@@ -1,0 +1,523 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ops Dashboard - Vanguard Claims</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+            color: #1a1a1a;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #f8f8f8 0%, #ffffff 100%);
+            padding: 24px 32px;
+            border-bottom: 2px solid #18A873;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header h1 {
+            font-size: 24px;
+            font-weight: 600;
+            color: #1a1a1a;
+        }
+
+        .header-controls {
+            display: flex;
+            gap: 16px;
+            align-items: center;
+        }
+
+        .live-badge {
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            background: #e8f5e9;
+            color: #18A873;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 700;
+        }
+
+        .pulse {
+            display: inline-block;
+            width: 8px;
+            height: 8px;
+            background: #18A873;
+            border-radius: 50%;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.5; }
+        }
+
+        .timestamp {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .hero-strip {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            padding: 24px 32px;
+            background: #fafafa;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .hero-card {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .hero-label {
+            font-size: 11px;
+            color: #666;
+            font-weight: 600;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .hero-value {
+            font-size: 32px;
+            font-weight: 700;
+            color: #18A873;
+            margin-bottom: 4px;
+        }
+
+        .hero-unit {
+            font-size: 12px;
+            color: #999;
+        }
+
+        .main-section {
+            display: grid;
+            grid-template-columns: 1.2fr 1fr;
+            gap: 32px;
+            padding: 32px;
+            background: white;
+        }
+
+        .chart-container {
+            background: #fafafa;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            padding: 16px;
+        }
+
+        .chart-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 12px;
+        }
+
+        .trend-chart {
+            width: 100%;
+            height: 180px;
+        }
+
+        .error-chart-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 12px;
+        }
+
+        .error-breakdown {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .error-row {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .error-label {
+            font-size: 11px;
+            color: #666;
+            width: 140px;
+        }
+
+        .error-bar-container {
+            flex: 1;
+            height: 24px;
+            background: #e0e0e0;
+            border-radius: 3px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .error-bar {
+            height: 100%;
+            background: linear-gradient(90deg, #3b82f6, #06b6d4);
+            display: flex;
+            align-items: center;
+            justify-content: flex-end;
+            padding-right: 6px;
+        }
+
+        .error-bar-text {
+            font-size: 10px;
+            color: white;
+            font-weight: 600;
+        }
+
+        .error-percent {
+            font-size: 11px;
+            color: #1a1a1a;
+            font-weight: 600;
+            width: 35px;
+            text-align: right;
+        }
+
+        .capacity-gauge {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 12px;
+            margin-top: 16px;
+            padding-top: 16px;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .gauge-label {
+            font-size: 11px;
+            font-weight: 600;
+            color: #666;
+        }
+
+        .gauge-svg {
+            width: 200px;
+            height: 120px;
+        }
+
+        .gauge-value {
+            font-size: 18px;
+            font-weight: 700;
+            color: #f59e0b;
+        }
+
+        .bottom-strip {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            padding: 24px 32px;
+            background: #fafafa;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .bottom-card {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            padding: 16px;
+        }
+
+        .bottom-title {
+            font-size: 12px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .bottom-content {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .bottom-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 12px;
+        }
+
+        .bottom-label {
+            color: #666;
+        }
+
+        .bottom-value {
+            font-weight: 700;
+            color: #1a1a1a;
+        }
+
+        .status-indicator {
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            margin-right: 4px;
+        }
+
+        .status-indicator.healthy { background: #18A873; }
+        .status-indicator.warning { background: #f59e0b; }
+        .status-indicator.error { background: #dc2626; }
+
+        .document-footer {
+            background: #fafafa;
+            padding: 12px 32px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            font-size: 11px;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Ops Dashboard: Claims Processing Automation Monitoring</h1>
+            <div class="header-controls">
+                <div class="live-badge">
+                    <span class="pulse"></span>
+                    LIVE
+                </div>
+                <div class="timestamp">Updated: 2:47 PM EST · Jan 17, 2026</div>
+            </div>
+        </div>
+
+        <div class="hero-strip">
+            <div class="hero-card">
+                <div class="hero-label">Claims Today</div>
+                <div class="hero-value">1,247</div>
+                <div class="hero-unit">processed</div>
+            </div>
+            <div class="hero-card">
+                <div class="hero-label">Auto-Adjudicated</div>
+                <div class="hero-value">73.2%</div>
+                <div class="hero-unit">of total</div>
+            </div>
+            <div class="hero-card">
+                <div class="hero-label">Avg Processing Time</div>
+                <div class="hero-value">4.2</div>
+                <div class="hero-unit">minutes</div>
+            </div>
+            <div class="hero-card">
+                <div class="hero-label">SLA Compliance</div>
+                <div class="hero-value">96.8%</div>
+                <div class="hero-unit">within target</div>
+            </div>
+        </div>
+
+        <div class="main-section">
+            <div>
+                <div class="chart-container">
+                    <div class="chart-title">Daily Volume Trend (Last 30 Days)</div>
+                    <svg class="trend-chart" viewBox="0 0 400 180" style="background: white;">
+                        <!-- Grid -->
+                        <line x1="40" y1="140" x2="380" y2="140" stroke="#e0e0e0" stroke-width="1"/>
+                        <line x1="40" y1="100" x2="380" y2="100" stroke="#e0e0e0" stroke-width="1" stroke-dasharray="2,2"/>
+                        <line x1="40" y1="60" x2="380" y2="60" stroke="#e0e0e0" stroke-width="1" stroke-dasharray="2,2"/>
+                        <line x1="40" y1="20" x2="380" y2="20" stroke="#e0e0e0" stroke-width="1" stroke-dasharray="2,2"/>
+
+                        <!-- Volume line -->
+                        <polyline points="50,95 65,85 80,88 95,75 110,72 125,65 140,70 155,62 170,58 185,45 200,50 215,42 230,40 245,35 260,38 275,30 290,28 305,32 320,25 335,22 350,20 365,18" stroke="#3b82f6" stroke-width="2.5" fill="none"/>
+
+                        <!-- Auto-adjudication rate overlay -->
+                        <polyline points="50,110 65,108 80,105 95,102 110,98 125,95 140,92 155,88 170,85 185,80 200,78 215,75 230,72 245,70 260,68 275,65 290,63 305,62 320,60 335,58 350,57 365,55" stroke="#18A873" stroke-width="2.5" fill="none"/>
+
+                        <!-- Y-axis labels (left) -->
+                        <text x="35" y="142" text-anchor="end" font-size="9" fill="#999">0</text>
+                        <text x="35" y="102" text-anchor="end" font-size="9" fill="#999">600</text>
+                        <text x="35" y="62" text-anchor="end" font-size="9" fill="#999">1.2K</text>
+                        <text x="35" y="22" text-anchor="end" font-size="9" fill="#999">1.8K</text>
+
+                        <!-- Y-axis labels (right for %) -->
+                        <text x="385" y="142" text-anchor="start" font-size="9" fill="#999">50%</text>
+                        <text x="385" y="102" text-anchor="start" font-size="9" fill="#999">65%</text>
+                        <text x="385" y="62" text-anchor="start" font-size="9" fill="#999">80%</text>
+                        <text x="385" y="22" text-anchor="start" font-size="9" fill="#999">95%</text>
+
+                        <!-- Legend -->
+                        <line x1="50" y1="8" x2="70" y2="8" stroke="#3b82f6" stroke-width="2"/>
+                        <text x="75" y="12" font-size="9" fill="#666">Volume</text>
+                        <line x1="150" y1="8" x2="170" y2="8" stroke="#18A873" stroke-width="2"/>
+                        <text x="175" y="12" font-size="9" fill="#666">Auto-Adj %</text>
+                    </svg>
+                </div>
+            </div>
+
+            <div>
+                <div class="chart-container">
+                    <div class="error-chart-title">Error Breakdown by Type</div>
+                    <div class="error-breakdown">
+                        <div class="error-row">
+                            <div class="error-label">Missing docs</div>
+                            <div class="error-bar-container">
+                                <div class="error-bar" style="width: 34%;">
+                                    <span class="error-bar-text">34%</span>
+                                </div>
+                            </div>
+                            <div class="error-percent">442</div>
+                        </div>
+                        <div class="error-row">
+                            <div class="error-label">Data mismatch</div>
+                            <div class="error-bar-container">
+                                <div class="error-bar" style="width: 28%;">
+                                    <span class="error-bar-text">28%</span>
+                                </div>
+                            </div>
+                            <div class="error-percent">364</div>
+                        </div>
+                        <div class="error-row">
+                            <div class="error-label">Policy lookup fail</div>
+                            <div class="error-bar-container">
+                                <div class="error-bar" style="width: 18%;">
+                                    <span class="error-bar-text">18%</span>
+                                </div>
+                            </div>
+                            <div class="error-percent">234</div>
+                        </div>
+                        <div class="error-row">
+                            <div class="error-label">Duplicate claim</div>
+                            <div class="error-bar-container">
+                                <div class="error-bar" style="width: 12%;">
+                                    <span class="error-bar-text">12%</span>
+                                </div>
+                            </div>
+                            <div class="error-percent">156</div>
+                        </div>
+                        <div class="error-row">
+                            <div class="error-label">Other</div>
+                            <div class="error-bar-container">
+                                <div class="error-bar" style="width: 8%;">
+                                    <span class="error-bar-text">8%</span>
+                                </div>
+                            </div>
+                            <div class="error-percent">104</div>
+                        </div>
+                    </div>
+
+                    <div class="capacity-gauge">
+                        <div class="gauge-label">Utilization</div>
+                        <svg class="gauge-svg" viewBox="0 0 200 120">
+                            <!-- Gauge background arc -->
+                            <path d="M 30 100 A 70 70 0 0 1 170 100" stroke="#e0e0e0" stroke-width="12" fill="none" stroke-linecap="round"/>
+                            <!-- Gauge fill arc (78%) -->
+                            <path d="M 30 100 A 70 70 0 0 1 142 100" stroke="#f59e0b" stroke-width="12" fill="none" stroke-linecap="round"/>
+                            <!-- Center dot -->
+                            <circle cx="100" cy="100" r="6" fill="#1a1a1a"/>
+                            <!-- Label -->
+                            <text x="100" y="55" text-anchor="middle" font-size="11" fill="#666">Current Load</text>
+                        </svg>
+                        <div class="gauge-value">78% of max capacity</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bottom-strip">
+            <div class="bottom-card">
+                <div class="bottom-title">Queue Status</div>
+                <div class="bottom-content">
+                    <div class="bottom-item">
+                        <span class="bottom-label">Pending claims:</span>
+                        <span class="bottom-value">142</span>
+                    </div>
+                    <div class="bottom-item">
+                        <span class="bottom-label">Avg wait time:</span>
+                        <span class="bottom-value">8 min</span>
+                    </div>
+                    <div class="bottom-item">
+                        <span class="bottom-label">Max wait time:</span>
+                        <span class="bottom-value">23 min</span>
+                    </div>
+                    <div class="bottom-item">
+                        <span class="bottom-label">Estimated clear:</span>
+                        <span class="bottom-value">3:15 PM</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bottom-card">
+                <div class="bottom-title">Escalations Today</div>
+                <div class="bottom-content">
+                    <div class="bottom-item">
+                        <span class="bottom-label">Manual reviews:</span>
+                        <span class="bottom-value">7</span>
+                    </div>
+                    <div class="bottom-item">
+                        <span class="bottom-label">Supervisor escalations:</span>
+                        <span class="bottom-value">2</span>
+                    </div>
+                    <div class="bottom-item">
+                        <span class="bottom-label">Legal review:</span>
+                        <span class="bottom-value">0</span>
+                    </div>
+                    <div class="bottom-item">
+                        <span class="bottom-label">Denial rate (today):</span>
+                        <span class="bottom-value">2.1%</span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="bottom-card">
+                <div class="bottom-title">System Health</div>
+                <div class="bottom-content">
+                    <div class="bottom-item">
+                        <span class="status-indicator healthy"></span>
+                        <span class="bottom-label">API latency:</span>
+                        <span class="bottom-value">120ms</span>
+                    </div>
+                    <div class="bottom-item">
+                        <span class="status-indicator healthy"></span>
+                        <span class="bottom-label">DB response:</span>
+                        <span class="bottom-value">45ms</span>
+                    </div>
+                    <div class="bottom-item">
+                        <span class="status-indicator healthy"></span>
+                        <span class="bottom-label">OCR service:</span>
+                        <span class="bottom-value">Active</span>
+                    </div>
+                    <div class="bottom-item">
+                        <span class="status-indicator healthy"></span>
+                        <span class="bottom-label">Uptime (30d):</span>
+                        <span class="bottom-value">99.96%</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="document-footer">
+            Sanitized excerpt · Prepared by Gratia · Jan 2026
+        </div>
+    </div>
+<a href="../" style="position:fixed;top:12px;right:16px;z-index:99999;background:#111827;color:#e2e8f0;padding:6px 16px;border-radius:8px;font-size:13px;font-weight:600;text-decoration:none;border:1px solid #475569;font-family:system-ui,sans-serif;transition:background .15s;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#111827'">← Gallery</a>
+</body>
+</html>

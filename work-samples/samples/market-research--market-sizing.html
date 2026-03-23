@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Market Sizing Summary Sheet - Embedded Payments</title>
+<style>
+:root {
+  --font-family-display: Arial, sans-serif;
+  --font-weight-display: 600;
+  --font-family-content: Arial, sans-serif;
+  --font-weight-content: 400;
+  --font-size-content: 16px;
+  --line-height-content: 1.4;
+  --slide-w: 1280px;
+  --slide-h: 720px;
+  --radius: 16px;
+  --shadow: 0 10px 24px rgba(0,0,0,.45);
+}
+body.theme-dark {
+  --color-bg-base: #0f172a;
+  --color-bg-elevated: #020617;
+  --color-bg-surface: #1e293b;
+  --color-bg-muted: #334155;
+  --color-text-primary: #f1f5f9;
+  --color-text-secondary: #cbd5e1;
+  --color-text-muted: #94a3b8;
+  --color-text-accent: #38bdf8;
+  --color-primary: #38bdf8;
+  --color-primary-foreground: #0f172a;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: var(--font-family-content);
+  font-weight: var(--font-weight-content);
+  font-size: var(--font-size-content);
+  line-height: var(--line-height-content);
+  overflow-x: hidden;
+  background: var(--color-bg-base);
+  color: var(--color-text-primary);
+}
+.deck-wrap{ display:flex; flex-direction:column; align-items:center; padding: 16px 12px; }
+.topbar{
+  width: min(var(--slide-w), 100%);
+  display:flex; align-items:center; justify-content:space-between;
+  gap: 12px; flex-wrap: wrap; margin: 0 0 10px;
+  color: var(--color-text-muted); font-size: 12px;
+}
+.kbd{
+  display:inline-flex; align-items:center; justify-content:center;
+  min-width: 22px; height: 22px; padding: 0 8px;
+  border: 1px solid #334155; border-radius: 10px;
+  background: #0b1220; color: var(--color-text-secondary);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+.deck{
+  width: var(--slide-w); height: var(--slide-h);
+  position: relative;
+  transform: scale(var(--scale, 1)); transform-origin: top center;
+}
+.slide {
+  display:none; width: var(--slide-w); height: var(--slide-h);
+  flex-shrink: 0; overflow: hidden;
+  background: var(--color-bg-base); color: var(--color-text-primary);
+  border: 1px solid #334155; border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+.slide.active{ display:flex; }
+
+.col { flex-direction: column; }
+.fill-height { flex: 1; display: flex; flex-direction: column; }
+
+.p-16 { padding: 3rem 3rem 4.25rem; }
+.mb-2 { margin-bottom: 0.5rem; }
+.mb-4 { margin-bottom: 1rem; }
+.mb-6 { margin-bottom: 1.5rem; }
+.mt-4 { margin-top: 1rem; }
+
+h1, h2, h3, h4 {
+  font-family: var(--font-family-display);
+  font-weight: var(--font-weight-display);
+  line-height: 1.2; margin: 0;
+  color: var(--color-primary);
+}
+h1 { font-size: 2.5rem; }
+h2 { font-size: 2rem; }
+h3 { font-size: 1.5rem; }
+p, li { color: var(--color-text-secondary); }
+strong { color: var(--color-primary); }
+.muted { color: var(--color-text-muted) !important; }
+.text-sm { font-size: 0.875rem; }
+.text-xs { font-size: 0.75rem; }
+.font-semibold { font-weight: 600; }
+
+.slide::after {
+  content: "Sanitized excerpt • Prepared by Gratia • Jan 2026";
+  position: absolute; left: 4rem; right: 4rem; bottom: 1.1rem;
+  font-size: 0.72rem; color: #94a3b8; opacity: 0.9;
+}
+
+/* Cards & metrics */
+.metric-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; }
+.metric-card {
+  padding: 1rem; background: #1e293b; border: 1px solid #334155;
+  border-left: 4px solid #38bdf8;
+}
+.metric-val { font-size: 2rem; font-weight: 700; margin-bottom: 0.15rem; }
+.metric-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; color: #94a3b8; }
+.metric-desc { font-size: 0.8rem; color: #cbd5e1; margin-top: 0.25rem; }
+
+.card-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+.info-card {
+  padding: 1rem; background: #1e293b; border: 1px solid #334155;
+}
+.info-card h4 { font-size: 0.85rem; margin-bottom: 0.5rem; }
+.info-card p { font-size: 0.8rem; line-height: 1.4; }
+
+.callout-card {
+  padding: 1rem; background: #1e293b; border: 1px solid #334155;
+  border-left: 4px solid #38bdf8;
+}
+.callout-card h4 { font-size: 0.85rem; margin-bottom: 0.5rem; color: #38bdf8; }
+.callout-card p { font-size: 0.8rem; line-height: 1.4; }
+.callout-card ul { margin-left: 1.2rem; margin-top: 0.3rem; }
+.callout-card li { font-size: 0.8rem; margin-bottom: 0.3rem; color: #cbd5e1; }
+
+/* Funnel */
+.funnel { background: #1e293b; border: 1px solid #334155; padding: 0.75rem; }
+.funnel svg text { font-family: Arial, sans-serif; }
+
+/* Heatmap */
+.heatmap { display: grid; grid-template-columns: 130px repeat(3, 1fr); gap: 0.4rem; }
+.h-hdr { padding: 0.35rem 0.5rem; font-size: 0.75rem; color: #94a3b8; }
+.h-row { padding: 0.4rem 0.5rem; background: #1e293b; border: 1px solid #334155; color: #cbd5e1; font-weight: 600; font-size: 0.8rem; }
+.h-cell { padding: 0.4rem 0.5rem; border: 1px solid #334155; font-size: 0.8rem; color: #e2e8f0; }
+.h1 { background: rgba(56,189,248,0.12); }
+.h2 { background: rgba(56,189,248,0.20); }
+.h3 { background: rgba(56,189,248,0.28); }
+.h4 { background: rgba(56,189,248,0.36); }
+
+/* Quadrant */
+.quadrant-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.5rem; }
+.q-item { padding: 0.75rem; }
+
+/* Scenario bars */
+.scenario { background: #1e293b; border: 1px solid #334155; padding: 0.75rem; }
+.s-row { display: grid; grid-template-columns: 140px 1fr 65px; gap: 0.5rem; align-items: center; margin-bottom: 0.4rem; }
+.s-row:last-child { margin-bottom: 0; }
+.s-name { color:#cbd5e1; font-weight: 600; font-size: 0.8rem; }
+.s-bar { height: 11px; border-radius: 999px; background: #0b1220; border: 1px solid #334155; overflow: hidden; }
+.s-fill { height: 100%; border-radius: 999px; background: linear-gradient(90deg, rgba(56,189,248,0.35), rgba(56,189,248,0.9)); }
+.s-val { color:#cbd5e1; text-align:right; font-size: 0.8rem; }
+
+/* Logo pills */
+.logo-row { display:flex; flex-wrap:wrap; gap:0.4rem; margin-top:0.5rem; }
+.logo-pill {
+  display:inline-flex; align-items:center; padding:0.25rem 0.45rem;
+  border:1px solid #334155; border-radius:999px; font-size:0.7rem;
+  color:#cbd5e1; background:#0b1220;
+}
+.logo-dot { width:0.4rem; height:0.4rem; border-radius:999px; background:#38bdf8; margin-right:0.35rem; }
+
+@media print{
+  body{ background:#fff; }
+  .deck-wrap{ padding:0; }
+  .topbar{ display:none; }
+  .deck{ width:auto; height:auto; transform:none; }
+  .slide{ display:flex !important; margin: 0 0 18px; page-break-after: always; box-shadow:none; }
+  .slide::after{ display:none; }
+}
+</style>
+</head>
+<body class="theme-dark">
+
+<div class="deck-wrap">
+  <div class="topbar" aria-hidden="true">
+    <div>HTML preview deck • Consulting-style sample</div>
+    <div><span class="kbd">←</span> <span class="kbd">→</span> to navigate • <span class="kbd">Cmd</span> + <span class="kbd">P</span> to export PDF</div>
+  </div>
+  <main class="deck" aria-label="Market sizing slide deck">
+
+<!-- Slide 1: Exec Overview -->
+<section class="slide active p-16 col">
+  <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:1.25rem;">
+    <div>
+      <p class="text-xs font-semibold" style="color:#38bdf8; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:0.4rem;">Market Research & Intelligence — Sample</p>
+      <h1>Market Sizing Summary Sheet</h1>
+      <p class="text-sm" style="color:#94a3b8; margin-top:0.35rem;">Embedded Payments for Vertical SaaS Platforms</p>
+    </div>
+    <div style="text-align:right; font-size:0.75rem; color:#94a3b8;">
+      <div>Client: Confidential (sample)</div>
+      <div>Date: Jan 2026</div>
+    </div>
+  </div>
+
+  <!-- Split: left metrics+findings, right funnel viz -->
+  <div style="display:grid; grid-template-columns: 0.48fr 0.52fr; gap:1rem; margin-bottom:0.6rem;">
+    <!-- Left: TAM/SAM/SOM cards stacked -->
+    <div style="display:flex; flex-direction:column; gap:0.5rem;">
+      <div class="metric-card" style="display:flex; align-items:center; gap:0.75rem;">
+        <div>
+          <p class="metric-label">TAM (Total Addressable)</p>
+          <p class="metric-val" style="color:#38bdf8; font-size:1.8rem;">$85B</p>
+        </div>
+        <p class="metric-desc" style="flex:1;">U.S. B2B payment volume eligible for embedded payments</p>
+      </div>
+      <div class="metric-card" style="border-left-color:#06b6d4; display:flex; align-items:center; gap:0.75rem;">
+        <div>
+          <p class="metric-label">SAM (Serviceable)</p>
+          <p class="metric-val" style="color:#06b6d4; font-size:1.8rem;">$12.3B</p>
+        </div>
+        <p class="metric-desc" style="flex:1;">Vertical SaaS platforms $10M+ ARR, attachable TPV</p>
+      </div>
+      <div class="metric-card" style="border-left-color:#22d3ee; display:flex; align-items:center; gap:0.75rem;">
+        <div>
+          <p class="metric-label">SOM (Obtainable)</p>
+          <p class="metric-val" style="color:#22d3ee; font-size:1.8rem;">$1.8B</p>
+        </div>
+        <p class="metric-desc" style="flex:1;">No incumbent partner, Year 1 reachable</p>
+      </div>
+
+      <!-- Findings -->
+      <div style="border-top:1px solid #334155; padding-top:0.5rem; margin-top:0.15rem;">
+        <div style="display:flex; gap:0.5rem; padding:0.3rem 0; font-size:0.72rem; line-height:1.35; color:#cbd5e1;">
+          <div style="width:6px; height:6px; border-radius:999px; background:#38bdf8; margin-top:4px; flex-shrink:0;"></div>
+          <div><strong style="color:#38bdf8;">Construction + Healthcare</strong> = 60% of SOM ($1.08B), 2.4% take rate vs. 1.9% avg</div>
+        </div>
+        <div style="display:flex; gap:0.5rem; padding:0.3rem 0; font-size:0.72rem; line-height:1.35; color:#cbd5e1;">
+          <div style="width:6px; height:6px; border-radius:999px; background:#f59e0b; margin-top:4px; flex-shrink:0;"></div>
+          <div><strong style="color:#f59e0b;">Base case: $270M</strong> at 15% penetration; upside to $450M at 25%</div>
+        </div>
+        <div style="display:flex; gap:0.5rem; padding:0.3rem 0; font-size:0.72rem; line-height:1.35; color:#cbd5e1;">
+          <div style="width:6px; height:6px; border-radius:999px; background:#22d3ee; margin-top:4px; flex-shrink:0;"></div>
+          <div><strong style="color:#22d3ee;">West + partner/platform</strong> channels show highest concentration</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: Funnel visualization -->
+    <div style="background:#1e293b; border:1px solid #334155; padding:0.75rem; display:flex; flex-direction:column;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.4rem;">
+        <div style="font-size:0.85rem; font-weight:600; color:#38bdf8;">TAM → SAM → SOM Funnel</div>
+        <div style="font-size:0.7rem; color:#94a3b8;">Conversion rates shown</div>
+      </div>
+      <svg width="100%" height="210" viewBox="0 0 480 210" preserveAspectRatio="none" style="flex:1;">
+        <!-- Funnel shapes -->
+        <polygon points="30,10 450,10 400,70 80,70" fill="rgba(56,189,248,0.28)" stroke="#38bdf8" stroke-width="2"/>
+        <polygon points="80,78 400,78 360,138 120,138" fill="rgba(6,182,212,0.24)" stroke="#06b6d4" stroke-width="2"/>
+        <polygon points="120,146 360,146 330,198 150,198" fill="rgba(34,211,238,0.22)" stroke="#22d3ee" stroke-width="2"/>
+
+        <!-- Labels -->
+        <text x="240" y="36" text-anchor="middle" fill="#f1f5f9" font-size="16" font-weight="700" font-family="Arial">TAM  $85B</text>
+        <text x="240" y="52" text-anchor="middle" fill="#94a3b8" font-size="10" font-family="Arial">U.S. B2B payment volume</text>
+
+        <text x="240" y="104" text-anchor="middle" fill="#f1f5f9" font-size="16" font-weight="700" font-family="Arial">SAM  $12.3B</text>
+        <text x="240" y="120" text-anchor="middle" fill="#94a3b8" font-size="10" font-family="Arial">$10M+ ARR platforms, attachable TPV</text>
+
+        <text x="240" y="172" text-anchor="middle" fill="#f1f5f9" font-size="16" font-weight="700" font-family="Arial">SOM  $1.8B</text>
+        <text x="240" y="188" text-anchor="middle" fill="#94a3b8" font-size="10" font-family="Arial">No incumbent, reachable Year 1</text>
+
+        <!-- Conversion rates -->
+        <text x="450" y="50" fill="#94a3b8" font-size="10" font-family="Arial">↓ 14.5%</text>
+        <text x="450" y="118" fill="#94a3b8" font-size="10" font-family="Arial">↓ 14.6%</text>
+      </svg>
+
+      <!-- Scenario strip at bottom -->
+      <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:0.4rem; margin-top:0.4rem;">
+        <div style="background:#0b1220; border:1px solid #334155; padding:0.4rem; text-align:center;">
+          <div style="font-size:0.65rem; color:#94a3b8;">Conservative</div>
+          <div style="font-size:0.9rem; font-weight:700; color:#cbd5e1;">$180M</div>
+          <div style="font-size:0.6rem; color:#94a3b8;">10% pen.</div>
+        </div>
+        <div style="background:#0b1220; border:2px solid #38bdf8; padding:0.4rem; text-align:center;">
+          <div style="font-size:0.65rem; color:#38bdf8; font-weight:700;">Base case</div>
+          <div style="font-size:0.9rem; font-weight:700; color:#38bdf8;">$270M</div>
+          <div style="font-size:0.6rem; color:#94a3b8;">15% pen.</div>
+        </div>
+        <div style="background:#0b1220; border:1px solid #334155; padding:0.4rem; text-align:center;">
+          <div style="font-size:0.65rem; color:#94a3b8;">Upside</div>
+          <div style="font-size:0.9rem; font-weight:700; color:#cbd5e1;">$450M</div>
+          <div style="font-size:0.6rem; color:#94a3b8;">25% pen.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-row">
+    <div class="info-card">
+      <h4 style="color:#38bdf8;">Recommended actions</h4>
+      <p><strong style="color:#38bdf8;">1.</strong> Pilot with 2 construction platforms (Q1) to validate 18-22% attach rate. <strong style="color:#38bdf8;">2.</strong> Build top-50 target list. <strong style="color:#38bdf8;">3.</strong> Monitor healthcare payment regulations.</p>
+    </div>
+    <div class="info-card">
+      <h4 style="color:#38bdf8;">Sources &amp; methodology</h4>
+      <p>TAM: Visa B2B + a16z Fintech + McKinsey Payments. SAM: platform maturity filter. SOM: incumbent + contract timing. 28 interviews (Nov–Dec 2025).</p>
+    </div>
+  </div>
+</section>
+
+<!-- Slide 2: Funnel + Geo × Channel Heatmap -->
+<section class="slide p-16 col">
+  <h2 class="mb-4">Sizing methodology & geographic concentration</h2>
+  <div class="fill-height col" style="gap:0.75rem;">
+    <div style="display:grid; grid-template-columns: 1.1fr 0.9fr; gap: 1rem;">
+      <!-- Left: Funnel -->
+      <div>
+        <p class="text-xs font-semibold" style="color:#38bdf8; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:0.4rem;">TAM → SAM → SOM Funnel</p>
+        <div class="funnel">
+          <svg width="100%" height="230" viewBox="0 0 580 230" preserveAspectRatio="none" aria-label="Funnel">
+            <polygon points="40,15 540,15 480,80 100,80" fill="rgba(56,189,248,0.28)" stroke="#38bdf8" stroke-width="2"/>
+            <polygon points="100,85 480,85 430,150 150,150" fill="rgba(6,182,212,0.24)" stroke="#06b6d4" stroke-width="2"/>
+            <polygon points="150,155 430,155 395,210 185,210" fill="rgba(34,211,238,0.22)" stroke="#22d3ee" stroke-width="2"/>
+            <text x="290" y="42" text-anchor="middle" fill="#f1f5f9" font-size="15" font-weight="700">TAM  $85B</text>
+            <text x="290" y="60" text-anchor="middle" fill="#cbd5e1" font-size="11">U.S. B2B payment volume</text>
+            <text x="290" y="112" text-anchor="middle" fill="#f1f5f9" font-size="15" font-weight="700">SAM  $12.3B</text>
+            <text x="290" y="130" text-anchor="middle" fill="#cbd5e1" font-size="11">$10M+ ARR platforms, attachable TPV</text>
+            <text x="290" y="182" text-anchor="middle" fill="#f1f5f9" font-size="15" font-weight="700">SOM  $1.8B</text>
+            <text x="290" y="200" text-anchor="middle" fill="#cbd5e1" font-size="11">No incumbent, reachable Year 1</text>
+            <text x="540" y="55" fill="#94a3b8" font-size="11">↓ 14.5%</text>
+            <text x="540" y="125" fill="#94a3b8" font-size="11">↓ 14.6%</text>
+          </svg>
+        </div>
+        <p class="text-xs mt-4" style="color:#94a3b8;"><strong style="color:#38bdf8;">Key filter:</strong> Largest compression from platform maturity + attachment rate assumptions; reachability driven by partner incumbency.</p>
+      </div>
+
+      <!-- Right: Heatmap -->
+      <div>
+        <p class="text-xs font-semibold" style="color:#38bdf8; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:0.4rem;">Geo × Channel Concentration</p>
+        <div class="heatmap">
+          <div class="h-hdr"></div>
+          <div class="h-hdr">Direct</div>
+          <div class="h-hdr">Partners</div>
+          <div class="h-hdr">Platform</div>
+          <div class="h-row">Northeast</div>
+          <div class="h-cell h2">Mid</div>
+          <div class="h-cell h3">High</div>
+          <div class="h-cell h2">Mid</div>
+          <div class="h-row">South</div>
+          <div class="h-cell h3">High</div>
+          <div class="h-cell h2">Mid</div>
+          <div class="h-cell h2">Mid</div>
+          <div class="h-row">Midwest</div>
+          <div class="h-cell h2">Mid</div>
+          <div class="h-cell h2">Mid</div>
+          <div class="h-cell h1">Low</div>
+          <div class="h-row">West</div>
+          <div class="h-cell h2">Mid</div>
+          <div class="h-cell h3">High</div>
+          <div class="h-cell h4">V. High</div>
+        </div>
+        <p class="text-xs mt-4" style="color:#94a3b8;"><strong style="color:#38bdf8;">GTM:</strong> Start with West + partner/platform motions for fastest distribution; South + direct for vertical-specific outbound.</p>
+
+        <div class="logo-row">
+          <span class="logo-pill"><span class="logo-dot"></span>Visa B2B</span>
+          <span class="logo-pill"><span class="logo-dot"></span>a16z Fintech</span>
+          <span class="logo-pill"><span class="logo-dot"></span>McKinsey</span>
+          <span class="logo-pill"><span class="logo-dot"></span>28 interviews</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Slide 3: Segment Prioritization + Scenarios -->
+<section class="slide p-16 col">
+  <h2 class="mb-4">Segment prioritization & capture scenarios</h2>
+  <div class="fill-height col" style="gap:0.75rem;">
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+      <!-- Left: Segments -->
+      <div>
+        <p class="text-xs font-semibold" style="color:#38bdf8; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:0.5rem;">Segment Priority Matrix</p>
+        <div class="quadrant-grid">
+          <div class="q-item" style="background: #065f46; border: 2px solid #10b981;">
+            <p style="color: #10b981; font-size:0.7rem; font-weight:700;">HIGH PRIORITY</p>
+            <p class="font-semibold" style="color: #f1f5f9; font-size:0.9rem;">Construction SaaS</p>
+            <p class="text-xs" style="color: #cbd5e1;">High ticket, manual invoicing pain</p>
+          </div>
+          <div class="q-item" style="background: #1e3a5f; border: 2px solid #3b82f6;">
+            <p style="color: #3b82f6; font-size:0.7rem; font-weight:700;">HIGH PRIORITY</p>
+            <p class="font-semibold" style="color: #f1f5f9; font-size:0.9rem;">Healthcare SaaS</p>
+            <p class="text-xs" style="color: #cbd5e1;">Regulatory moat, high attachment</p>
+          </div>
+          <div class="q-item" style="background: #78350f; border: 2px solid #f59e0b;">
+            <p style="color: #f59e0b; font-size:0.7rem; font-weight:700;">MEDIUM</p>
+            <p class="font-semibold" style="color: #f1f5f9; font-size:0.9rem;">Field / Prof Services</p>
+            <p class="text-xs" style="color: #cbd5e1;">Moderate ticket, competitive</p>
+          </div>
+          <div class="q-item" style="background: #3f3f46; border: 2px solid #71717a;">
+            <p style="color: #94a3b8; font-size:0.7rem; font-weight:700;">LOW PRIORITY</p>
+            <p class="font-semibold" style="color: #f1f5f9; font-size:0.9rem;">Hospitality & Retail</p>
+            <p class="text-xs" style="color: #cbd5e1;">Saturated, thin margins</p>
+          </div>
+        </div>
+        <p class="text-xs mt-4" style="color:#94a3b8;"><strong style="color:#38bdf8;">Sizing:</strong> Construction + Healthcare = 60% of SOM ($1.08B) with 2.4% take rate (vs. 1.9% blended avg).</p>
+      </div>
+
+      <!-- Right: Scenarios -->
+      <div>
+        <p class="text-xs font-semibold" style="color:#38bdf8; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:0.5rem;">Year-1 SOM Capture Sensitivity</p>
+        <div class="scenario">
+          <div class="s-row">
+            <div class="s-name">Conservative (10%)</div>
+            <div class="s-bar"><div class="s-fill" style="width: 40%;"></div></div>
+            <div class="s-val">$0.18B</div>
+          </div>
+          <div class="s-row">
+            <div class="s-name">Base (15%)</div>
+            <div class="s-bar"><div class="s-fill" style="width: 60%;"></div></div>
+            <div class="s-val">$0.27B</div>
+          </div>
+          <div class="s-row">
+            <div class="s-name">Upside (25%)</div>
+            <div class="s-bar"><div class="s-fill" style="width: 100%;"></div></div>
+            <div class="s-val">$0.45B</div>
+          </div>
+        </div>
+        <p class="text-xs mt-4" style="color:#94a3b8;"><strong style="color:#38bdf8;">Decision:</strong> If targeting ≥25% capture, prioritize partners and embedded distribution earlier (vs. direct-only GTM).</p>
+
+        <div style="margin-top:1rem;">
+          <p class="text-xs font-semibold" style="color:#38bdf8; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:0.4rem;">Recommended Next Steps</p>
+          <div style="background:#1e293b; padding:0.75rem; border:1px solid #334155;">
+            <p class="text-xs" style="color:#cbd5e1;"><strong style="color:#38bdf8;">1.</strong> Launch pilot with 2 construction platforms (Q1) to validate 18-22% attach rate</p>
+            <p class="text-xs" style="color:#cbd5e1; margin-top:0.3rem;"><strong style="color:#38bdf8;">2.</strong> Build top-50 target list to validate SOM reachability assumptions</p>
+            <p class="text-xs" style="color:#cbd5e1; margin-top:0.3rem;"><strong style="color:#38bdf8;">3.</strong> Monitor OIG healthcare payment guidance + state construction payment laws</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+  </main>
+</div>
+
+<script>
+(function(){
+  const root = document.documentElement;
+  const slides = Array.from(document.querySelectorAll('.deck .slide'));
+  let idx = 0;
+  function scaleToFit(){
+    const pad = 32;
+    const w = Math.max(320, window.innerWidth - pad);
+    const h = Math.max(320, window.innerHeight - pad);
+    const s = Math.min(w / 1280, h / 720, 1);
+    root.style.setProperty('--scale', String(s));
+  }
+  function show(i){
+    idx = Math.max(0, Math.min(slides.length - 1, i));
+    slides.forEach((s, k) => s.classList.toggle('active', k === idx));
+    window.location.hash = `slide-${idx+1}`;
+  }
+  function fromHash(){
+    const m = (window.location.hash||'').match(/slide-(\d+)/);
+    if(!m) return;
+    const n = parseInt(m[1], 10);
+    if(!Number.isFinite(n)) return;
+    show(n - 1);
+  }
+  document.addEventListener('keydown',(e)=>{
+    if(e.key==='ArrowRight'||e.key==='PageDown') show(idx+1);
+    if(e.key==='ArrowLeft'||e.key==='PageUp') show(idx-1);
+    if(e.key==='Home') show(0);
+    if(e.key==='End') show(slides.length-1);
+  });
+  window.addEventListener('hashchange', fromHash);
+  window.addEventListener('resize', scaleToFit);
+  scaleToFit();
+  fromHash();
+})();
+</script>
+<a href="../" style="position:fixed;top:12px;right:16px;z-index:99999;background:#111827;color:#e2e8f0;padding:6px 16px;border-radius:8px;font-size:13px;font-weight:600;text-decoration:none;border:1px solid #475569;font-family:system-ui,sans-serif;transition:background .15s;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#111827'">← Gallery</a>
+</body>
+</html>

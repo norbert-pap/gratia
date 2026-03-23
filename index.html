@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gratia</title>
+<script src="auth.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', -apple-system, sans-serif;
+    background: #f5f6f7;
+    color: #1a1a1a;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+  }
+
+  .top-bar {
+    background: #032729;
+    padding: 16px 32px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .top-logo {
+    width: 32px; height: 32px; border-radius: 8px;
+    background: #00C9A7; color: #032729;
+    font-size: 16px; font-weight: 700;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .top-brand { font-size: 15px; font-weight: 600; color: #fff; }
+
+  .container {
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 48px 32px;
+  }
+
+  .page-title {
+    font-size: 28px;
+    font-weight: 700;
+    color: #032729;
+    margin-bottom: 4px;
+  }
+  .page-sub {
+    font-size: 14px;
+    color: #6b7280;
+    margin-bottom: 36px;
+  }
+
+  .section-label {
+    font-size: 11px;
+    font-weight: 600;
+    color: #00A88A;
+    text-transform: uppercase;
+    letter-spacing: 1.2px;
+    margin-bottom: 12px;
+  }
+
+  .card-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 16px;
+    margin-bottom: 40px;
+  }
+
+  .card {
+    background: #fff;
+    border: 1px solid #e5e7eb;
+    border-radius: 12px;
+    padding: 24px;
+    text-decoration: none;
+    color: inherit;
+    transition: all 0.2s ease;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+  }
+  .card:hover {
+    border-color: #00C9A7;
+    box-shadow: 0 4px 16px rgba(0,201,167,0.1);
+    transform: translateY(-2px);
+  }
+
+  .card-icon {
+    width: 40px; height: 40px; border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .card-icon svg {
+    width: 20px; height: 20px;
+    stroke: #fff; fill: none;
+    stroke-width: 2; stroke-linecap: round; stroke-linejoin: round;
+  }
+  .icon-green { background: #00C9A7; }
+  .icon-teal { background: #0d9488; }
+  .icon-blue { background: #3b82f6; }
+  .icon-purple { background: #8b5cf6; }
+  .icon-amber { background: #f59e0b; }
+  .icon-rose { background: #f43f5e; }
+
+  .card-title {
+    font-size: 16px;
+    font-weight: 600;
+    color: #032729;
+  }
+  .card-desc {
+    font-size: 13px;
+    color: #6b7280;
+    line-height: 1.5;
+  }
+  .card-tag {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    padding: 3px 8px;
+    border-radius: 4px;
+    background: #f0fdf4;
+    color: #15803d;
+    margin-top: 4px;
+    align-self: flex-start;
+  }
+  .card-tag.deck { background: #f0f9ff; color: #0369a1; }
+  .card-tag.tool { background: #fdf4ff; color: #86198f; }
+  .card-tag.dashboard { background: #fffbeb; color: #92400e; }
+</style>
+</head>
+<body>
+
+<div id="deck-content">
+
+<div class="top-bar">
+  <div class="top-logo">G</div>
+  <div class="top-brand">Gratia</div>
+</div>
+
+<div class="container">
+  <h1 class="page-title">Internal Hub</h1>
+  <p class="page-sub">Strategy decks, dashboards, and internal tools.</p>
+
+  <div class="section-label">Strategy &amp; Growth</div>
+  <div class="card-grid">
+    <a class="card" href="pitch/">
+      <div class="card-icon icon-green">
+        <svg viewBox="0 0 24 24"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5"/><path d="M2 12l10 5 10-5"/></svg>
+      </div>
+      <div class="card-title">Investor Pitch Deck</div>
+      <div class="card-desc">Series A fundraising deck with market thesis, financials, and growth strategy.</div>
+      <div class="card-tag deck">Deck</div>
+    </a>
+
+    <a class="card" href="apollo/">
+      <div class="card-icon icon-teal">
+        <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18"/><path d="M9 21V9"/></svg>
+      </div>
+      <div class="card-title">Apollo Expansion Strategy</div>
+      <div class="card-desc">Division coverage map, engagement framework, and champion playbook for Apollo.</div>
+      <div class="card-tag deck">Deck</div>
+    </a>
+
+    <a class="card" href="apollo/growth.html">
+      <div class="card-icon icon-amber">
+        <svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg>
+      </div>
+      <div class="card-title">Growth Dashboard</div>
+      <div class="card-desc">Revenue calculator, 2026 roadmap with editable actuals, and pricing gap analysis.</div>
+      <div class="card-tag dashboard">Dashboard</div>
+    </a>
+  </div>
+
+  <div class="section-label">Sales &amp; Delivery</div>
+  <div class="card-grid">
+    <a class="card" href="work-samples/">
+      <div class="card-icon icon-blue">
+        <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/></svg>
+      </div>
+      <div class="card-title">Work Samples</div>
+      <div class="card-desc">Portfolio of 27 consulting deliverables across 9 service clusters.</div>
+      <div class="card-tag">Portfolio</div>
+    </a>
+
+    <a class="card" href="ai-assessment/">
+      <div class="card-icon icon-purple">
+        <svg viewBox="0 0 24 24"><path d="M12 2a10 10 0 1010 10A10 10 0 0012 2z"/><path d="M12 6v6l4 2"/></svg>
+      </div>
+      <div class="card-title">AI Readiness Assessment</div>
+      <div class="card-desc">Interactive deck presenting the Gratia AI readiness assessment methodology.</div>
+      <div class="card-tag deck">Deck</div>
+    </a>
+
+    <a class="card" href="skills/">
+      <div class="card-icon icon-rose">
+        <svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+      </div>
+      <div class="card-title">Skills Framework</div>
+      <div class="card-desc">Core skills taxonomy, services catalog, and AQS calculator for analyst assessment.</div>
+      <div class="card-tag tool">Tool</div>
+    </a>
+  </div>
+</div>
+
+</div><!-- /deck-content -->
+
+</body>
+</html>

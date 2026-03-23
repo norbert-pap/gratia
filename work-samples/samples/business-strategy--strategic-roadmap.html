@@ -1,0 +1,603 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Strategic Roadmap: Digital Transformation 2026–2028</title>
+<style>
+:root {
+  --font-family-display: Arial, sans-serif;
+  --font-weight-display: 600;
+  --font-family-content: Arial, sans-serif;
+  --font-weight-content: 400;
+  --font-size-content: 16px;
+  --line-height-content: 1.4;
+  --slide-w: 1280px;
+  --slide-h: 720px;
+  --radius: 16px;
+  --shadow: 0 10px 24px rgba(0,0,0,.45);
+}
+body.theme-dark {
+  --color-bg-base: #0f172a;
+  --color-bg-elevated: #020617;
+  --color-bg-surface: #1e293b;
+  --color-bg-muted: #334155;
+  --color-text-primary: #f1f5f9;
+  --color-text-secondary: #cbd5e1;
+  --color-text-muted: #94a3b8;
+  --color-text-accent: #38bdf8;
+  --color-primary: #38bdf8;
+  --color-primary-foreground: #0f172a;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: var(--font-family-content);
+  font-weight: var(--font-weight-content);
+  font-size: var(--font-size-content);
+  line-height: var(--line-height-content);
+  overflow-x: hidden;
+  background: var(--color-bg-base);
+  color: var(--color-text-primary);
+}
+.deck-wrap{ display:flex; flex-direction:column; align-items:center; padding: 16px 12px; }
+.topbar{
+  width: min(var(--slide-w), 100%);
+  display:flex; align-items:center; justify-content:space-between;
+  gap: 12px; flex-wrap: wrap; margin: 0 0 10px;
+  color: var(--color-text-muted); font-size: 12px;
+}
+.kbd{
+  display:inline-flex; align-items:center; justify-content:center;
+  min-width: 22px; height: 22px; padding: 0 8px;
+  border: 1px solid #334155; border-radius: 10px;
+  background: #0b1220; color: var(--color-text-secondary);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+.deck{
+  width: var(--slide-w); height: var(--slide-h);
+  position: relative;
+  transform: scale(var(--scale, 1)); transform-origin: top center;
+}
+.slide {
+  display:none; width: var(--slide-w); height: var(--slide-h);
+  flex-shrink: 0; overflow: hidden;
+  background: var(--color-bg-base); color: var(--color-text-primary);
+  border: 1px solid #334155; border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+.slide.active{ display:flex; }
+
+.col { flex-direction: column; }
+.fill-height { flex: 1; display: flex; flex-direction: column; }
+
+.p-16 { padding: 3rem 3rem 4.25rem; }
+.mb-2 { margin-bottom: 0.5rem; }
+.mb-4 { margin-bottom: 1rem; }
+.mb-6 { margin-bottom: 1.5rem; }
+.mt-4 { margin-top: 1rem; }
+
+h1, h2, h3, h4 {
+  font-family: var(--font-family-display);
+  font-weight: var(--font-weight-display);
+  line-height: 1.2; margin: 0;
+  color: var(--color-primary);
+}
+h1 { font-size: 2.5rem; }
+h2 { font-size: 2rem; }
+h3 { font-size: 1.5rem; }
+p, li { color: var(--color-text-secondary); }
+strong { color: var(--color-primary); }
+.muted { color: var(--color-text-muted) !important; }
+.text-sm { font-size: 0.875rem; }
+.text-xs { font-size: 0.75rem; }
+.font-semibold { font-weight: 600; }
+
+.slide::after {
+  content: "Sanitized excerpt • Prepared by Gratia • Jan 2026";
+  position: absolute; left: 4rem; right: 4rem; bottom: 1.1rem;
+  font-size: 0.72rem; color: #94a3b8; opacity: 0.9;
+}
+
+/* Cards & metrics */
+.metric-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; }
+.metric-card {
+  padding: 1rem; background: #1e293b; border: 1px solid #334155;
+  border-left: 4px solid #38bdf8;
+}
+.metric-val { font-size: 2rem; font-weight: 700; margin-bottom: 0.15rem; }
+.metric-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; color: #94a3b8; }
+.metric-desc { font-size: 0.8rem; color: #cbd5e1; margin-top: 0.25rem; }
+
+.card-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+.info-card {
+  padding: 1rem; background: #1e293b; border: 1px solid #334155;
+}
+.info-card h4 { font-size: 0.85rem; margin-bottom: 0.5rem; }
+.info-card p { font-size: 0.8rem; line-height: 1.4; }
+
+.callout-card {
+  padding: 1rem; background: #1e293b; border: 1px solid #334155;
+  border-left: 4px solid #38bdf8;
+}
+.callout-card h4 { font-size: 0.85rem; margin-bottom: 0.5rem; color: #38bdf8; }
+.callout-card p { font-size: 0.8rem; line-height: 1.4; }
+.callout-card ul { margin-left: 1.2rem; margin-top: 0.3rem; }
+.callout-card li { font-size: 0.8rem; margin-bottom: 0.3rem; color: #cbd5e1; }
+
+/* Swimlane roadmap */
+.swimlane { background: #1e293b; border: 1px solid #334155; padding: 0.75rem; }
+.swimlane-row { display: grid; grid-template-columns: 120px 1fr 1fr 1fr; gap: 0.5rem; align-items: stretch; margin-bottom: 0.75rem; }
+.swimlane-row:last-child { margin-bottom: 0; }
+.swimlane-label { background: #0b1220; padding: 0.5rem; font-size: 0.75rem; font-weight: 600; color: #cbd5e1; border: 1px solid #334155; }
+.year-col { position: relative; background: #0b1220; border: 1px solid #334155; padding: 0.4rem; }
+.initiative { background: #38bdf8; opacity: 0.8; color: #0f172a; padding: 0.35rem; border-radius: 4px; font-size: 0.65rem; font-weight: 600; text-align: center; margin-bottom: 0.3rem; }
+.initiative.p1 { background: #10b981; opacity: 0.85; }
+.initiative.p2 { background: #f59e0b; opacity: 0.8; }
+.milestone { width: 8px; height: 8px; border-radius: 999px; background: #38bdf8; margin: 0.2rem auto; }
+
+/* Stacked bar chart -->
+.chart-container { background: #1e293b; border: 1px solid #334155; padding: 0.75rem; }
+.bar-row { display: grid; grid-template-columns: 80px 1fr 60px; gap: 0.5rem; align-items: center; margin-bottom: 0.5rem; }
+.bar-label { font-size: 0.8rem; color: #cbd5e1; font-weight: 600; }
+.stacked-bar { height: 24px; display: flex; border-radius: 4px; overflow: hidden; }
+.bar-segment { display: flex; align-items: center; justify-content: center; color: #0f172a; font-size: 0.65rem; font-weight: 600; }
+.bar-segment.p { background: #38bdf8; }
+.bar-segment.c { background: #06b6d4; }
+.bar-segment.a { background: #22d3ee; }
+.bar-val { text-align: right; font-size: 0.8rem; color: #cbd5e1; }
+
+/* KPI cards row -->
+.kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.5rem; margin-top: 0.75rem; }
+.kpi-card { background: #0b1220; border: 1px solid #334155; padding: 0.6rem; text-align: center; }
+.kpi-label { font-size: 0.65rem; color: #94a3b8; text-transform: uppercase; }
+.kpi-val { font-size: 1.4rem; font-weight: 700; color: #38bdf8; margin: 0.25rem 0; }
+.kpi-desc { font-size: 0.65rem; color: #cbd5e1; }
+
+@media print{
+  body{ background:#fff; }
+  .deck-wrap{ padding:0; }
+  .topbar{ display:none; }
+  .deck{ width:auto; height:auto; transform:none; }
+  .slide{ display:flex !important; margin: 0 0 18px; page-break-after: always; box-shadow:none; }
+  .slide::after{ display:none; }
+}
+</style>
+</head>
+<body class="theme-dark">
+
+<div class="deck-wrap">
+  <div class="topbar" aria-hidden="true">
+    <div>Business Strategy Services • Consulting-style sample</div>
+    <div><span class="kbd">←</span> <span class="kbd">→</span> to navigate • <span class="kbd">Cmd</span> + <span class="kbd">P</span> to export PDF</div>
+  </div>
+  <main class="deck" aria-label="Digital transformation strategic roadmap">
+
+<!-- Slide 1: Exec Overview -->
+<section class="slide active p-16 col">
+  <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:1.25rem;">
+    <div>
+      <p class="text-xs font-semibold" style="color:#38bdf8; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:0.4rem;">Business Strategy — Sample</p>
+      <h1>Digital Transformation<br/>Strategic Roadmap</h1>
+      <p class="text-sm" style="color:#94a3b8; margin-top:0.35rem;">Palisade Insurance • 3-year transformation initiative (2026–2028)</p>
+    </div>
+    <div style="text-align:right; font-size:0.75rem; color:#94a3b8;">
+      <div>Client: Palisade Insurance</div>
+      <div>Date: Jan 2026</div>
+    </div>
+  </div>
+
+  <!-- Split: left metrics+findings, right radar/spider viz -->
+  <div style="display:grid; grid-template-columns: 0.48fr 0.52fr; gap:1rem; margin-bottom:0.6rem;">
+    <!-- Left: 3 metric cards + findings -->
+    <div style="display:flex; flex-direction:column; gap:0.5rem;">
+      <div class="metric-card" style="display:flex; align-items:center; gap:0.75rem;">
+        <div>
+          <p class="metric-label">Total Investment</p>
+          <p class="metric-val" style="color:#38bdf8; font-size:1.8rem;">$14.5M</p>
+        </div>
+        <p class="metric-desc" style="flex:1;">Over 3 years; tech, talent, consulting, change management</p>
+      </div>
+      <div class="metric-card" style="border-left-color:#06b6d4; display:flex; align-items:center; gap:0.75rem;">
+        <div>
+          <p class="metric-label">Efficiency Gain Target</p>
+          <p class="metric-val" style="color:#06b6d4; font-size:1.8rem;">35%</p>
+        </div>
+        <p class="metric-desc" style="flex:1;">Operating cost reduction in claims + underwriting by 2028</p>
+      </div>
+      <div class="metric-card" style="border-left-color:#22d3ee; display:flex; align-items:center; gap:0.75rem;">
+        <div>
+          <p class="metric-label">Digital Maturity</p>
+          <p class="metric-val" style="color:#22d3ee; font-size:1.8rem;">2.1 → 4.2</p>
+        </div>
+        <p class="metric-desc" style="flex:1;">Current to target (5.0 max); across six dimensions</p>
+      </div>
+
+      <!-- Findings -->
+      <div style="border-top:1px solid #334155; padding-top:0.5rem; margin-top:0.15rem;">
+        <div style="display:flex; gap:0.5rem; padding:0.3rem 0; font-size:0.72rem; line-height:1.35; color:#cbd5e1;">
+          <div style="width:6px; height:6px; border-radius:999px; background:#38bdf8; margin-top:4px; flex-shrink:0;"></div>
+          <div><strong style="color:#38bdf8;">Claims automation highest ROI:</strong> $3.2M annual savings + 45% faster turnaround by 2028</div>
+        </div>
+        <div style="display:flex; gap:0.5rem; padding:0.3rem 0; font-size:0.72rem; line-height:1.35; color:#cbd5e1;">
+          <div style="width:6px; height:6px; border-radius:999px; background:#f59e0b; margin-top:4px; flex-shrink:0;"></div>
+          <div><strong style="color:#f59e0b;">Underwriting AI highest execution risk:</strong> Requires historical data cleanse + regulatory sign-off (12+ months)</div>
+        </div>
+        <div style="display:flex; gap:0.5rem; padding:0.3rem 0; font-size:0.72rem; line-height:1.35; color:#cbd5e1;">
+          <div style="width:6px; height:6px; border-radius:999px; background:#22d3ee; margin-top:4px; flex-shrink:0;"></div>
+          <div><strong style="color:#22d3ee;">Customer portal quickest win:</strong> Q4 2026 launch; <6 month build; drives engagement +40%</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: Current vs. Target radar/spider chart -->
+    <div style="background:#1e293b; border:1px solid #334155; padding:0.75rem; display:flex; flex-direction:column;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.4rem;">
+        <div style="font-size:0.85rem; font-weight:600; color:#38bdf8;">Digital Maturity: Current vs. Target</div>
+        <div style="font-size:0.7rem; color:#94a3b8;">6 dimensions</div>
+      </div>
+      <svg width="100%" height="220" viewBox="0 0 400 240" preserveAspectRatio="xMidYMid meet" style="flex:1;">
+        <!-- Hexagon grid (6 dimensions: Claims, Underwriting, Customer, Data, Cloud, Culture) -->
+        <!-- Center point at (200, 120) -->
+        <!-- Outer circle for scale -->
+        <circle cx="200" cy="120" r="70" fill="none" stroke="#334155" stroke-width="1" opacity="0.3"/>
+        <circle cx="200" cy="120" r="100" fill="none" stroke="#334155" stroke-width="1" opacity="0.2"/>
+
+        <!-- Current state (2.1/5.0) polygon - smaller -->
+        <polygon points="200,40 260,55 275,115 245,165 145,165 115,115" fill="rgba(56,189,248,0.15)" stroke="#38bdf8" stroke-width="2"/>
+
+        <!-- Target state (4.2/5.0) polygon - larger -->
+        <polygon points="200,25 280,50 310,125 270,200 130,200 90,125" fill="rgba(34,211,238,0.12)" stroke="#22d3ee" stroke-width="2"/>
+
+        <!-- Dimension labels & values -->
+        <text x="200" y="25" text-anchor="middle" fill="#cbd5e1" font-size="10" font-weight="600">Claims Process</text>
+        <text x="200" y="15" text-anchor="middle" fill="#94a3b8" font-size="9">2.2 → 4.5</text>
+
+        <text x="290" y="65" text-anchor="start" fill="#cbd5e1" font-size="10" font-weight="600">Underwriting</text>
+        <text x="290" y="55" text-anchor="start" fill="#94a3b8" font-size="9">1.8 → 3.9</text>
+
+        <text x="310" y="135" text-anchor="start" fill="#cbd5e1" font-size="10" font-weight="600">Customer Portal</text>
+        <text x="310" y="125" text-anchor="start" fill="#94a3b8" font-size="9">1.5 → 4.3</text>
+
+        <text x="270" y="210" text-anchor="middle" fill="#cbd5e1" font-size="10" font-weight="600">Data &amp; Analytics</text>
+        <text x="270" y="220" text-anchor="middle" fill="#94a3b8" font-size="9">2.8 → 4.1</text>
+
+        <text x="130" y="210" text-anchor="middle" fill="#cbd5e1" font-size="10" font-weight="600">Cloud Infra</text>
+        <text x="130" y="220" text-anchor="middle" fill="#94a3b8" font-size="9">2.4 → 4.0</text>
+
+        <text x="90" y="135" text-anchor="end" fill="#cbd5e1" font-size="10" font-weight="600">Org &amp; Culture</text>
+        <text x="90" y="125" text-anchor="end" fill="#94a3b8" font-size="9">2.0 → 4.5</text>
+
+        <!-- Legend -->
+        <line x1="30" y1="235" x2="50" y2="235" stroke="#38bdf8" stroke-width="2"/>
+        <text x="55" y="238" fill="#cbd5e1" font-size="9">Current (2.1)</text>
+
+        <line x1="180" y1="235" x2="200" y2="235" stroke="#22d3ee" stroke-width="2"/>
+        <text x="205" y="238" fill="#cbd5e1" font-size="9">Target (4.2)</text>
+      </svg>
+
+      <!-- Gap callouts below -->
+      <div style="font-size:0.7rem; color:#cbd5e1; margin-top:0.3rem; padding:0.3rem; background:#0b1220; border-radius:4px;">
+        <strong style="color:#38bdf8;">Largest gaps:</strong> Customer Portal (+2.8), Claims (+2.3), Org (+2.5) → Priority focus areas
+      </div>
+    </div>
+  </div>
+
+  <div class="card-row">
+    <div class="info-card">
+      <h4 style="color:#38bdf8;">Investment drivers</h4>
+      <p><strong style="color:#38bdf8;">•</strong> Claims platform: $5.2M (build + implementation). <strong style="color:#38bdf8;">•</strong> Underwriting AI: $3.8M. <strong style="color:#38bdf8;">•</strong> Customer portal: $2.1M. <strong style="color:#38bdf8;">•</strong> Data/Cloud: $2.4M. <strong style="color:#38bdf8;">•</strong> Change mgmt: $1M.</p>
+    </div>
+    <div class="info-card">
+      <h4 style="color:#38bdf8;">Success metrics</h4>
+      <p><strong style="color:#38bdf8;">•</strong> Claims turnaround <3 days (vs. 8 today). <strong style="color:#38bdf8;">•</strong> Portal adoption >70%. <strong style="color:#38bdf8;">•</strong> Cost/claim down 35%. <strong style="color:#38bdf8;">•</strong> Employee NPS >60 by 2028.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Slide 2: Detailed Spider Chart + Gap Analysis -->
+<section class="slide p-16 col">
+  <h2 class="mb-4">Digital maturity assessment & capability roadmap</h2>
+  <div class="fill-height col" style="gap:0.75rem;">
+    <div style="display:grid; grid-template-columns: 1.1fr 0.9fr; gap: 1rem;">
+      <!-- Left: Large radar chart -->
+      <div>
+        <p class="text-xs font-semibold" style="color:#38bdf8; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:0.4rem;">6-Dimension Maturity Model</p>
+        <svg width="100%" height="300" viewBox="0 0 380 340" preserveAspectRatio="xMidYMid meet" aria-label="Digital maturity radar">
+          <!-- Concentric circles (scale 0-5) -->
+          <circle cx="190" cy="170" r="10" fill="none" stroke="#334155" stroke-width="1" opacity="0.4"/>
+          <circle cx="190" cy="170" r="40" fill="none" stroke="#334155" stroke-width="1" opacity="0.4"/>
+          <circle cx="190" cy="170" r="70" fill="none" stroke="#334155" stroke-width="1" opacity="0.4"/>
+          <circle cx="190" cy="170" r="100" fill="none" stroke="#334155" stroke-width="1" opacity="0.4"/>
+
+          <!-- Radial grid lines (6 dimensions) -->
+          <line x1="190" y1="70" x2="190" y2="270" stroke="#334155" stroke-width="1" opacity="0.3"/>
+          <line x1="335" y1="105" x2="45" y2="235" stroke="#334155" stroke-width="1" opacity="0.3"/>
+          <line x1="335" y1="235" x2="45" y2="105" stroke="#334155" stroke-width="1" opacity="0.3"/>
+
+          <!-- Current state polygon (2.1 avg) -->
+          <polygon points="190,100 270,135 310,210 270,245 110,245 50,210" fill="rgba(56,189,248,0.15)" stroke="#38bdf8" stroke-width="2"/>
+
+          <!-- Target state polygon (4.2 avg) -->
+          <polygon points="190,50 330,120 380,240 280,300 100,300 40,240" fill="rgba(34,211,238,0.12)" stroke="#22d3ee" stroke-width="2"/>
+
+          <!-- Dimension labels (6) -->
+          <text x="190" y="35" text-anchor="middle" fill="#cbd5e1" font-size="10" font-weight="700">Claims</text>
+          <text x="190" y="48" text-anchor="middle" fill="#f1f5f9" font-size="12" font-weight="700">2.2</text>
+
+          <text x="330" y="110" text-anchor="start" fill="#cbd5e1" font-size="10" font-weight="700">Underwriting</text>
+          <text x="330" y="125" text-anchor="start" fill="#f1f5f9" font-size="12" font-weight="700">1.8</text>
+
+          <text x="360" y="240" text-anchor="start" fill="#cbd5e1" font-size="10" font-weight="700">Customer</text>
+          <text x="360" y="255" text-anchor="start" fill="#f1f5f9" font-size="12" font-weight="700">1.5</text>
+
+          <text x="190" y="320" text-anchor="middle" fill="#cbd5e1" font-size="10" font-weight="700">Data &amp; Analytics</text>
+          <text x="190" y="333" text-anchor="middle" fill="#f1f5f9" font-size="12" font-weight="700">2.8</text>
+
+          <text x="40" y="240" text-anchor="end" fill="#cbd5e1" font-size="10" font-weight="700">Cloud Infra</text>
+          <text x="40" y="255" text-anchor="end" fill="#f1f5f9" font-size="12" font-weight="700">2.4</text>
+
+          <text x="50" y="110" text-anchor="start" fill="#cbd5e1" font-size="10" font-weight="700">Org &amp; Culture</text>
+          <text x="50" y="125" text-anchor="start" fill="#f1f5f9" font-size="12" font-weight="700">2.0</text>
+
+          <!-- Scale labels -->
+          <text x="200" y="175" font-size="8" fill="#94a3b8">1</text>
+          <text x="200" y="145" font-size="8" fill="#94a3b8">2</text>
+          <text x="200" y="105" font-size="8" fill="#94a3b8">3</text>
+          <text x="200" y="75" font-size="8" fill="#94a3b8">4</text>
+
+          <!-- Legend -->
+          <line x1="20" y1="290" x2="50" y2="290" stroke="#38bdf8" stroke-width="2"/>
+          <text x="55" y="293" fill="#cbd5e1" font-size="9" font-weight="600">Current State (2.1)</text>
+
+          <line x1="220" y1="290" x2="250" y2="290" stroke="#22d3ee" stroke-width="2"/>
+          <text x="255" y="293" fill="#cbd5e1" font-size="9" font-weight="600">Target State (4.2)</text>
+        </svg>
+      </div>
+
+      <!-- Right: Gap summary -->
+      <div>
+        <p class="text-xs font-semibold" style="color:#38bdf8; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:0.5rem;">Gap & Sequencing</p>
+        <div style="display:flex; flex-direction:column; gap:0.5rem; font-size:0.75rem;">
+          <div style="background:#0b1220; border:1px solid #334155; padding:0.4rem; border-left:4px solid #10b981;">
+            <div style="font-weight:700; color:#10b981;">Priority 1 (2026)</div>
+            <div style="color:#cbd5e1; margin-top:0.2rem;">Claims, Customer portal, Data foundation</div>
+          </div>
+          <div style="background:#0b1220; border:1px solid #334155; padding:0.4rem; border-left:4px solid #f59e0b;">
+            <div style="font-weight:700; color:#f59e0b;">Priority 2 (2027)</div>
+            <div style="color:#cbd5e1; margin-top:0.2rem;">Underwriting AI, Cloud consolidation</div>
+          </div>
+          <div style="background:#0b1220; border:1px solid #334155; padding:0.4rem; border-left:4px solid #38bdf8;">
+            <div style="font-weight:700; color:#38bdf8;">Priority 3 (2028)</div>
+            <div style="color:#cbd5e1; margin-top:0.2rem;">Org maturity, Advanced analytics, Integration</div>
+          </div>
+        </div>
+
+        <p class="text-xs font-semibold" style="color:#38bdf8; text-transform:uppercase; letter-spacing:0.06em; margin-top:0.75rem; margin-bottom:0.4rem;">Largest leverage plays</p>
+        <div style="font-size:0.7rem; color:#cbd5e1; line-height:1.4;">
+          <div style="margin-bottom:0.3rem;"><strong style="color:#38bdf8;">Claims:</strong> 2.2→4.5 = $3.2M/yr savings</div>
+          <div style="margin-bottom:0.3rem;"><strong style="color:#38bdf8;">Culture:</strong> 2.0→4.5 = Critical enabler for AI, faster time-to-value</div>
+          <div><strong style="color:#38bdf8;">Customer:</strong> 1.5→4.3 = Retention +15%, NPS +20pts</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Slide 3: Swimlane Roadmap -->
+<section class="slide p-16 col">
+  <h2 class="mb-4">Initiative roadmap: 2026–2028 phased delivery</h2>
+  <div class="fill-height col" style="gap:0.75rem;">
+    <p class="text-xs font-semibold" style="color:#38bdf8; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:0.5rem;">Swimlane timeline (4 workstreams × 3 years)</p>
+    <div class="swimlane">
+      <!-- Row 1: Claims -->
+      <div class="swimlane-row">
+        <div class="swimlane-label">Claims Process</div>
+        <div class="year-col">
+          <div class="initiative p1">Assessment + Design Q1</div>
+          <div class="initiative p1">Build & Pilot Q2-Q3</div>
+          <div class="milestone"></div>
+        </div>
+        <div class="year-col">
+          <div class="initiative">Scale & Refine</div>
+          <div class="initiative">Optimization</div>
+          <div class="milestone"></div>
+        </div>
+        <div class="year-col">
+          <div class="initiative">Advanced Features</div>
+          <div class="milestone"></div>
+        </div>
+      </div>
+
+      <!-- Row 2: Underwriting AI -->
+      <div class="swimlane-row">
+        <div class="swimlane-label">Underwriting AI</div>
+        <div class="year-col">
+          <div style="font-size:0.65rem; color:#94a3b8; padding:0.4rem;">Data cleanse + model dev</div>
+          <div class="milestone"></div>
+        </div>
+        <div class="year-col">
+          <div class="initiative p2">Pilot Q2-Q4</div>
+          <div class="initiative p2">Regulatory approval</div>
+          <div class="milestone"></div>
+        </div>
+        <div class="year-col">
+          <div class="initiative">Production rollout</div>
+          <div class="initiative">Refine models</div>
+          <div class="milestone"></div>
+        </div>
+      </div>
+
+      <!-- Row 3: Customer Portal -->
+      <div class="swimlane-row">
+        <div class="swimlane-label">Customer Portal</div>
+        <div class="year-col">
+          <div class="initiative p1">Design Q1-Q2</div>
+          <div class="initiative p1">Build Q3-Q4</div>
+          <div class="milestone"></div>
+        </div>
+        <div class="year-col">
+          <div class="initiative">Launch Q1</div>
+          <div class="initiative">Scale & Marketing</div>
+          <div class="milestone"></div>
+        </div>
+        <div class="year-col">
+          <div class="initiative">Advanced features</div>
+          <div class="milestone"></div>
+        </div>
+      </div>
+
+      <!-- Row 4: Cloud & Data -->
+      <div class="swimlane-row">
+        <div class="swimlane-label">Cloud & Data Infra</div>
+        <div class="year-col">
+          <div class="initiative">Cloud strategy</div>
+          <div class="initiative p1">Foundation build</div>
+          <div class="milestone"></div>
+        </div>
+        <div class="year-col">
+          <div class="initiative">Migration Phase 1</div>
+          <div class="initiative">Analytics platform</div>
+          <div class="milestone"></div>
+        </div>
+        <div class="year-col">
+          <div class="initiative">Migration Phase 2</div>
+          <div class="initiative">Optimization</div>
+          <div class="milestone"></div>
+        </div>
+      </div>
+    </div>
+
+    <p class="text-xs" style="color:#94a3b8; margin-top:0.5rem;">
+      <strong style="color:#38bdf8;">Legend:</strong> <span style="display:inline-block; background:#10b981; opacity:0.8; padding:0 0.4rem; margin:0 0.2rem; border-radius:2px; color:#0f172a; font-size:0.65rem;">P1</span> = Priority 1 (critical path);
+      <span style="display:inline-block; background:#f59e0b; opacity:0.8; padding:0 0.4rem; margin:0 0.2rem; border-radius:2px; color:#0f172a; font-size:0.65rem;">P2</span> = Priority 2;
+      <span style="display:inline-block; background:#38bdf8; opacity:0.8; padding:0 0.4rem; margin:0 0.2rem; border-radius:2px; color:#0f172a; font-size:0.65rem;">Blue</span> = Execution;
+      <span style="display:inline-block; width:8px; height:8px; background:#38bdf8; border-radius:999px; margin:0 0.3rem; vertical-align:middle;"></span>= Milestone gate
+    </p>
+  </div>
+</section>
+
+<!-- Slide 4: Investment by Pillar & KPI Summary -->
+<section class="slide p-16 col">
+  <h2 class="mb-4">Investment summary & KPI dashboard</h2>
+  <div class="fill-height col" style="gap:0.75rem;">
+    <p class="text-xs font-semibold" style="color:#38bdf8; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:0.5rem;">3-Year investment by pillar & KPI targets</p>
+
+    <div class="chart-container">
+      <div class="bar-row">
+        <div class="bar-label">Claims Platform</div>
+        <div class="stacked-bar">
+          <div class="bar-segment p" style="width: 55%;">$5.2M</div>
+        </div>
+        <div class="bar-val">$5.2M</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">Underwriting AI</div>
+        <div class="stacked-bar">
+          <div class="bar-segment c" style="width: 41%;">$3.8M</div>
+        </div>
+        <div class="bar-val">$3.8M</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">Customer Portal</div>
+        <div class="stacked-bar">
+          <div class="bar-segment a" style="width: 23%;">$2.1M</div>
+        </div>
+        <div class="bar-val">$2.1M</div>
+      </div>
+      <div class="bar-row">
+        <div class="bar-label">Data + Cloud</div>
+        <div class="stacked-bar">
+          <div class="bar-segment p" style="width: 26%;">$2.4M</div>
+        </div>
+        <div class="bar-val">$2.4M</div>
+      </div>
+      <div class="bar-row" style="border-top: 1px solid #334155; padding-top:0.4rem; margin-top:0.4rem;">
+        <div class="bar-label" style="font-weight:700;">Total</div>
+        <div class="stacked-bar">
+          <div class="bar-segment p" style="width: 36%;">$5.2M</div>
+          <div class="bar-segment c" style="width: 26%;">$3.8M</div>
+          <div class="bar-segment a" style="width: 14%;">$2.1M</div>
+          <div class="bar-segment p" style="width: 16%;">$2.4M</div>
+        </div>
+        <div class="bar-val" style="font-weight:700;">$14.5M</div>
+      </div>
+    </div>
+
+    <!-- KPI cards -->
+    <div class="kpi-row">
+      <div class="kpi-card">
+        <div class="kpi-label">Claims Turnaround</div>
+        <div class="kpi-val">8d → 2d</div>
+        <div class="kpi-desc">Faster resolution, better NPS</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Portal Adoption</div>
+        <div class="kpi-val">0% → 70%</div>
+        <div class="kpi-desc">By end 2027</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Cost per claim</div>
+        <div class="kpi-val">$285 → $185</div>
+        <div class="kpi-desc">35% reduction target</div>
+      </div>
+      <div class="kpi-card">
+        <div class="kpi-label">Emp. NPS</div>
+        <div class="kpi-val">42 → 60+</div>
+        <div class="kpi-desc">Org change metric</div>
+      </div>
+    </div>
+
+    <div class="callout-card" style="margin-top:0.75rem;">
+      <h4 style="color:#38bdf8;">Risk mitigation & success factors</h4>
+      <ul style="margin-top:0.4rem;">
+        <li><strong style="color:#38bdf8;">Underwriting AI:</strong> Secure regulatory pre-approval by Q4 2026 to stay on timeline; allocate 6 months for model validation.</li>
+        <li><strong style="color:#38bdf8;">Org change:</strong> Launch change management office Q1 2026; executive sponsorship critical for adoption targets.</li>
+        <li><strong style="color:#38bdf8;">Data cleanse:</strong> Begin legacy system audit in Q1; allocate $500K for remediation (not in core $14.5M estimate).</li>
+        <li><strong style="color:#38bdf8;">Gating:</strong> Monthly steering committee reviews; kill/pivot decisions at Q2, Q4, Q8 gates if KPIs slip >15%.</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+  </main>
+</div>
+
+<script>
+(function(){
+  const root = document.documentElement;
+  const slides = Array.from(document.querySelectorAll('.deck .slide'));
+  let idx = 0;
+  function scaleToFit(){
+    const pad = 32;
+    const w = Math.max(320, window.innerWidth - pad);
+    const h = Math.max(320, window.innerHeight - pad);
+    const s = Math.min(w / 1280, h / 720, 1);
+    root.style.setProperty('--scale', String(s));
+  }
+  function show(i){
+    idx = Math.max(0, Math.min(slides.length - 1, i));
+    slides.forEach((s, k) => s.classList.toggle('active', k === idx));
+    window.location.hash = `slide-${idx+1}`;
+  }
+  function fromHash(){
+    const m = (window.location.hash||'').match(/slide-(\d+)/);
+    if(!m) return;
+    const n = parseInt(m[1], 10);
+    if(!Number.isFinite(n)) return;
+    show(n - 1);
+  }
+  document.addEventListener('keydown',(e)=>{
+    if(e.key==='ArrowRight'||e.key==='PageDown') show(idx+1);
+    if(e.key==='ArrowLeft'||e.key==='PageUp') show(idx-1);
+    if(e.key==='Home') show(0);
+    if(e.key==='End') show(slides.length-1);
+  });
+  window.addEventListener('hashchange', fromHash);
+  window.addEventListener('resize', scaleToFit);
+  scaleToFit();
+  fromHash();
+})();
+</script>
+<a href="../" style="position:fixed;top:12px;right:16px;z-index:99999;background:#111827;color:#e2e8f0;padding:6px 16px;border-radius:8px;font-size:13px;font-weight:600;text-decoration:none;border:1px solid #475569;font-family:system-ui,sans-serif;transition:background .15s;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#111827'">← Gallery</a>
+</body>
+</html>

@@ -1,0 +1,595 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Growth Thesis: Commercial Energy Management Expansion</title>
+<style>
+:root {
+  --font-family-display: Arial, sans-serif;
+  --font-weight-display: 600;
+  --font-family-content: Arial, sans-serif;
+  --font-weight-content: 400;
+  --font-size-content: 16px;
+  --line-height-content: 1.4;
+  --slide-w: 1280px;
+  --slide-h: 720px;
+  --radius: 16px;
+  --shadow: 0 10px 24px rgba(0,0,0,.45);
+}
+body.theme-dark {
+  --color-bg-base: #0f172a;
+  --color-bg-elevated: #020617;
+  --color-bg-surface: #1e293b;
+  --color-bg-muted: #334155;
+  --color-text-primary: #f1f5f9;
+  --color-text-secondary: #cbd5e1;
+  --color-text-muted: #94a3b8;
+  --color-text-accent: #38bdf8;
+  --color-primary: #38bdf8;
+  --color-primary-foreground: #0f172a;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: var(--font-family-content);
+  font-weight: var(--font-weight-content);
+  font-size: var(--font-size-content);
+  line-height: var(--line-height-content);
+  overflow-x: hidden;
+  background: var(--color-bg-base);
+  color: var(--color-text-primary);
+}
+.deck-wrap{ display:flex; flex-direction:column; align-items:center; padding: 16px 12px; }
+.topbar{
+  width: min(var(--slide-w), 100%);
+  display:flex; align-items:center; justify-content:space-between;
+  gap: 12px; flex-wrap: wrap; margin: 0 0 10px;
+  color: var(--color-text-muted); font-size: 12px;
+}
+.kbd{
+  display:inline-flex; align-items:center; justify-content:center;
+  min-width: 22px; height: 22px; padding: 0 8px;
+  border: 1px solid #334155; border-radius: 10px;
+  background: #0b1220; color: var(--color-text-secondary);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+.deck{
+  width: var(--slide-w); height: var(--slide-h);
+  position: relative;
+  transform: scale(var(--scale, 1)); transform-origin: top center;
+}
+.slide {
+  display:none; width: var(--slide-w); height: var(--slide-h);
+  flex-shrink: 0; overflow: hidden;
+  background: var(--color-bg-base); color: var(--color-text-primary);
+  border: 1px solid #334155; border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+.slide.active{ display:flex; }
+
+.col { flex-direction: column; }
+.fill-height { flex: 1; display: flex; flex-direction: column; }
+
+.p-16 { padding: 3rem 3rem 4.25rem; }
+.mb-2 { margin-bottom: 0.5rem; }
+.mb-4 { margin-bottom: 1rem; }
+.mb-6 { margin-bottom: 1.5rem; }
+.mt-4 { margin-top: 1rem; }
+
+h1, h2, h3, h4 {
+  font-family: var(--font-family-display);
+  font-weight: var(--font-weight-display);
+  line-height: 1.2; margin: 0;
+  color: var(--color-primary);
+}
+h1 { font-size: 2.5rem; }
+h2 { font-size: 2rem; }
+h3 { font-size: 1.5rem; }
+p, li { color: var(--color-text-secondary); }
+strong { color: var(--color-primary); }
+.muted { color: var(--color-text-muted) !important; }
+.text-sm { font-size: 0.875rem; }
+.text-xs { font-size: 0.75rem; }
+.font-semibold { font-weight: 600; }
+
+.slide::after {
+  content: "Sanitized excerpt • Prepared by Gratia • Jan 2026";
+  position: absolute; left: 4rem; right: 4rem; bottom: 1.1rem;
+  font-size: 0.72rem; color: #94a3b8; opacity: 0.9;
+}
+
+/* Cards & metrics */
+.metric-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 0.75rem; }
+.metric-card {
+  padding: 1rem; background: #1e293b; border: 1px solid #334155;
+  border-left: 4px solid #38bdf8;
+}
+.metric-val { font-size: 2rem; font-weight: 700; margin-bottom: 0.15rem; }
+.metric-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; color: #94a3b8; }
+.metric-desc { font-size: 0.8rem; color: #cbd5e1; margin-top: 0.25rem; }
+
+.card-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+.info-card {
+  padding: 1rem; background: #1e293b; border: 1px solid #334155;
+}
+.info-card h4 { font-size: 0.85rem; margin-bottom: 0.5rem; }
+.info-card p { font-size: 0.8rem; line-height: 1.4; }
+
+.callout-card {
+  padding: 1rem; background: #1e293b; border: 1px solid #334155;
+  border-left: 4px solid #38bdf8;
+}
+.callout-card h4 { font-size: 0.85rem; margin-bottom: 0.5rem; color: #38bdf8; }
+.callout-card p { font-size: 0.8rem; line-height: 1.4; }
+.callout-card ul { margin-left: 1.2rem; margin-top: 0.3rem; }
+.callout-card li { font-size: 0.8rem; margin-bottom: 0.3rem; color: #cbd5e1; }
+
+/* Heatmap for matrix */
+.matrix-grid { display: grid; grid-template-columns: 140px repeat(3, 1fr); gap: 0.4rem; }
+.m-hdr { padding: 0.35rem 0.5rem; font-size: 0.75rem; color: #94a3b8; font-weight: 600; }
+.m-row { padding: 0.4rem 0.5rem; background: #1e293b; border: 1px solid #334155; color: #cbd5e1; font-weight: 600; font-size: 0.8rem; }
+.m-cell { padding: 0.4rem 0.5rem; border: 1px solid #334155; font-size: 0.8rem; color: #e2e8f0; text-align: center; }
+.m-excellent { background: rgba(34,197,94,0.25); color: #22c55e; }
+.m-good { background: rgba(56,189,248,0.25); color: #38bdf8; }
+.m-moderate { background: rgba(249,115,22,0.25); color: #f97316; }
+.m-poor { background: rgba(239,68,68,0.25); color: #ef4444; }
+
+/* Scenario bars */
+.scenario { background: #1e293b; border: 1px solid #334155; padding: 0.75rem; }
+.s-row { display: grid; grid-template-columns: 140px 1fr 65px; gap: 0.5rem; align-items: center; margin-bottom: 0.4rem; }
+.s-row:last-child { margin-bottom: 0; }
+.s-name { color:#cbd5e1; font-weight: 600; font-size: 0.8rem; }
+.s-bar { height: 11px; border-radius: 999px; background: #0b1220; border: 1px solid #334155; overflow: hidden; }
+.s-fill { height: 100%; border-radius: 999px; background: linear-gradient(90deg, rgba(56,189,248,0.35), rgba(56,189,248,0.9)); }
+.s-val { color:#cbd5e1; text-align:right; font-size: 0.8rem; }
+
+/* Table */
+.data-table { width: 100%; background: #1e293b; border: 1px solid #334155; }
+.data-table th {
+  background: #0b1220; padding: 0.5rem; text-align: left; font-size: 0.75rem;
+  color: #94a3b8; font-weight: 600; border-bottom: 1px solid #334155;
+}
+.data-table td {
+  padding: 0.5rem; border-bottom: 1px solid #334155; font-size: 0.8rem; color: #cbd5e1;
+}
+.data-table tr:last-child td { border-bottom: none; }
+
+@media print{
+  body{ background:#fff; }
+  .deck-wrap{ padding:0; }
+  .topbar{ display:none; }
+  .deck{ width:auto; height:auto; transform:none; }
+  .slide{ display:flex !important; margin: 0 0 18px; page-break-after: always; box-shadow:none; }
+  .slide::after{ display:none; }
+}
+</style>
+</head>
+<body class="theme-dark">
+
+<div class="deck-wrap">
+  <div class="topbar" aria-hidden="true">
+    <div>Business Strategy Services • Consulting-style sample</div>
+    <div><span class="kbd">←</span> <span class="kbd">→</span> to navigate • <span class="kbd">Cmd</span> + <span class="kbd">P</span> to export PDF</div>
+  </div>
+  <main class="deck" aria-label="Growth thesis slide deck">
+
+<!-- Slide 1: Exec Overview -->
+<section class="slide active p-16 col">
+  <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:1.25rem;">
+    <div>
+      <p class="text-xs font-semibold" style="color:#38bdf8; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:0.4rem;">Business Strategy — Sample</p>
+      <h1>Growth Thesis:<br/>Commercial Expansion</h1>
+      <p class="text-sm" style="color:#94a3b8; margin-top:0.35rem;">Verdant Energy • Clean energy SaaS expansion strategy</p>
+    </div>
+    <div style="text-align:right; font-size:0.75rem; color:#94a3b8;">
+      <div>Client: Verdant Energy</div>
+      <div>Date: Jan 2026</div>
+    </div>
+  </div>
+
+  <!-- Split: left metrics+findings, right waterfall viz -->
+  <div style="display:grid; grid-template-columns: 0.48fr 0.52fr; gap:1rem; margin-bottom:0.6rem;">
+    <!-- Left: 3 metric cards + findings -->
+    <div style="display:flex; flex-direction:column; gap:0.5rem;">
+      <div class="metric-card" style="display:flex; align-items:center; gap:0.75rem;">
+        <div>
+          <p class="metric-label">Current ARR</p>
+          <p class="metric-val" style="color:#38bdf8; font-size:1.8rem;">$8.5M</p>
+        </div>
+        <p class="metric-desc" style="flex:1;">Residential portfolio, market-leading penetration</p>
+      </div>
+      <div class="metric-card" style="border-left-color:#06b6d4; display:flex; align-items:center; gap:0.75rem;">
+        <div>
+          <p class="metric-label">Target 2028 ARR</p>
+          <p class="metric-val" style="color:#06b6d4; font-size:1.8rem;">$28M</p>
+        </div>
+        <p class="metric-desc" style="flex:1;">230% growth: commercial + partnerships</p>
+      </div>
+      <div class="metric-card" style="border-left-color:#22d3ee; display:flex; align-items:center; gap:0.75rem;">
+        <div>
+          <p class="metric-label">Commercial TAM</p>
+          <p class="metric-val" style="color:#22d3ee; font-size:1.8rem;">$4.2B</p>
+        </div>
+        <p class="metric-desc" style="flex:1;">U.S. commercial property energy management</p>
+      </div>
+
+      <!-- Findings -->
+      <div style="border-top:1px solid #334155; padding-top:0.5rem; margin-top:0.15rem;">
+        <div style="display:flex; gap:0.5rem; padding:0.3rem 0; font-size:0.72rem; line-height:1.35; color:#cbd5e1;">
+          <div style="width:6px; height:6px; border-radius:999px; background:#38bdf8; margin-top:4px; flex-shrink:0;"></div>
+          <div><strong style="color:#38bdf8;">Organic expansion fastest path:</strong> $9M incremental ARR from cross-sell to existing residential base</div>
+        </div>
+        <div style="display:flex; gap:0.5rem; padding:0.3rem 0; font-size:0.72rem; line-height:1.35; color:#cbd5e1;">
+          <div style="width:6px; height:6px; border-radius:999px; background:#f59e0b; margin-top:4px; flex-shrink:0;"></div>
+          <div><strong style="color:#f59e0b;">Acquisition adds $6M ARR:</strong> Boosts TAM coverage but integration risk with 18-month payback</div>
+        </div>
+        <div style="display:flex; gap:0.5rem; padding:0.3rem 0; font-size:0.72rem; line-height:1.35; color:#cbd5e1;">
+          <div style="width:6px; height:6px; border-radius:999px; background:#22d3ee; margin-top:4px; flex-shrink:0;"></div>
+          <div><strong style="color:#22d3ee;">Partnership model de-risks regulatory:</strong> $4M incremental from white-label + MOU with utilities</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: Revenue bridge waterfall -->
+    <div style="background:#1e293b; border:1px solid #334155; padding:0.75rem; display:flex; flex-direction:column;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.4rem;">
+        <div style="font-size:0.85rem; font-weight:600; color:#38bdf8;">Revenue Bridge: $8.5M → $28M</div>
+        <div style="font-size:0.7rem; color:#94a3b8;">2028 target</div>
+      </div>
+      <svg width="100%" height="220" viewBox="0 0 500 220" preserveAspectRatio="none" style="flex:1;">
+        <!-- Waterfall bars -->
+        <!-- Current $8.5M -->
+        <rect x="20" y="120" width="35" height="80" fill="#38bdf8" opacity="0.9"/>
+        <text x="37.5" y="210" text-anchor="middle" fill="#f1f5f9" font-size="11" font-weight="700">Current</text>
+        <text x="37.5" y="195" text-anchor="middle" fill="#38bdf8" font-size="10">$8.5M</text>
+
+        <!-- Pricing +$2M -->
+        <line x1="55" y1="120" x2="75" y2="120" stroke="#94a3b8" stroke-width="1" stroke-dasharray="2"/>
+        <rect x="75" y="112" width="30" height="8" fill="#06b6d4" opacity="0.8"/>
+        <text x="90" y="210" text-anchor="middle" fill="#f1f5f9" font-size="11" font-weight="700">Pricing</text>
+        <text x="90" y="195" text-anchor="middle" fill="#06b6d4" font-size="10">+$2M</text>
+
+        <!-- New Segment +$9M -->
+        <line x1="105" y1="112" x2="125" y2="112" stroke="#94a3b8" stroke-width="1" stroke-dasharray="2"/>
+        <rect x="125" y="52" width="35" height="60" fill="#22d3ee" opacity="0.8"/>
+        <text x="142.5" y="210" text-anchor="middle" fill="#f1f5f9" font-size="11" font-weight="700">Commercial</text>
+        <text x="142.5" y="195" text-anchor="middle" fill="#22d3ee" font-size="10">+$9M</text>
+
+        <!-- Cross-sell +$4.5M -->
+        <line x1="160" y1="52" x2="180" y2="52" stroke="#94a3b8" stroke-width="1" stroke-dasharray="2"/>
+        <rect x="180" y="30" width="32" height="22" fill="#10b981" opacity="0.8"/>
+        <text x="196" y="210" text-anchor="middle" fill="#f1f5f9" font-size="11" font-weight="700">Cross-sell</text>
+        <text x="196" y="195" text-anchor="middle" fill="#10b981" font-size="10">+$4.5M</text>
+
+        <!-- Partnerships +$4M -->
+        <line x1="212" y1="30" x2="232" y2="30" stroke="#94a3b8" stroke-width="1" stroke-dasharray="2"/>
+        <rect x="232" y="14" width="28" height="16" fill="#f59e0b" opacity="0.8"/>
+        <text x="246" y="210" text-anchor="middle" fill="#f1f5f9" font-size="11" font-weight="700">Partnership</text>
+        <text x="246" y="195" text-anchor="middle" fill="#f59e0b" font-size="10">+$4M</text>
+
+        <!-- Final $28M -->
+        <line x1="260" y1="14" x2="280" y2="14" stroke="#94a3b8" stroke-width="1" stroke-dasharray="2"/>
+        <rect x="280" y="10" width="50" height="110" fill="#38bdf8" opacity="0.6"/>
+        <text x="305" y="210" text-anchor="middle" fill="#f1f5f9" font-size="11" font-weight="700">2028 Target</text>
+        <text x="305" y="195" text-anchor="middle" fill="#38bdf8" font-size="11" font-weight="700">$28M</text>
+
+        <!-- Baseline at bottom for reference -->
+        <line x1="10" y1="130" x2="340" y2="130" stroke="#334155" stroke-width="1" opacity="0.5"/>
+      </svg>
+
+      <!-- Scenario strip at bottom -->
+      <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:0.4rem; margin-top:0.4rem;">
+        <div style="background:#0b1220; border:1px solid #334155; padding:0.4rem; text-align:center;">
+          <div style="font-size:0.65rem; color:#94a3b8;">Conservative</div>
+          <div style="font-size:0.9rem; font-weight:700; color:#cbd5e1;">$22M</div>
+          <div style="font-size:0.6rem; color:#94a3b8;">Organic only</div>
+        </div>
+        <div style="background:#0b1220; border:2px solid #38bdf8; padding:0.4rem; text-align:center;">
+          <div style="font-size:0.65rem; color:#38bdf8; font-weight:700;">Base case</div>
+          <div style="font-size:0.9rem; font-weight:700; color:#38bdf8;">$28M</div>
+          <div style="font-size:0.6rem; color:#94a3b8;">All channels</div>
+        </div>
+        <div style="background:#0b1220; border:1px solid #334155; padding:0.4rem; text-align:center;">
+          <div style="font-size:0.65rem; color:#94a3b8;">Upside</div>
+          <div style="font-size:0.9rem; font-weight:700; color:#cbd5e1;">$34M</div>
+          <div style="font-size:0.6rem; color:#94a3b8;">Acq + partners</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-row">
+    <div class="info-card">
+      <h4 style="color:#38bdf8;">Key assumptions</h4>
+      <p><strong style="color:#38bdf8;">•</strong> Residential base grows 8% YoY; commercial attach rate 45%. <strong style="color:#38bdf8;">•</strong> Partnership with 1–2 utilities begins Q3 2026. <strong style="color:#38bdf8;">•</strong> Acquisition target identified in H1 2026.</p>
+    </div>
+    <div class="info-card">
+      <h4 style="color:#38bdf8;">Success metrics</h4>
+      <p><strong style="color:#38bdf8;">•</strong> Commercial ARR > $5M by end 2026 (organic + pilot partner). <strong style="color:#38bdf8;">•</strong> Acquisition closes with <12 month integration. <strong style="color:#38bdf8;">•</strong> NPS ≥55 across segments.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Slide 2: Scoring Matrix -->
+<section class="slide p-16 col">
+  <h2 class="mb-4">Growth path evaluation & strategy selection</h2>
+  <div class="fill-height col" style="gap:0.75rem;">
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+      <!-- Left: Scoring matrix -->
+      <div>
+        <p class="text-xs font-semibold" style="color:#38bdf8; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:0.5rem;">Expansion Channel Scoring</p>
+        <div class="matrix-grid">
+          <div class="m-hdr"></div>
+          <div class="m-hdr">Organic</div>
+          <div class="m-hdr">Acquisition</div>
+          <div class="m-hdr">Partnership</div>
+
+          <div class="m-row">Speed to Revenue</div>
+          <div class="m-cell m-excellent">9/10 mo</div>
+          <div class="m-cell m-poor">3–4 yr</div>
+          <div class="m-cell m-good">12–18 mo</div>
+
+          <div class="m-row">Investment Cost</div>
+          <div class="m-cell m-good">$3.5M</div>
+          <div class="m-cell m-poor">$45–60M</div>
+          <div class="m-cell m-excellent">$1.2M</div>
+
+          <div class="m-row">Execution Risk</div>
+          <div class="m-cell m-good">Low</div>
+          <div class="m-cell m-poor">High</div>
+          <div class="m-cell m-good">Medium</div>
+
+          <div class="m-row">Strategic Control</div>
+          <div class="m-cell m-excellent">Full</div>
+          <div class="m-cell m-excellent">Full</div>
+          <div class="m-cell m-good">Shared</div>
+        </div>
+        <p class="text-xs mt-4" style="color:#94a3b8;"><strong style="color:#38bdf8;">Scoring:</strong> Speeds rated by time-to-first-revenue. Costs include sales ramp-up. Risk includes regulatory, integration, market timing.</p>
+      </div>
+
+      <!-- Right: Recommendation callout + path -->
+      <div>
+        <p class="text-xs font-semibold" style="color:#38bdf8; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:0.5rem;">Recommended sequencing</p>
+        <div class="callout-card">
+          <h4 style="color:#38bdf8;">Hybrid acceleration model</h4>
+          <p style="margin-bottom:0.5rem;"><strong style="color:#38bdf8;">Phase 1 (Now–Q3 2026):</strong> Launch organic commercial team; validate product-market fit; pilot partnership with 1 utility.</p>
+          <p style="margin-bottom:0.5rem;"><strong style="color:#38bdf8;">Phase 2 (Q3 2026–Q2 2027):</strong> Scale organic if >$1M ARR run-rate; negotiate acquisition target term sheet; expand partner pipeline to 2–3 utilities.</p>
+          <p><strong style="color:#38bdf8;">Phase 3 (Q3 2027+):</strong> Integrate acquisition IF internal team already at $2.5M ARR (de-risks overlap). Scale partnerships to 4+ utilities for national footprint.</p>
+        </div>
+
+        <div class="callout-card" style="margin-top:0.75rem;">
+          <h4 style="color:#38bdf8;">Why this order wins</h4>
+          <ul>
+            <li>Organic validates demand + builds domain IP before acquisition.</li>
+            <li>Partnership wins derisks utility regulatory concerns early.</li>
+            <li>Acquisition only proceeds if organic shows traction (lowers integration surprise).</li>
+            <li>Avoids $45–60M spend in unfamiliar market without proof.</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Slide 3: Full Revenue Bridge -->
+<section class="slide p-16 col">
+  <h2 class="mb-4">Detailed revenue bridge & waterfall sensitivity</h2>
+  <div class="fill-height col" style="gap:0.75rem;">
+    <div style="background:#1e293b; border:1px solid #334155; padding:0.75rem;">
+      <svg width="100%" height="300" viewBox="0 0 1200 300" preserveAspectRatio="none" aria-label="Revenue waterfall">
+        <!-- Starting point: $8.5M -->
+        <rect x="30" y="180" width="60" height="90" fill="#38bdf8" opacity="0.9" stroke="#38bdf8" stroke-width="2"/>
+        <text x="60" y="140" text-anchor="middle" fill="#f1f5f9" font-size="13" font-weight="700">Current</text>
+        <text x="60" y="155" text-anchor="middle" fill="#38bdf8" font-size="12" font-weight="700">$8.5M</text>
+
+        <!-- Connecting line -->
+        <line x1="90" y1="180" x2="110" y2="180" stroke="#94a3b8" stroke-width="1"/>
+
+        <!-- Organic: cross-sell + upsell $6.5M -->
+        <rect x="110" y="112" width="65" height="68" fill="#06b6d4" opacity="0.8" stroke="#06b6d4" stroke-width="2"/>
+        <text x="142.5" y="65" text-anchor="middle" fill="#f1f5f9" font-size="13" font-weight="700">Organic</text>
+        <text x="142.5" y="80" text-anchor="middle" fill="#06b6d4" font-size="12" font-weight="700">+$6.5M</text>
+
+        <!-- Line with delta label -->
+        <line x1="175" y1="112" x2="195" y2="112" stroke="#94a3b8" stroke-width="1"/>
+        <text x="185" y="105" text-anchor="middle" fill="#cbd5e1" font-size="10">Cross-sell 45% + Upsell</text>
+
+        <!-- New commercial segment $9M -->
+        <rect x="195" y="32" width="75" height="80" fill="#22d3ee" opacity="0.8" stroke="#22d3ee" stroke-width="2"/>
+        <text x="232.5" y="0" text-anchor="middle" fill="#f1f5f9" font-size="13" font-weight="700">Commercial</text>
+        <text x="232.5" y="15" text-anchor="middle" fill="#22d3ee" font-size="12" font-weight="700">+$9M</text>
+
+        <!-- Line -->
+        <line x1="270" y1="32" x2="290" y2="32" stroke="#94a3b8" stroke-width="1"/>
+        <text x="280" y="25" text-anchor="middle" fill="#cbd5e1" font-size="10">New segment</text>
+
+        <!-- Acquisition contribution $4M (optional) -->
+        <rect x="290" y="68" width="55" height="44" fill="#f59e0b" opacity="0.8" stroke="#f59e0b" stroke-width="2"/>
+        <text x="317.5" y="40" text-anchor="middle" fill="#f1f5f9" font-size="13" font-weight="700">Acquisition</text>
+        <text x="317.5" y="55" text-anchor="middle" fill="#f59e0b" font-size="12" font-weight="700">+$4M</text>
+
+        <!-- Line -->
+        <line x1="345" y1="90" x2="365" y2="90" stroke="#94a3b8" stroke-width="1"/>
+
+        <!-- Partnership revenue $4M -->
+        <rect x="365" y="64" width="55" height="48" fill="#10b981" opacity="0.8" stroke="#10b981" stroke-width="2"/>
+        <text x="392.5" y="35" text-anchor="middle" fill="#f1f5f9" font-size="13" font-weight="700">Partnership</text>
+        <text x="392.5" y="50" text-anchor="middle" fill="#10b981" font-size="12" font-weight="700">+$4M</text>
+
+        <!-- Line -->
+        <line x1="420" y1="88" x2="440" y2="88" stroke="#94a3b8" stroke-width="1"/>
+
+        <!-- Final target $31.5M (conservative) or $32.5M (base) -->
+        <rect x="440" y="60" width="80" height="111" fill="#38bdf8" opacity="0.6" stroke="#38bdf8" stroke-width="2"/>
+        <text x="480" y="30" text-anchor="middle" fill="#f1f5f9" font-size="13" font-weight="700">2028 Total</text>
+        <text x="480" y="45" text-anchor="middle" fill="#38bdf8" font-size="13" font-weight="700">$31.5M–$32.5M</text>
+
+        <!-- Baseline -->
+        <line x1="20" y1="180" x2="530" y2="180" stroke="#334155" stroke-width="1" opacity="0.4"/>
+
+        <!-- Grid for context -->
+        <text x="15" y="185" text-anchor="end" fill="#94a3b8" font-size="10">$8M</text>
+        <text x="15" y="95" text-anchor="end" fill="#94a3b8" font-size="10">$20M</text>
+        <line x1="20" y1="90" x2="530" y2="90" stroke="#334155" stroke-width="1" opacity="0.3" stroke-dasharray="3"/>
+      </svg>
+    </div>
+
+    <!-- Sensitivity scenarios below -->
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 1rem; margin-top:0.75rem;">
+      <div>
+        <p class="text-xs font-semibold" style="color:#38bdf8; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:0.5rem;">Base case ($28M): Organic + Partial Acq + Partnership</p>
+        <div class="scenario">
+          <div class="s-row">
+            <div class="s-name">Organic hold</div>
+            <div class="s-bar"><div class="s-fill" style="width: 65%;"></div></div>
+            <div class="s-val">$6.5M</div>
+          </div>
+          <div class="s-row">
+            <div class="s-name">Commercial new</div>
+            <div class="s-bar"><div class="s-fill" style="width: 90%;"></div></div>
+            <div class="s-val">$9.0M</div>
+          </div>
+          <div class="s-row">
+            <div class="s-name">Acquisition</div>
+            <div class="s-bar"><div class="s-fill" style="width: 40%;"></div></div>
+            <div class="s-val">$4.0M</div>
+          </div>
+          <div class="s-row">
+            <div class="s-name">Partnership</div>
+            <div class="s-bar"><div class="s-fill" style="width: 40%;"></div></div>
+            <div class="s-val">$4.0M</div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <p class="text-xs font-semibold" style="color:#38bdf8; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:0.5rem;">Stress case ($22M): Organic only</p>
+        <div class="scenario">
+          <div class="s-row">
+            <div class="s-name">Organic only</div>
+            <div class="s-bar"><div class="s-fill" style="width: 65%;"></div></div>
+            <div class="s-val">$6.5M</div>
+          </div>
+          <div class="s-row">
+            <div class="s-name">Commercial (limited)</div>
+            <div class="s-bar"><div class="s-fill" style="width: 50%;"></div></div>
+            <div class="s-val">$6.0M</div>
+          </div>
+          <div class="s-row">
+            <div class="s-name">1 Partner deal</div>
+            <div class="s-bar"><div class="s-fill" style="width: 30%;"></div></div>
+            <div class="s-val">$2.5M</div>
+          </div>
+          <div class="s-row">
+            <div class="s-name">No acquisition</div>
+            <div class="s-bar"><div class="s-fill" style="width: 0%;"></div></div>
+            <div class="s-val">—</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Slide 4: Validation Plan -->
+<section class="slide p-16 col">
+  <h2 class="mb-4">Growth path validation & risk-mitigation schedule</h2>
+  <div class="fill-height col" style="gap:0.75rem;">
+    <p class="text-xs font-semibold" style="color:#38bdf8; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:0.5rem;">Validation hypothesis × testing plan</p>
+    <table class="data-table">
+      <thead>
+        <tr>
+          <th style="width: 20%;">Hypothesis</th>
+          <th style="width: 25%;">Validation method</th>
+          <th style="width: 25%;">Success metric</th>
+          <th style="width: 30%;">Kill criterion / pivot trigger</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong style="color:#38bdf8;">Commercial attach rate ≥45%</strong> of residential base signs up for commercial trial</td>
+          <td>Email + in-app campaign to 2,000 residential users; track signup rate; 3-month trial</td>
+          <td>≥900 signups (45%); ≥60% complete onboarding</td>
+          <td><30% attach → Reposition product value props; extend trial to 6 months</td>
+        </tr>
+        <tr>
+          <td><strong style="color:#38bdf8;">Acquisition target integrates in <12 months</strong> with <10% churn</td>
+          <td>Acquire target; run side-by-side integration plan; track platform consolidation milestones</td>
+          <td>Product unified by Q2 2027; <10% customer churn by end Q3 2027</td>
+          <td>>15% churn → Increase integration resources; consider carve-out model vs. full integration</td>
+        </tr>
+        <tr>
+          <td><strong style="color:#38bdf8;">Utility partnership closes in <6 months</strong> with meaningful pilot</td>
+          <td>Identify top 5 utility targets; engage exec sponsor; negotiate white-label MOU; pilot with 1 utility</td>
+          <td>1 signed MOU by Q2 2026; pilot live by Q4 2026; ≥100 commercial customers via partner</td>
+          <td>No MOU signed by Q3 2026 → Shift to direct commercial GTM + defer partnership 12 months</td>
+        </tr>
+        <tr>
+          <td><strong style="color:#38bdf8;">Commercial NPS ≥50 in first 6 months</strong> (product-market fit signal)</td>
+          <td>Monthly NPS survey of first 500 commercial customers; segment by cohort</td>
+          <td>NPS ≥50 by end Q2 2026; NPS >55 by end 2026</td>
+          <td>NPS <40 by Q2 2026 → Reduce commercial marketing spend; refocus product roadmap on core feature gaps</td>
+        </tr>
+        <tr>
+          <td><strong style="color:#38bdf8;">Acquisition ROI breaks even in <18 months</strong> post-integration</td>
+          <td>Track acquisition cost, integration cost, and incremental ARR contribution; monthly P&amp;L</td>
+          <td>Payback ratio <1.5x by Q2 2028; ARR lift ≥$4M in Year 1</td>
+          <td>Payback >2.0x or ARR lift <$2M → Reduce mid-market focused vs. scale existing acquired base</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <div class="callout-card" style="margin-top:0.75rem;">
+      <h4 style="color:#38bdf8;">Decision gate sequence (quarterly)</h4>
+      <ul>
+        <li><strong style="color:#38bdf8;">Q2 2026:</strong> Commercial attach ≥40% + NPS ≥45 → Approve $2M increase to commercial sales headcount</li>
+        <li><strong style="color:#38bdf8;">Q3 2026:</strong> Utility MOU signed + organic commercial ARR ≥$1M → Green-light acquisition search</li>
+        <li><strong style="color:#38bdf8;">Q4 2026:</strong> Acquisition integration plan ready + partnership pilot launched → Decide on full 2027 commitment</li>
+        <li><strong style="color:#38bdf8;">Q2 2027:</strong> Commercial ARR ≥$3M + acquisition integration <3 months behind → Scale acquisition</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+  </main>
+</div>
+
+<script>
+(function(){
+  const root = document.documentElement;
+  const slides = Array.from(document.querySelectorAll('.deck .slide'));
+  let idx = 0;
+  function scaleToFit(){
+    const pad = 32;
+    const w = Math.max(320, window.innerWidth - pad);
+    const h = Math.max(320, window.innerHeight - pad);
+    const s = Math.min(w / 1280, h / 720, 1);
+    root.style.setProperty('--scale', String(s));
+  }
+  function show(i){
+    idx = Math.max(0, Math.min(slides.length - 1, i));
+    slides.forEach((s, k) => s.classList.toggle('active', k === idx));
+    window.location.hash = `slide-${idx+1}`;
+  }
+  function fromHash(){
+    const m = (window.location.hash||'').match(/slide-(\d+)/);
+    if(!m) return;
+    const n = parseInt(m[1], 10);
+    if(!Number.isFinite(n)) return;
+    show(n - 1);
+  }
+  document.addEventListener('keydown',(e)=>{
+    if(e.key==='ArrowRight'||e.key==='PageDown') show(idx+1);
+    if(e.key==='ArrowLeft'||e.key==='PageUp') show(idx-1);
+    if(e.key==='Home') show(0);
+    if(e.key==='End') show(slides.length-1);
+  });
+  window.addEventListener('hashchange', fromHash);
+  window.addEventListener('resize', scaleToFit);
+  scaleToFit();
+  fromHash();
+})();
+</script>
+<a href="../" style="position:fixed;top:12px;right:16px;z-index:99999;background:#111827;color:#e2e8f0;padding:6px 16px;border-radius:8px;font-size:13px;font-weight:600;text-decoration:none;border:1px solid #475569;font-family:system-ui,sans-serif;transition:background .15s;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#111827'">← Gallery</a>
+</body>
+</html>

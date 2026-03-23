@@ -1,0 +1,645 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Executive Financial Dashboard — Meridian SaaS (Sample)</title>
+  <style>
+    :root{
+      --bg:#f6f7f9;
+      --slide:#ffffff;
+      --ink:#111827;
+      --muted:#6b7280;
+      --line:#e5e7eb;
+      --accent:#18A873;
+      --accent-2:#0ea5e9;
+      --warn:#f59e0b;
+      --danger:#ef4444;
+      --violet:#8b5cf6;
+      --shadow: 0 10px 24px rgba(17,24,39,.10);
+      --radius: 16px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    }
+    *{ box-sizing:border-box; margin:0; padding:0; }
+    body{ font-family:var(--sans); background:var(--bg); color:var(--ink); }
+
+    .deck{ max-width:1280px; margin:22px auto; padding:0 14px 40px; }
+    .topbar{
+      display:flex; align-items:center; justify-content:space-between;
+      margin:6px 2px 14px; color:var(--muted); font-size:13px;
+    }
+    .kbd{
+      font-family:var(--mono); border:1px solid var(--line);
+      padding:2px 8px; border-radius:10px; background:#fff; color:#374151;
+    }
+
+    .slide{
+      display:none; background:var(--slide); border:1px solid var(--line);
+      border-radius:var(--radius); box-shadow:var(--shadow);
+      overflow:hidden; min-height:720px; position:relative;
+    }
+    .slide.active{ display:block; }
+    .slide-inner{ padding:26px 32px 58px; }
+
+    .hdr{
+      display:flex; align-items:flex-start; justify-content:space-between;
+      gap:18px; padding:20px 32px 0;
+    }
+    .hdr-left .kicker{
+      font-size:12px; letter-spacing:.08em; text-transform:uppercase;
+      color:var(--accent); font-weight:750; margin-bottom:6px;
+    }
+    .hdr-left h1{ font-size:28px; line-height:1.18; margin:0 0 6px; font-weight:780; }
+    .hdr-left .sub{ margin:0; color:var(--muted); font-size:14px; line-height:1.35; max-width:900px; }
+    .hdr-right{ text-align:right; color:var(--muted); font-size:12px; line-height:1.4; white-space:nowrap; }
+    .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:6px 10px; border:1px solid var(--line); border-radius:999px;
+      background:#fff; margin-top:6px;
+    }
+    .dot{ width:10px; height:10px; border-radius:999px; background:var(--accent); display:inline-block; }
+
+    .ftr{
+      position:absolute; left:0; right:0; bottom:0;
+      border-top:1px solid var(--line); padding:10px 18px;
+      display:flex; align-items:center; justify-content:space-between;
+      font-size:12px; color:var(--muted); background:#fff;
+    }
+    .brand{ display:flex; align-items:center; gap:10px; font-weight:780; color:#111827; }
+    .brand .mark{
+      width:18px; height:18px; border-radius:6px;
+      background:linear-gradient(135deg, var(--accent), #0bd3a3); display:inline-block;
+    }
+    .trust{ font-family:var(--mono); font-size:11px; color:#64748b; }
+
+    /* Layout */
+    .grid-2{ display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+    .grid-3{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; }
+    .grid-4{ display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:12px; }
+
+    .card{
+      border:1px solid var(--line); border-radius:14px;
+      padding:14px; background:#fff;
+    }
+    .card h3{ margin:0 0 8px; font-size:13px; color:#111827; letter-spacing:.02em; }
+    .card p{ margin:0; color:var(--muted); font-size:13px; line-height:1.35; }
+
+    .metric{
+      display:flex; align-items:baseline; justify-content:space-between; gap:10px;
+      padding:10px 12px; border:1px solid var(--line); border-radius:12px; background:#fbfbfc;
+    }
+    .metric .label{ color:var(--muted); font-size:12px; }
+    .metric .value{ font-weight:780; font-size:16px; }
+
+    .badge{
+      display:inline-flex; align-items:center; padding:4px 9px;
+      border-radius:999px; font-size:12px; border:1px solid var(--line);
+      color:#374151; background:#fff; white-space:nowrap;
+    }
+    .badge.win{ border-color:rgba(24,168,115,.35); background:rgba(24,168,115,.08); color:#0f5132; }
+    .badge.risk{ border-color:rgba(245,158,11,.35); background:rgba(245,158,11,.10); color:#7a4b00; }
+    .badge.gap{ border-color:rgba(239,68,68,.30); background:rgba(239,68,68,.08); color:#7f1d1d; }
+    .badge.info{ border-color:rgba(14,165,233,.35); background:rgba(14,165,233,.10); color:#0b4a6f; }
+
+    .viz{
+      border:1px solid var(--line); border-radius:14px;
+      background:#fff; padding:12px;
+    }
+    .viz-title{
+      display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;
+    }
+    .viz-title h3{ margin:0; font-size:13px; letter-spacing:.02em; }
+    .viz-title .note{ color:var(--muted); font-size:12px; }
+
+    .callout{
+      border-left:4px solid var(--accent); padding:12px;
+      background:rgba(24,168,115,.06); border-radius:12px;
+      border:1px solid rgba(24,168,115,.18);
+    }
+    .callout h4{ margin:0 0 6px; font-size:13px; }
+    .callout p{ margin:0; color:#374151; font-size:13px; line-height:1.4; }
+
+    /* Stat card */
+    .stat-card{
+      border:1px solid var(--line); border-radius:14px;
+      padding:16px; background:#fbfbfc; text-align:center;
+    }
+    .stat-card .stat-value{
+      font-size:28px; font-weight:780; color:#111827; line-height:1.1;
+    }
+    .stat-card .stat-label{
+      font-size:12px; color:var(--muted); margin-top:4px; text-transform:uppercase;
+      letter-spacing:.04em;
+    }
+    .stat-card .stat-delta{
+      font-size:12px; margin-top:6px; font-weight:600;
+    }
+    .stat-card .stat-delta.up{ color:#0f5132; }
+    .stat-card .stat-delta.down{ color:#7f1d1d; }
+
+    /* RAG dot */
+    .rag{ display:inline-block; width:10px; height:10px; border-radius:999px; margin-right:6px; }
+    .rag-g{ background:#18A873; }
+    .rag-a{ background:#f59e0b; }
+    .rag-r{ background:#ef4444; }
+
+    /* KPI grid */
+    .kpi-grid{
+      display:grid; grid-template-columns:repeat(3,1fr); gap:10px;
+    }
+    .kpi-cell{
+      border:1px solid var(--line); border-radius:12px;
+      padding:12px; background:#fbfbfc;
+    }
+    .kpi-cell .kpi-val{ font-size:20px; font-weight:780; color:#111827; }
+    .kpi-cell .kpi-name{ font-size:11px; color:var(--muted); margin-top:2px; text-transform:uppercase; letter-spacing:.04em; }
+    .kpi-cell .kpi-trend{ font-size:11px; margin-top:4px; font-weight:600; display:flex; align-items:center; gap:4px; }
+
+    @media print{
+      body{ background:#fff; }
+      .topbar{ display:none; }
+      .deck{ margin:0; max-width:none; padding:0; }
+      .slide{ display:block; box-shadow:none; border:none; border-radius:0; page-break-after:always; min-height:auto; }
+      .slide-inner{ padding-bottom:58px; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="deck">
+    <div class="topbar">
+      <div>HTML preview deck • Consulting-style sample</div>
+      <div>
+        <span class="kbd">←</span> <span class="kbd">→</span> to navigate • <span class="kbd">Cmd</span> + <span class="kbd">P</span> to export PDF
+      </div>
+    </div>
+
+    <!-- Slide 1: Cover -->
+    <section class="slide active" data-slide="1">
+      <div class="hdr">
+        <div class="hdr-left">
+          <div class="kicker">Data Dashboards & Analytics — Sample</div>
+          <h1>Executive Financial Dashboard: Monthly Operating Review</h1>
+          <p class="sub">Consolidated view of revenue performance, cash position, and operating KPIs to support board-level decision-making and monthly operating cadence (illustrative / anonymized).</p>
+        </div>
+        <div class="hdr-right">
+          <div>Client: Meridian SaaS</div>
+          <div>Period: January 2026</div>
+          <div class="pill"><span class="dot"></span><span>Board-ready</span></div>
+        </div>
+      </div>
+
+      <div class="slide-inner">
+        <!-- Split layout: left = metrics + findings, right = ARR waterfall -->
+        <div style="display:grid; grid-template-columns: 0.46fr 0.54fr; gap:18px; margin-top:10px;">
+          <!-- Left column -->
+          <div>
+            <!-- Stacked metric cards with icons -->
+            <div style="display:flex; flex-direction:column; gap:10px;">
+              <div style="display:flex; align-items:center; gap:12px; border:1px solid var(--line); border-radius:12px; padding:12px 14px;">
+                <div style="width:40px; height:40px; border-radius:10px; background:rgba(24,168,115,.10); display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                  <svg width="20" height="20" viewBox="0 0 20 20"><path d="M2 16 L2 8 L6 8 L6 16 Z M8 16 L8 4 L12 4 L12 16 Z M14 16 L14 1 L18 1 L18 16 Z" fill="#18A873"/></svg>
+                </div>
+                <div style="flex:1;">
+                  <div style="font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:.05em;">ARR</div>
+                  <div style="font-size:22px; font-weight:800; color:var(--accent); line-height:1.2;">$35.0M</div>
+                  <div style="font-size:11px; color:var(--muted);">+$1.4M net in Jan &bull; NRR 118%</div>
+                </div>
+              </div>
+              <div style="display:flex; align-items:center; gap:12px; border:1px solid var(--line); border-radius:12px; padding:12px 14px;">
+                <div style="width:40px; height:40px; border-radius:10px; background:rgba(14,165,233,.10); display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                  <svg width="20" height="20" viewBox="0 0 20 20"><circle cx="10" cy="10" r="8" fill="none" stroke="#0ea5e9" stroke-width="2.5"/><path d="M10 4 L10 10 L15 10" fill="none" stroke="#0ea5e9" stroke-width="2" stroke-linecap="round"/></svg>
+                </div>
+                <div style="flex:1;">
+                  <div style="font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:.05em;">Cash Runway</div>
+                  <div style="font-size:22px; font-weight:800; color:#0ea5e9; line-height:1.2;">18 months</div>
+                  <div style="font-size:11px; color:var(--muted);">$34.2M cash &bull; $1.9M/mo burn</div>
+                </div>
+              </div>
+              <div style="display:flex; align-items:center; gap:12px; border:1px solid var(--line); border-radius:12px; padding:12px 14px;">
+                <div style="width:40px; height:40px; border-radius:10px; background:rgba(245,158,11,.10); display:flex; align-items:center; justify-content:center; flex-shrink:0;">
+                  <svg width="20" height="20" viewBox="0 0 20 20"><path d="M10 1 L12 7 L18 7 L13 11 L15 17 L10 13 L5 17 L7 11 L2 7 L8 7 Z" fill="#f59e0b"/></svg>
+                </div>
+                <div style="flex:1;">
+                  <div style="font-size:11px; color:var(--muted); text-transform:uppercase; letter-spacing:.05em;">Gross Margin</div>
+                  <div style="font-size:22px; font-weight:800; line-height:1.2;">78.2%</div>
+                  <div style="font-size:11px; color:var(--muted);">On target &bull; Stable QoQ</div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Findings as dot-list -->
+            <div style="margin-top:12px; border-top:1px solid var(--line); padding-top:10px;">
+              <div style="display:flex; gap:8px; padding:7px 0; border-bottom:1px solid var(--line); font-size:12px; line-height:1.4;">
+                <div style="width:8px; height:8px; border-radius:999px; background:var(--warn); margin-top:4px; flex-shrink:0;"></div>
+                <div style="color:#374151;"><b>CAC payback trending up</b> (15 → 17 mo). Paid channels at 40% of new logos but efficiency declining.</div>
+              </div>
+              <div style="display:flex; gap:8px; padding:7px 0; border-bottom:1px solid var(--line); font-size:12px; line-height:1.4;">
+                <div style="width:8px; height:8px; border-radius:999px; background:var(--danger); margin-top:4px; flex-shrink:0;"></div>
+                <div style="color:#374151;"><b>Logo retention at 91.4%</b> (below 92% target). Mid-market losses preceded by support ticket spikes.</div>
+              </div>
+              <div style="display:flex; gap:8px; padding:7px 0; font-size:12px; line-height:1.4;">
+                <div style="width:8px; height:8px; border-radius:999px; background:var(--accent); margin-top:4px; flex-shrink:0;"></div>
+                <div style="color:#374151;"><b>Expansion pipeline strong</b> — 3 deals &gt;$200K in negotiation. Protect with dedicated CSM coverage.</div>
+              </div>
+            </div>
+
+            <!-- Actions + sources -->
+            <div style="display:grid; grid-template-columns:1fr 1fr; gap:8px; margin-top:10px;">
+              <div style="border:1px solid var(--line); border-radius:10px; padding:8px 10px; background:#fbfbfc;">
+                <div style="font-size:11px; font-weight:700; margin-bottom:3px;">Recommended actions</div>
+                <div style="font-size:11px; color:var(--muted); line-height:1.35;"><b>1.</b> Cohort analysis on mid-market churn. <b>2.</b> Cap CAC payback; shift channel mix. <b>3.</b> CSMs for top-10 expansion accounts.</div>
+              </div>
+              <div style="border:1px solid var(--line); border-radius:10px; padding:8px 10px; background:#fbfbfc;">
+                <div style="font-size:11px; font-weight:700; margin-bottom:3px;">Data sources</div>
+                <div style="font-size:11px; color:var(--muted); line-height:1.35;">Stripe + Salesforce (ARR), Brex (cash), dbt (KPIs). Monthly leadership sync + quarterly board.</div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right column: ARR waterfall chart -->
+          <div style="border:1px solid var(--line); border-radius:14px; padding:14px 16px; background:#fff; display:flex; flex-direction:column;">
+            <div style="font-size:13px; font-weight:700; margin-bottom:2px;">January ARR Movement</div>
+            <div style="font-size:11px; color:var(--muted); margin-bottom:8px;">Waterfall: new, expansion, contraction, churn → net ARR</div>
+
+            <svg width="100%" height="320" viewBox="0 0 520 320" style="flex:1;" aria-label="ARR waterfall">
+              <!-- Grid -->
+              <g opacity="0.5">
+                <line x1="60" y1="30" x2="500" y2="30" stroke="#e5e7eb"/>
+                <line x1="60" y1="80" x2="500" y2="80" stroke="#e5e7eb"/>
+                <line x1="60" y1="130" x2="500" y2="130" stroke="#e5e7eb"/>
+                <line x1="60" y1="180" x2="500" y2="180" stroke="#e5e7eb"/>
+                <line x1="60" y1="230" x2="500" y2="230" stroke="#e5e7eb"/>
+                <line x1="60" y1="280" x2="500" y2="280" stroke="#e5e7eb"/>
+              </g>
+              <!-- Y-axis -->
+              <text x="55" y="34" text-anchor="end" font-size="10" fill="#6b7280" font-family="Arial">$36M</text>
+              <text x="55" y="84" text-anchor="end" font-size="10" fill="#6b7280" font-family="Arial">$35M</text>
+              <text x="55" y="134" text-anchor="end" font-size="10" fill="#6b7280" font-family="Arial">$34M</text>
+              <text x="55" y="184" text-anchor="end" font-size="10" fill="#6b7280" font-family="Arial">$33M</text>
+
+              <!-- Starting: $33.6M = y180 - (0.6*50) = 150 → bar from 150 to 280 -->
+              <rect x="75" y="152" width="60" height="128" rx="4" fill="#e5e7eb"/>
+              <text x="105" y="142" text-anchor="middle" font-size="12" font-weight="700" fill="#374151" font-family="Arial">$33.6M</text>
+              <text x="105" y="300" text-anchor="middle" font-size="11" fill="#6b7280" font-family="Arial">Starting</text>
+
+              <!-- New: +$0.8M → connector, green block rises -->
+              <line x1="135" y1="152" x2="165" y2="152" stroke="#d1d5db" stroke-width="1" stroke-dasharray="4"/>
+              <rect x="165" y="112" width="60" height="40" rx="4" fill="rgba(24,168,115,.75)"/>
+              <text x="195" y="102" text-anchor="middle" font-size="11" font-weight="700" fill="#0f5132" font-family="Arial">+$0.8M</text>
+              <text x="195" y="300" text-anchor="middle" font-size="11" fill="#6b7280" font-family="Arial">New</text>
+
+              <!-- Expansion: +$1.8M → big green block -->
+              <line x1="225" y1="112" x2="255" y2="112" stroke="#d1d5db" stroke-width="1" stroke-dasharray="4"/>
+              <rect x="255" y="22" width="60" height="90" rx="4" fill="rgba(24,168,115,.55)"/>
+              <text x="285" y="14" text-anchor="middle" font-size="11" font-weight="700" fill="#0f5132" font-family="Arial">+$1.8M</text>
+              <text x="285" y="300" text-anchor="middle" font-size="11" fill="#6b7280" font-family="Arial">Expansion</text>
+
+              <!-- Contraction: -$0.8M → amber block drops -->
+              <line x1="315" y1="22" x2="345" y2="22" stroke="#d1d5db" stroke-width="1" stroke-dasharray="4"/>
+              <rect x="345" y="22" width="60" height="40" rx="4" fill="rgba(245,158,11,.65)"/>
+              <text x="375" y="76" text-anchor="middle" font-size="11" font-weight="700" fill="#7a4b00" font-family="Arial">-$0.8M</text>
+              <text x="375" y="300" text-anchor="middle" font-size="11" fill="#6b7280" font-family="Arial">Contract.</text>
+
+              <!-- Churn: -$0.4M → red block drops -->
+              <line x1="405" y1="62" x2="435" y2="62" stroke="#d1d5db" stroke-width="1" stroke-dasharray="4"/>
+              <rect x="435" y="62" width="60" height="20" rx="4" fill="rgba(239,68,68,.60)"/>
+              <text x="465" y="96" text-anchor="middle" font-size="11" font-weight="700" fill="#7f1d1d" font-family="Arial">-$0.4M</text>
+              <text x="465" y="300" text-anchor="middle" font-size="11" fill="#6b7280" font-family="Arial">Churn</text>
+            </svg>
+
+            <!-- Mini KPI gauges -->
+            <div style="display:grid; grid-template-columns:repeat(3,1fr); gap:8px; margin-top:auto;">
+              <div style="border:1px solid var(--line); border-radius:10px; padding:6px 8px; text-align:center; background:#fbfbfc;">
+                <div style="font-size:10px; color:var(--muted);">Logo Retention</div>
+                <div style="font-size:15px; font-weight:800; color:var(--danger);">91.4%</div>
+                <div style="font-size:10px; font-weight:700; color:var(--danger);">&#9660; Below target</div>
+              </div>
+              <div style="border:1px solid var(--line); border-radius:10px; padding:6px 8px; text-align:center; background:#fbfbfc;">
+                <div style="font-size:10px; color:var(--muted);">CAC Payback</div>
+                <div style="font-size:15px; font-weight:800; color:var(--warn);">17 mo</div>
+                <div style="font-size:10px; font-weight:700; color:var(--warn);">&#9650; Trending up</div>
+              </div>
+              <div style="border:1px solid var(--line); border-radius:10px; padding:6px 8px; text-align:center; background:#fbfbfc;">
+                <div style="font-size:10px; color:var(--muted);">Net Retention</div>
+                <div style="font-size:15px; font-weight:800; color:var(--accent);">118%</div>
+                <div style="font-size:10px; font-weight:700; color:var(--accent);">&#9650; On target</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="ftr">
+        <div class="brand"><span class="mark"></span> Gratia (sample)</div>
+        <div class="trust">Sanitized excerpt • Prepared by Gratia • Jan 2026</div>
+        <div>1</div>
+      </div>
+    </section>
+
+    <!-- Slide 2: ARR Waterfall -->
+    <section class="slide" data-slide="2">
+      <div class="hdr">
+        <div class="hdr-left">
+          <div class="kicker">Revenue performance</div>
+          <h1>ARR waterfall: net movement of $1.4M in January 2026</h1>
+          <p class="sub">Decomposing ARR changes into new, expansion, contraction, and churn to isolate what's driving (or dragging) growth.</p>
+        </div>
+        <div class="hdr-right">
+          <div class="pill"><span class="dot"></span><span>Monthly view</span></div>
+        </div>
+      </div>
+
+      <div class="slide-inner">
+        <div class="viz">
+          <div class="viz-title">
+            <h3>ARR Bridge — January 2026 ($M)</h3>
+            <div class="note">Beginning → Ending ARR with net adds</div>
+          </div>
+          <svg width="100%" height="380" viewBox="0 0 1100 380" aria-label="ARR waterfall chart">
+            <!-- Baseline -->
+            <line x1="60" y1="340" x2="1060" y2="340" stroke="#e5e7eb" stroke-width="2"/>
+
+            <!-- Y-axis labels -->
+            <text x="50" y="340" text-anchor="end" font-size="11" fill="#6b7280" font-family="Arial">$0</text>
+            <text x="50" y="260" text-anchor="end" font-size="11" fill="#6b7280" font-family="Arial">$10M</text>
+            <text x="50" y="180" text-anchor="end" font-size="11" fill="#6b7280" font-family="Arial">$20M</text>
+            <text x="50" y="100" text-anchor="end" font-size="11" fill="#6b7280" font-family="Arial">$30M</text>
+            <line x1="60" y1="260" x2="1060" y2="260" stroke="#f3f4f6" stroke-width="1"/>
+            <line x1="60" y1="180" x2="1060" y2="180" stroke="#f3f4f6" stroke-width="1"/>
+            <line x1="60" y1="100" x2="1060" y2="100" stroke="#f3f4f6" stroke-width="1"/>
+
+            <!-- Beginning ARR: $33.6M — bar from 0 to 33.6 (each $1M = 8px from baseline 340) -->
+            <rect x="100" y="71" width="120" height="269" rx="6" fill="rgba(14,165,233,.18)" stroke="rgba(14,165,233,.55)" stroke-width="2"/>
+            <text x="160" y="62" text-anchor="middle" font-size="14" fill="#111827" font-weight="700" font-family="Arial">$33.6M</text>
+            <text x="160" y="362" text-anchor="middle" font-size="12" fill="#6b7280" font-family="Arial">Beginning ARR</text>
+
+            <!-- New Business: +$0.9M — floating bar -->
+            <rect x="280" y="64" width="100" height="7" rx="4" fill="rgba(24,168,115,.75)" stroke="rgba(24,168,115,.90)" stroke-width="1.5"/>
+            <!-- Connector line -->
+            <line x1="220" y1="71" x2="280" y2="71" stroke="#d1d5db" stroke-width="1" stroke-dasharray="4,3"/>
+            <text x="330" y="55" text-anchor="middle" font-size="13" fill="#0f5132" font-weight="700" font-family="Arial">+$0.9M</text>
+            <text x="330" y="362" text-anchor="middle" font-size="12" fill="#6b7280" font-family="Arial">New Business</text>
+
+            <!-- Expansion: +$1.8M — floating bar -->
+            <rect x="430" y="49" width="100" height="15" rx="4" fill="rgba(24,168,115,.85)" stroke="rgba(24,168,115,.95)" stroke-width="1.5"/>
+            <line x1="380" y1="64" x2="430" y2="64" stroke="#d1d5db" stroke-width="1" stroke-dasharray="4,3"/>
+            <text x="480" y="42" text-anchor="middle" font-size="13" fill="#0f5132" font-weight="700" font-family="Arial">+$1.8M</text>
+            <text x="480" y="362" text-anchor="middle" font-size="12" fill="#6b7280" font-family="Arial">Expansion</text>
+
+            <!-- Contraction: -$0.9M — drops bar down -->
+            <rect x="580" y="49" width="100" height="7" rx="4" fill="rgba(245,158,11,.65)" stroke="rgba(245,158,11,.85)" stroke-width="1.5"/>
+            <line x1="530" y1="49" x2="580" y2="49" stroke="#d1d5db" stroke-width="1" stroke-dasharray="4,3"/>
+            <text x="630" y="42" text-anchor="middle" font-size="13" fill="#7a4b00" font-weight="700" font-family="Arial">−$0.9M</text>
+            <text x="630" y="362" text-anchor="middle" font-size="12" fill="#6b7280" font-family="Arial">Contraction</text>
+
+            <!-- Churn: -$0.4M -->
+            <rect x="730" y="56" width="100" height="3" rx="4" fill="rgba(239,68,68,.65)" stroke="rgba(239,68,68,.85)" stroke-width="1.5"/>
+            <line x1="680" y1="56" x2="730" y2="56" stroke="#d1d5db" stroke-width="1" stroke-dasharray="4,3"/>
+            <text x="780" y="42" text-anchor="middle" font-size="13" fill="#7f1d1d" font-weight="700" font-family="Arial">−$0.4M</text>
+            <text x="780" y="362" text-anchor="middle" font-size="12" fill="#6b7280" font-family="Arial">Churn</text>
+
+            <!-- Ending ARR: $35.0M -->
+            <rect x="880" y="60" width="120" height="280" rx="6" fill="rgba(24,168,115,.15)" stroke="rgba(24,168,115,.55)" stroke-width="2"/>
+            <line x1="830" y1="60" x2="880" y2="60" stroke="#d1d5db" stroke-width="1" stroke-dasharray="4,3"/>
+            <text x="940" y="51" text-anchor="middle" font-size="14" fill="#111827" font-weight="700" font-family="Arial">$35.0M</text>
+            <text x="940" y="362" text-anchor="middle" font-size="12" fill="#6b7280" font-family="Arial">Ending ARR</text>
+          </svg>
+        </div>
+
+        <div class="callout" style="margin-top:12px;">
+          <h4>Key insight</h4>
+          <p><strong>Net revenue retention: 108%</strong> — Expansion revenue ($1.8M) more than offsets contraction + churn ($1.3M combined). Logo churn at 0.8% monthly is within target, but contraction spike bears watching — driven by 2 enterprise downgrades mid-contract.</p>
+        </div>
+      </div>
+
+      <div class="ftr">
+        <div class="brand"><span class="mark"></span> Gratia (sample)</div>
+        <div class="trust">Sanitized excerpt • Prepared by Gratia • Jan 2026</div>
+        <div>2</div>
+      </div>
+    </section>
+
+    <!-- Slide 3: Cash & Runway -->
+    <section class="slide" data-slide="3">
+      <div class="hdr">
+        <div class="hdr-left">
+          <div class="kicker">Cash position</div>
+          <h1>18 months runway at current burn; AR trending healthy</h1>
+          <p class="sub">Cash metrics designed for quick capital-timing decisions: when to fundraise, when to accelerate spend, when to pull back.</p>
+        </div>
+        <div class="hdr-right">
+          <div class="pill"><span class="dot"></span><span>Healthy</span></div>
+        </div>
+      </div>
+
+      <div class="slide-inner">
+        <div class="grid-4" style="margin-top:4px;">
+          <div class="stat-card">
+            <div class="stat-value">$18.2M</div>
+            <div class="stat-label">Cash Balance</div>
+            <div class="stat-delta up">▲ $0.4M vs. prior month</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">$1.02M</div>
+            <div class="stat-label">Monthly Burn Rate</div>
+            <div class="stat-delta down">▲ $80K vs. prior (hiring)</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">18 mo</div>
+            <div class="stat-label">Runway</div>
+            <div class="stat-delta up">▼ 1 mo vs. prior (burn ↑)</div>
+          </div>
+          <div class="stat-card">
+            <div class="stat-value">38 days</div>
+            <div class="stat-label">AR Days Outstanding</div>
+            <div class="stat-delta up">▼ 4 days vs. prior</div>
+          </div>
+        </div>
+
+        <div class="viz" style="margin-top:14px;">
+          <div class="viz-title">
+            <h3>Cash balance trend — last 6 months ($M)</h3>
+            <div class="note">Dotted line = 12-month runway threshold</div>
+          </div>
+          <svg width="100%" height="260" viewBox="0 0 1100 260" aria-label="Cash balance trend">
+            <!-- Grid -->
+            <line x1="80" y1="220" x2="1040" y2="220" stroke="#e5e7eb" stroke-width="2"/>
+            <line x1="80" y1="170" x2="1040" y2="170" stroke="#f3f4f6" stroke-width="1"/>
+            <line x1="80" y1="120" x2="1040" y2="120" stroke="#f3f4f6" stroke-width="1"/>
+            <line x1="80" y1="70" x2="1040" y2="70" stroke="#f3f4f6" stroke-width="1"/>
+
+            <!-- Y labels -->
+            <text x="70" y="224" text-anchor="end" font-size="11" fill="#6b7280" font-family="Arial">$14M</text>
+            <text x="70" y="174" text-anchor="end" font-size="11" fill="#6b7280" font-family="Arial">$16M</text>
+            <text x="70" y="124" text-anchor="end" font-size="11" fill="#6b7280" font-family="Arial">$18M</text>
+            <text x="70" y="74" text-anchor="end" font-size="11" fill="#6b7280" font-family="Arial">$20M</text>
+
+            <!-- 12-month runway threshold line -->
+            <line x1="80" y1="195" x2="1040" y2="195" stroke="#ef4444" stroke-width="1.5" stroke-dasharray="6,4"/>
+            <text x="1045" y="199" font-size="10" fill="#ef4444" font-family="Arial">12mo threshold</text>
+
+            <!-- Cash line: Aug $17.0, Sep $17.2, Oct $17.5, Nov $17.6, Dec $17.8, Jan $18.2 -->
+            <!-- Scale: $14M=220, $20M=70 → each $1M = 25px -->
+            <polyline points="160,145 320,140 480,132.5 640,130 800,125 960,115"
+                      fill="none" stroke="#18A873" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"/>
+            <!-- Dots -->
+            <circle cx="160" cy="145" r="5" fill="#18A873"/>
+            <circle cx="320" cy="140" r="5" fill="#18A873"/>
+            <circle cx="480" cy="132.5" r="5" fill="#18A873"/>
+            <circle cx="640" cy="130" r="5" fill="#18A873"/>
+            <circle cx="800" cy="125" r="5" fill="#18A873"/>
+            <circle cx="960" cy="115" r="6" fill="#18A873" stroke="#fff" stroke-width="2"/>
+
+            <!-- Value labels -->
+            <text x="160" y="138" text-anchor="middle" font-size="11" fill="#111827" font-weight="600" font-family="Arial">$17.0</text>
+            <text x="320" y="133" text-anchor="middle" font-size="11" fill="#111827" font-weight="600" font-family="Arial">$17.2</text>
+            <text x="480" y="125" text-anchor="middle" font-size="11" fill="#111827" font-weight="600" font-family="Arial">$17.5</text>
+            <text x="640" y="123" text-anchor="middle" font-size="11" fill="#111827" font-weight="600" font-family="Arial">$17.6</text>
+            <text x="800" y="118" text-anchor="middle" font-size="11" fill="#111827" font-weight="600" font-family="Arial">$17.8</text>
+            <text x="960" y="108" text-anchor="middle" font-size="12" fill="#111827" font-weight="700" font-family="Arial">$18.2</text>
+
+            <!-- X labels -->
+            <text x="160" y="242" text-anchor="middle" font-size="11" fill="#6b7280" font-family="Arial">Aug</text>
+            <text x="320" y="242" text-anchor="middle" font-size="11" fill="#6b7280" font-family="Arial">Sep</text>
+            <text x="480" y="242" text-anchor="middle" font-size="11" fill="#6b7280" font-family="Arial">Oct</text>
+            <text x="640" y="242" text-anchor="middle" font-size="11" fill="#6b7280" font-family="Arial">Nov</text>
+            <text x="800" y="242" text-anchor="middle" font-size="11" fill="#6b7280" font-family="Arial">Dec</text>
+            <text x="960" y="242" text-anchor="middle" font-size="11" fill="#6b7280" font-family="Arial">Jan</text>
+          </svg>
+        </div>
+
+        <div class="callout" style="margin-top:12px;">
+          <h4>Capital timing note</h4>
+          <p>At current burn ($1.02M/mo), runway hits 12-month mark around <strong>July 2027</strong>. If hiring plan accelerates (burn → $1.3M), runway compresses to ~14 months. Begin fundraise conversations by Q3 2026 to maintain optionality.</p>
+        </div>
+      </div>
+
+      <div class="ftr">
+        <div class="brand"><span class="mark"></span> Gratia (sample)</div>
+        <div class="trust">Sanitized excerpt • Prepared by Gratia • Jan 2026</div>
+        <div>3</div>
+      </div>
+    </section>
+
+    <!-- Slide 4: KPI Scorecard -->
+    <section class="slide" data-slide="4">
+      <div class="hdr">
+        <div class="hdr-left">
+          <div class="kicker">Operating metrics</div>
+          <h1>KPI scorecard: 7 green, 2 amber — two items need attention</h1>
+          <p class="sub">Nine metrics that drive board conversation. Each shows current value, trailing trend, and RAG status vs. target. Scan for amber/red, then drill into the narrative.</p>
+        </div>
+        <div class="hdr-right">
+          <div class="pill"><span class="dot"></span><span>Jan 2026</span></div>
+        </div>
+      </div>
+
+      <div class="slide-inner">
+        <div class="kpi-grid">
+          <!-- Row 1 -->
+          <div class="kpi-cell">
+            <div class="kpi-val">$35.0M</div>
+            <div class="kpi-name">Annual Recurring Revenue</div>
+            <div class="kpi-trend" style="color:#0f5132;"><span class="rag rag-g"></span> ▲ 4.2% MoM</div>
+          </div>
+          <div class="kpi-cell">
+            <div class="kpi-val">108%</div>
+            <div class="kpi-name">Net Revenue Retention</div>
+            <div class="kpi-trend" style="color:#0f5132;"><span class="rag rag-g"></span> Target: >105%</div>
+          </div>
+          <div class="kpi-cell">
+            <div class="kpi-val">91.5%</div>
+            <div class="kpi-name">Logo Retention (Annual)</div>
+            <div class="kpi-trend" style="color:#7a4b00;"><span class="rag rag-a"></span> ▼ Below 92% target</div>
+          </div>
+
+          <!-- Row 2 -->
+          <div class="kpi-cell">
+            <div class="kpi-val">$8,420</div>
+            <div class="kpi-name">CAC (Blended)</div>
+            <div class="kpi-trend" style="color:#0f5132;"><span class="rag rag-g"></span> ▼ 3% vs. prior</div>
+          </div>
+          <div class="kpi-cell">
+            <div class="kpi-val">$42,100</div>
+            <div class="kpi-name">LTV (Blended)</div>
+            <div class="kpi-trend" style="color:#0f5132;"><span class="rag rag-g"></span> LTV:CAC = 5.0×</div>
+          </div>
+          <div class="kpi-cell">
+            <div class="kpi-val">14.2 mo</div>
+            <div class="kpi-name">CAC Payback</div>
+            <div class="kpi-trend" style="color:#7a4b00;"><span class="rag rag-a"></span> ▲ Trending up (was 12.8)</div>
+          </div>
+
+          <!-- Row 3 -->
+          <div class="kpi-cell">
+            <div class="kpi-val">0.78</div>
+            <div class="kpi-name">Magic Number</div>
+            <div class="kpi-trend" style="color:#0f5132;"><span class="rag rag-g"></span> Target: >0.7</div>
+          </div>
+          <div class="kpi-cell">
+            <div class="kpi-val">76%</div>
+            <div class="kpi-name">Gross Margin</div>
+            <div class="kpi-trend" style="color:#0f5132;"><span class="rag rag-g"></span> Stable (±1pt)</div>
+          </div>
+          <div class="kpi-cell">
+            <div class="kpi-val">48%</div>
+            <div class="kpi-name">Rule of 40</div>
+            <div class="kpi-trend" style="color:#0f5132;"><span class="rag rag-g"></span> ▲ 3pts vs. prior quarter</div>
+          </div>
+        </div>
+
+        <div class="grid-2" style="margin-top:14px;">
+          <div class="callout">
+            <h4>Amber: Logo retention dipped to 91.5%</h4>
+            <p>Two SMB cohorts churned at higher rate (onboarding friction flagged by CS). Action: product team reviewing first-14-day activation flow; target fix by March.</p>
+          </div>
+          <div class="callout" style="border-left-color:var(--warn); background:rgba(245,158,11,.06); border-color:rgba(245,158,11,.18);">
+            <h4>Amber: CAC payback stretching to 14.2 months</h4>
+            <p>Driven by increased enterprise AE headcount (longer ramp). Expected to normalize by Q2 as new reps hit quota. Watch: if payback exceeds 16 months, revisit hiring plan.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="ftr">
+        <div class="brand"><span class="mark"></span> Gratia (sample)</div>
+        <div class="trust">Sanitized excerpt • Prepared by Gratia • Jan 2026</div>
+        <div>4</div>
+      </div>
+    </section>
+
+  </div>
+
+  <script>
+    (function(){
+      const slides = Array.from(document.querySelectorAll('.slide'));
+      let idx = 0;
+
+      function show(i){
+        idx = Math.max(0, Math.min(slides.length - 1, i));
+        slides.forEach((s, k) => s.classList.toggle('active', k === idx));
+        window.location.hash = `slide-${idx+1}`;
+      }
+
+      function fromHash(){
+        const m = (window.location.hash || '').match(/slide-(\d+)/);
+        if(!m) return;
+        const n = parseInt(m[1], 10);
+        if(!isNaN(n)) show(n-1);
+      }
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === 'PageDown') show(idx + 1);
+        if (e.key === 'ArrowLeft' || e.key === 'PageUp') show(idx - 1);
+        if (e.key === 'Home') show(0);
+        if (e.key === 'End') show(slides.length - 1);
+      });
+
+      window.addEventListener('hashchange', fromHash);
+      fromHash();
+    })();
+  </script>
+<a href="../" style="position:fixed;top:12px;right:16px;z-index:99999;background:#111827;color:#e2e8f0;padding:6px 16px;border-radius:8px;font-size:13px;font-weight:600;text-decoration:none;border:1px solid #475569;font-family:system-ui,sans-serif;transition:background .15s;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#111827'">← Gallery</a>
+</body>
+</html>

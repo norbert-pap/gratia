@@ -1,0 +1,558 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Enterprise Analytics Proposal — Pacific Northwest Health</title>
+<style>
+:root {
+  --font-family-display: Arial, sans-serif;
+  --font-weight-display: 600;
+  --font-family-content: Arial, sans-serif;
+  --font-weight-content: 400;
+  --font-size-content: 16px;
+  --line-height-content: 1.4;
+  --slide-w: 1280px;
+  --slide-h: 720px;
+  --radius: 16px;
+  --shadow: 0 10px 24px rgba(0,0,0,.45);
+}
+body.theme-dark {
+  --color-bg-base: #0f172a;
+  --color-bg-elevated: #020617;
+  --color-bg-surface: #1e293b;
+  --color-bg-muted: #334155;
+  --color-text-primary: #f1f5f9;
+  --color-text-secondary: #cbd5e1;
+  --color-text-muted: #94a3b8;
+  --color-text-accent: #38bdf8;
+  --color-primary: #38bdf8;
+  --color-primary-foreground: #0f172a;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: var(--font-family-content);
+  font-weight: var(--font-weight-content);
+  font-size: var(--font-size-content);
+  line-height: var(--line-height-content);
+  overflow-x: hidden;
+  background: var(--color-bg-base);
+  color: var(--color-text-primary);
+}
+.deck-wrap{ display:flex; flex-direction:column; align-items:center; padding: 16px 12px; }
+.topbar{
+  width: min(var(--slide-w), 100%);
+  display:flex; align-items:center; justify-content:space-between;
+  gap: 12px; flex-wrap: wrap; margin: 0 0 10px;
+  color: var(--color-text-muted); font-size: 12px;
+}
+.kbd{
+  display:inline-flex; align-items:center; justify-content:center;
+  min-width: 22px; height: 22px; padding: 0 8px;
+  border: 1px solid #334155; border-radius: 10px;
+  background: #0b1220; color: var(--color-text-secondary);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+.deck{
+  width: var(--slide-w); height: var(--slide-h);
+  position: relative;
+  transform: scale(var(--scale, 1)); transform-origin: top center;
+}
+.slide {
+  display:none; width: var(--slide-w); height: var(--slide-h);
+  flex-shrink: 0; overflow: hidden;
+  background: var(--color-bg-base); color: var(--color-text-primary);
+  border: 1px solid #334155; border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+.slide.active{ display:flex; }
+
+.col { flex-direction: column; }
+.fill-height { flex: 1; display: flex; flex-direction: column; }
+
+.p-16 { padding: 3rem 3rem 4.25rem; }
+.mb-2 { margin-bottom: 0.5rem; }
+.mb-4 { margin-bottom: 1rem; }
+.mb-6 { margin-bottom: 1.5rem; }
+.mt-4 { margin-top: 1rem; }
+
+h1, h2, h3, h4 {
+  font-family: var(--font-family-display);
+  font-weight: var(--font-weight-display);
+  line-height: 1.2; margin: 0;
+  color: var(--color-primary);
+}
+h1 { font-size: 2.5rem; }
+h2 { font-size: 2rem; }
+h3 { font-size: 1.5rem; }
+p, li { color: var(--color-text-secondary); }
+strong { color: var(--color-primary); }
+.muted { color: var(--color-text-muted) !important; }
+.text-sm { font-size: 0.875rem; }
+.text-xs { font-size: 0.75rem; }
+.font-semibold { font-weight: 600; }
+
+.slide::after {
+  content: "Sanitized excerpt • Prepared by Gratia • Jan 2026";
+  position: absolute; left: 4rem; right: 4rem; bottom: 1.1rem;
+  font-size: 0.72rem; color: #94a3b8; opacity: 0.9;
+}
+
+/* Cards & metrics */
+.metric-card {
+  padding: 1rem; background: #1e293b; border: 1px solid #334155;
+  border-left: 4px solid #38bdf8;
+}
+.metric-val { font-size: 2rem; font-weight: 700; margin-bottom: 0.15rem; }
+.metric-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; color: #94a3b8; }
+.metric-desc { font-size: 0.8rem; color: #cbd5e1; margin-top: 0.25rem; }
+
+.card-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+.info-card {
+  padding: 1rem; background: #1e293b; border: 1px solid #334155;
+}
+.info-card h4 { font-size: 0.85rem; margin-bottom: 0.5rem; }
+.info-card p { font-size: 0.8rem; line-height: 1.4; }
+
+.callout-card {
+  padding: 1rem; background: #1e293b; border: 1px solid #334155;
+  border-left: 4px solid #38bdf8;
+}
+.callout-card h4 { font-size: 0.85rem; margin-bottom: 0.5rem; color: #38bdf8; }
+.callout-card p { font-size: 0.8rem; line-height: 1.4; }
+.callout-card ul { margin-left: 1.2rem; margin-top: 0.3rem; }
+.callout-card li { font-size: 0.8rem; margin-bottom: 0.3rem; color: #cbd5e1; }
+
+.stat-card {
+  padding: 0.75rem 1rem; background: #1e293b; border: 1px solid #334155;
+  border-left: 4px solid #38bdf8; text-align: center;
+}
+.stat-val { font-size: 1.4rem; font-weight: 700; color: #38bdf8; margin-bottom: 0.2rem; }
+.stat-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; color: #94a3b8; }
+
+.logo-row { display:flex; flex-wrap:wrap; gap:0.4rem; margin-top:0.5rem; }
+.logo-pill {
+  display:inline-flex; align-items:center; padding:0.25rem 0.45rem;
+  border:1px solid #334155; border-radius:999px; font-size:0.7rem;
+  color:#cbd5e1; background:#0b1220;
+}
+.logo-dot { width:0.4rem; height:0.4rem; border-radius:999px; background:#38bdf8; margin-right:0.35rem; }
+
+.check-mark { color: #10b981; font-weight: 700; }
+
+@media print{
+  body{ background:#fff; }
+  .deck-wrap{ padding:0; }
+  .topbar{ display:none; }
+  .deck{ width:auto; height:auto; transform:none; }
+  .slide{ display:flex !important; margin: 0 0 18px; page-break-after: always; box-shadow:none; }
+  .slide::after{ display:none; }
+}
+</style>
+</head>
+<body class="theme-dark">
+
+<div class="deck-wrap">
+  <div class="topbar" aria-hidden="true">
+    <div>Proposal — Enterprise Analytics Transformation Program</div>
+    <div><span class="kbd">←</span> <span class="kbd">→</span> to navigate • <span class="kbd">Cmd</span> + <span class="kbd">P</span> to export PDF</div>
+  </div>
+  <main class="deck" aria-label="High-stakes proposal slide deck">
+
+<!-- Slide 1: Exec Overview -->
+<section class="slide active p-16 col">
+  <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:1.25rem;">
+    <div>
+      <p class="text-xs font-semibold" style="color:#38bdf8; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:0.4rem;">RFP Response</p>
+      <h1>Enterprise Analytics Transformation Program</h1>
+      <p class="text-sm" style="color:#94a3b8; margin-top:0.35rem;">Pacific Northwest Health System</p>
+    </div>
+    <div style="text-align:right; font-size:0.75rem; color:#94a3b8;">
+      <div>Client: PNWHS</div>
+      <div>Date: Jan 2026</div>
+    </div>
+  </div>
+
+  <!-- Split: left metrics, right circular diagram -->
+  <div style="display:grid; grid-template-columns: 0.48fr 0.52fr; gap:1rem; margin-bottom:0.6rem;">
+    <!-- Left: 3 metric cards + summary -->
+    <div style="display:flex; flex-direction:column; gap:0.5rem;">
+      <div class="metric-card" style="display:flex; align-items:center; gap:0.75rem;">
+        <div>
+          <p class="metric-label">Projected ROI</p>
+          <p class="metric-val" style="color:#38bdf8;">4.2x</p>
+        </div>
+        <p class="metric-desc" style="flex:1;">$4 return for every $1 invested (3-year horizon)</p>
+      </div>
+
+      <div class="metric-card" style="display:flex; align-items:center; gap:0.75rem;">
+        <div>
+          <p class="metric-label">Time to Value</p>
+          <p class="metric-val" style="color:#22d3ee;">90 days</p>
+        </div>
+        <p class="metric-desc" style="flex:1;">Full platform operational; early wins visible</p>
+      </div>
+
+      <div class="metric-card" style="display:flex; align-items:center; gap:0.75rem;">
+        <div>
+          <p class="metric-label">Cost Reduction</p>
+          <p class="metric-val" style="color:#06b6d4;">23%</p>
+        </div>
+        <p class="metric-desc" style="flex:1;">Operational expense savings (Year 1)</p>
+      </div>
+
+      <!-- Approach summary -->
+      <div style="border-top:1px solid #334155; padding-top:0.5rem; margin-top:0.15rem;">
+        <div style="display:flex; gap:0.5rem; padding:0.3rem 0; font-size:0.72rem; line-height:1.35; color:#cbd5e1;">
+          <div style="width:6px; height:6px; border-radius:999px; background:#38bdf8; margin-top:4px; flex-shrink:0;"></div>
+          <div><strong style="color:#38bdf8;">Phased delivery</strong> reduces risk & enables course correction</div>
+        </div>
+        <div style="display:flex; gap:0.5rem; padding:0.3rem 0; font-size:0.72rem; line-height:1.35; color:#cbd5e1;">
+          <div style="width:6px; height:6px; border-radius:999px; background:#f59e0b; margin-top:4px; flex-shrink:0;"></div>
+          <div><strong style="color:#f59e0b;">Modern data stack</strong> (cloud-native, serverless, AI-ready)</div>
+        </div>
+        <div style="display:flex; gap:0.5rem; padding:0.3rem 0; font-size:0.72rem; line-height:1.35; color:#cbd5e1;">
+          <div style="width:6px; height:6px; border-radius:999px; background:#22d3ee; margin-top:4px; flex-shrink:0;"></div>
+          <div><strong style="color:#22d3ee;">Knowledge transfer</strong> to internal analytics CoE</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: 4-phase circular flow -->
+    <div style="background:#1e293b; border:1px solid #334155; padding:0.75rem; display:flex; flex-direction:column; align-items:center; justify-content:center;">
+      <div style="font-size:0.85rem; font-weight:600; color:#38bdf8; margin-bottom:0.4rem;">Four-Phase Approach</div>
+
+      <svg width="100%" height="200" viewBox="0 0 300 200" preserveAspectRatio="none" style="max-width:100%; max-height:100%;">
+        <!-- Center -->
+        <circle cx="150" cy="100" r="40" fill="rgba(56,189,248,0.12)" stroke="#38bdf8" stroke-width="2"/>
+        <text x="150" y="105" text-anchor="middle" fill="#f1f5f9" font-size="14" font-weight="700">Your</text>
+        <text x="150" y="122" text-anchor="middle" fill="#f1f5f9" font-size="14" font-weight="700">Goals</text>
+
+        <!-- Phase 1: Discover (top-left) -->
+        <circle cx="70" cy="50" r="20" fill="rgba(56,189,248,0.25)" stroke="#38bdf8" stroke-width="2"/>
+        <text x="70" y="55" text-anchor="middle" fill="#f1f5f9" font-size="11" font-weight="700">Discover</text>
+        <text x="70" y="68" text-anchor="middle" fill="#cbd5e1" font-size="8">Requirements,</text>
+        <text x="70" y="77" text-anchor="middle" fill="#cbd5e1" font-size="8">data mapping</text>
+
+        <!-- Arrow: Discover → Design -->
+        <path d="M 85 60 L 120 75" stroke="#38bdf8" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+
+        <!-- Phase 2: Design (top-right) -->
+        <circle cx="230" cy="50" r="20" fill="rgba(56,189,248,0.25)" stroke="#22d3ee" stroke-width="2"/>
+        <text x="230" y="55" text-anchor="middle" fill="#f1f5f9" font-size="11" font-weight="700">Design</text>
+        <text x="230" y="68" text-anchor="middle" fill="#cbd5e1" font-size="8">Architecture,</text>
+        <text x="230" y="77" text-anchor="middle" fill="#cbd5e1" font-size="8">models</text>
+
+        <!-- Arrow: Design → Build -->
+        <path d="M 220 70 L 185 90" stroke="#22d3ee" stroke-width="2" fill="none" marker-end="url(#arrowhead2)"/>
+
+        <!-- Phase 3: Build (bottom-right) -->
+        <circle cx="230" cy="150" r="20" fill="rgba(56,189,248,0.25)" stroke="#06b6d4" stroke-width="2"/>
+        <text x="230" y="155" text-anchor="middle" fill="#f1f5f9" font-size="11" font-weight="700">Build</text>
+        <text x="230" y="168" text-anchor="middle" fill="#cbd5e1" font-size="8">Implement,</text>
+        <text x="230" y="177" text-anchor="middle" fill="#cbd5e1" font-size="8">test</text>
+
+        <!-- Arrow: Build → Operationalize -->
+        <path d="M 215 160 L 180 125" stroke="#06b6d4" stroke-width="2" fill="none" marker-end="url(#arrowhead3)"/>
+
+        <!-- Phase 4: Operationalize (bottom-left) -->
+        <circle cx="70" cy="150" r="20" fill="rgba(56,189,248,0.25)" stroke="#10b981" stroke-width="2"/>
+        <text x="70" y="152" text-anchor="middle" fill="#f1f5f9" font-size="10" font-weight="700">Operate</text>
+        <text x="70" y="165" text-anchor="middle" fill="#cbd5e1" font-size="8">Monitor,</text>
+        <text x="70" y="174" text-anchor="middle" fill="#cbd5e1" font-size="8">optimize</text>
+
+        <!-- Arrow: Operationalize → Discover (cycle) -->
+        <path d="M 85 140 L 120 125" stroke="#10b981" stroke-width="2" fill="none" marker-end="url(#arrowhead4)"/>
+
+        <!-- Arrow definitions -->
+        <defs>
+          <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+            <polygon points="0 0, 10 3, 0 6" fill="#38bdf8"/>
+          </marker>
+          <marker id="arrowhead2" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+            <polygon points="0 0, 10 3, 0 6" fill="#22d3ee"/>
+          </marker>
+          <marker id="arrowhead3" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+            <polygon points="0 0, 10 3, 0 6" fill="#06b6d4"/>
+          </marker>
+          <marker id="arrowhead4" markerWidth="10" markerHeight="10" refX="9" refY="3" orient="auto">
+            <polygon points="0 0, 10 3, 0 6" fill="#10b981"/>
+          </marker>
+        </defs>
+      </svg>
+    </div>
+  </div>
+
+  <div class="card-row">
+    <div class="info-card">
+      <h4 style="color:#38bdf8;">Why Gratia</h4>
+      <p>8+ years healthcare analytics experience. Delivered 15+ transformation programs in hospital systems, insurers, and health IT vendors. Proven ability to navigate clinical + operational complexity.</p>
+    </div>
+    <div class="info-card">
+      <h4 style="color:#38bdf8;">Program scope</h4>
+      <p>Data consolidation (EHR, claims, operations) → centralized warehouse → BI/reporting layer → AI-ready foundation. 22-week end-to-end program, $1.2M investment.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Slide 2: Approach & Phases -->
+<section class="slide p-16 col">
+  <h2 class="mb-4">Detailed 22-Week Roadmap</h2>
+  <div class="fill-height col" style="gap:0.75rem;">
+    <svg width="100%" height="280" viewBox="0 0 1240 280" preserveAspectRatio="none" style="margin-bottom:0.5rem;">
+      <!-- Phase boxes and connecting line -->
+      <line x1="80" y1="140" x2="1160" y2="140" stroke="#334155" stroke-width="2"/>
+
+      <!-- Phase 1: Weeks 1-6 -->
+      <rect x="20" y="60" width="120" height="160" fill="#1e293b" stroke="#38bdf8" stroke-width="2" rx="4"/>
+      <circle cx="80" cy="140" r="12" fill="#38bdf8"/>
+      <text x="80" y="90" text-anchor="middle" fill="#38bdf8" font-size="13" font-weight="700">Phase 1</text>
+      <text x="80" y="108" text-anchor="middle" fill="#cbd5e1" font-size="10">Discover</text>
+      <text x="80" y="125" text-anchor="middle" fill="#94a3b8" font-size="9">Weeks 1–6</text>
+      <text x="80" y="145" text-anchor="middle" fill="#94a3b8" font-size="8">Stakeholder</text>
+      <text x="80" y="158" text-anchor="middle" fill="#94a3b8" font-size="8">workshops</text>
+      <text x="80" y="171" text-anchor="middle" fill="#94a3b8" font-size="8">Data audit</text>
+      <text x="80" y="184" text-anchor="middle" fill="#94a3b8" font-size="8">Requirements</text>
+      <text x="80" y="197" text-anchor="middle" fill="#f1f5f9" font-size="9" font-weight="600">Deliverable:</text>
+      <text x="80" y="210" text-anchor="middle" fill="#cbd5e1" font-size="8">Design Doc</text>
+
+      <!-- Phase 2: Weeks 7-12 -->
+      <rect x="170" y="60" width="120" height="160" fill="#1e293b" stroke="#22d3ee" stroke-width="2" rx="4"/>
+      <circle cx="230" cy="140" r="12" fill="#22d3ee"/>
+      <text x="230" y="90" text-anchor="middle" fill="#22d3ee" font-size="13" font-weight="700">Phase 2</text>
+      <text x="230" y="108" text-anchor="middle" fill="#cbd5e1" font-size="10">Design</text>
+      <text x="230" y="125" text-anchor="middle" fill="#94a3b8" font-size="9">Weeks 7–12</text>
+      <text x="230" y="145" text-anchor="middle" fill="#94a3b8" font-size="8">Cloud</text>
+      <text x="230" y="158" text-anchor="middle" fill="#94a3b8" font-size="8">architecture</text>
+      <text x="230" y="171" text-anchor="middle" fill="#94a3b8" font-size="8">ETL design</text>
+      <text x="230" y="184" text-anchor="middle" fill="#94a3b8" font-size="8">BI mockups</text>
+      <text x="230" y="197" text-anchor="middle" fill="#f1f5f9" font-size="9" font-weight="600">Deliverable:</text>
+      <text x="230" y="210" text-anchor="middle" fill="#cbd5e1" font-size="8">Arch Review</text>
+
+      <!-- Phase 3: Weeks 13-19 -->
+      <rect x="320" y="60" width="120" height="160" fill="#1e293b" stroke="#06b6d4" stroke-width="2" rx="4"/>
+      <circle cx="380" cy="140" r="12" fill="#06b6d4"/>
+      <text x="380" y="90" text-anchor="middle" fill="#06b6d4" font-size="13" font-weight="700">Phase 3</text>
+      <text x="380" y="108" text-anchor="middle" fill="#cbd5e1" font-size="10">Build</text>
+      <text x="380" y="125" text-anchor="middle" fill="#94a3b8" font-size="9">Weeks 13–19</text>
+      <text x="380" y="145" text-anchor="middle" fill="#94a3b8" font-size="8">Warehouse</text>
+      <text x="380" y="158" text-anchor="middle" fill="#94a3b8" font-size="8">build</text>
+      <text x="380" y="171" text-anchor="middle" fill="#94a3b8" font-size="8">ETL pipeline</text>
+      <text x="380" y="184" text-anchor="middle" fill="#94a3b8" font-size="8">Reporting</text>
+      <text x="380" y="197" text-anchor="middle" fill="#f1f5f9" font-size="9" font-weight="600">Deliverable:</text>
+      <text x="380" y="210" text-anchor="middle" fill="#cbd5e1" font-size="8">UAT Ready</text>
+
+      <!-- Phase 4: Weeks 20-22 -->
+      <rect x="470" y="60" width="120" height="160" fill="#1e293b" stroke="#10b981" stroke-width="2" rx="4"/>
+      <circle cx="530" cy="140" r="12" fill="#10b981"/>
+      <text x="530" y="90" text-anchor="middle" fill="#10b981" font-size="13" font-weight="700">Phase 4</text>
+      <text x="530" y="108" text-anchor="middle" fill="#cbd5e1" font-size="10">Go-Live +</text>
+      <text x="530" y="122" text-anchor="middle" fill="#cbd5e1" font-size="10">Support</text>
+      <text x="530" y="139" text-anchor="middle" fill="#94a3b8" font-size="9">Weeks 20–22</text>
+      <text x="530" y="159" text-anchor="middle" fill="#94a3b8" font-size="8">UAT support</text>
+      <text x="530" y="172" text-anchor="middle" fill="#94a3b8" font-size="8">Go-live</text>
+      <text x="530" y="185" text-anchor="middle" fill="#94a3b8" font-size="8">60-day support</text>
+      <text x="530" y="198" text-anchor="middle" fill="#f1f5f9" font-size="9" font-weight="600">Deliverable:</text>
+      <text x="530" y="211" text-anchor="middle" fill="#cbd5e1" font-size="8">Ops Handoff</text>
+
+      <!-- Outcomes row -->
+      <text x="80" y="255" text-anchor="middle" fill="#10b981" font-size="11" font-weight="700">✓ Requirements locked</text>
+      <text x="230" y="255" text-anchor="middle" fill="#10b981" font-size="11" font-weight="700">✓ Tech approved</text>
+      <text x="380" y="255" text-anchor="middle" fill="#10b981" font-size="11" font-weight="700">✓ Platform live</text>
+      <text x="530" y="255" text-anchor="middle" fill="#10b981" font-size="11" font-weight="700">✓ Team trained</text>
+    </svg>
+  </div>
+</section>
+
+<!-- Slide 3: Deliverables Matrix -->
+<section class="slide p-16 col">
+  <h2 class="mb-4">Deliverables & Acceptance Criteria</h2>
+  <div class="fill-height col" style="gap:0.75rem;">
+    <div style="background:#1e293b; border:1px solid #334155; overflow-x:auto; border-radius:6px;">
+      <table style="width:100%; border-collapse:collapse; font-size:0.8rem;">
+        <thead>
+          <tr style="background:#0b1220; border-bottom:2px solid #334155;">
+            <th style="padding:0.6rem; text-align:left; color:#94a3b8; font-weight:600;">Phase</th>
+            <th style="padding:0.6rem; text-align:left; color:#94a3b8; font-weight:600;">Deliverable</th>
+            <th style="padding:0.6rem; text-align:left; color:#94a3b8; font-weight:600;">Acceptance Criteria</th>
+            <th style="padding:0.6rem; text-align:center; color:#94a3b8; font-weight:600; width:60px;">✓</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr style="border-bottom:1px solid #334155;">
+            <td style="padding:0.6rem; color:#38bdf8; font-weight:600;">Discover</td>
+            <td style="padding:0.6rem; color:#cbd5e1;">Data inventory + mapping</td>
+            <td style="padding:0.6rem; color:#cbd5e1;">100% of systems catalogued</td>
+            <td style="padding:0.6rem; text-align:center; color:#10b981;">✓</td>
+          </tr>
+          <tr style="border-bottom:1px solid #334155;">
+            <td style="padding:0.6rem; color:#38bdf8; font-weight:600;">Discover</td>
+            <td style="padding:0.6rem; color:#cbd5e1;">Stakeholder requirements doc</td>
+            <td style="padding:0.6rem; color:#cbd5e1;">Signed off by steering committee</td>
+            <td style="padding:0.6rem; text-align:center; color:#10b981;">✓</td>
+          </tr>
+          <tr style="border-bottom:1px solid #334155;">
+            <td style="padding:0.6rem; color:#22d3ee; font-weight:600;">Design</td>
+            <td style="padding:0.6rem; color:#cbd5e1;">Cloud architecture (AWS)</td>
+            <td style="padding:0.6rem; color:#cbd5e1;">Security + cost reviewed, approved</td>
+            <td style="padding:0.6rem; text-align:center; color:#10b981;">✓</td>
+          </tr>
+          <tr style="border-bottom:1px solid #334155;">
+            <td style="padding:0.6rem; color:#22d3ee; font-weight:600;">Design</td>
+            <td style="padding:0.6rem; color:#cbd5e1;">ETL specification</td>
+            <td style="padding:0.6rem; color:#cbd5e1;">Data lineage traced end-to-end</td>
+            <td style="padding:0.6rem; text-align:center; color:#10b981;">✓</td>
+          </tr>
+          <tr style="border-bottom:1px solid #334155;">
+            <td style="padding:0.6rem; color:#22d3ee; font-weight:600;">Design</td>
+            <td style="padding:0.6rem; color:#cbd5e1;">BI prototype (Tableau)</td>
+            <td style="padding:0.6rem; color:#cbd5e1;">10+ dashboard mockups + user feedback</td>
+            <td style="padding:0.6rem; text-align:center; color:#10b981;">✓</td>
+          </tr>
+          <tr style="border-bottom:1px solid #334155;">
+            <td style="padding:0.6rem; color:#06b6d4; font-weight:600;">Build</td>
+            <td style="padding:0.6rem; color:#cbd5e1;">Data warehouse (Redshift)</td>
+            <td style="padding:0.6rem; color:#cbd5e1;">Load test: 2B+ rows/day</td>
+            <td style="padding:0.6rem; text-align:center; color:#10b981;">✓</td>
+          </tr>
+          <tr style="border-bottom:1px solid #334155;">
+            <td style="padding:0.6rem; color:#06b6d4; font-weight:600;">Build</td>
+            <td style="padding:0.6rem; color:#cbd5e1;">Automated ETL pipeline</td>
+            <td style="padding:0.6rem; color:#cbd5e1;">99.5% uptime, <4hr latency</td>
+            <td style="padding:0.6rem; text-align:center; color:#10b981;">✓</td>
+          </tr>
+          <tr style="border-bottom:1px solid #334155;">
+            <td style="padding:0.6rem; color:#06b6d4; font-weight:600;">Build</td>
+            <td style="padding:0.6rem; color:#cbd5e1;">BI dashboards (production)</td>
+            <td style="padding:0.6rem; color:#cbd5e1;">End-user testing complete, bugs <10</td>
+            <td style="padding:0.6rem; text-align:center; color:#10b981;">✓</td>
+          </tr>
+          <tr style="border-bottom:1px solid #334155;">
+            <td style="padding:0.6rem; color:#10b981; font-weight:600;">Go-Live</td>
+            <td style="padding:0.6rem; color:#cbd5e1;">Training materials</td>
+            <td style="padding:0.6rem; color:#cbd5e1;">100+ users trained, certification</td>
+            <td style="padding:0.6rem; text-align:center; color:#10b981;">✓</td>
+          </tr>
+          <tr style="border-bottom:1px solid #334155;">
+            <td style="padding:0.6rem; color:#10b981; font-weight:600;">Go-Live</td>
+            <td style="padding:0.6rem; color:#cbd5e1;">60-day support & SLA</td>
+            <td style="padding:0.6rem; color:#cbd5e1;">P1: 2hr, P2: 8hr, P3: 24hr response</td>
+            <td style="padding:0.6rem; text-align:center; color:#10b981;">✓</td>
+          </tr>
+          <tr>
+            <td style="padding:0.6rem; color:#10b981; font-weight:600;">Handoff</td>
+            <td style="padding:0.6rem; color:#cbd5e1;">Analytics CoE playbook</td>
+            <td style="padding:0.6rem; color:#cbd5e1;">Operations manual + runbooks</td>
+            <td style="padding:0.6rem; text-align:center; color:#10b981;">✓</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- Slide 4: Why Gratia & Next Steps -->
+<section class="slide p-16 col">
+  <h2 class="mb-4">Why Gratia + Next Steps</h2>
+  <div class="fill-height col" style="gap:0.75rem;">
+    <div style="display:grid; grid-template-columns: 1fr 1fr 1fr; gap: 0.75rem; margin-bottom:1rem;">
+
+      <!-- Differentiator 1 -->
+      <div style="background:#1e293b; border:2px solid #38bdf8; border-radius:8px; padding:1rem;">
+        <h3 style="color:#38bdf8; font-size:1.05rem; margin-bottom:0.5rem;">Healthcare DNA</h3>
+        <p style="font-size:0.8rem; color:#cbd5e1; margin-bottom:0.5rem;"><strong style="color:#38bdf8;">15+ transformation</strong> programs in hospital systems, health plans, and HIE networks.</p>
+        <ul style="margin-left:1rem; font-size:0.75rem; color:#cbd5e1;">
+          <li>Clinical data complexity expertise</li>
+          <li>Regulatory + compliance fluency (HIPAA, 42 CFR)</li>
+          <li>Provider + payer workflow knowledge</li>
+        </ul>
+      </div>
+
+      <!-- Differentiator 2 -->
+      <div style="background:#1e293b; border:2px solid #22d3ee; border-radius:8px; padding:1rem;">
+        <h3 style="color:#22d3ee; font-size:1.05rem; margin-bottom:0.5rem;">Execution Speed</h3>
+        <p style="font-size:0.8rem; color:#cbd5e1; margin-bottom:0.5rem;"><strong style="color:#22d3ee;">22 weeks</strong> → delivery; modern stack ensures no legacy slowdown.</p>
+        <ul style="margin-left:1rem; font-size:0.75rem; color:#cbd5e1;">
+          <li>Cloud-native (AWS, Redshift, Tableau)</li>
+          <li>Agile sprints with bi-weekly demos</li>
+          <li>AI-ready architecture from day 1</li>
+        </ul>
+      </div>
+
+      <!-- Differentiator 3 -->
+      <div style="background:#1e293b; border:2px solid #06b6d4; border-radius:8px; padding:1rem;">
+        <h3 style="color:#06b6d4; font-size:1.05rem; margin-bottom:0.5rem;">Knowledge Transfer</h3>
+        <p style="font-size:0.8rem; color:#cbd5e1; margin-bottom:0.5rem;"><strong style="color:#06b6d4;">Your team</strong> owns the platform post-go-live, not vendor lock-in.</p>
+        <ul style="margin-left:1rem; font-size:0.75rem; color:#cbd5e1;">
+          <li>Build internal analytics CoE</li>
+          <li>Train 5+ data engineers + analysts</li>
+          <li>Open-source tools (dbt, Great Expectations)</li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- Bottom: Commercial terms + next steps -->
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+      <div class="callout-card">
+        <h4>Commercial Terms</h4>
+        <p><strong style="color:#38bdf8;">Investment:</strong> $1.2M fixed price (22 weeks)</p>
+        <p style="margin-top:0.3rem;"><strong style="color:#38bdf8;">Payment:</strong> 30% kickoff, 40% design gate, 30% go-live</p>
+        <p style="margin-top:0.3rem;"><strong style="color:#38bdf8;">Team:</strong> 1 delivery lead, 2 architects, 3 engineers, 1 analyst</p>
+      </div>
+
+      <div style="background:#1e293b; border:2px solid #10b981; border-radius:8px; padding:1rem;">
+        <h4 style="color:#10b981; margin-bottom:0.5rem;">Next Steps (If Approved)</h4>
+        <ol style="margin-left:1rem; font-size:0.8rem; color:#cbd5e1;">
+          <li style="margin-bottom:0.4rem;"><span class="check-mark">✓</span> <strong>This week:</strong> Sign Statement of Work</li>
+          <li style="margin-bottom:0.4rem;"><span class="check-mark">✓</span> <strong>Week 1:</strong> Kick-off + team onboarding</li>
+          <li style="margin-bottom:0.4rem;"><span class="check-mark">✓</span> <strong>Weeks 1-6:</strong> Discovery workshops + requirements</li>
+          <li style="margin-bottom:0.4rem;"><span class="check-mark">✓</span> <strong>Weeks 7-12:</strong> Design review & approval</li>
+          <li><span class="check-mark">✓</span> <strong>Weeks 13-22:</strong> Build, UAT, go-live</li>
+        </ol>
+      </div>
+    </div>
+  </div>
+</section>
+
+  </main>
+</div>
+
+<script>
+(function(){
+  const root = document.documentElement;
+  const slides = Array.from(document.querySelectorAll('.deck .slide'));
+  let idx = 0;
+  function scaleToFit(){
+    const pad = 32;
+    const w = Math.max(320, window.innerWidth - pad);
+    const h = Math.max(320, window.innerHeight - pad);
+    const s = Math.min(w / 1280, h / 720, 1);
+    root.style.setProperty('--scale', String(s));
+  }
+  function show(i){
+    idx = Math.max(0, Math.min(slides.length - 1, i));
+    slides.forEach((s, k) => s.classList.toggle('active', k === idx));
+    window.location.hash = `slide-${idx+1}`;
+  }
+  function fromHash(){
+    const m = (window.location.hash||'').match(/slide-(\d+)/);
+    if(!m) return;
+    const n = parseInt(m[1], 10);
+    if(!Number.isFinite(n)) return;
+    show(n - 1);
+  }
+  document.addEventListener('keydown',(e)=>{
+    if(e.key==='ArrowRight'||e.key==='PageDown') show(idx+1);
+    if(e.key==='ArrowLeft'||e.key==='PageUp') show(idx-1);
+    if(e.key==='Home') show(0);
+    if(e.key==='End') show(slides.length-1);
+  });
+  window.addEventListener('hashchange', fromHash);
+  window.addEventListener('resize', scaleToFit);
+  scaleToFit();
+  fromHash();
+})();
+</script>
+<a href="../" style="position:fixed;top:12px;right:16px;z-index:99999;background:#111827;color:#e2e8f0;padding:6px 16px;border-radius:8px;font-size:13px;font-weight:600;text-decoration:none;border:1px solid #475569;font-family:system-ui,sans-serif;transition:background .15s;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#111827'">← Gallery</a>
+</body>
+</html>

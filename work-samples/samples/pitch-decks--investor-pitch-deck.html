@@ -1,0 +1,520 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Investor Pitch — Canopy Health Series A</title>
+<style>
+:root {
+  --font-family-display: Arial, sans-serif;
+  --font-weight-display: 600;
+  --font-family-content: Arial, sans-serif;
+  --font-weight-content: 400;
+  --font-size-content: 16px;
+  --line-height-content: 1.4;
+  --slide-w: 1280px;
+  --slide-h: 720px;
+  --radius: 16px;
+  --shadow: 0 10px 24px rgba(0,0,0,.45);
+}
+body.theme-dark {
+  --color-bg-base: #0f172a;
+  --color-bg-elevated: #020617;
+  --color-bg-surface: #1e293b;
+  --color-bg-muted: #334155;
+  --color-text-primary: #f1f5f9;
+  --color-text-secondary: #cbd5e1;
+  --color-text-muted: #94a3b8;
+  --color-text-accent: #38bdf8;
+  --color-primary: #38bdf8;
+  --color-primary-foreground: #0f172a;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: var(--font-family-content);
+  font-weight: var(--font-weight-content);
+  font-size: var(--font-size-content);
+  line-height: var(--line-height-content);
+  overflow-x: hidden;
+  background: var(--color-bg-base);
+  color: var(--color-text-primary);
+}
+.deck-wrap{ display:flex; flex-direction:column; align-items:center; padding: 16px 12px; }
+.topbar{
+  width: min(var(--slide-w), 100%);
+  display:flex; align-items:center; justify-content:space-between;
+  gap: 12px; flex-wrap: wrap; margin: 0 0 10px;
+  color: var(--color-text-muted); font-size: 12px;
+}
+.kbd{
+  display:inline-flex; align-items:center; justify-content:center;
+  min-width: 22px; height: 22px; padding: 0 8px;
+  border: 1px solid #334155; border-radius: 10px;
+  background: #0b1220; color: var(--color-text-secondary);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+.deck{
+  width: var(--slide-w); height: var(--slide-h);
+  position: relative;
+  transform: scale(var(--scale, 1)); transform-origin: top center;
+}
+.slide {
+  display:none; width: var(--slide-w); height: var(--slide-h);
+  flex-shrink: 0; overflow: hidden;
+  background: var(--color-bg-base); color: var(--color-text-primary);
+  border: 1px solid #334155; border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+.slide.active{ display:flex; }
+
+.col { flex-direction: column; }
+.fill-height { flex: 1; display: flex; flex-direction: column; }
+
+.p-16 { padding: 3rem 3rem 4.25rem; }
+.mb-2 { margin-bottom: 0.5rem; }
+.mb-4 { margin-bottom: 1rem; }
+.mb-6 { margin-bottom: 1.5rem; }
+.mt-4 { margin-top: 1rem; }
+
+h1, h2, h3, h4 {
+  font-family: var(--font-family-display);
+  font-weight: var(--font-weight-display);
+  line-height: 1.2; margin: 0;
+  color: var(--color-primary);
+}
+h1 { font-size: 2.5rem; }
+h2 { font-size: 2rem; }
+h3 { font-size: 1.5rem; }
+p, li { color: var(--color-text-secondary); }
+strong { color: var(--color-primary); }
+.muted { color: var(--color-text-muted) !important; }
+.text-sm { font-size: 0.875rem; }
+.text-xs { font-size: 0.75rem; }
+.font-semibold { font-weight: 600; }
+
+.slide::after {
+  content: "Sanitized excerpt • Prepared by Gratia • Jan 2026";
+  position: absolute; left: 4rem; right: 4rem; bottom: 1.1rem;
+  font-size: 0.72rem; color: #94a3b8; opacity: 0.9;
+}
+
+/* Cards & metrics */
+.metric-card {
+  padding: 1rem; background: #1e293b; border: 1px solid #334155;
+  border-left: 4px solid #38bdf8;
+}
+.metric-val { font-size: 2rem; font-weight: 700; margin-bottom: 0.15rem; }
+.metric-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; color: #94a3b8; }
+.metric-desc { font-size: 0.8rem; color: #cbd5e1; margin-top: 0.25rem; }
+
+.card-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.75rem; }
+.info-card {
+  padding: 1rem; background: #1e293b; border: 1px solid #334155;
+}
+.info-card h4 { font-size: 0.85rem; margin-bottom: 0.5rem; }
+.info-card p { font-size: 0.8rem; line-height: 1.4; }
+
+.callout-card {
+  padding: 1rem; background: #1e293b; border: 1px solid #334155;
+  border-left: 4px solid #38bdf8;
+}
+.callout-card h4 { font-size: 0.85rem; margin-bottom: 0.5rem; color: #38bdf8; }
+.callout-card p { font-size: 0.8rem; line-height: 1.4; }
+.callout-card ul { margin-left: 1.2rem; margin-top: 0.3rem; }
+.callout-card li { font-size: 0.8rem; margin-bottom: 0.3rem; color: #cbd5e1; }
+
+.stat-card {
+  padding: 0.75rem 1rem; background: #1e293b; border: 1px solid #334155;
+  border-left: 4px solid #38bdf8; text-align: center;
+}
+.stat-val { font-size: 1.4rem; font-weight: 700; color: #38bdf8; margin-bottom: 0.2rem; }
+.stat-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.05em; color: #94a3b8; }
+
+.logo-row { display:flex; flex-wrap:wrap; gap:0.4rem; margin-top:0.5rem; }
+.logo-pill {
+  display:inline-flex; align-items:center; padding:0.25rem 0.45rem;
+  border:1px solid #334155; border-radius:999px; font-size:0.7rem;
+  color:#cbd5e1; background:#0b1220;
+}
+.logo-dot { width:0.4rem; height:0.4rem; border-radius:999px; background:#38bdf8; margin-right:0.35rem; }
+
+@media print{
+  body{ background:#fff; }
+  .deck-wrap{ padding:0; }
+  .topbar{ display:none; }
+  .deck{ width:auto; height:auto; transform:none; }
+  .slide{ display:flex !important; margin: 0 0 18px; page-break-after: always; box-shadow:none; }
+  .slide::after{ display:none; }
+}
+</style>
+</head>
+<body class="theme-dark">
+
+<div class="deck-wrap">
+  <div class="topbar" aria-hidden="true">
+    <div>Investor Pitch — Canopy Health Series A</div>
+    <div><span class="kbd">←</span> <span class="kbd">→</span> to navigate • <span class="kbd">Cmd</span> + <span class="kbd">P</span> to export PDF</div>
+  </div>
+  <main class="deck" aria-label="Investor pitch slide deck">
+
+<!-- Slide 1: Exec Overview -->
+<section class="slide active p-16 col">
+  <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:1.25rem;">
+    <div>
+      <p class="text-xs font-semibold" style="color:#38bdf8; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:0.4rem;">Series A Investment</p>
+      <h1>Canopy Health: Reimagining Chronic Care Management</h1>
+    </div>
+    <div style="text-align:right; font-size:0.75rem; color:#94a3b8;">
+      <div>Client: Canopy Health</div>
+      <div>Date: Jan 2026</div>
+    </div>
+  </div>
+
+  <!-- Split: left metrics, right viz -->
+  <div style="display:grid; grid-template-columns: 0.48fr 0.52fr; gap:1rem; margin-bottom:0.6rem;">
+    <!-- Left: 4 metric cards stacked -->
+    <div style="display:flex; flex-direction:column; gap:0.5rem;">
+      <div class="metric-card" style="display:flex; align-items:center; gap:0.75rem;">
+        <div>
+          <p class="metric-label">Annual Recurring Revenue</p>
+          <p class="metric-val" style="color:#38bdf8;">$2.8M</p>
+        </div>
+        <p class="metric-desc" style="flex:1;"><strong style="color:#38bdf8;">3.2x YoY</strong> growth trajectory</p>
+      </div>
+
+      <div class="metric-card" style="display:flex; align-items:center; gap:0.75rem;">
+        <div>
+          <p class="metric-label">Patient Lives Managed</p>
+          <p class="metric-val" style="color:#22d3ee;">45K</p>
+        </div>
+        <p class="metric-desc" style="flex:1;">Across 8 health systems + 120 partnerships</p>
+      </div>
+
+      <div class="metric-card" style="display:flex; align-items:center; gap:0.75rem;">
+        <div>
+          <p class="metric-label">Provider Partners</p>
+          <p class="metric-val" style="color:#06b6d4;">120</p>
+        </div>
+        <p class="metric-desc" style="flex:1;">Primary care, cardiologists, endocrinology</p>
+      </div>
+
+      <div class="metric-card" style="display:flex; align-items:center; gap:0.75rem;">
+        <div>
+          <p class="metric-label">NPS Score</p>
+          <p class="metric-val" style="color:#10b981;">72</p>
+        </div>
+        <p class="metric-desc" style="flex:1;">Patient + provider combined engagement</p>
+      </div>
+
+      <!-- Findings dots -->
+      <div style="border-top:1px solid #334155; padding-top:0.5rem; margin-top:0.15rem;">
+        <div style="display:flex; gap:0.5rem; padding:0.3rem 0; font-size:0.72rem; line-height:1.35; color:#cbd5e1;">
+          <div style="width:6px; height:6px; border-radius:999px; background:#38bdf8; margin-top:4px; flex-shrink:0;"></div>
+          <div><strong style="color:#38bdf8;">$2.8M ARR</strong> implies $18K LTV per patient, 6-7mo payback period</div>
+        </div>
+        <div style="display:flex; gap:0.5rem; padding:0.3rem 0; font-size:0.72rem; line-height:1.35; color:#cbd5e1;">
+          <div style="width:6px; height:6px; border-radius:999px; background:#f59e0b; margin-top:4px; flex-shrink:0;"></div>
+          <div><strong style="color:#f59e0b;">45K lives</strong> at $62/life/year average contract value</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right: Quarterly trajectory + round details -->
+    <div style="background:#1e293b; border:1px solid #334155; padding:0.75rem; display:flex; flex-direction:column;">
+      <div style="display:flex; justify-content:space-between; align-items:center; margin-bottom:0.4rem;">
+        <div style="font-size:0.85rem; font-weight:600; color:#38bdf8;">Quarterly ARR Trajectory</div>
+        <div style="font-size:0.7rem; color:#94a3b8;">Last 6 quarters</div>
+      </div>
+
+      <svg width="100%" height="160" viewBox="0 0 480 160" preserveAspectRatio="none" style="flex:1; margin-bottom:0.5rem;">
+        <!-- Grid lines -->
+        <line x1="40" y1="130" x2="460" y2="130" stroke="#334155" stroke-width="1" stroke-dasharray="3,3" opacity="0.5"/>
+        <line x1="40" y1="90" x2="460" y2="90" stroke="#334155" stroke-width="1" stroke-dasharray="3,3" opacity="0.5"/>
+        <line x1="40" y1="50" x2="460" y2="50" stroke="#334155" stroke-width="1" stroke-dasharray="3,3" opacity="0.5"/>
+
+        <!-- Bars -->
+        <rect x="50" y="110" width="35" height="20" fill="#38bdf8" opacity="0.6"/>
+        <rect x="100" y="100" width="35" height="30" fill="#38bdf8" opacity="0.7"/>
+        <rect x="150" y="85" width="35" height="45" fill="#38bdf8" opacity="0.8"/>
+        <rect x="200" y="75" width="35" height="55" fill="#38bdf8" opacity="0.85"/>
+        <rect x="250" y="60" width="35" height="70" fill="#38bdf8" opacity="0.9"/>
+        <rect x="300" y="45" width="35" height="85" fill="#38bdf8"/>
+
+        <!-- Labels -->
+        <text x="67" y="145" text-anchor="middle" fill="#94a3b8" font-size="11">Q3'24</text>
+        <text x="117" y="145" text-anchor="middle" fill="#94a3b8" font-size="11">Q4'24</text>
+        <text x="167" y="145" text-anchor="middle" fill="#94a3b8" font-size="11">Q1'25</text>
+        <text x="217" y="145" text-anchor="middle" fill="#94a3b8" font-size="11">Q2'25</text>
+        <text x="267" y="145" text-anchor="middle" fill="#94a3b8" font-size="11">Q3'25</text>
+        <text x="317" y="145" text-anchor="middle" fill="#f1f5f9" font-size="11" font-weight="700">Q4'25</text>
+
+        <!-- Y-axis labels -->
+        <text x="30" y="135" text-anchor="end" fill="#94a3b8" font-size="10">$0.6M</text>
+        <text x="30" y="95" text-anchor="end" fill="#94a3b8" font-size="10">$1.5M</text>
+        <text x="30" y="55" text-anchor="end" fill="#94a3b8" font-size="10">$2.5M</text>
+      </svg>
+
+      <!-- Round details -->
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.4rem;">
+        <div style="background:#0b1220; border:2px solid #38bdf8; padding:0.4rem; text-align:center;">
+          <div style="font-size:0.65rem; color:#38bdf8; font-weight:700;">Series A Round</div>
+          <div style="font-size:1rem; font-weight:700; color:#38bdf8;">$12M</div>
+          <div style="font-size:0.6rem; color:#94a3b8;">Close target</div>
+        </div>
+        <div style="background:#0b1220; border:1px solid #334155; padding:0.4rem; text-align:center;">
+          <div style="font-size:0.65rem; color:#94a3b8;">Runway Target</div>
+          <div style="font-size:0.9rem; font-weight:700; color:#cbd5e1;">18 months</div>
+          <div style="font-size:0.6rem; color:#94a3b8;">Post-raise</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card-row">
+    <div class="info-card">
+      <h4 style="color:#38bdf8;">Market opportunity</h4>
+      <p>Chronic disease management touches 130M U.S. patients; current digital adoption <5%. Canopy targeting $8B TAM in high-utilization segments (diabetes, heart disease, COPD).</p>
+    </div>
+    <div class="info-card">
+      <h4 style="color:#38bdf8;">Capital allocation</h4>
+      <p>Series A funds: 40% product + engineering, 35% go-to-market, 20% operations + infrastructure, 5% runway buffer.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Slide 2: Problem -->
+<section class="slide p-16 col">
+  <h2 class="mb-4">The Problem: Chronic Care Fragmentation</h2>
+  <div class="fill-height col" style="gap:0.75rem;">
+    <div style="display:grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 0.75rem;">
+      <div class="stat-card" style="background:rgba(239,68,68,0.08); border-left-color:#ef4444;">
+        <div class="stat-label">Annual Cost</div>
+        <div class="stat-val" style="color:#ef4444;">$3.7T</div>
+        <div style="font-size:0.7rem; color:#cbd5e1; margin-top:0.3rem;">U.S. chronic disease management spend</div>
+      </div>
+
+      <div class="stat-card" style="background:rgba(249,115,22,0.08); border-left-color:#f97316;">
+        <div class="stat-label">Provider Burnout</div>
+        <div class="stat-val" style="color:#f97316;">62%</div>
+        <div style="font-size:0.7rem; color:#cbd5e1; margin-top:0.3rem;">Experience moderate-to-severe burnout</div>
+      </div>
+
+      <div class="stat-card" style="background:rgba(236,72,153,0.08); border-left-color:#ec4899;">
+        <div class="stat-label">Adherence Gap</div>
+        <div class="stat-val" style="color:#ec4899;">47%</div>
+        <div style="font-size:0.7rem; color:#cbd5e1; margin-top:0.3rem;">Patients fail to adhere to care plans</div>
+      </div>
+
+      <div class="stat-card" style="background:rgba(168,85,247,0.08); border-left-color:#a855f7;">
+        <div class="stat-label">Readmission Rate</div>
+        <div class="stat-val" style="color:#a855f7;">26%</div>
+        <div style="font-size:0.7rem; color:#cbd5e1; margin-top:0.3rem;">30-day preventable readmissions</div>
+      </div>
+    </div>
+
+    <div class="callout-card" style="margin-top:0.75rem;">
+      <h4>Why it matters</h4>
+      <p>Fragmented care delivery → clinical gaps → poor outcomes. Providers lack real-time visibility; patients juggle multiple apps. Canopy unifies the workflow, enabling proactive care coordination and 15-20% readmission reduction within 6 months.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Slide 3: Traction -->
+<section class="slide p-16 col">
+  <h2 class="mb-4">Growth & Unit Economics</h2>
+  <div class="fill-height col" style="gap:0.75rem;">
+    <div style="display:grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 0.75rem; margin-bottom:1rem;">
+      <div class="metric-card" style="display:flex; flex-direction:column;">
+        <p class="metric-label">Patient Cohorts Added</p>
+        <p class="metric-val" style="color:#38bdf8;">+8.5K</p>
+        <p style="font-size:0.75rem; color:#10b981; margin-top:0.3rem;">↑ 18% QoQ (last 4 quarters)</p>
+      </div>
+
+      <div class="metric-card" style="display:flex; flex-direction:column;">
+        <p class="metric-label">Health System Wins</p>
+        <p class="metric-val" style="color:#22d3ee;">+3</p>
+        <p style="font-size:0.75rem; color:#10b981; margin-top:0.3rem;">↑ Top-50 IDNs (Series A target)</p>
+      </div>
+
+      <div class="metric-card" style="display:flex; flex-direction:column;">
+        <p class="metric-label">Daily Active Users</p>
+        <p class="metric-val" style="color:#06b6d4;">68%</p>
+        <p style="font-size:0.75rem; color:#10b981; margin-top:0.3rem;">↑ Engagement + retention</p>
+      </div>
+
+      <div class="metric-card" style="display:flex; flex-direction:column;">
+        <p class="metric-label">Gross Margin</p>
+        <p class="metric-val" style="color:#ec4899;">76%</p>
+        <p style="font-size:0.75rem; color:#cbd5e1; margin-top:0.3rem;">Highly scalable SaaS model</p>
+      </div>
+    </div>
+
+    <!-- Unit economics callout -->
+    <div style="display:grid; grid-template-columns: 1fr 1fr; gap: 0.75rem;">
+      <div class="callout-card">
+        <h4>Customer Economics</h4>
+        <p><strong style="color:#38bdf8;">LTV:</strong> $18,000 (3-year contract, 45% net expansion)</p>
+        <p style="margin-top:0.3rem;"><strong style="color:#38bdf8;">CAC:</strong> $2,100 (direct health system sales cycle)</p>
+        <p style="margin-top:0.3rem;"><strong style="color:#38bdf8;">LTV/CAC Ratio:</strong> <span style="color:#10b981;">8.6x</span> (target: >5x)</p>
+      </div>
+
+      <div class="callout-card">
+        <h4>Growth Drivers (Next 12mo)</h4>
+        <ul>
+          <li>Launch cardiology specialty module (Feb 2026)</li>
+          <li>Expand to 20+ health systems (geographic + network effects)</li>
+          <li>Partner channel: pharmacy chains (walgreens, CVS)</li>
+          <li>International pilot (Canada Q3)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Slide 4: Market & Ask -->
+<section class="slide p-16 col">
+  <h2 class="mb-4">Market Sizing & Capital Ask</h2>
+  <div class="fill-height col" style="gap:0.75rem;">
+    <div style="display:grid; grid-template-columns: 0.55fr 0.45fr; gap: 1rem;">
+
+      <!-- Left: TAM/SAM/SOM -->
+      <div>
+        <p class="text-xs font-semibold" style="color:#38bdf8; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:0.5rem;">TAM / SAM / SOM Waterfall</p>
+        <svg width="100%" height="280" viewBox="0 0 500 280" preserveAspectRatio="none">
+          <!-- TAM bar -->
+          <rect x="30" y="20" width="420" height="40" fill="rgba(56,189,248,0.2)" stroke="#38bdf8" stroke-width="2" rx="2"/>
+          <text x="250" y="50" text-anchor="middle" fill="#f1f5f9" font-size="16" font-weight="700">TAM: $8.2 Billion</text>
+          <text x="465" y="50" text-anchor="start" fill="#94a3b8" font-size="11">U.S. chronic care digital</text>
+
+          <!-- Arrow -->
+          <line x1="250" y1="65" x2="250" y2="85" stroke="#38bdf8" stroke-width="2" marker-end="url(#arrowhead)"/>
+          <text x="260" y="78" fill="#38bdf8" font-size="10">↓ 18%</text>
+
+          <!-- SAM bar -->
+          <rect x="50" y="95" width="380" height="40" fill="rgba(6,182,212,0.2)" stroke="#06b6d4" stroke-width="2" rx="2"/>
+          <text x="250" y="125" text-anchor="middle" fill="#f1f5f9" font-size="16" font-weight="700">SAM: $1.5 Billion</text>
+          <text x="465" y="125" text-anchor="start" fill="#94a3b8" font-size="11">Health systems + IDNs, U.S.</text>
+
+          <!-- Arrow -->
+          <line x1="250" y1="140" x2="250" y2="160" stroke="#06b6d4" stroke-width="2" marker-end="url(#arrowhead)"/>
+          <text x="260" y="153" fill="#06b6d4" font-size="10">↓ 22%</text>
+
+          <!-- SOM bar -->
+          <rect x="100" y="170" width="300" height="40" fill="rgba(34,211,238,0.2)" stroke="#22d3ee" stroke-width="2" rx="2"/>
+          <text x="250" y="200" text-anchor="middle" fill="#f1f5f9" font-size="16" font-weight="700">SOM: $330 Million</text>
+          <text x="465" y="200" text-anchor="start" fill="#94a3b8" font-size="11">Year 5 Canopy market share (4%)</text>
+
+          <!-- Target for Series A -->
+          <line x1="30" y1="245" x2="420" y2="245" stroke="#38bdf8" stroke-width="1" stroke-dasharray="3,3" opacity="0.6"/>
+          <text x="30" y="265" fill="#94a3b8" font-size="11"><tspan fill="#38bdf8" font-weight="700">Series A Goal (Y5):</tspan> 2% market share = $165M ARR</text>
+
+          <!-- Arrow marker definition -->
+          <defs>
+            <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto">
+              <polygon points="0 0, 10 5, 0 10" fill="#38bdf8"/>
+            </marker>
+          </defs>
+        </svg>
+      </div>
+
+      <!-- Right: Use of Funds -->
+      <div>
+        <p class="text-xs font-semibold" style="color:#38bdf8; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:0.5rem;">$12M Series A — Use of Funds</p>
+
+        <!-- Budget bars -->
+        <div style="display:flex; flex-direction:column; gap:0.5rem;">
+          <div>
+            <div style="display:flex; justify-content:space-between; margin-bottom:0.25rem;">
+              <span style="font-size:0.8rem; color:#cbd5e1; font-weight:600;">Product & Engineering</span>
+              <span style="font-size:0.8rem; color:#38bdf8; font-weight:700;">$4.8M</span>
+            </div>
+            <div style="height:16px; background:#0b1220; border:1px solid #334155; border-radius:4px; overflow:hidden;">
+              <div style="height:100%; width:40%; background:linear-gradient(90deg, #38bdf8, #22d3ee);"></div>
+            </div>
+          </div>
+
+          <div>
+            <div style="display:flex; justify-content:space-between; margin-bottom:0.25rem;">
+              <span style="font-size:0.8rem; color:#cbd5e1; font-weight:600;">Sales & Marketing</span>
+              <span style="font-size:0.8rem; color:#f97316; font-weight:700;">$4.2M</span>
+            </div>
+            <div style="height:16px; background:#0b1220; border:1px solid #334155; border-radius:4px; overflow:hidden;">
+              <div style="height:100%; width:35%; background:linear-gradient(90deg, #f97316, #f59e0b);"></div>
+            </div>
+          </div>
+
+          <div>
+            <div style="display:flex; justify-content:space-between; margin-bottom:0.25rem;">
+              <span style="font-size:0.8rem; color:#cbd5e1; font-weight:600;">Operations & Admin</span>
+              <span style="font-size:0.8rem; color:#8b5cf6; font-weight:700;">$2.4M</span>
+            </div>
+            <div style="height:16px; background:#0b1220; border:1px solid #334155; border-radius:4px; overflow:hidden;">
+              <div style="height:100%; width:20%; background:linear-gradient(90deg, #8b5cf6, #a855f7);"></div>
+            </div>
+          </div>
+
+          <div>
+            <div style="display:flex; justify-content:space-between; margin-bottom:0.25rem;">
+              <span style="font-size:0.8rem; color:#cbd5e1; font-weight:600;">Runway Buffer</span>
+              <span style="font-size:0.8rem; color:#ec4899; font-weight:700;">$0.6M</span>
+            </div>
+            <div style="height:16px; background:#0b1220; border:1px solid #334155; border-radius:4px; overflow:hidden;">
+              <div style="height:100%; width:5%; background:linear-gradient(90deg, #ec4899, #f472b6);"></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Key metrics -->
+        <div style="margin-top:1rem; padding:0.75rem; background:#1e293b; border:1px solid #334155; border-radius:6px;">
+          <p style="font-size:0.75rem; color:#94a3b8; margin-bottom:0.3rem;"><strong style="color:#38bdf8;">Expected outcomes:</strong></p>
+          <p style="font-size:0.75rem; color:#cbd5e1;"><strong>• 150K+</strong> patient lives by YE 2026</p>
+          <p style="font-size:0.75rem; color:#cbd5e1; margin-top:0.2rem;"><strong>• $8.5M</strong> ARR by close of Series B</p>
+          <p style="font-size:0.75rem; color:#cbd5e1; margin-top:0.2rem;"><strong>• Break-even</strong> unit economics (LTV/CAC >7x)</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+  </main>
+</div>
+
+<script>
+(function(){
+  const root = document.documentElement;
+  const slides = Array.from(document.querySelectorAll('.deck .slide'));
+  let idx = 0;
+  function scaleToFit(){
+    const pad = 32;
+    const w = Math.max(320, window.innerWidth - pad);
+    const h = Math.max(320, window.innerHeight - pad);
+    const s = Math.min(w / 1280, h / 720, 1);
+    root.style.setProperty('--scale', String(s));
+  }
+  function show(i){
+    idx = Math.max(0, Math.min(slides.length - 1, i));
+    slides.forEach((s, k) => s.classList.toggle('active', k === idx));
+    window.location.hash = `slide-${idx+1}`;
+  }
+  function fromHash(){
+    const m = (window.location.hash||'').match(/slide-(\d+)/);
+    if(!m) return;
+    const n = parseInt(m[1], 10);
+    if(!Number.isFinite(n)) return;
+    show(n - 1);
+  }
+  document.addEventListener('keydown',(e)=>{
+    if(e.key==='ArrowRight'||e.key==='PageDown') show(idx+1);
+    if(e.key==='ArrowLeft'||e.key==='PageUp') show(idx-1);
+    if(e.key==='Home') show(0);
+    if(e.key==='End') show(slides.length-1);
+  });
+  window.addEventListener('hashchange', fromHash);
+  window.addEventListener('resize', scaleToFit);
+  scaleToFit();
+  fromHash();
+})();
+</script>
+<a href="../" style="position:fixed;top:12px;right:16px;z-index:99999;background:#111827;color:#e2e8f0;padding:6px 16px;border-radius:8px;font-size:13px;font-weight:600;text-decoration:none;border:1px solid #475569;font-family:system-ui,sans-serif;transition:background .15s;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#111827'">← Gallery</a>
+</body>
+</html>

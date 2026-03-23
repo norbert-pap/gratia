@@ -1,0 +1,825 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>3–5 Year Financial Forecast: NorthBridge Payments</title>
+    <style>
+        :root {
+            --font-family-display: Arial, sans-serif;
+            --font-weight-display: 600;
+            --font-family-content: Arial, sans-serif;
+            --font-weight-content: 400;
+            --font-size-content: 16px;
+            --line-height-content: 1.4;
+            --slide-w: 1280px;
+            --slide-h: 720px;
+            --radius: 16px;
+            --shadow: 0 10px 24px rgba(0,0,0,.45);
+        }
+
+        body.theme-dark {
+            --color-bg-base: #0f172a;
+            --color-bg-elevated: #020617;
+            --color-bg-surface: #1e293b;
+            --color-bg-muted: #334155;
+            --color-text-primary: #f1f5f9;
+            --color-text-secondary: #cbd5e1;
+            --color-text-muted: #94a3b8;
+            --color-text-accent: #38bdf8;
+            --color-primary: #38bdf8;
+            --color-primary-foreground: #0f172a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+        }
+
+        body {
+            font-family: var(--font-family-content);
+            font-weight: var(--font-weight-content);
+            font-size: var(--font-size-content);
+            line-height: var(--line-height-content);
+            background: var(--color-bg-base);
+            color: var(--color-text-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        body.theme-dark {
+            background: #0f172a;
+            color: #f1f5f9;
+        }
+
+        .deck {
+            position: relative;
+            width: var(--slide-w);
+            height: var(--slide-h);
+            background: var(--color-bg-base);
+            overflow: hidden;
+        }
+
+        .slide {
+            position: absolute;
+            width: var(--slide-w);
+            height: var(--slide-h);
+            display: flex;
+            flex-direction: column;
+            padding: 40px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease-in-out;
+            background: linear-gradient(135deg, #0f172a 0%, #1a1f3a 100%);
+        }
+
+        .slide.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .slide::after {
+            content: "Sanitized excerpt · Prepared by Gratia · Jan 2026";
+            position: absolute;
+            bottom: 20px;
+            left: 40px;
+            right: 40px;
+            font-size: 12px;
+            color: var(--color-text-muted);
+            text-align: left;
+        }
+
+        .slide-title {
+            font-size: 48px;
+            font-weight: var(--font-weight-display);
+            color: var(--color-text-primary);
+            margin-bottom: 12px;
+            font-family: var(--font-family-display);
+        }
+
+        .slide-subtitle {
+            font-size: 20px;
+            color: var(--color-text-secondary);
+            margin-bottom: 40px;
+        }
+
+        .content {
+            flex: 1;
+            display: flex;
+            gap: 40px;
+        }
+
+        .content-left {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .content-right {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .metric-card {
+            background: rgba(56, 189, 248, 0.1);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            border-radius: var(--radius);
+            padding: 20px;
+            flex: 1;
+        }
+
+        .metric-value {
+            font-size: 32px;
+            font-weight: var(--font-weight-display);
+            color: var(--color-text-accent);
+            margin-bottom: 8px;
+        }
+
+        .metric-label {
+            font-size: 14px;
+            color: var(--color-text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .findings {
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            border-radius: var(--radius);
+            padding: 24px;
+            flex: 1;
+        }
+
+        .findings h4 {
+            font-size: 13px;
+            text-transform: uppercase;
+            color: var(--color-text-accent);
+            margin-bottom: 16px;
+            font-weight: var(--font-weight-display);
+            letter-spacing: 0.5px;
+        }
+
+        .finding-item {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 12px;
+            font-size: 15px;
+        }
+
+        .finding-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .finding-dot {
+            color: var(--color-text-accent);
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .finding-text {
+            color: var(--color-text-secondary);
+            line-height: 1.5;
+        }
+
+        .full-width {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            gap: 24px;
+        }
+
+        .chart-container {
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            border-radius: var(--radius);
+            padding: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex: 1;
+        }
+
+        .financials-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            border-radius: var(--radius);
+            overflow: hidden;
+            font-size: 14px;
+        }
+
+        .financials-table th, .financials-table td {
+            padding: 12px 16px;
+            text-align: right;
+            border: 1px solid rgba(56, 189, 248, 0.15);
+        }
+
+        .financials-table th {
+            background: rgba(56, 189, 248, 0.15);
+            color: var(--color-text-accent);
+            font-weight: var(--font-weight-display);
+        }
+
+        .financials-table td:first-child, .financials-table th:first-child {
+            text-align: left;
+        }
+
+        .financials-table tr:nth-child(even) {
+            background: rgba(56, 189, 248, 0.05);
+        }
+
+        .assumption-callout {
+            background: rgba(56, 189, 248, 0.08);
+            border-left: 3px solid var(--color-text-accent);
+            padding: 12px 16px;
+            margin-top: 16px;
+            font-size: 13px;
+            color: var(--color-text-secondary);
+        }
+
+        .fcf-waterfall {
+            display: flex;
+            gap: 16px;
+            align-items: flex-end;
+            justify-content: center;
+            margin-bottom: 32px;
+        }
+
+        .waterfall-step {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            flex: 1;
+        }
+
+        .waterfall-bar {
+            width: 60px;
+            background: rgba(56, 189, 248, 0.3);
+            border: 1px solid rgba(56, 189, 248, 0.5);
+            border-radius: 4px;
+            display: flex;
+            align-items: flex-end;
+            justify-content: center;
+            color: var(--color-text-accent);
+            font-weight: var(--font-weight-display);
+            font-size: 13px;
+        }
+
+        .waterfall-label {
+            font-size: 12px;
+            color: var(--color-text-secondary);
+            margin-top: 12px;
+            text-align: center;
+        }
+
+        .scenario-cards {
+            display: flex;
+            gap: 20px;
+        }
+
+        .scenario-card {
+            flex: 1;
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            border-radius: var(--radius);
+            padding: 24px;
+        }
+
+        .scenario-card h3 {
+            font-size: 18px;
+            color: var(--color-text-accent);
+            margin-bottom: 20px;
+            font-weight: var(--font-weight-display);
+        }
+
+        .scenario-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(56, 189, 248, 0.1);
+            font-size: 14px;
+        }
+
+        .scenario-row:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .scenario-label {
+            color: var(--color-text-secondary);
+        }
+
+        .scenario-value {
+            color: var(--color-text-accent);
+            font-weight: var(--font-weight-display);
+        }
+
+        .stat-card {
+            flex: 1;
+            background: rgba(56, 189, 248, 0.1);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            border-radius: var(--radius);
+            padding: 24px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 36px;
+            font-weight: var(--font-weight-display);
+            color: var(--color-text-accent);
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            text-transform: uppercase;
+            color: var(--color-text-muted);
+            letter-spacing: 0.5px;
+        }
+
+        .controls {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            gap: 12px;
+            z-index: 1000;
+        }
+
+        .control-btn {
+            background: rgba(56, 189, 248, 0.2);
+            border: 1px solid rgba(56, 189, 248, 0.4);
+            color: var(--color-text-accent);
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.2s;
+        }
+
+        .control-btn:hover {
+            background: rgba(56, 189, 248, 0.3);
+            border-color: rgba(56, 189, 248, 0.6);
+        }
+
+        .slide-counter {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            font-size: 13px;
+            color: var(--color-text-muted);
+        }
+    </style>
+</head>
+<body class="theme-dark">
+    <div class="deck">
+        <!-- Slide 1: Executive Overview -->
+        <div class="slide active">
+            <h1 class="slide-title">Financial Forecast</h1>
+            <h2 class="slide-subtitle">3–5 Year projection | NorthBridge Payments | $42M ARR</h2>
+            <div class="content">
+                <div class="content-left">
+                    <div style="display: flex; gap: 16px;">
+                        <div class="metric-card">
+                            <div class="metric-value">$142M</div>
+                            <div class="metric-label">2030 Revenue</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value">28%</div>
+                            <div class="metric-label">EBITDA Margin</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value">Q3 2027</div>
+                            <div class="metric-label">FCF Positive</div>
+                        </div>
+                    </div>
+                    <div class="findings">
+                        <h4>Key Drivers</h4>
+                        <div class="finding-item">
+                            <span class="finding-dot">•</span>
+                            <span class="finding-text">Payment volume drives 68% of revenue growth</span>
+                        </div>
+                        <div class="finding-item">
+                            <span class="finding-dot">•</span>
+                            <span class="finding-text">Enterprise segment growing 45% YoY vs 22% SMB</span>
+                        </div>
+                        <div class="finding-item">
+                            <span class="finding-dot">•</span>
+                            <span class="finding-text">Gross margin expansion 62% → 71% on mix shift</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="content-right">
+                    <svg width="400" height="350" viewBox="0 0 400 350" style="background: rgba(30, 41, 59, 0.6); border-radius: 16px; border: 1px solid rgba(56, 189, 248, 0.2);">
+                        <!-- Stacked bar chart: Revenue by segment -->
+                        <defs>
+                            <linearGradient id="smbGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                                <stop offset="0%" style="stop-color:#0ea5e9;stop-opacity:0.8" />
+                                <stop offset="100%" style="stop-color:#06b6d4;stop-opacity:0.8" />
+                            </linearGradient>
+                            <linearGradient id="enterpriseGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                                <stop offset="0%" style="stop-color:#38bdf8;stop-opacity:0.8" />
+                                <stop offset="100%" style="stop-color:#22d3ee;stop-opacity:0.8" />
+                            </linearGradient>
+                            <linearGradient id="platformGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                                <stop offset="0%" style="stop-color:#06b6d4;stop-opacity:0.8" />
+                                <stop offset="100%" style="stop-color:#0891b2;stop-opacity:0.8" />
+                            </linearGradient>
+                        </defs>
+                        <!-- X-axis -->
+                        <line x1="40" y1="280" x2="380" y2="280" stroke="#475569" stroke-width="1" />
+                        <!-- X-axis labels -->
+                        <text x="50" y="300" font-size="11" fill="#94a3b8">2026</text>
+                        <text x="115" y="300" font-size="11" fill="#94a3b8">2027</text>
+                        <text x="175" y="300" font-size="11" fill="#94a3b8">2028</text>
+                        <text x="235" y="300" font-size="11" fill="#94a3b8">2029</text>
+                        <text x="295" y="300" font-size="11" fill="#94a3b8">2030</text>
+                        <!-- Year 1 (2026) - $42M -->
+                        <rect x="45" y="210" width="30" height="70" fill="url(#platformGrad)" />
+                        <rect x="45" y="135" width="30" height="75" fill="url(#enterpriseGrad)" />
+                        <rect x="45" y="40" width="30" height="95" fill="url(#smbGrad)" />
+                        <!-- Year 2 (2027) - $65M -->
+                        <rect x="105" y="190" width="30" height="90" fill="url(#platformGrad)" />
+                        <rect x="105" y="100" width="30" height="90" fill="url(#enterpriseGrad)" />
+                        <rect x="105" y="20" width="30" height="80" fill="url(#smbGrad)" />
+                        <!-- Year 3 (2028) - $95M -->
+                        <rect x="165" y="160" width="30" height="120" fill="url(#platformGrad)" />
+                        <rect x="165" y="65" width="30" height="95" fill="url(#enterpriseGrad)" />
+                        <rect x="165" y="20" width="30" height="45" fill="url(#smbGrad)" />
+                        <!-- Year 4 (2029) - $118M -->
+                        <rect x="225" y="140" width="30" height="140" fill="url(#platformGrad)" />
+                        <rect x="225" y="45" width="30" height="95" fill="url(#enterpriseGrad)" />
+                        <rect x="225" y="20" width="30" height="25" fill="url(#smbGrad)" />
+                        <!-- Year 5 (2030) - $142M -->
+                        <rect x="285" y="115" width="30" height="165" fill="url(#platformGrad)" />
+                        <rect x="285" y="30" width="30" height="85" fill="url(#enterpriseGrad)" />
+                        <rect x="285" y="15" width="30" height="15" fill="url(#smbGrad)" />
+                        <!-- Legend -->
+                        <rect x="50" y="320" width="12" height="12" fill="url(#smbGrad)" />
+                        <text x="68" y="328" font-size="10" fill="#cbd5e1">SMB</text>
+                        <rect x="140" y="320" width="12" height="12" fill="url(#enterpriseGrad)" />
+                        <text x="158" y="328" font-size="10" fill="#cbd5e1">Enterprise</text>
+                        <rect x="280" y="320" width="12" height="12" fill="url(#platformGrad)" />
+                        <text x="298" y="328" font-size="10" fill="#cbd5e1">Platform</text>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 2: Full Revenue Forecast Chart -->
+        <div class="slide">
+            <h1 class="slide-title">Revenue Forecast by Segment</h1>
+            <h2 class="slide-subtitle">5-year projection with YoY growth rates</h2>
+            <div class="full-width" style="flex: 1;">
+                <div class="chart-container">
+                    <svg width="900" height="320" viewBox="0 0 900 320">
+                        <defs>
+                            <linearGradient id="smbGrad2" x1="0%" y1="0%" x2="0%" y2="100%">
+                                <stop offset="0%" style="stop-color:#0ea5e9;stop-opacity:0.8" />
+                                <stop offset="100%" style="stop-color:#06b6d4;stop-opacity:0.8" />
+                            </linearGradient>
+                            <linearGradient id="enterpriseGrad2" x1="0%" y1="0%" x2="0%" y2="100%">
+                                <stop offset="0%" style="stop-color:#38bdf8;stop-opacity:0.8" />
+                                <stop offset="100%" style="stop-color:#22d3ee;stop-opacity:0.8" />
+                            </linearGradient>
+                            <linearGradient id="platformGrad2" x1="0%" y1="0%" x2="0%" y2="100%">
+                                <stop offset="0%" style="stop-color:#06b6d4;stop-opacity:0.8" />
+                                <stop offset="100%" style="stop-color:#0891b2;stop-opacity:0.8" />
+                            </linearGradient>
+                        </defs>
+                        <!-- Y-axis -->
+                        <line x1="80" y1="20" x2="80" y2="270" stroke="#475569" stroke-width="1" />
+                        <text x="20" y="275" font-size="11" fill="#94a3b8">$0M</text>
+                        <text x="10" y="200" font-size="11" fill="#94a3b8">$75M</text>
+                        <text x="10" y="130" font-size="11" fill="#94a3b8">$150M</text>
+                        <!-- X-axis -->
+                        <line x1="80" y1="270" x2="850" y2="270" stroke="#475569" stroke-width="1" />
+                        <!-- Year labels -->
+                        <text x="130" y="295" font-size="11" fill="#94a3b8">2026</text>
+                        <text x="255" y="295" font-size="11" fill="#94a3b8">2027</text>
+                        <text x="380" y="295" font-size="11" fill="#94a3b8">2028</text>
+                        <text x="505" y="295" font-size="11" fill="#94a3b8">2029</text>
+                        <text x="630" y="295" font-size="11" fill="#94a3b8">2030</text>
+                        <!-- 2026: $42M (16M SMB, 18M Enterprise, 8M Platform) -->
+                        <rect x="110" y="210" width="40" height="60" fill="url(#platformGrad2)" />
+                        <rect x="110" y="130" width="40" height="80" fill="url(#enterpriseGrad2)" />
+                        <rect x="110" y="35" width="40" height="95" fill="url(#smbGrad2)" />
+                        <text x="125" y="285" font-size="11" fill="#38bdf8" font-weight="bold">$42M</text>
+                        <text x="120" y="315" font-size="10" fill="#94a3b8">+55%</text>
+                        <!-- 2027: $65M (14M SMB, 28M Enterprise, 23M Platform) -->
+                        <rect x="235" y="175" width="40" height="95" fill="url(#platformGrad2)" />
+                        <rect x="235" y="75" width="40" height="100" fill="url(#enterpriseGrad2)" />
+                        <rect x="235" y="20" width="40" height="55" fill="url(#smbGrad2)" />
+                        <text x="250" y="285" font-size="11" fill="#38bdf8" font-weight="bold">$65M</text>
+                        <text x="240" y="315" font-size="10" fill="#94a3b8">+47%</text>
+                        <!-- 2028: $95M (8M SMB, 38M Enterprise, 49M Platform) -->
+                        <rect x="360" y="110" width="40" height="160" fill="url(#platformGrad2)" />
+                        <rect x="360" y="45" width="40" height="65" fill="url(#enterpriseGrad2)" />
+                        <rect x="360" y="20" width="40" height="25" fill="url(#smbGrad2)" />
+                        <text x="375" y="285" font-size="11" fill="#38bdf8" font-weight="bold">$95M</text>
+                        <text x="365" y="315" font-size="10" fill="#94a3b8">+46%</text>
+                        <!-- 2029: $118M (5M SMB, 48M Enterprise, 65M Platform) -->
+                        <rect x="485" y="35" width="40" height="235" fill="url(#platformGrad2)" />
+                        <rect x="485" y="20" width="40" height="15" fill="url(#enterpriseGrad2)" />
+                        <rect x="485" y="20" width="40" height="0" fill="url(#smbGrad2)" />
+                        <text x="500" y="285" font-size="11" fill="#38bdf8" font-weight="bold">$118M</text>
+                        <text x="495" y="315" font-size="10" fill="#94a3b8">+24%</text>
+                        <!-- 2030: $142M (3M SMB, 56M Enterprise, 83M Platform) -->
+                        <rect x="610" y="25" width="40" height="245" fill="url(#platformGrad2)" />
+                        <rect x="610" y="20" width="40" height="5" fill="url(#enterpriseGrad2)" />
+                        <rect x="610" y="20" width="40" height="0" fill="url(#smbGrad2)" />
+                        <text x="625" y="285" font-size="11" fill="#38bdf8" font-weight="bold">$142M</text>
+                        <text x="620" y="315" font-size="10" fill="#94a3b8">+20%</text>
+                    </svg>
+                </div>
+                <div class="assumption-callout">
+                    <strong style="color: var(--color-text-accent);">Growth Drivers:</strong> Revenue CAGR of 35% through 2030. SMB declines due to competitive pressures; Enterprise (45% YoY) and Platform fees (58% YoY) drive growth mix shift toward higher-margin products.
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3: P&L Summary -->
+        <div class="slide">
+            <h1 class="slide-title">Projected P&L Summary</h1>
+            <h2 class="slide-subtitle">5-year income statement with key margin metrics</h2>
+            <div class="full-width" style="flex: 1;">
+                <table class="financials-table">
+                    <thead>
+                        <tr>
+                            <th>$ Millions</th>
+                            <th>2026A</th>
+                            <th>2027E</th>
+                            <th>2028E</th>
+                            <th>2029E</th>
+                            <th>2030E</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Revenue</strong></td>
+                            <td>$42.0</td>
+                            <td>$65.1</td>
+                            <td>$95.2</td>
+                            <td>$118.1</td>
+                            <td>$141.7</td>
+                        </tr>
+                        <tr>
+                            <td>Cost of Revenue</td>
+                            <td>$16.0</td>
+                            <td>$23.8</td>
+                            <td>$32.4</td>
+                            <td>$39.1</td>
+                            <td>$41.3</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Gross Profit</strong></td>
+                            <td>$26.0</td>
+                            <td>$41.3</td>
+                            <td>$62.8</td>
+                            <td>$79.0</td>
+                            <td>$100.4</td>
+                        </tr>
+                        <tr>
+                            <td style="color: var(--color-text-muted); font-size: 13px;">Gross Margin %</td>
+                            <td style="color: var(--color-text-muted); font-size: 13px;">62%</td>
+                            <td style="color: var(--color-text-muted); font-size: 13px;">63%</td>
+                            <td style="color: var(--color-text-muted); font-size: 13px;">66%</td>
+                            <td style="color: var(--color-text-muted); font-size: 13px;">67%</td>
+                            <td style="color: var(--color-text-muted); font-size: 13px;">71%</td>
+                        </tr>
+                        <tr>
+                            <td>Operating Expenses</td>
+                            <td>$18.5</td>
+                            <td>$24.7</td>
+                            <td>$31.4</td>
+                            <td>$37.8</td>
+                            <td>$43.6</td>
+                        </tr>
+                        <tr>
+                            <td><strong>EBITDA</strong></td>
+                            <td>$7.5</td>
+                            <td>$16.6</td>
+                            <td>$31.4</td>
+                            <td>$41.2</td>
+                            <td>$56.8</td>
+                        </tr>
+                        <tr>
+                            <td style="color: var(--color-text-muted); font-size: 13px;">EBITDA Margin %</td>
+                            <td style="color: var(--color-text-muted); font-size: 13px;">18%</td>
+                            <td style="color: var(--color-text-muted); font-size: 13px;">26%</td>
+                            <td style="color: var(--color-text-muted); font-size: 13px;">33%</td>
+                            <td style="color: var(--color-text-muted); font-size: 13px;">35%</td>
+                            <td style="color: var(--color-text-muted); font-size: 13px;">40%</td>
+                        </tr>
+                        <tr>
+                            <td>Depreciation & Amort.</td>
+                            <td>$2.1</td>
+                            <td>$2.5</td>
+                            <td>$3.0</td>
+                            <td>$3.5</td>
+                            <td>$4.0</td>
+                        </tr>
+                        <tr>
+                            <td><strong>EBIT</strong></td>
+                            <td>$5.4</td>
+                            <td>$14.1</td>
+                            <td>$28.4</td>
+                            <td>$37.7</td>
+                            <td>$52.8</td>
+                        </tr>
+                        <tr>
+                            <td>Taxes (25%)</td>
+                            <td>$1.4</td>
+                            <td>$3.5</td>
+                            <td>$7.1</td>
+                            <td>$9.4</td>
+                            <td>$13.2</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Net Income</strong></td>
+                            <td>$4.0</td>
+                            <td>$10.6</td>
+                            <td>$21.3</td>
+                            <td>$28.3</td>
+                            <td>$39.6</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div class="assumption-callout">
+                    <strong style="color: var(--color-text-accent);">Key Metrics:</strong> Gross margin expands 62%→71% on platform mix. EBITDA margins improve from 18% to 40%. OpEx leverage of ~37% of incremental revenue provides operating leverage.
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 4: Cash Flow & Scenarios -->
+        <div class="slide">
+            <h1 class="slide-title">Free Cash Flow & Scenarios</h1>
+            <h2 class="slide-subtitle">Base/Bull/Bear case analysis</h2>
+            <div class="full-width" style="flex: 1;">
+                <div class="fcf-waterfall">
+                    <div class="waterfall-step">
+                        <div class="waterfall-bar" style="height: 120px; background: rgba(56, 189, 248, 0.4);">$48M</div>
+                        <div class="waterfall-label">Operating<br/>Cash Flow</div>
+                    </div>
+                    <div style="display: flex; align-items: center; color: var(--color-text-muted); font-size: 20px;">→</div>
+                    <div class="waterfall-step">
+                        <div class="waterfall-bar" style="height: 50px; background: rgba(255, 100, 100, 0.3);">−$12M</div>
+                        <div class="waterfall-label">CapEx</div>
+                    </div>
+                    <div style="display: flex; align-items: center; color: var(--color-text-muted); font-size: 20px;">→</div>
+                    <div class="waterfall-step">
+                        <div class="waterfall-bar" style="height: 30px; background: rgba(255, 100, 100, 0.3);">−$8M</div>
+                        <div class="waterfall-label">WC Change</div>
+                    </div>
+                    <div style="display: flex; align-items: center; color: var(--color-text-muted); font-size: 20px;">→</div>
+                    <div class="waterfall-step">
+                        <div class="waterfall-bar" style="height: 80px; background: rgba(56, 189, 248, 0.6);">$28M</div>
+                        <div class="waterfall-label">Free<br/>Cash Flow</div>
+                    </div>
+                </div>
+                <div class="scenario-cards">
+                    <div class="scenario-card">
+                        <h3>Bear Case</h3>
+                        <div class="scenario-row">
+                            <span class="scenario-label">Revenue Growth</span>
+                            <span class="scenario-value">28% CAGR</span>
+                        </div>
+                        <div class="scenario-row">
+                            <span class="scenario-label">Churn Rate</span>
+                            <span class="scenario-value">8%</span>
+                        </div>
+                        <div class="scenario-row">
+                            <span class="scenario-label">Gross Margin</span>
+                            <span class="scenario-value">65%</span>
+                        </div>
+                        <div class="scenario-row">
+                            <span class="scenario-label">2030 Revenue</span>
+                            <span class="scenario-value">$110M</span>
+                        </div>
+                        <div class="scenario-row" style="border-bottom: 2px solid rgba(56, 189, 248, 0.3); margin-bottom: 16px; padding-bottom: 16px;">
+                            <span class="scenario-label">FCF (5yr cum)</span>
+                            <span class="scenario-value">$8M</span>
+                        </div>
+                    </div>
+                    <div class="scenario-card">
+                        <h3>Base Case</h3>
+                        <div class="scenario-row">
+                            <span class="scenario-label">Revenue Growth</span>
+                            <span class="scenario-value">35% CAGR</span>
+                        </div>
+                        <div class="scenario-row">
+                            <span class="scenario-label">Churn Rate</span>
+                            <span class="scenario-value">5%</span>
+                        </div>
+                        <div class="scenario-row">
+                            <span class="scenario-label">Gross Margin</span>
+                            <span class="scenario-value">71%</span>
+                        </div>
+                        <div class="scenario-row">
+                            <span class="scenario-label">2030 Revenue</span>
+                            <span class="scenario-value">$142M</span>
+                        </div>
+                        <div class="scenario-row" style="border-bottom: 2px solid rgba(56, 189, 248, 0.3); margin-bottom: 16px; padding-bottom: 16px;">
+                            <span class="scenario-label">FCF (5yr cum)</span>
+                            <span class="scenario-value">$18M</span>
+                        </div>
+                    </div>
+                    <div class="scenario-card">
+                        <h3>Bull Case</h3>
+                        <div class="scenario-row">
+                            <span class="scenario-label">Revenue Growth</span>
+                            <span class="scenario-value">42% CAGR</span>
+                        </div>
+                        <div class="scenario-row">
+                            <span class="scenario-label">Churn Rate</span>
+                            <span class="scenario-value">2%</span>
+                        </div>
+                        <div class="scenario-row">
+                            <span class="scenario-label">Gross Margin</span>
+                            <span class="scenario-value">75%</span>
+                        </div>
+                        <div class="scenario-row">
+                            <span class="scenario-label">2030 Revenue</span>
+                            <span class="scenario-value">$180M</span>
+                        </div>
+                        <div class="scenario-row" style="border-bottom: 2px solid rgba(56, 189, 248, 0.3); margin-bottom: 16px; padding-bottom: 16px;">
+                            <span class="scenario-label">FCF (5yr cum)</span>
+                            <span class="scenario-value">$28M</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide-counter">
+        <span id="current-slide">1</span> / <span id="total-slides">4</span>
+    </div>
+
+    <div class="controls">
+        <button class="control-btn" onclick="previousSlide()">← Prev</button>
+        <button class="control-btn" onclick="nextSlide()">Next →</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+            document.getElementById('current-slide').textContent = currentSlide + 1;
+        }
+
+        function nextSlide() {
+            showSlide(currentSlide + 1);
+        }
+
+        function previousSlide() {
+            showSlide(currentSlide - 1);
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                e.preventDefault();
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                previousSlide();
+            } else if (e.key === 'Home') {
+                e.preventDefault();
+                showSlide(0);
+            } else if (e.key === 'End') {
+                e.preventDefault();
+                showSlide(totalSlides - 1);
+            } else if (e.key === 'PageDown') {
+                e.preventDefault();
+                nextSlide();
+            } else if (e.key === 'PageUp') {
+                e.preventDefault();
+                previousSlide();
+            }
+        });
+
+        document.getElementById('total-slides').textContent = totalSlides;
+    </script>
+<a href="../" style="position:fixed;top:12px;right:16px;z-index:99999;background:#111827;color:#e2e8f0;padding:6px 16px;border-radius:8px;font-size:13px;font-weight:600;text-decoration:none;border:1px solid #475569;font-family:system-ui,sans-serif;transition:background .15s;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#111827'">← Gallery</a>
+</body>
+</html>

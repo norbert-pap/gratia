@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRM Blueprint: Sales Process Architecture & CRM Design</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
+            background: #f8f8f8;
+            color: #1a1a1a;
+            line-height: 1.6;
+        }
+
+        .document {
+            max-width: 900px;
+            margin: 40px auto;
+            background: white;
+            padding: 60px 50px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            border-radius: 2px;
+        }
+
+        .header-block {
+            border-bottom: 3px solid #18A873;
+            padding-bottom: 30px;
+            margin-bottom: 40px;
+        }
+
+        .header-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #666;
+        }
+
+        .status-badge {
+            background: #ffa94d;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 2px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        h1 {
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #1a1a1a;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            color: #666;
+            font-weight: 400;
+        }
+
+        h2 {
+            font-size: 28px;
+            font-weight: 700;
+            margin: 50px 0 30px 0;
+            color: #1a1a1a;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #18A873;
+        }
+
+        h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin: 24px 0 16px 0;
+            color: #1a1a1a;
+        }
+
+        p {
+            margin-bottom: 16px;
+            color: #333;
+        }
+
+        /* Pain Point Cards */
+        .pain-points {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .pain-card {
+            padding: 20px;
+            border-radius: 2px;
+            border-left: 5px solid #c00000;
+            background: #fff5f5;
+        }
+
+        .pain-card h3 {
+            margin-top: 0;
+            color: #c00000;
+            font-size: 15px;
+        }
+
+        .pain-metric {
+            font-size: 24px;
+            font-weight: 700;
+            color: #c00000;
+            margin: 12px 0 4px 0;
+        }
+
+        .pain-desc {
+            font-size: 13px;
+            color: #333;
+        }
+
+        /* Architecture Diagram */
+        .diagram-container {
+            background: #f9f9f9;
+            border: 1px solid #e0e0e0;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 2px;
+        }
+
+        /* Funnel Diagram */
+        .funnel-section {
+            margin-bottom: 40px;
+        }
+
+        .funnel-svg-container {
+            background: white;
+            border: 1px solid #e0e0e0;
+            padding: 20px;
+            margin-bottom: 20px;
+            border-radius: 2px;
+        }
+
+        /* Lead Scoring Bars */
+        .scoring-bars {
+            margin-bottom: 30px;
+        }
+
+        .scoring-bar-row {
+            margin-bottom: 20px;
+        }
+
+        .scoring-label {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: #1a1a1a;
+            font-size: 14px;
+        }
+
+        .stacked-bar {
+            display: flex;
+            height: 40px;
+            border-radius: 2px;
+            overflow: hidden;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.08);
+        }
+
+        .bar-segment {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 12px;
+        }
+
+        .segment-firmographic {
+            background: #18A873;
+            flex: 0.4;
+        }
+
+        .segment-behavioral {
+            background: #ffa94d;
+            flex: 0.35;
+        }
+
+        .segment-engagement {
+            background: #66d9ef;
+            flex: 0.25;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        th {
+            background: #f5f5f5;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            color: #1a1a1a;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        td {
+            padding: 14px 12px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        tr:nth-child(even) {
+            background: #fafafa;
+        }
+
+        /* Entity Diagram */
+        .entities-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .entity-box {
+            border: 2px solid #18A873;
+            padding: 16px;
+            border-radius: 2px;
+            background: #f0f8f5;
+        }
+
+        .entity-name {
+            font-weight: 700;
+            color: #18A873;
+            margin-bottom: 12px;
+            font-size: 15px;
+        }
+
+        .entity-field {
+            font-size: 12px;
+            color: #333;
+            margin-bottom: 4px;
+            padding-left: 8px;
+            border-left: 2px solid #ccc;
+        }
+
+        /* Timeline */
+        .timeline-container {
+            background: white;
+            border: 1px solid #e0e0e0;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 2px;
+        }
+
+        .timeline-bar {
+            display: flex;
+            margin-bottom: 20px;
+            font-size: 13px;
+        }
+
+        .timeline-phase {
+            padding: 12px 16px;
+            font-weight: 600;
+            color: white;
+            border-radius: 2px;
+            flex: 1;
+            text-align: center;
+            background: #18A873;
+            margin-right: 8px;
+        }
+
+        .timeline-phase:last-child {
+            margin-right: 0;
+        }
+
+        .phase-label {
+            margin-top: 8px;
+            font-size: 11px;
+            color: #666;
+            text-align: center;
+        }
+
+        /* Dashboard Cards */
+        .dashboard-specs {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .dashboard-card {
+            border: 1px solid #e0e0e0;
+            padding: 20px;
+            border-radius: 2px;
+            background: white;
+        }
+
+        .dashboard-card h3 {
+            margin-top: 0;
+            color: #18A873;
+        }
+
+        .dashboard-mock {
+            background: #fafafa;
+            border: 1px solid #e0e0e0;
+            padding: 16px;
+            margin-top: 12px;
+            border-radius: 2px;
+            font-size: 11px;
+            color: #999;
+            min-height: 180px;
+        }
+
+        .mock-widget {
+            background: white;
+            border: 1px solid #e0e0e0;
+            padding: 8px;
+            margin-bottom: 8px;
+            border-radius: 2px;
+            text-align: center;
+            color: #999;
+        }
+
+        /* Footer */
+        .document-footer {
+            margin-top: 60px;
+            padding-top: 30px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            font-size: 12px;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+    <div class="document">
+        <div class="header-block">
+            <div class="header-meta">
+                <div>
+                    <div>Stratos Cloud</div>
+                    <div>January 2026</div>
+                </div>
+                <div class="status-badge">Draft v2.1</div>
+            </div>
+            <h1>CRM Blueprint</h1>
+            <p class="subtitle">Sales Process Architecture & CRM Design</p>
+        </div>
+
+        <h2>Current State Assessment</h2>
+        <p>Stratos Cloud is currently managing sales pipeline through spreadsheets, email, and tribal knowledge. No centralized lead tracking, no pipeline visibility, and critical process inefficiencies.</p>
+
+        <div class="pain-points">
+            <div class="pain-card">
+                <h3>Leads Lost</h3>
+                <div class="pain-metric">23%</div>
+                <div class="pain-desc">Opportunities fall through cracks due to lack of tracking and follow-up discipline</div>
+            </div>
+            <div class="pain-card">
+                <h3>No Pipeline Visibility</h3>
+                <div class="pain-metric">0/10</div>
+                <div class="pain-desc">Sales leadership cannot forecast accurately; board reporting requires manual compilation</div>
+            </div>
+            <div class="pain-card">
+                <h3>Response Time</h3>
+                <div class="pain-metric">4.2 days</div>
+                <div class="pain-desc">Average time from inbound lead to first contact (target: < 2 hours)</div>
+            </div>
+        </div>
+
+        <h2>Target Architecture</h2>
+        <p>System architecture showing data flow from sources through CRM platform to outputs. All integrations API-first.</p>
+
+        <div class="diagram-container">
+            <svg width="100%" height="200" viewBox="0 0 800 200" xmlns="http://www.w3.org/2000/svg">
+                <!-- Data Sources (Left) -->
+                <rect x="20" y="30" width="100" height="50" fill="#e8f4f8" stroke="#66d9ef" stroke-width="2" rx="2"/>
+                <text x="70" y="65" font-size="12" fill="#1a1a1a" text-anchor="middle" font-weight="600">Website Forms</text>
+
+                <rect x="20" y="100" width="100" height="50" fill="#e8f4f8" stroke="#66d9ef" stroke-width="2" rx="2"/>
+                <text x="70" y="135" font-size="12" fill="#1a1a1a" text-anchor="middle" font-weight="600">LinkedIn Ads</text>
+
+                <rect x="20" y="170" width="100" height="50" fill="#e8f4f8" stroke="#66d9ef" stroke-width="2" rx="2"/>
+                <text x="70" y="205" font-size="12" fill="#1a1a1a" text-anchor="middle" font-weight="600">Email List</text>
+
+                <!-- Arrows to CRM -->
+                <path d="M 120 55 L 160 55" stroke="#999" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+                <path d="M 120 125 L 160 125" stroke="#999" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+                <path d="M 120 195 L 160 195" stroke="#999" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+
+                <!-- CRM Platform (Center) -->
+                <rect x="160" y="20" width="120" height="180" fill="#f0f8f5" stroke="#18A873" stroke-width="3" rx="2"/>
+                <text x="220" y="80" font-size="14" fill="#1a1a1a" text-anchor="middle" font-weight="700">CRM</text>
+                <text x="220" y="100" font-size="11" fill="#666" text-anchor="middle">Platform</text>
+                <text x="220" y="120" font-size="10" fill="#999" text-anchor="middle">(Lead Mgmt)</text>
+                <text x="220" y="140" font-size="10" fill="#999" text-anchor="middle">(Scoring)</text>
+                <text x="220" y="160" font-size="10" fill="#999" text-anchor="middle">(Pipeline)</text>
+
+                <!-- Arrows from CRM -->
+                <path d="M 280 55 L 320 55" stroke="#999" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+                <path d="M 280 125 L 320 125" stroke="#999" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+                <path d="M 280 195 L 320 195" stroke="#999" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+
+                <!-- Outputs (Right) -->
+                <rect x="320" y="30" width="100" height="50" fill="#fff5f5" stroke="#c00000" stroke-width="2" rx="2"/>
+                <text x="370" y="50" font-size="12" fill="#1a1a1a" text-anchor="middle" font-weight="600">Dashboards</text>
+                <text x="370" y="70" font-size="10" fill="#666" text-anchor="middle">(Pipeline, Forecast)</text>
+
+                <rect x="320" y="100" width="100" height="50" fill="#fff5f5" stroke="#c00000" stroke-width="2" rx="2"/>
+                <text x="370" y="120" font-size="12" fill="#1a1a1a" text-anchor="middle" font-weight="600">Alerts</text>
+                <text x="370" y="140" font-size="10" fill="#666" text-anchor="middle">(Lead Ready, Hot Opp)</text>
+
+                <rect x="320" y="170" width="100" height="50" fill="#fff5f5" stroke="#c00000" stroke-width="2" rx="2"/>
+                <text x="370" y="190" font-size="12" fill="#1a1a1a" text-anchor="middle" font-weight="600">Reports</text>
+                <text x="370" y="210" font-size="10" fill="#666" text-anchor="middle">(CSV, Email Weekly)</text>
+
+                <!-- Arrow marker definition -->
+                <defs>
+                    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto">
+                        <polygon points="0 0, 10 5, 0 10" fill="#999"/>
+                    </marker>
+                </defs>
+            </svg>
+        </div>
+
+        <h2>Sales Stage Pipeline</h2>
+        <p>7-stage funnel with defined entry/exit criteria for each stage. Qualification discipline reduces lead loss.</p>
+
+        <div class="funnel-svg-container">
+            <svg width="100%" height="240" viewBox="0 0 800 240" xmlns="http://www.w3.org/2000/svg">
+                <!-- Funnel stages -->
+                <polygon points="100,20 700,20 650,80 150,80" fill="#e8f4f8" stroke="#66d9ef" stroke-width="2"/>
+                <polygon points="150,80 650,80 600,140 200,140" fill="#d4e9f7" stroke="#66d9ef" stroke-width="2"/>
+                <polygon points="200,140 600,140 550,200 250,200" fill="#a0d8f7" stroke="#66d9ef" stroke-width="2"/>
+                <polygon points="250,200 550,200 500,260 300,260" fill="#7acef7" stroke="#66d9ef" stroke-width="2"/>
+
+                <!-- Stage labels -->
+                <text x="400" y="55" font-size="14" fill="#1a1a1a" text-anchor="middle" font-weight="700">Lead</text>
+                <text x="400" y="110" font-size="14" fill="#1a1a1a" text-anchor="middle" font-weight="700">MQL (Marketing Qualified)</text>
+                <text x="400" y="170" font-size="14" fill="#1a1a1a" text-anchor="middle" font-weight="700">SQL (Sales Qualified)</text>
+                <text x="400" y="230" font-size="14" fill="#1a1a1a" text-anchor="middle" font-weight="700">Proposal</text>
+            </svg>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 14%;">Stage</th>
+                    <th style="width: 14%;">Conversion %</th>
+                    <th style="width: 14%;">Avg Days</th>
+                    <th style="width: 58%;">Exit Criteria (Move to Next Stage)</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Lead</strong></td>
+                    <td>40%</td>
+                    <td>3-5</td>
+                    <td>Email opened + engagement signal OR lead scored 40+ points (meets MQL threshold)</td>
+                </tr>
+                <tr>
+                    <td><strong>MQL</strong></td>
+                    <td>35%</td>
+                    <td>7-10</td>
+                    <td>Sales rep has contacted; discovery call scheduled OR prospect downloaded high-intent asset</td>
+                </tr>
+                <tr>
+                    <td><strong>SQL</strong></td>
+                    <td>50%</td>
+                    <td>14-21</td>
+                    <td>Explicit budget/timeline/authority confirmed; fit assessment positive; demo scheduled</td>
+                </tr>
+                <tr>
+                    <td><strong>Discovery</strong></td>
+                    <td>65%</td>
+                    <td>7-14</td>
+                    <td>Demo completed; detailed notes captured; champion identified; requirements clarified</td>
+                </tr>
+                <tr>
+                    <td><strong>Proposal</strong></td>
+                    <td>40%</td>
+                    <td>10-14</td>
+                    <td>Written proposal delivered; economic buyer reviewed; pricing discussed; timeline set</td>
+                </tr>
+                <tr>
+                    <td><strong>Negotiation</strong></td>
+                    <td>75%</td>
+                    <td>5-10</td>
+                    <td>Contract terms finalized; legal sign-off obtained; deal sponsor confident in close date</td>
+                </tr>
+                <tr>
+                    <td><strong>Closed-Won</strong></td>
+                    <td>100%</td>
+                    <td>—</td>
+                    <td>Contract fully executed; payment received or on file; onboarding scheduled</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>Lead Scoring Model</h2>
+        <p>Three-dimensional scoring system: Firmographic (40%), Behavioral (35%), Engagement (25%). Automatically qualifies leads as MQL at 66 points.</p>
+
+        <div class="scoring-bars">
+            <div class="scoring-bar-row">
+                <div class="scoring-label">Lead Scoring Composition</div>
+                <div class="stacked-bar">
+                    <div class="bar-segment segment-firmographic">40% Firmographic</div>
+                    <div class="bar-segment segment-behavioral">35% Behavioral</div>
+                    <div class="bar-segment segment-engagement">25% Engagement</div>
+                </div>
+            </div>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 20%;">Score Range</th>
+                    <th style="width: 20%;">Grade</th>
+                    <th style="width: 30%;">Stage</th>
+                    <th style="width: 30%;">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>0–40</strong></td>
+                    <td>Cold</td>
+                    <td>Lead (nurture)</td>
+                    <td>Email drip campaign; no sales touch</td>
+                </tr>
+                <tr>
+                    <td><strong>41–65</strong></td>
+                    <td>Warm</td>
+                    <td>MQL (sales engaged)</td>
+                    <td>Sales rep discovery call within 24 hours</td>
+                </tr>
+                <tr>
+                    <td><strong>66–85</strong></td>
+                    <td>Hot</td>
+                    <td>SQL (qualified)</td>
+                    <td>Sales manager involved; demo scheduled</td>
+                </tr>
+                <tr>
+                    <td><strong>86+</strong></td>
+                    <td>Priority</td>
+                    <td>SQL (accelerated)</td>
+                    <td>Immediate outreach; executive sponsor loops in</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>Data Model (Entities & Relationships)</h2>
+        <p>Five core objects and their connections. All relationships support pipeline visibility and reporting.</p>
+
+        <div class="entities-grid">
+            <div class="entity-box">
+                <div class="entity-name">Lead</div>
+                <div class="entity-field">First Name / Last Name</div>
+                <div class="entity-field">Company</div>
+                <div class="entity-field">Email / Phone</div>
+                <div class="entity-field">Lead Score</div>
+                <div class="entity-field">Source</div>
+                <div class="entity-field">Stage</div>
+            </div>
+
+            <div class="entity-box">
+                <div class="entity-name">Contact</div>
+                <div class="entity-field">First Name / Last Name</div>
+                <div class="entity-field">Title</div>
+                <div class="entity-field">Account (FK)</div>
+                <div class="entity-field">Email / Phone</div>
+                <div class="entity-field">Decision Role</div>
+            </div>
+
+            <div class="entity-box">
+                <div class="entity-name">Account</div>
+                <div class="entity-field">Company Name</div>
+                <div class="entity-field">Industry</div>
+                <div class="entity-field">ARR</div>
+                <div class="entity-field">Employee Count</div>
+                <div class="entity-field">Location</div>
+            </div>
+
+            <div class="entity-box">
+                <div class="entity-name">Opportunity</div>
+                <div class="entity-field">Deal Name</div>
+                <div class="entity-field">Account (FK)</div>
+                <div class="entity-field">Amount</div>
+                <div class="entity-field">Close Date</div>
+                <div class="entity-field">Stage</div>
+                <div class="entity-field">Probability %</div>
+            </div>
+        </div>
+
+        <h2>Implementation Roadmap</h2>
+        <p>6-week phased rollout. Go-live occurs Week 5 with 30-day optimization window.</p>
+
+        <div class="timeline-container">
+            <div style="display: grid; grid-template-columns: repeat(6, 1fr); gap: 12px;">
+                <div>
+                    <div class="timeline-phase">Week 1-2<br/>Config</div>
+                    <div class="phase-label">Setup instance, data import, user provisioning</div>
+                </div>
+                <div>
+                    <div class="timeline-phase">Week 3<br/>Migration</div>
+                    <div class="phase-label">Load historical data, dedup, mapping validation</div>
+                </div>
+                <div>
+                    <div class="timeline-phase">Week 4<br/>Training</div>
+                    <div class="phase-label">Sales team & ops training, lead routing setup</div>
+                </div>
+                <div>
+                    <div class="timeline-phase" style="background: #c00000;">Week 5<br/>Go-Live</div>
+                    <div class="phase-label">Production switch, 24/7 support, change management</div>
+                </div>
+                <div>
+                    <div class="timeline-phase">Week 6<br/>Optimization</div>
+                    <div class="phase-label">Dashboard tuning, automation refinement, QA</div>
+                </div>
+                <div>
+                    <div class="timeline-phase">Ongoing<br/>Support</div>
+                    <div class="phase-label">Weekly reviews, scoring adjustments</div>
+                </div>
+            </div>
+        </div>
+
+        <h2>Dashboard Specifications</h2>
+        <p>Three dashboard personas designed for different user roles. All real-time, with drill-down capability.</p>
+
+        <div class="dashboard-specs">
+            <div class="dashboard-card">
+                <h3>Executive View</h3>
+                <div class="dashboard-mock">
+                    <div class="mock-widget">ARR Pipeline Forecast</div>
+                    <div class="mock-widget">Win Rate Trend (30/60/90d)</div>
+                    <div class="mock-widget">Sales Cycle Velocity</div>
+                    <div class="mock-widget">Top Deals at Risk</div>
+                </div>
+                <p style="font-size: 12px; margin-top: 12px; color: #666;">Refresh: Daily<br/>Access: VP Sales, CFO</p>
+            </div>
+
+            <div class="dashboard-card">
+                <h3>Manager View</h3>
+                <div class="dashboard-mock">
+                    <div class="mock-widget">Team Pipeline by Stage</div>
+                    <div class="mock-widget">Rep Quota vs. Actual</div>
+                    <div class="mock-widget">Activity Metrics (calls, emails)</div>
+                    <div class="mock-widget">Open Issues by Rep</div>
+                </div>
+                <p style="font-size: 12px; margin-top: 12px; color: #666;">Refresh: Real-time<br/>Access: Sales Managers</p>
+            </div>
+
+            <div class="dashboard-card">
+                <h3>Rep View</h3>
+                <div class="dashboard-mock">
+                    <div class="mock-widget">My Pipeline (drag-drop stage)</div>
+                    <div class="mock-widget">Next Actions Due Today</div>
+                    <div class="mock-widget">MQL Queue (hot leads)</div>
+                    <div class="mock-widget">Quota Progress</div>
+                </div>
+                <p style="font-size: 12px; margin-top: 12px; color: #666;">Refresh: Real-time<br/>Access: All Sales Team</p>
+            </div>
+        </div>
+
+        <div class="document-footer">
+            <p>Sanitized excerpt · Prepared by Gratia · Jan 2026</p>
+        </div>
+    </div>
+<a href="../" style="position:fixed;top:12px;right:16px;z-index:99999;background:#111827;color:#e2e8f0;padding:6px 16px;border-radius:8px;font-size:13px;font-weight:600;text-decoration:none;border:1px solid #475569;font-family:system-ui,sans-serif;transition:background .15s;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#111827'">← Gallery</a>
+</body>
+</html>

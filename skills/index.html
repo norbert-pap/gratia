@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gratia Skills Assessment</title>
+    <script src="../auth.js"></script>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div id="deck-content">
+    <div class="app">
+        <header class="header">
+            <div class="logo">
+                <span class="logo-icon">G</span>
+                <span class="logo-text">Gratia Skills Framework</span>
+            </div>
+            <nav class="nav">
+                <button class="nav-btn active" data-view="overview">Core Skills</button>
+                <button class="nav-btn" data-view="services">Services</button>
+                <button class="nav-btn" data-view="assessment">Assessment</button>
+                <button class="nav-btn" data-view="aqs">AQS Calculator</button>
+                <button class="nav-btn" data-view="simulator">Simulator</button>
+                <button class="nav-btn" data-view="progression">Progression</button>
+            </nav>
+        </header>
+
+        <main class="main">
+            <!-- Overview View -->
+            <section id="overview" class="view active">
+                <div class="view-header">
+                    <h1>Core Skills Framework</h1>
+                    <p>Every Gratia analyst is assessed on five core traits that represent the fundamental dimensions of high performance.</p>
+                </div>
+
+                <div class="core-tabs">
+                    <button class="core-tab active" data-core-tab="traits">Core Traits</button>
+                    <button class="core-tab" data-core-tab="core-training">Training Paths</button>
+                </div>
+
+                <div class="core-panel active" id="traits-panel">
+                    <div class="level-selector">
+                        <span class="level-label">Viewing Level:</span>
+                        <div class="level-tabs">
+                            <button class="level-tab active" data-level="A1">A1 <span>Junior</span></button>
+                            <button class="level-tab" data-level="A2">A2 <span>Analyst</span></button>
+                            <button class="level-tab" data-level="A3">A3 <span>Senior</span></button>
+                            <button class="level-tab" data-level="A4">A4 <span>Principal</span></button>
+                        </div>
+                    </div>
+
+                    <div class="traits-grid">
+                        <!-- Traits will be populated by JS -->
+                    </div>
+                </div>
+
+                <div class="core-panel" id="core-training-panel">
+                    <div class="training-selector">
+                        <div class="training-tabs">
+                            <button class="training-tab active" data-core-training="A1_A2">A1 → A2</button>
+                            <button class="training-tab" data-core-training="A2_A3">A2 → A3</button>
+                            <button class="training-tab" data-core-training="A3_A4">A3 → A4</button>
+                        </div>
+                    </div>
+                    <div class="training-content" id="coreTrainingContent">
+                        <!-- Populated by JS -->
+                    </div>
+                </div>
+            </section>
+
+            <!-- Services View -->
+            <section id="services" class="view">
+                <div class="view-header">
+                    <h1>Service Clusters</h1>
+                    <p>Service-specific skills layer on top of core competencies. Select a cluster to explore deliverables and specialized skills.</p>
+                </div>
+
+                <div class="cluster-tabs-wrapper">
+                    <div class="cluster-tabs" id="clusterTabs">
+                        <button class="cluster-tab active" data-cluster="financial">
+                            <span class="cluster-icon">💰</span>
+                            <span>Financial Models & Planning</span>
+                        </button>
+                        <button class="cluster-tab disabled" data-cluster="pitch">
+                            <span class="cluster-icon">📑</span>
+                            <span>Pitch Decks & Proposals</span>
+                        </button>
+                        <button class="cluster-tab disabled" data-cluster="market-research">
+                            <span class="cluster-icon">🔍</span>
+                            <span>Market Research & Intelligence</span>
+                        </button>
+                        <button class="cluster-tab disabled" data-cluster="dashboards">
+                            <span class="cluster-icon">📊</span>
+                            <span>Data Dashboards & Analytics</span>
+                        </button>
+                        <button class="cluster-tab disabled" data-cluster="process">
+                            <span class="cluster-icon">⚙️</span>
+                            <span>Business Process Optimization</span>
+                        </button>
+                        <button class="cluster-tab disabled" data-cluster="project">
+                            <span class="cluster-icon">📋</span>
+                            <span>Project Management</span>
+                        </button>
+                        <button class="cluster-tab disabled" data-cluster="gtm">
+                            <span class="cluster-icon">🚀</span>
+                            <span>Growth & GTM Strategy</span>
+                        </button>
+                        <button class="cluster-tab disabled" data-cluster="revops">
+                            <span class="cluster-icon">💼</span>
+                            <span>RevOps & Sales Enablement</span>
+                        </button>
+                        <button class="cluster-tab disabled" data-cluster="strategy">
+                            <span class="cluster-icon">🎯</span>
+                            <span>Business Strategy Services</span>
+                        </button>
+                    </div>
+                </div>
+
+                <div class="service-content">
+                    <div class="service-tabs">
+                        <button class="service-tab active" data-tab="deliverables">Service Areas</button>
+                        <button class="service-tab" data-tab="skills">Skills by Level</button>
+                        <button class="service-tab" data-tab="tools">Tools & AI</button>
+                        <button class="service-tab" data-tab="training">Training Paths</button>
+                        <button class="service-tab" data-tab="templates">Templates</button>
+                    </div>
+
+                    <div class="service-panel" id="deliverables-panel">
+                        <div class="deliverables-grid" id="deliverablesGrid">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+
+                    <div class="service-panel hidden" id="skills-panel">
+                        <div class="skills-header">
+                            <div class="skills-level-selector">
+                                <div class="level-tabs service-level-tabs">
+                                    <button class="level-tab active" data-service-level="A1">A1 <span>Junior</span></button>
+                                    <button class="level-tab" data-service-level="A2">A2 <span>Analyst</span></button>
+                                    <button class="level-tab" data-service-level="A3">A3 <span>Senior</span></button>
+                                    <button class="level-tab" data-service-level="A4">A4 <span>Principal</span></button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="skills-by-level" id="skillsByLevel">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+
+                    <div class="service-panel hidden" id="tools-panel">
+                        <div class="tools-grid" id="toolsGrid">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+
+                    <div class="service-panel hidden" id="training-panel">
+                        <div class="training-selector">
+                            <div class="training-tabs">
+                                <button class="training-tab active" data-training="A1_A2">A1 → A2</button>
+                                <button class="training-tab" data-training="A2_A3">A2 → A3</button>
+                                <button class="training-tab" data-training="A3_A4">A3 → A4</button>
+                            </div>
+                        </div>
+                        <div class="training-content" id="trainingContent">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+
+                    <div class="service-panel hidden" id="templates-panel">
+                        <div class="templates-grid" id="templatesGrid">
+                            <!-- Populated by JS -->
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Assessment View -->
+            <section id="assessment" class="view">
+                <div class="view-header">
+                    <h1>Skill Assessment</h1>
+                    <p>Rate your proficiency in each skill area to see your current level and growth opportunities.</p>
+                </div>
+
+                <div class="assessment-container">
+                    <div class="radar-container">
+                        <canvas id="radarChart" width="400" height="400"></canvas>
+                    </div>
+
+                    <div class="assessment-form">
+                        <div class="analyst-info">
+                            <input type="text" id="analystName" placeholder="Analyst Name" class="input-field">
+                            <select id="currentLevel" class="select-field">
+                                <option value="A1">A1 - Junior Analyst</option>
+                                <option value="A2">A2 - Analyst</option>
+                                <option value="A3" selected>A3 - Senior Analyst</option>
+                                <option value="A4">A4 - Principal Analyst</option>
+                            </select>
+                        </div>
+
+                        <div class="skills-assessment">
+                            <!-- Skills sliders will be populated by JS -->
+                        </div>
+
+                        <div class="assessment-summary">
+                            <div class="summary-card">
+                                <span class="summary-label">Overall Score</span>
+                                <span class="summary-value" id="overallScore">0</span>
+                            </div>
+                            <div class="summary-card">
+                                <span class="summary-label">Suggested Level</span>
+                                <span class="summary-value" id="suggestedLevel">A1</span>
+                            </div>
+                            <div class="summary-card">
+                                <span class="summary-label">Top Strength</span>
+                                <span class="summary-value" id="topStrength">-</span>
+                            </div>
+                            <div class="summary-card">
+                                <span class="summary-label">Growth Area</span>
+                                <span class="summary-value" id="growthArea">-</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- AQS Calculator View -->
+            <section id="aqs" class="view">
+                <div class="view-header">
+                    <h1>AQS Calculator</h1>
+                    <p>Calculate the Analyst Quality Score based on rolling 90-day performance metrics.</p>
+                </div>
+
+                <div class="aqs-container">
+                    <div class="aqs-score-display">
+                        <div class="aqs-gauge">
+                            <svg viewBox="0 0 200 200" class="aqs-gauge-svg">
+                                <circle cx="100" cy="100" r="90" fill="none" stroke="#E5E7EB" stroke-width="12"/>
+                                <circle cx="100" cy="100" r="90" fill="none" stroke="url(#aqsGradient)" stroke-width="12"
+                                        stroke-linecap="round" stroke-dasharray="565.48" stroke-dashoffset="565.48"
+                                        id="aqsProgress" transform="rotate(-90 100 100)"/>
+                                <defs>
+                                    <linearGradient id="aqsGradient" x1="0%" y1="0%" x2="100%" y2="0%">
+                                        <stop offset="0%" stop-color="#EF4444"/>
+                                        <stop offset="50%" stop-color="#F59E0B"/>
+                                        <stop offset="100%" stop-color="#10B981"/>
+                                    </linearGradient>
+                                </defs>
+                            </svg>
+                            <div class="aqs-gauge-value">
+                                <span class="aqs-number" id="aqsScore">0</span>
+                                <span class="aqs-label">AQS Score</span>
+                            </div>
+                        </div>
+
+                        <div class="aqs-level-indicator">
+                            <div class="aqs-level-bar">
+                                <div class="aqs-level-segment" data-level="A1">
+                                    <span class="segment-range">70-80</span>
+                                    <span class="segment-label">A1</span>
+                                </div>
+                                <div class="aqs-level-segment" data-level="A2">
+                                    <span class="segment-range">80-90</span>
+                                    <span class="segment-label">A2</span>
+                                </div>
+                                <div class="aqs-level-segment" data-level="A3">
+                                    <span class="segment-range">90-95</span>
+                                    <span class="segment-label">A3</span>
+                                </div>
+                                <div class="aqs-level-segment" data-level="A4">
+                                    <span class="segment-range">95+</span>
+                                    <span class="segment-label">A4</span>
+                                </div>
+                            </div>
+                            <div class="aqs-current-level">
+                                Performance Level: <strong id="aqsLevel">Below A1</strong>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="aqs-inputs">
+                        <div class="aqs-component" data-component="accuracy">
+                            <div class="aqs-component-header">
+                                <div class="aqs-component-info">
+                                    <span class="aqs-component-icon">🎯</span>
+                                    <div>
+                                        <h3>Solution Accuracy</h3>
+                                        <p>Does the work pass Gate 2? Is it correct and insightful?</p>
+                                    </div>
+                                </div>
+                                <div class="aqs-component-weight">40%</div>
+                            </div>
+                            <div class="aqs-component-body">
+                                <div class="aqs-metric">
+                                    <label>Gate 1 Pass Rate (Internal QA)</label>
+                                    <div class="aqs-metric-input">
+                                        <input type="range" min="0" max="100" value="85" id="gate1PassRate">
+                                        <span class="aqs-metric-value" id="gate1PassRateValue">85%</span>
+                                    </div>
+                                    <div class="aqs-metric-hints">
+                                        <span>0% - Always needs rework</span>
+                                        <span>100% - Always passes first try</span>
+                                    </div>
+                                </div>
+                                <div class="aqs-metric">
+                                    <label>Gate 2 Pass Rate (Final Review)</label>
+                                    <div class="aqs-metric-input">
+                                        <input type="range" min="0" max="100" value="75" id="gate2PassRate">
+                                        <span class="aqs-metric-value" id="gate2PassRateValue">75%</span>
+                                    </div>
+                                    <div class="aqs-metric-hints">
+                                        <span>0% - Never passes</span>
+                                        <span>100% - Always passes</span>
+                                    </div>
+                                </div>
+                                <div class="aqs-metric">
+                                    <label>Insight Quality (avg rating)</label>
+                                    <div class="aqs-metric-input">
+                                        <input type="range" min="1" max="5" step="0.1" value="3.5" id="insightQuality">
+                                        <span class="aqs-metric-value" id="insightQualityValue">3.5/5</span>
+                                    </div>
+                                    <div class="aqs-metric-hints">
+                                        <span>1 - Descriptive only</span>
+                                        <span>5 - Decision-driving</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="aqs-component-score">
+                                Component Score: <strong id="accuracyScore">0</strong>
+                            </div>
+                        </div>
+
+                        <div class="aqs-component" data-component="delivery">
+                            <div class="aqs-component-header">
+                                <div class="aqs-component-info">
+                                    <span class="aqs-component-icon">⏱️</span>
+                                    <div>
+                                        <h3>On-Time / Low-Rework</h3>
+                                        <p>Delivered on time? Minimal revisions required?</p>
+                                    </div>
+                                </div>
+                                <div class="aqs-component-weight">30%</div>
+                            </div>
+                            <div class="aqs-component-body">
+                                <div class="aqs-metric">
+                                    <label>On-Time Delivery Rate</label>
+                                    <div class="aqs-metric-input">
+                                        <input type="range" min="0" max="100" value="80" id="onTimeRate">
+                                        <span class="aqs-metric-value" id="onTimeRateValue">80%</span>
+                                    </div>
+                                    <div class="aqs-metric-hints">
+                                        <span>0% - Always late</span>
+                                        <span>100% - Always on time</span>
+                                    </div>
+                                </div>
+                                <div class="aqs-metric">
+                                    <label>Rework Rate (lower is better)</label>
+                                    <div class="aqs-metric-input">
+                                        <input type="range" min="0" max="100" value="20" id="reworkRate">
+                                        <span class="aqs-metric-value" id="reworkRateValue">20%</span>
+                                    </div>
+                                    <div class="aqs-metric-hints">
+                                        <span>0% - No rework needed</span>
+                                        <span>100% - Major rework always</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="aqs-component-score">
+                                Component Score: <strong id="deliveryScore">0</strong>
+                            </div>
+                        </div>
+
+                        <div class="aqs-component" data-component="professionalism">
+                            <div class="aqs-component-header">
+                                <div class="aqs-component-info">
+                                    <span class="aqs-component-icon">💼</span>
+                                    <div>
+                                        <h3>Professionalism</h3>
+                                        <p>Communication, responsiveness, client feedback?</p>
+                                    </div>
+                                </div>
+                                <div class="aqs-component-weight">30%</div>
+                            </div>
+                            <div class="aqs-component-body">
+                                <div class="aqs-metric">
+                                    <label>Client Feedback Score</label>
+                                    <div class="aqs-metric-input">
+                                        <input type="range" min="1" max="5" step="0.1" value="4.0" id="clientFeedback">
+                                        <span class="aqs-metric-value" id="clientFeedbackValue">4.0/5</span>
+                                    </div>
+                                    <div class="aqs-metric-hints">
+                                        <span>1 star</span>
+                                        <span>5 stars</span>
+                                    </div>
+                                </div>
+                                <div class="aqs-metric">
+                                    <label>Response Time SLA Compliance</label>
+                                    <div class="aqs-metric-input">
+                                        <input type="range" min="0" max="100" value="85" id="responseSLA">
+                                        <span class="aqs-metric-value" id="responseSLAValue">85%</span>
+                                    </div>
+                                    <div class="aqs-metric-hints">
+                                        <span>0% - Never meets 24hr SLA</span>
+                                        <span>100% - Always within SLA</span>
+                                    </div>
+                                </div>
+                                <div class="aqs-metric">
+                                    <label>Communication Quality</label>
+                                    <div class="aqs-metric-input">
+                                        <input type="range" min="1" max="5" step="0.1" value="3.5" id="commQuality">
+                                        <span class="aqs-metric-value" id="commQualityValue">3.5/5</span>
+                                    </div>
+                                    <div class="aqs-metric-hints">
+                                        <span>1 - Needs coaching</span>
+                                        <span>5 - Exemplary</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="aqs-component-score">
+                                Component Score: <strong id="professionalismScore">0</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="aqs-breakdown">
+                    <h3>Score Breakdown</h3>
+                    <div class="aqs-breakdown-chart">
+                        <div class="breakdown-bar">
+                            <div class="breakdown-segment accuracy" id="breakdownAccuracy" style="width: 0%"></div>
+                            <div class="breakdown-segment delivery" id="breakdownDelivery" style="width: 0%"></div>
+                            <div class="breakdown-segment professionalism" id="breakdownProfessionalism" style="width: 0%"></div>
+                        </div>
+                        <div class="breakdown-legend">
+                            <div class="legend-item">
+                                <span class="legend-color accuracy"></span>
+                                <span>Solution Accuracy (40%)</span>
+                                <strong id="legendAccuracy">0</strong>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-color delivery"></span>
+                                <span>On-Time/Low-Rework (30%)</span>
+                                <strong id="legendDelivery">0</strong>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-color professionalism"></span>
+                                <span>Professionalism (30%)</span>
+                                <strong id="legendProfessionalism">0</strong>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Simulator View -->
+            <section id="simulator" class="view">
+                <div class="view-header">
+                    <h1>Analyst Evaluation Simulator</h1>
+                    <p>Simulate a comprehensive analyst review with project history, skill assessments, and promotion readiness.</p>
+                </div>
+
+                <div class="simulator-container">
+                    <!-- Analyst Profile -->
+                    <div class="sim-panel sim-profile">
+                        <div class="sim-panel-header">
+                            <h3>Analyst Profile</h3>
+                        </div>
+                        <div class="sim-panel-body">
+                            <div class="sim-avatar">
+                                <span id="simAvatar">JD</span>
+                            </div>
+                            <div class="sim-form-grid">
+                                <div class="sim-field">
+                                    <label>Name</label>
+                                    <input type="text" id="simName" value="Jane Doe" class="sim-input">
+                                </div>
+                                <div class="sim-field">
+                                    <label>Current Level</label>
+                                    <select id="simLevel" class="sim-select">
+                                        <option value="A1">A1 - Junior Analyst</option>
+                                        <option value="A2" selected>A2 - Analyst</option>
+                                        <option value="A3">A3 - Senior Analyst</option>
+                                        <option value="A4">A4 - Principal Analyst</option>
+                                    </select>
+                                </div>
+                                <div class="sim-field">
+                                    <label>Tenure (months)</label>
+                                    <input type="number" id="simTenure" value="14" min="0" max="120" class="sim-input">
+                                </div>
+                                <div class="sim-field">
+                                    <label>Service Cluster</label>
+                                    <select id="simCluster" class="sim-select">
+                                        <option value="financial">Financial Services</option>
+                                        <option value="strategy">Strategy & Ops</option>
+                                        <option value="marketing">Marketing & Growth</option>
+                                    </select>
+                                </div>
+                                <div class="sim-field">
+                                    <label>Last Review</label>
+                                    <input type="date" id="simLastReview" class="sim-input">
+                                </div>
+                            </div>
+
+                            <div class="sim-hours-section">
+                                <h4>Logged Hours by Service Area</h4>
+                                <div class="sim-hours-grid" id="simHoursGrid">
+                                    <div class="sim-hours-item">
+                                        <label>Financial Modeling & Forecasting</label>
+                                        <input type="number" id="hoursModeling" value="180" min="0" class="sim-input sim-hours-input">
+                                        <span class="hours-label">hrs</span>
+                                    </div>
+                                    <div class="sim-hours-item">
+                                        <label>Scenario & Sensitivity Analysis</label>
+                                        <input type="number" id="hoursScenario" value="95" min="0" class="sim-input sim-hours-input">
+                                        <span class="hours-label">hrs</span>
+                                    </div>
+                                    <div class="sim-hours-item">
+                                        <label>Company & Asset Valuation</label>
+                                        <input type="number" id="hoursValuation" value="145" min="0" class="sim-input sim-hours-input">
+                                        <span class="hours-label">hrs</span>
+                                    </div>
+                                </div>
+                                <div class="sim-hours-total">
+                                    Total Cluster Hours: <strong id="simTotalHours">420</strong> hrs
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Project History -->
+                    <div class="sim-panel sim-projects">
+                        <div class="sim-panel-header">
+                            <h3>Recent Project Performance</h3>
+                            <button class="sim-btn-small" id="randomizeProjects">Randomize</button>
+                        </div>
+                        <div class="sim-panel-body">
+                            <div class="sim-project-list" id="simProjectList">
+                                <!-- Generated by JS -->
+                            </div>
+                            <div class="sim-project-summary">
+                                <div class="sim-stat">
+                                    <span class="stat-value" id="simProjectHours">0h</span>
+                                    <span class="stat-label">Hours</span>
+                                </div>
+                                <div class="sim-stat">
+                                    <span class="stat-value" id="simGate1Rate">0%</span>
+                                    <span class="stat-label">Gate 1</span>
+                                </div>
+                                <div class="sim-stat">
+                                    <span class="stat-value" id="simGate2Rate">0%</span>
+                                    <span class="stat-label">Gate 2</span>
+                                </div>
+                                <div class="sim-stat">
+                                    <span class="stat-value" id="simOnTimeRate">0%</span>
+                                    <span class="stat-label">On-Time</span>
+                                </div>
+                                <div class="sim-stat">
+                                    <span class="stat-value" id="simAvgRating">0</span>
+                                    <span class="stat-label">Rating</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Core Traits Evaluation -->
+                    <div class="sim-panel sim-traits">
+                        <div class="sim-panel-header">
+                            <h3>Core Traits Evaluation</h3>
+                        </div>
+                        <div class="sim-panel-body">
+                            <div class="sim-traits-grid" id="simTraitsGrid">
+                                <!-- Generated by JS -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Service Skills Evaluation -->
+                    <div class="sim-panel sim-service-skills">
+                        <div class="sim-panel-header">
+                            <h3>Service-Specific Skills</h3>
+                        </div>
+                        <div class="sim-panel-body">
+                            <div class="sim-skills-grid" id="simSkillsGrid">
+                                <!-- Generated by JS -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Evaluation Results -->
+                    <div class="sim-panel sim-results">
+                        <div class="sim-panel-header">
+                            <h3>Evaluation Results</h3>
+                        </div>
+                        <div class="sim-panel-body">
+                            <div class="sim-results-grid">
+                                <div class="sim-result-card">
+                                    <div class="result-icon aqs-icon">📊</div>
+                                    <div class="result-content">
+                                        <span class="result-label">Calculated AQS</span>
+                                        <span class="result-value" id="simAQS">0</span>
+                                    </div>
+                                </div>
+                                <div class="sim-result-card">
+                                    <div class="result-icon level-icon">🎯</div>
+                                    <div class="result-content">
+                                        <span class="result-label">Performance Level</span>
+                                        <span class="result-value" id="simPerfLevel">-</span>
+                                    </div>
+                                </div>
+                                <div class="sim-result-card">
+                                    <div class="result-icon promo-icon">📈</div>
+                                    <div class="result-content">
+                                        <span class="result-label">Promotion Readiness</span>
+                                        <span class="result-value" id="simPromoReady">-</span>
+                                    </div>
+                                </div>
+                                <div class="sim-result-card">
+                                    <div class="result-icon review-icon">📅</div>
+                                    <div class="result-content">
+                                        <span class="result-label">Next Review</span>
+                                        <span class="result-value" id="simNextReview">-</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="sim-promo-meter">
+                                <div class="promo-meter-header">
+                                    <span>Promotion Progress to <strong id="simNextLevel">A3</strong></span>
+                                    <span id="simPromoPercent">0%</span>
+                                </div>
+                                <div class="promo-meter-bar">
+                                    <div class="promo-meter-fill" id="simPromoFill" style="width: 0%"></div>
+                                </div>
+                                <div class="promo-meter-requirements" id="simPromoReqs">
+                                    <!-- Generated by JS -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Recommendations -->
+                    <div class="sim-panel sim-recommendations">
+                        <div class="sim-panel-header">
+                            <h3>Development Recommendations</h3>
+                        </div>
+                        <div class="sim-panel-body">
+                            <div class="sim-recs-list" id="simRecsList">
+                                <!-- Generated by JS -->
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Red Flags -->
+                    <div class="sim-panel sim-flags" id="simFlagsPanel">
+                        <div class="sim-panel-header">
+                            <h3>Red Flags</h3>
+                        </div>
+                        <div class="sim-panel-body">
+                            <div class="sim-flags-list" id="simFlagsList">
+                                <!-- Generated by JS -->
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="sim-actions">
+                    <button class="sim-btn primary" id="runSimulation">Run Full Evaluation</button>
+                    <button class="sim-btn secondary" id="exportReport">Export Report</button>
+                </div>
+            </section>
+
+            <!-- Progression View -->
+            <section id="progression" class="view">
+                <div class="view-header">
+                    <h1>Career Progression</h1>
+                    <p>Understand the journey from A1 to A4 and what it takes to advance.</p>
+                </div>
+
+                <div class="progression-timeline">
+                    <div class="timeline-track"></div>
+
+                    <div class="timeline-item" data-level="A1">
+                        <div class="timeline-marker">A1</div>
+                        <div class="timeline-content">
+                            <h3>Junior Analyst (Apprentice)</h3>
+                            <p class="timeline-duration">Entry Level</p>
+                            <ul class="timeline-requirements">
+                                <li>Learning fundamentals with clear guidance</li>
+                                <li>Executes well-defined tasks</li>
+                                <li>Needs close supervision</li>
+                            </ul>
+                            <div class="timeline-metrics">
+                                <span class="metric"><strong>AQS Target:</strong> 70-80</span>
+                                <span class="metric"><strong>Review:</strong> Every 3 months</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-transition">
+                        <div class="transition-arrow"></div>
+                        <div class="transition-info">
+                            <strong>A1 → A2: Building Independence</strong>
+                            <p>6-12 months, 10-15 projects</p>
+                            <ul>
+                                <li>3+ consecutive Gate 2 passes</li>
+                                <li>4+ star client feedback</li>
+                                <li>Independence on standard deliverables</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item" data-level="A2">
+                        <div class="timeline-marker">A2</div>
+                        <div class="timeline-content">
+                            <h3>Analyst (Independent Contributor)</h3>
+                            <p class="timeline-duration">6-12 months from A1</p>
+                            <ul class="timeline-requirements">
+                                <li>Executes independently on standard deliverables</li>
+                                <li>Reliable and accurate</li>
+                                <li>Needs guidance on complex situations</li>
+                            </ul>
+                            <div class="timeline-metrics">
+                                <span class="metric"><strong>AQS Target:</strong> 80-90</span>
+                                <span class="metric"><strong>Review:</strong> Every 6 months</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-transition">
+                        <div class="transition-arrow"></div>
+                        <div class="transition-info">
+                            <strong>A2 → A3: Developing Strategic Thinking</strong>
+                            <p>12-24 months, 20-30 projects</p>
+                            <ul>
+                                <li>5+ projects exceeding Gate 2</li>
+                                <li>4.5+ star client feedback</li>
+                                <li>Strategic thinking & sound judgment</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item" data-level="A3">
+                        <div class="timeline-marker">A3</div>
+                        <div class="timeline-content">
+                            <h3>Senior Analyst (Strategic Problem-Solver)</h3>
+                            <p class="timeline-duration">12-24 months from A2</p>
+                            <ul class="timeline-requirements">
+                                <li>Designs approach for complex problems</li>
+                                <li>Exercises sound judgment</li>
+                                <li>Delivers outcomes, not just outputs</li>
+                                <li>Mentors junior analysts</li>
+                            </ul>
+                            <div class="timeline-metrics">
+                                <span class="metric"><strong>AQS Target:</strong> 90-95</span>
+                                <span class="metric"><strong>Review:</strong> Annually</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="timeline-transition">
+                        <div class="transition-arrow"></div>
+                        <div class="transition-info">
+                            <strong>A3 → A4: Achieving Mastery</strong>
+                            <p>18-36 months, 30+ projects</p>
+                            <ul>
+                                <li>Reference-quality deliverables</li>
+                                <li>5 star client feedback consistently</li>
+                                <li>Creates frameworks & trains others</li>
+                            </ul>
+                        </div>
+                    </div>
+
+                    <div class="timeline-item" data-level="A4">
+                        <div class="timeline-marker">A4</div>
+                        <div class="timeline-content">
+                            <h3>Principal Analyst (Expert & Teacher)</h3>
+                            <p class="timeline-duration">18-36 months from A3</p>
+                            <ul class="timeline-requirements">
+                                <li>Recognized expert</li>
+                                <li>Creates knowledge and trains others</li>
+                                <li>Handles the hardest problems</li>
+                                <li>Sets standards for the team</li>
+                            </ul>
+                            <div class="timeline-metrics">
+                                <span class="metric"><strong>AQS Target:</strong> 95+</span>
+                                <span class="metric"><strong>Review:</strong> Annually</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+
+    <script src="app.js"></script>
+</div>
+</body>
+</html>

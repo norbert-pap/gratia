@@ -1,0 +1,718 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Charter: Core Banking Platform Migration</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
+            background: #f8f8f8;
+            color: #1a1a1a;
+            line-height: 1.6;
+        }
+
+        .document {
+            max-width: 900px;
+            margin: 40px auto;
+            background: white;
+            padding: 60px 50px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            border-radius: 2px;
+        }
+
+        .header-block {
+            border-bottom: 3px solid #18A873;
+            padding-bottom: 30px;
+            margin-bottom: 40px;
+        }
+
+        .header-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #666;
+        }
+
+        .classification {
+            background: #f0f0f0;
+            color: #333;
+            padding: 4px 12px;
+            border-radius: 2px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        h1 {
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #1a1a1a;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            color: #666;
+            font-weight: 400;
+            margin-bottom: 16px;
+        }
+
+        .doc-meta {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            padding: 16px;
+            background: #fafafa;
+            border: 1px solid #e0e0e0;
+            font-size: 12px;
+            margin-bottom: 40px;
+        }
+
+        .doc-meta-item {
+            border-right: 1px solid #e0e0e0;
+            padding-right: 12px;
+        }
+
+        .doc-meta-item:last-child {
+            border-right: none;
+        }
+
+        .meta-label {
+            color: #999;
+            text-transform: uppercase;
+            font-size: 10px;
+            margin-bottom: 4px;
+            font-weight: 600;
+            letter-spacing: 0.5px;
+        }
+
+        .meta-value {
+            color: #333;
+            font-weight: 500;
+        }
+
+        /* Signature Block */
+        .signature-block {
+            margin: 40px 0;
+            padding: 24px;
+            background: #f9f9f9;
+            border: 1px solid #e0e0e0;
+        }
+
+        .sig-title {
+            font-size: 14px;
+            font-weight: 600;
+            margin-bottom: 24px;
+            color: #1a1a1a;
+        }
+
+        .sig-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 24px;
+        }
+
+        .sig-line {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .sig-blank {
+            border-bottom: 1px solid #333;
+            height: 40px;
+            margin-bottom: 8px;
+        }
+
+        .sig-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .sig-sublabel {
+            font-size: 11px;
+            color: #999;
+            margin-top: 2px;
+        }
+
+        h2 {
+            font-size: 28px;
+            font-weight: 700;
+            margin: 50px 0 30px 0;
+            color: #1a1a1a;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #18A873;
+        }
+
+        h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin: 24px 0 16px 0;
+            color: #1a1a1a;
+        }
+
+        p {
+            margin-bottom: 16px;
+            color: #333;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        th {
+            background: #f5f5f5;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            color: #1a1a1a;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        td {
+            padding: 14px 12px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        tr:nth-child(even) {
+            background: #fafafa;
+        }
+
+        /* RACI Matrix */
+        .raci-matrix {
+            overflow-x: auto;
+            margin-bottom: 30px;
+        }
+
+        .raci-cell {
+            text-align: center;
+            font-weight: 600;
+            color: #18A873;
+            font-size: 13px;
+        }
+
+        /* Gantt Chart SVG */
+        svg {
+            max-width: 100%;
+            height: auto;
+            margin-bottom: 30px;
+        }
+
+        /* Metric Cards */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .metric-card {
+            border: 1px solid #e0e0e0;
+            padding: 24px;
+            border-radius: 2px;
+            background: white;
+        }
+
+        .metric-card h3 {
+            margin-top: 0;
+            color: #18A873;
+        }
+
+        .metric-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin: 12px 0;
+        }
+
+        .metric-desc {
+            font-size: 13px;
+            color: #666;
+        }
+
+        /* Risk Grid */
+        .risk-grid {
+            position: relative;
+            width: 100%;
+            margin-bottom: 30px;
+            background: white;
+            border: 1px solid #e0e0e0;
+            padding: 20px;
+        }
+
+        .risk-svg-container {
+            width: 100%;
+            height: 400px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Footer */
+        .document-footer {
+            margin-top: 60px;
+            padding-top: 30px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            font-size: 12px;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+    <div class="document">
+        <div class="header-block">
+            <div class="header-meta">
+                <div>
+                    <div>Riverton Financial</div>
+                    <div>January 2026 · v1.0</div>
+                </div>
+                <div class="classification">INTERNAL</div>
+            </div>
+            <h1>Project Charter</h1>
+            <p class="subtitle">Core Banking Platform Migration</p>
+        </div>
+
+        <div class="doc-meta">
+            <div class="doc-meta-item">
+                <div class="meta-label">Project ID</div>
+                <div class="meta-value">RFN-CBP-2026-001</div>
+            </div>
+            <div class="doc-meta-item">
+                <div class="meta-label">Status</div>
+                <div class="meta-value">Active</div>
+            </div>
+            <div class="doc-meta-item">
+                <div class="meta-label">Effective Date</div>
+                <div class="meta-value">January 20, 2026</div>
+            </div>
+            <div class="doc-meta-item">
+                <div class="meta-label">Review Date</div>
+                <div class="meta-value">July 20, 2026</div>
+            </div>
+        </div>
+
+        <div class="signature-block">
+            <div class="sig-title">Approvals</div>
+            <div class="sig-grid">
+                <div class="sig-line">
+                    <div class="sig-blank"></div>
+                    <div class="sig-label">Project Sponsor</div>
+                    <div class="sig-sublabel">Chief Technology Officer</div>
+                </div>
+                <div class="sig-line">
+                    <div class="sig-blank"></div>
+                    <div class="sig-label">Project Director</div>
+                    <div class="sig-sublabel">Program Management Office</div>
+                </div>
+                <div class="sig-line">
+                    <div class="sig-blank"></div>
+                    <div class="sig-label">Delivery Lead</div>
+                    <div class="sig-sublabel">Gratia Inc</div>
+                </div>
+                <div class="sig-line">
+                    <div class="sig-blank"></div>
+                    <div class="sig-label">Client Stakeholder</div>
+                    <div class="sig-sublabel">VP of Operations</div>
+                </div>
+            </div>
+        </div>
+
+        <h2>Executive Summary</h2>
+        <p>Riverton Financial is undertaking a comprehensive migration from a legacy core banking platform (running on 25+ year old infrastructure) to a modern, cloud-native platform capable of supporting real-time transaction processing, regulatory compliance, and future business expansion. This project is critical to maintaining competitive positioning in the regional banking market and meeting evolving regulatory requirements.</p>
+        <p>The migration will be executed in five phases over 24 weeks, with minimal customer-facing downtime through a phased cutover approach. Total project investment is $4.2M with expected cost recovery through operational efficiency improvements within 18 months.</p>
+
+        <h2>Project Scope</h2>
+        <h3>In-Scope</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Core Platform Migration</strong></td>
+                    <td>Full migration of deposit, loan, and transaction modules to new platform architecture</td>
+                </tr>
+                <tr>
+                    <td><strong>Data Migration & Validation</strong></td>
+                    <td>Complete customer, account, and transaction history migration with 100% validation</td>
+                </tr>
+                <tr>
+                    <td><strong>Integration Build-Out</strong></td>
+                    <td>APIs for 12 critical systems (ATM network, payment processors, CRM, reporting)</td>
+                </tr>
+                <tr>
+                    <td><strong>Staff Training</strong></td>
+                    <td>250+ employees across operations, compliance, and support teams</td>
+                </tr>
+                <tr>
+                    <td><strong>Testing & QA</strong></td>
+                    <td>Full system, UAT, load, and compliance testing</td>
+                </tr>
+                <tr>
+                    <td><strong>Go-Live Support</strong></td>
+                    <td>24/7 war room and production support for 30 days post-launch</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h3>Out-of-Scope</h3>
+        <table>
+            <thead>
+                <tr>
+                    <th>Item</th>
+                    <th>Description</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Wealth Management System</strong></td>
+                    <td>Planned for Q3 2026 in separate project</td>
+                </tr>
+                <tr>
+                    <td><strong>Branch Automation Refresh</strong></td>
+                    <td>Deferred; will integrate with existing kiosks and tellers</td>
+                </tr>
+                <tr>
+                    <td><strong>Customer Portal Rebuild</strong></td>
+                    <td>Will receive minimal UI refresh; backend APIs will be new</td>
+                </tr>
+                <tr>
+                    <td><strong>Regulatory Audit Prep</strong></td>
+                    <td>Separate workstream led by Compliance; this project provides infrastructure</td>
+                </tr>
+                <tr>
+                    <td><strong>Backup/Disaster Recovery Build</strong></td>
+                    <td>Infrastructure-level DR owned by platform vendor</td>
+                </tr>
+                <tr>
+                    <td><strong>Mobile App Rebuild</strong></td>
+                    <td>UI only; backend APIs consumed from core platform</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>Governance & RACI</h2>
+        <p>Decision-making authority and responsibility assignment for six key decision categories.</p>
+
+        <div class="raci-matrix">
+            <table>
+                <thead>
+                    <tr>
+                        <th style="width: 25%;">Decision</th>
+                        <th style="width: 15%;">Sponsor</th>
+                        <th style="width: 15%;">Dir. of Ops</th>
+                        <th style="width: 15%;">Delivery Lead</th>
+                        <th style="width: 15%;">CTO</th>
+                        <th style="width: 15%;">Compliance</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>Scope Changes</strong></td>
+                        <td class="raci-cell">A</td>
+                        <td class="raci-cell">R</td>
+                        <td class="raci-cell">C</td>
+                        <td class="raci-cell">C</td>
+                        <td class="raci-cell">I</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Timeline Adjustments</strong></td>
+                        <td class="raci-cell">A</td>
+                        <td class="raci-cell">R</td>
+                        <td class="raci-cell">R</td>
+                        <td class="raci-cell">C</td>
+                        <td class="raci-cell">I</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Go/No-Go Cutover</strong></td>
+                        <td class="raci-cell">A</td>
+                        <td class="raci-cell">R</td>
+                        <td class="raci-cell">R</td>
+                        <td class="raci-cell">C</td>
+                        <td class="raci-cell">C</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Major Risk Mitigation</strong></td>
+                        <td class="raci-cell">C</td>
+                        <td class="raci-cell">R</td>
+                        <td class="raci-cell">R</td>
+                        <td class="raci-cell">C</td>
+                        <td class="raci-cell">C</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Vendor Change/Disputes</strong></td>
+                        <td class="raci-cell">A</td>
+                        <td class="raci-cell">C</td>
+                        <td class="raci-cell">R</td>
+                        <td class="raci-cell">C</td>
+                        <td class="raci-cell">I</td>
+                    </tr>
+                    <tr>
+                        <td><strong>Budget Reallocation (>$100K)</strong></td>
+                        <td class="raci-cell">A</td>
+                        <td class="raci-cell">R</td>
+                        <td class="raci-cell">C</td>
+                        <td class="raci-cell">C</td>
+                        <td class="raci-cell">I</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <h2>Timeline & Milestones</h2>
+        <p>5-phase delivery schedule spanning 24 weeks. Critical path highlighted; phase dependencies managed through staged cutover approach.</p>
+
+        <svg width="100%" height="280" viewBox="0 0 850 280" xmlns="http://www.w3.org/2000/svg">
+            <!-- Timeline background -->
+            <rect x="40" y="40" width="800" height="200" fill="none" stroke="#e0e0e0" stroke-width="1"/>
+            
+            <!-- Week markers -->
+            <g font-size="11" fill="#999" text-anchor="middle">
+                <text x="40" y="265">Wk 0</text>
+                <text x="200" y="265">Wk 6</text>
+                <text x="360" y="265">Wk 12</text>
+                <text x="520" y="265">Wk 18</text>
+                <text x="680" y="265">Wk 24</text>
+                <text x="840" y="265">Wk 30</text>
+            </g>
+
+            <!-- Vertical grid lines -->
+            <line x1="40" y1="40" x2="40" y2="240" stroke="#e0e0e0" stroke-width="1"/>
+            <line x1="200" y1="40" x2="200" y2="240" stroke="#e0e0e0" stroke-width="1"/>
+            <line x1="360" y1="40" x2="360" y2="240" stroke="#e0e0e0" stroke-width="1"/>
+            <line x1="520" y1="40" x2="520" y2="240" stroke="#e0e0e0" stroke-width="1"/>
+            <line x1="680" y1="40" x2="680" y2="240" stroke="#e0e0e0" stroke-width="1"/>
+            <line x1="840" y1="40" x2="840" y2="240" stroke="#e0e0e0" stroke-width="1"/>
+
+            <!-- Phase bars -->
+            <!-- Phase 1: Discovery & Design (0-6 weeks) -->
+            <rect x="40" y="60" width="160" height="32" fill="#18A873" rx="2"/>
+            <text x="120" y="81" font-size="12" fill="white" font-weight="600" text-anchor="middle">Phase 1: Discovery</text>
+
+            <!-- Phase 2: Build (6-12 weeks) -->
+            <rect x="200" y="60" width="160" height="32" fill="#18A873" rx="2"/>
+            <text x="280" y="81" font-size="12" fill="white" font-weight="600" text-anchor="middle">Phase 2: Build</text>
+
+            <!-- Phase 3: Testing (12-18 weeks) -->
+            <rect x="360" y="60" width="160" height="32" fill="#18A873" rx="2"/>
+            <text x="440" y="81" font-size="12" fill="white" font-weight="600" text-anchor="middle">Phase 3: Testing</text>
+
+            <!-- Phase 4: Training (14-20 weeks) -->
+            <rect x="280" y="110" width="240" height="32" fill="#ffa94d" rx="2"/>
+            <text x="400" y="131" font-size="12" fill="white" font-weight="600" text-anchor="middle">Phase 4: Training</text>
+
+            <!-- Phase 5: Cutover (18-24 weeks) - CRITICAL PATH -->
+            <rect x="520" y="160" width="160" height="32" fill="#c00000" rx="2"/>
+            <text x="600" y="181" font-size="12" fill="white" font-weight="600" text-anchor="middle">Phase 5: Cutover</text>
+
+            <!-- Milestones (diamonds) -->
+            <!-- M1: Design Approved (Wk 6) -->
+            <polygon points="200,80 204,84 200,88 196,84" fill="#18A873"/>
+            
+            <!-- M2: Code Complete (Wk 12) -->
+            <polygon points="360,80 364,84 360,88 356,84" fill="#18A873"/>
+            
+            <!-- M3: UAT Start (Wk 14) -->
+            <polygon points="480,80 484,84 480,88 476,84" fill="#ffa94d"/>
+            
+            <!-- M4: Go-Live (Wk 24) -->
+            <polygon points="680,165 684,169 680,173 676,169" fill="#c00000"/>
+
+            <!-- Legend -->
+            <rect x="40" y="210" width="12" height="12" fill="#18A873"/>
+            <text x="60" y="219" font-size="11" fill="#333">Core Path</text>
+            
+            <rect x="140" y="210" width="12" height="12" fill="#ffa94d"/>
+            <text x="160" y="219" font-size="11" fill="#333">Parallel Track</text>
+            
+            <rect x="260" y="210" width="12" height="12" fill="#c00000"/>
+            <text x="280" y="219" font-size="11" fill="#333">Critical (0 float)</text>
+        </svg>
+
+        <h2>Risk Register</h2>
+        <p>5x5 probability-impact matrix. Five priority risks plotted; details below.</p>
+
+        <div class="risk-grid">
+            <svg width="100%" height="320" viewBox="0 0 500 320" xmlns="http://www.w3.org/2000/svg">
+                <!-- Grid -->
+                <g stroke="#e0e0e0" stroke-width="1">
+                    <line x1="60" y1="20" x2="60" y2="260" />
+                    <line x1="120" y1="20" x2="120" y2="260" />
+                    <line x1="180" y1="20" x2="180" y2="260" />
+                    <line x1="240" y1="20" x2="240" y2="260" />
+                    <line x1="300" y1="20" x2="300" y2="260" />
+                    <line x1="40" y1="60" x2="300" y2="60" />
+                    <line x1="40" y1="120" x2="300" y2="120" />
+                    <line x1="40" y1="180" x2="300" y2="180" />
+                    <line x1="40" y1="240" x2="300" y2="240" />
+                </g>
+
+                <!-- Axes -->
+                <line x1="40" y1="260" x2="300" y2="260" stroke="#333" stroke-width="2"/>
+                <line x1="40" y1="20" x2="40" y2="260" stroke="#333" stroke-width="2"/>
+
+                <!-- Axis labels -->
+                <text x="170" y="295" font-size="12" fill="#666" text-anchor="middle" font-weight="600">Probability</text>
+                <text x="10" y="140" font-size="12" fill="#666" text-anchor="middle" font-weight="600" transform="rotate(-90 10 140)">Impact</text>
+
+                <!-- Scale -->
+                <g font-size="10" fill="#999" text-anchor="middle">
+                    <text x="60" y="275">1 (Low)</text>
+                    <text x="180" y="275">3 (Med)</text>
+                    <text x="300" y="275">5 (High)</text>
+                </g>
+                <g font-size="10" fill="#999" text-anchor="end">
+                    <text x="35" y="265">5 (High)</text>
+                    <text x="35" y="140">3 (Med)</text>
+                    <text x="35" y="45">1 (Low)</text>
+                </g>
+
+                <!-- Risk dots -->
+                <circle cx="180" cy="120" r="6" fill="#c00000" opacity="0.8"/>
+                <text x="180" y="115" font-size="9" fill="white" font-weight="600" text-anchor="middle">1</text>
+
+                <circle cx="240" cy="180" r="6" fill="#c00000" opacity="0.8"/>
+                <text x="240" y="175" font-size="9" fill="white" font-weight="600" text-anchor="middle">2</text>
+
+                <circle cx="260" cy="100" r="6" fill="#ffa94d" opacity="0.8"/>
+                <text x="260" y="95" font-size="9" fill="white" font-weight="600" text-anchor="middle">3</text>
+
+                <circle cx="120" cy="200" r="6" fill="#ffa94d" opacity="0.8"/>
+                <text x="120" y="195" font-size="9" fill="white" font-weight="600" text-anchor="middle">4</text>
+
+                <circle cx="100" cy="140" r="6" fill="#ffa94d" opacity="0.8"/>
+                <text x="100" y="135" font-size="9" fill="white" font-weight="600" text-anchor="middle">5</text>
+            </svg>
+        </div>
+
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 8%;">ID</th>
+                    <th style="width: 20%;">Risk</th>
+                    <th style="width: 15%;">Probability</th>
+                    <th style="width: 15%;">Impact</th>
+                    <th style="width: 42%;">Mitigation</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>1</strong></td>
+                    <td>Data migration gaps/corruption</td>
+                    <td>Medium (3)</td>
+                    <td>High (5)</td>
+                    <td>Parallel runs on 10% of customer base Week 20; full validation audit; rollback plan</td>
+                </tr>
+                <tr>
+                    <td><strong>2</strong></td>
+                    <td>Key staff turnover during delivery</td>
+                    <td>Medium-High (4)</td>
+                    <td>High (4)</td>
+                    <td>Knowledge transfer docs; cross-training; retention bonuses for critical roles</td>
+                </tr>
+                <tr>
+                    <td><strong>3</strong></td>
+                    <td>Integration delays with external vendors (ATM, payment processors)</td>
+                    <td>Medium-High (3)</td>
+                    <td>Medium-High (4)</td>
+                    <td>Vendor engagement plan Week 2; weekly sync calls; API contracts signed upfront</td>
+                </tr>
+                <tr>
+                    <td><strong>4</strong></td>
+                    <td>Regulatory compliance gaps discovered in testing</td>
+                    <td>Low-Medium (2)</td>
+                    <td>High (4)</td>
+                    <td>Compliance QA embedded in Phase 3; external audit Week 16; remediation buffer in Phase 4</td>
+                </tr>
+                <tr>
+                    <td><strong>5</strong></td>
+                    <td>Customer communication breakdown / change resistance</td>
+                    <td>Low (2)</td>
+                    <td>Medium-High (3)</td>
+                    <td>Marketing plan launched Week 10; town halls every 2 weeks; 24/7 support hotline first 30 days</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>Success Criteria</h2>
+        <p>Four quantified success metrics. All must be met for project sign-off.</p>
+
+        <div class="metrics-grid">
+            <div class="metric-card">
+                <h3>On-Time Delivery</h3>
+                <div class="metric-value">100%</div>
+                <div class="metric-desc">Go-live occurs on or before June 30, 2026 with zero customer-facing delays</div>
+            </div>
+            <div class="metric-card">
+                <h3>Budget Variance</h3>
+                <div class="metric-value">< 5%</div>
+                <div class="metric-desc">Final project cost within $210K of $4.2M baseline; no additional funding required</div>
+            </div>
+            <div class="metric-card">
+                <h3>User Adoption</h3>
+                <div class="metric-value">> 90%</div>
+                <div class="metric-desc">95%+ of staff staff proficient on new platform by Week 2 post-launch (assessed via test cases)</div>
+            </div>
+            <div class="metric-card">
+                <h3>Defect-Free Go-Live</h3>
+                <div class="metric-value">Zero Critical</div>
+                <div class="metric-desc">No critical or showstopper defects in production first 30 days; < 5 high-severity issues</div>
+            </div>
+        </div>
+
+        <h2>Approvals (Executive Sign-Off)</h2>
+        <div class="signature-block">
+            <div class="sig-grid">
+                <div class="sig-line">
+                    <div class="sig-blank"></div>
+                    <div class="sig-label">Project Sponsor</div>
+                    <div class="sig-sublabel">CTO</div>
+                    <div style="font-size: 11px; color: #999; margin-top: 4px;">Date: ___________</div>
+                </div>
+                <div class="sig-line">
+                    <div class="sig-blank"></div>
+                    <div class="sig-label">Project Director</div>
+                    <div class="sig-sublabel">PMO</div>
+                    <div style="font-size: 11px; color: #999; margin-top: 4px;">Date: ___________</div>
+                </div>
+                <div class="sig-line">
+                    <div class="sig-blank"></div>
+                    <div class="sig-label">Delivery Lead</div>
+                    <div class="sig-sublabel">Gratia Inc</div>
+                    <div style="font-size: 11px; color: #999; margin-top: 4px;">Date: ___________</div>
+                </div>
+                <div class="sig-line">
+                    <div class="sig-blank"></div>
+                    <div class="sig-label">Client Stakeholder</div>
+                    <div class="sig-sublabel">VP Operations</div>
+                    <div style="font-size: 11px; color: #999; margin-top: 4px;">Date: ___________</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="document-footer">
+            <p>Sanitized excerpt · Prepared by Gratia · Jan 2026</p>
+        </div>
+    </div>
+<a href="../" style="position:fixed;top:12px;right:16px;z-index:99999;background:#111827;color:#e2e8f0;padding:6px 16px;border-radius:8px;font-size:13px;font-weight:600;text-decoration:none;border:1px solid #475569;font-family:system-ui,sans-serif;transition:background .15s;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#111827'">← Gallery</a>
+</body>
+</html>

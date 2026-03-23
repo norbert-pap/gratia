@@ -1,0 +1,620 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>KPI Scorecard Framework — Apex Logistics (Sample)</title>
+  <style>
+    :root{
+      --bg:#f6f7f9;
+      --slide:#ffffff;
+      --ink:#111827;
+      --muted:#6b7280;
+      --line:#e5e7eb;
+      --accent:#18A873;
+      --accent-2:#0ea5e9;
+      --warn:#f59e0b;
+      --danger:#ef4444;
+      --violet:#8b5cf6;
+      --shadow: 0 10px 24px rgba(17,24,39,.10);
+      --radius: 16px;
+      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
+    }
+    *{ box-sizing:border-box; margin:0; padding:0; }
+    body{ font-family:var(--sans); background:var(--bg); color:var(--ink); }
+
+    .deck{ max-width:1280px; margin:22px auto; padding:0 14px 40px; }
+    .topbar{
+      display:flex; align-items:center; justify-content:space-between;
+      margin:6px 2px 14px; color:var(--muted); font-size:13px;
+    }
+    .kbd{
+      font-family:var(--mono); border:1px solid var(--line);
+      padding:2px 8px; border-radius:10px; background:#fff; color:#374151;
+    }
+
+    .slide{
+      display:none; background:var(--slide); border:1px solid var(--line);
+      border-radius:var(--radius); box-shadow:var(--shadow);
+      overflow:hidden; min-height:720px; position:relative;
+    }
+    .slide.active{ display:block; }
+    .slide-inner{ padding:26px 32px 58px; }
+
+    .hdr{
+      display:flex; align-items:flex-start; justify-content:space-between;
+      gap:18px; padding:20px 32px 0;
+    }
+    .hdr-left .kicker{
+      font-size:12px; letter-spacing:.08em; text-transform:uppercase;
+      color:var(--accent); font-weight:750; margin-bottom:6px;
+    }
+    .hdr-left h1{ font-size:28px; line-height:1.18; margin:0 0 6px; font-weight:780; }
+    .hdr-left .sub{ margin:0; color:var(--muted); font-size:14px; line-height:1.35; max-width:900px; }
+    .hdr-right{ text-align:right; color:var(--muted); font-size:12px; line-height:1.4; white-space:nowrap; }
+    .pill{
+      display:inline-flex; align-items:center; gap:8px;
+      padding:6px 10px; border:1px solid var(--line); border-radius:999px;
+      background:#fff; margin-top:6px;
+    }
+    .dot{ width:10px; height:10px; border-radius:999px; background:var(--accent); display:inline-block; }
+
+    .ftr{
+      position:absolute; left:0; right:0; bottom:0;
+      border-top:1px solid var(--line); padding:10px 18px;
+      display:flex; align-items:center; justify-content:space-between;
+      font-size:12px; color:var(--muted); background:#fff;
+    }
+    .brand{ display:flex; align-items:center; gap:10px; font-weight:780; color:#111827; }
+    .brand .mark{
+      width:18px; height:18px; border-radius:6px;
+      background:linear-gradient(135deg, var(--accent), #0bd3a3); display:inline-block;
+    }
+    .trust{ font-family:var(--mono); font-size:11px; color:#64748b; }
+
+    .grid-2{ display:grid; grid-template-columns:1fr 1fr; gap:16px; }
+    .grid-3{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; }
+    .grid-4{ display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:12px; }
+
+    .card{
+      border:1px solid var(--line); border-radius:14px;
+      padding:14px; background:#fff;
+    }
+    .card h3{ margin:0 0 8px; font-size:13px; color:#111827; letter-spacing:.02em; }
+    .card p{ margin:0; color:var(--muted); font-size:13px; line-height:1.35; }
+
+    .metric{
+      display:flex; align-items:baseline; justify-content:space-between; gap:10px;
+      padding:10px 12px; border:1px solid var(--line); border-radius:12px; background:#fbfbfc;
+    }
+    .metric .label{ color:var(--muted); font-size:12px; }
+    .metric .value{ font-weight:780; font-size:16px; }
+
+    .badge{
+      display:inline-flex; align-items:center; padding:4px 9px;
+      border-radius:999px; font-size:12px; border:1px solid var(--line);
+      color:#374151; background:#fff; white-space:nowrap;
+    }
+    .badge.win{ border-color:rgba(24,168,115,.35); background:rgba(24,168,115,.08); color:#0f5132; }
+    .badge.risk{ border-color:rgba(245,158,11,.35); background:rgba(245,158,11,.10); color:#7a4b00; }
+    .badge.gap{ border-color:rgba(239,68,68,.30); background:rgba(239,68,68,.08); color:#7f1d1d; }
+    .badge.info{ border-color:rgba(14,165,233,.35); background:rgba(14,165,233,.10); color:#0b4a6f; }
+
+    .viz{
+      border:1px solid var(--line); border-radius:14px;
+      background:#fff; padding:12px;
+    }
+    .viz-title{
+      display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;
+    }
+    .viz-title h3{ margin:0; font-size:13px; letter-spacing:.02em; }
+    .viz-title .note{ color:var(--muted); font-size:12px; }
+
+    .callout{
+      border-left:4px solid var(--accent); padding:12px;
+      background:rgba(24,168,115,.06); border-radius:12px;
+      border:1px solid rgba(24,168,115,.18);
+    }
+    .callout h4{ margin:0 0 6px; font-size:13px; }
+    .callout p{ margin:0; color:#374151; font-size:13px; line-height:1.4; }
+
+    /* Quadrant */
+    .quadrant{
+      display:grid; grid-template-columns:1fr 1fr; gap:14px;
+    }
+    .q-box{
+      border:1px solid var(--line); border-radius:14px;
+      padding:16px; background:#fbfbfc;
+    }
+    .q-box h4{
+      font-size:13px; font-weight:750; margin:0 0 10px;
+      display:flex; align-items:center; gap:8px;
+    }
+    .q-box .q-icon{
+      width:28px; height:28px; border-radius:8px; display:inline-flex;
+      align-items:center; justify-content:center; font-size:14px; color:#fff;
+    }
+    .q-metric{
+      display:flex; align-items:baseline; justify-content:space-between;
+      padding:6px 0; border-bottom:1px solid #f3f4f6; font-size:13px;
+    }
+    .q-metric:last-child{ border-bottom:none; }
+    .q-metric .q-name{ color:#374151; }
+    .q-metric .q-vals{ display:flex; gap:12px; align-items:baseline; }
+    .q-metric .q-actual{ font-weight:700; color:#111827; }
+    .q-metric .q-target{ color:var(--muted); font-size:11px; }
+
+    /* Flow diagram */
+    .flow-grid{
+      display:grid; grid-template-columns:1fr 60px 1fr; gap:0; align-items:start;
+    }
+    .flow-col{ display:flex; flex-direction:column; gap:10px; }
+    .flow-item{
+      border:1px solid var(--line); border-radius:12px;
+      padding:10px 14px; background:#fbfbfc;
+    }
+    .flow-item .fi-name{ font-size:13px; font-weight:600; color:#111827; }
+    .flow-item .fi-desc{ font-size:11px; color:var(--muted); margin-top:2px; }
+    .flow-arrows{
+      display:flex; flex-direction:column; align-items:center; justify-content:center;
+      gap:10px; padding-top:10px;
+    }
+    .flow-arrows .arrow{
+      font-size:20px; color:var(--accent); font-weight:700;
+    }
+
+    /* Threshold table */
+    table{
+      width:100%; border-collapse:separate; border-spacing:0;
+      border:1px solid var(--line); border-radius:14px;
+      overflow:hidden; background:#fff; font-size:12.5px;
+    }
+    thead th{
+      background:#f9fafb; text-align:left; color:#374151;
+      font-weight:780; padding:10px 10px; border-bottom:1px solid var(--line);
+      vertical-align:bottom;
+    }
+    tbody td{
+      padding:10px 10px; border-bottom:1px solid var(--line);
+      vertical-align:top; color:#111827;
+    }
+    tbody tr:last-child td{ border-bottom:none; }
+    .cell-g{ background:rgba(24,168,115,.10); color:#0f5132; font-weight:600; }
+    .cell-a{ background:rgba(245,158,11,.12); color:#7a4b00; font-weight:600; }
+    .cell-r{ background:rgba(239,68,68,.10); color:#7f1d1d; font-weight:600; }
+
+    @media print{
+      body{ background:#fff; }
+      .topbar{ display:none; }
+      .deck{ margin:0; max-width:none; padding:0; }
+      .slide{ display:block; box-shadow:none; border:none; border-radius:0; page-break-after:always; min-height:auto; }
+      .slide-inner{ padding-bottom:58px; }
+    }
+  </style>
+</head>
+
+<body>
+  <div class="deck">
+    <div class="topbar">
+      <div>HTML preview deck • Consulting-style sample</div>
+      <div>
+        <span class="kbd">←</span> <span class="kbd">→</span> to navigate • <span class="kbd">Cmd</span> + <span class="kbd">P</span> to export PDF
+      </div>
+    </div>
+
+    <!-- Slide 1: Cover -->
+    <section class="slide active" data-slide="1">
+      <div class="hdr">
+        <div class="hdr-left">
+          <div class="kicker">Data Dashboards & Analytics — Sample</div>
+          <h1>KPI Scorecard Framework: Operations & Growth Alignment</h1>
+          <p class="sub">A structured framework for selecting, organizing, and monitoring the metrics that connect operational execution to strategic outcomes — designed for leadership alignment and accountability (illustrative / anonymized).</p>
+        </div>
+        <div class="hdr-right">
+          <div>Client: Apex Logistics</div>
+          <div>Revenue: $50M</div>
+          <div class="pill"><span class="dot"></span><span>Framework</span></div>
+        </div>
+      </div>
+
+      <div class="slide-inner">
+        <!-- Hero: 4-quadrant health status cards -->
+        <div class="grid-4" style="margin-top:12px;">
+          <div style="border:2px solid rgba(24,168,115,.4); border-radius:14px; padding:14px; background:rgba(24,168,115,.04); text-align:center;">
+            <div style="font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:var(--accent); margin-bottom:6px;">Operational Efficiency</div>
+            <svg width="56" height="56" viewBox="0 0 56 56"><circle cx="28" cy="28" r="24" fill="none" stroke="#e5e7eb" stroke-width="5"/><circle cx="28" cy="28" r="24" fill="none" stroke="#18A873" stroke-width="5" stroke-dasharray="150.8" stroke-dashoffset="0" stroke-linecap="round" transform="rotate(-90 28 28)"/><text x="28" y="32" text-anchor="middle" font-size="14" font-weight="800" fill="#18A873" font-family="Arial">3/3</text></svg>
+            <div style="font-size:12px; font-weight:700; color:#0f5132; margin-top:4px;">All Green</div>
+            <div style="font-size:11px; color:var(--muted); margin-top:2px;">OTD 96.2% &bull; 4th month</div>
+          </div>
+          <div style="border:2px solid rgba(245,158,11,.4); border-radius:14px; padding:14px; background:rgba(245,158,11,.04); text-align:center;">
+            <div style="font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:var(--warn); margin-bottom:6px;">Revenue Growth</div>
+            <svg width="56" height="56" viewBox="0 0 56 56"><circle cx="28" cy="28" r="24" fill="none" stroke="#e5e7eb" stroke-width="5"/><circle cx="28" cy="28" r="24" fill="none" stroke="#f59e0b" stroke-width="5" stroke-dasharray="100.5" stroke-dashoffset="0" stroke-linecap="round" transform="rotate(-90 28 28)"/><text x="28" y="32" text-anchor="middle" font-size="14" font-weight="800" fill="#f59e0b" font-family="Arial">2/3</text></svg>
+            <div style="font-size:12px; font-weight:700; color:#7a4b00; margin-top:4px;">1 Amber</div>
+            <div style="font-size:11px; color:var(--muted); margin-top:2px;">Pipeline coverage &lt;3×</div>
+          </div>
+          <div style="border:2px solid rgba(245,158,11,.4); border-radius:14px; padding:14px; background:rgba(245,158,11,.04); text-align:center;">
+            <div style="font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:var(--warn); margin-bottom:6px;">Customer Health</div>
+            <svg width="56" height="56" viewBox="0 0 56 56"><circle cx="28" cy="28" r="24" fill="none" stroke="#e5e7eb" stroke-width="5"/><circle cx="28" cy="28" r="24" fill="none" stroke="#f59e0b" stroke-width="5" stroke-dasharray="100.5" stroke-dashoffset="0" stroke-linecap="round" transform="rotate(-90 28 28)"/><text x="28" y="32" text-anchor="middle" font-size="14" font-weight="800" fill="#f59e0b" font-family="Arial">2/3</text></svg>
+            <div style="font-size:12px; font-weight:700; color:#7a4b00; margin-top:4px;">1 Amber</div>
+            <div style="font-size:11px; color:var(--muted); margin-top:2px;">Mid-market churn signals</div>
+          </div>
+          <div style="border:2px solid rgba(24,168,115,.4); border-radius:14px; padding:14px; background:rgba(24,168,115,.04); text-align:center;">
+            <div style="font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:var(--accent); margin-bottom:6px;">People &amp; Culture</div>
+            <svg width="56" height="56" viewBox="0 0 56 56"><circle cx="28" cy="28" r="24" fill="none" stroke="#e5e7eb" stroke-width="5"/><circle cx="28" cy="28" r="24" fill="none" stroke="#18A873" stroke-width="5" stroke-dasharray="150.8" stroke-dashoffset="0" stroke-linecap="round" transform="rotate(-90 28 28)"/><text x="28" y="32" text-anchor="middle" font-size="14" font-weight="800" fill="#18A873" font-family="Arial">3/3</text></svg>
+            <div style="font-size:12px; font-weight:700; color:#0f5132; margin-top:4px;">All Green</div>
+            <div style="font-size:11px; color:var(--muted); margin-top:2px;">eNPS 42 &bull; Attrition 8%</div>
+          </div>
+        </div>
+
+        <!-- Key findings -->
+        <div class="callout" style="margin-top:14px;">
+          <h4>Key findings</h4>
+          <ul>
+            <li><strong>Ops efficiency is the strongest quadrant</strong> — on-time delivery at 96.2% (above 94% target) for 4th consecutive month; warehouse utilization at 89%</li>
+            <li><strong>Revenue growth flagged amber:</strong> pipeline coverage at 2.9× (below 3× threshold); new logo acquisition slowed 18% QoQ</li>
+            <li><strong>Leading indicators predicted churn:</strong> support ticket volume in mid-market rose 40% six weeks before logo losses — framework caught it early</li>
+          </ul>
+        </div>
+
+        <!-- Actions + Sources -->
+        <div class="grid-2" style="margin-top:12px;">
+          <div class="card">
+            <h3>Recommended actions</h3>
+            <p><b>1.</b> Increase pipeline gen — outbound activity 25% below target. <b>2.</b> Dedicated support for mid-market accounts with ticket spikes. <b>3.</b> Promote OTD performance in sales narratives to reinforce competitive moat.</p>
+          </div>
+          <div class="card">
+            <h3>Data sources &amp; cadence</h3>
+            <p>Salesforce (revenue), Zendesk (support), WMS (ops), Looker (aggregation). Thresholds calibrated quarterly. Weekly pulse + monthly full review.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="ftr">
+        <div class="brand"><span class="mark"></span> Gratia (sample)</div>
+        <div class="trust">Sanitized excerpt • Prepared by Gratia • Jan 2026</div>
+        <div>1</div>
+      </div>
+    </section>
+
+    <!-- Slide 2: Strategic KPIs (Quadrant View) -->
+    <section class="slide" data-slide="2">
+      <div class="hdr">
+        <div class="hdr-left">
+          <div class="kicker">Strategic KPIs</div>
+          <h1>Four-quadrant view: 12 metrics across growth, efficiency, customers, and finance</h1>
+          <p class="sub">Each quadrant maps to a strategic objective. Metrics show current value vs. target with status indicator.</p>
+        </div>
+        <div class="hdr-right">
+          <div class="pill"><span class="dot"></span><span>10 green, 2 amber</span></div>
+        </div>
+      </div>
+
+      <div class="slide-inner">
+        <div class="quadrant">
+          <!-- Revenue Growth -->
+          <div class="q-box">
+            <h4><span class="q-icon" style="background:#18A873;">📈</span> Revenue Growth</h4>
+            <div class="q-metric">
+              <span class="q-name">Revenue (TTM)</span>
+              <span class="q-vals"><span class="q-actual">$50.2M</span><span class="q-target">T: $48M</span><span class="badge win" style="font-size:10px;">●</span></span>
+            </div>
+            <div class="q-metric">
+              <span class="q-name">Pipeline coverage</span>
+              <span class="q-vals"><span class="q-actual">2.6×</span><span class="q-target">T: 3.0×</span><span class="badge risk" style="font-size:10px;">●</span></span>
+            </div>
+            <div class="q-metric">
+              <span class="q-name">New logo wins (QTD)</span>
+              <span class="q-vals"><span class="q-actual">14</span><span class="q-target">T: 12</span><span class="badge win" style="font-size:10px;">●</span></span>
+            </div>
+          </div>
+
+          <!-- Operational Efficiency -->
+          <div class="q-box">
+            <h4><span class="q-icon" style="background:#0ea5e9;">⚙️</span> Operational Efficiency</h4>
+            <div class="q-metric">
+              <span class="q-name">On-time delivery %</span>
+              <span class="q-vals"><span class="q-actual">96.2%</span><span class="q-target">T: 95%</span><span class="badge win" style="font-size:10px;">●</span></span>
+            </div>
+            <div class="q-metric">
+              <span class="q-name">Load utilization</span>
+              <span class="q-vals"><span class="q-actual">82%</span><span class="q-target">T: 80%</span><span class="badge win" style="font-size:10px;">●</span></span>
+            </div>
+            <div class="q-metric">
+              <span class="q-name">Cost per shipment</span>
+              <span class="q-vals"><span class="q-actual">$142</span><span class="q-target">T: <$150</span><span class="badge win" style="font-size:10px;">●</span></span>
+            </div>
+          </div>
+
+          <!-- Customer Health -->
+          <div class="q-box">
+            <h4><span class="q-icon" style="background:#8b5cf6;">💜</span> Customer Health</h4>
+            <div class="q-metric">
+              <span class="q-name">NPS (quarterly)</span>
+              <span class="q-vals"><span class="q-actual">62</span><span class="q-target">T: 55+</span><span class="badge win" style="font-size:10px;">●</span></span>
+            </div>
+            <div class="q-metric">
+              <span class="q-name">Logo retention (annual)</span>
+              <span class="q-vals"><span class="q-actual">89%</span><span class="q-target">T: 90%</span><span class="badge risk" style="font-size:10px;">●</span></span>
+            </div>
+            <div class="q-metric">
+              <span class="q-name">Support resolution (avg)</span>
+              <span class="q-vals"><span class="q-actual">4.2 hrs</span><span class="q-target">T: <6 hrs</span><span class="badge win" style="font-size:10px;">●</span></span>
+            </div>
+          </div>
+
+          <!-- Financial Health -->
+          <div class="q-box">
+            <h4><span class="q-icon" style="background:#111827;">💰</span> Financial Health</h4>
+            <div class="q-metric">
+              <span class="q-name">Gross margin</span>
+              <span class="q-vals"><span class="q-actual">34.5%</span><span class="q-target">T: 32%+</span><span class="badge win" style="font-size:10px;">●</span></span>
+            </div>
+            <div class="q-metric">
+              <span class="q-name">EBITDA margin</span>
+              <span class="q-vals"><span class="q-actual">12.1%</span><span class="q-target">T: 10%+</span><span class="badge win" style="font-size:10px;">●</span></span>
+            </div>
+            <div class="q-metric">
+              <span class="q-name">DSO (days sales out)</span>
+              <span class="q-vals"><span class="q-actual">42 days</span><span class="q-target">T: <45</span><span class="badge win" style="font-size:10px;">●</span></span>
+            </div>
+          </div>
+        </div>
+
+        <div class="callout" style="margin-top:12px;">
+          <h4>Reading this scorecard</h4>
+          <p><strong>Green (●)</strong> = at or above target. <strong>Amber (●)</strong> = within 10% of threshold, needs monitoring. <strong>Red (●)</strong> = breached, requires action. Pipeline coverage (2.6× vs. 3.0×) and logo retention (89% vs. 90%) are the two items in amber.</p>
+        </div>
+      </div>
+
+      <div class="ftr">
+        <div class="brand"><span class="mark"></span> Gratia (sample)</div>
+        <div class="trust">Sanitized excerpt • Prepared by Gratia • Jan 2026</div>
+        <div>2</div>
+      </div>
+    </section>
+
+    <!-- Slide 3: Leading → Lagging Map -->
+    <section class="slide" data-slide="3">
+      <div class="hdr">
+        <div class="hdr-left">
+          <div class="kicker">Causality map</div>
+          <h1>Leading indicators predict lagging outcomes 4–8 weeks ahead</h1>
+          <p class="sub">Mapping the causal chain from inputs you control (left) to outcomes you measure (right) — so teams know which levers to pull and when to expect impact.</p>
+        </div>
+        <div class="hdr-right">
+          <div class="pill"><span class="dot" style="background:var(--accent-2)"></span><span>Predictive</span></div>
+        </div>
+      </div>
+
+      <div class="slide-inner">
+        <div class="flow-grid">
+          <!-- Leading indicators (left) -->
+          <div class="flow-col">
+            <div style="text-align:center; font-size:12px; font-weight:750; color:var(--accent); text-transform:uppercase; letter-spacing:.06em; margin-bottom:6px;">Leading Indicators</div>
+            <div class="flow-item" style="border-left:3px solid var(--accent);">
+              <div class="fi-name">Pipeline created ($)</div>
+              <div class="fi-desc">New qualified pipeline added this month</div>
+              <div style="margin-top:6px;"><span class="badge win">$4.2M — on track</span></div>
+            </div>
+            <div class="flow-item" style="border-left:3px solid var(--accent);">
+              <div class="fi-name">Demos / proposals sent</div>
+              <div class="fi-desc">Activity volume drives conversion input</div>
+              <div style="margin-top:6px;"><span class="badge win">38 — above pace</span></div>
+            </div>
+            <div class="flow-item" style="border-left:3px solid var(--warn);">
+              <div class="fi-name">Support tickets (trailing 30d)</div>
+              <div class="fi-desc">Early signal of satisfaction / churn risk</div>
+              <div style="margin-top:6px;"><span class="badge risk">↑ 18% MoM — watch</span></div>
+            </div>
+            <div class="flow-item" style="border-left:3px solid var(--accent);">
+              <div class="fi-name">Load booking volume</div>
+              <div class="fi-desc">Operational throughput input metric</div>
+              <div style="margin-top:6px;"><span class="badge win">2,340 loads — steady</span></div>
+            </div>
+            <div class="flow-item" style="border-left:3px solid var(--accent);">
+              <div class="fi-name">Employee engagement score</div>
+              <div class="fi-desc">Predicts retention, productivity, service quality</div>
+              <div style="margin-top:6px;"><span class="badge win">78/100 — stable</span></div>
+            </div>
+          </div>
+
+          <!-- Arrows -->
+          <div class="flow-arrows">
+            <div class="arrow" style="margin-top:40px;">→</div>
+            <div class="arrow">→</div>
+            <div class="arrow">→</div>
+            <div class="arrow">→</div>
+            <div class="arrow">→</div>
+          </div>
+
+          <!-- Lagging outcomes (right) -->
+          <div class="flow-col">
+            <div style="text-align:center; font-size:12px; font-weight:750; color:var(--accent-2); text-transform:uppercase; letter-spacing:.06em; margin-bottom:6px;">Lagging Outcomes</div>
+            <div class="flow-item" style="border-left:3px solid var(--accent-2);">
+              <div class="fi-name">Revenue (monthly)</div>
+              <div class="fi-desc">Pipeline → demos → closed deals → revenue</div>
+              <div style="margin-top:6px;"><span class="badge info">$4.18M — ▲ 3%</span></div>
+            </div>
+            <div class="flow-item" style="border-left:3px solid var(--accent-2);">
+              <div class="fi-name">Win rate</div>
+              <div class="fi-desc">Proposal quality and ICP fit drive conversion</div>
+              <div style="margin-top:6px;"><span class="badge info">28% — stable</span></div>
+            </div>
+            <div class="flow-item" style="border-left:3px solid var(--warn);">
+              <div class="fi-name">Churn rate (quarterly)</div>
+              <div class="fi-desc">Ticket spikes predict churn 4–8 weeks later</div>
+              <div style="margin-top:6px;"><span class="badge risk">2.8% — trending up</span></div>
+            </div>
+            <div class="flow-item" style="border-left:3px solid var(--accent-2);">
+              <div class="fi-name">Gross margin</div>
+              <div class="fi-desc">Load volume × utilization → cost efficiency</div>
+              <div style="margin-top:6px;"><span class="badge info">34.5% — on target</span></div>
+            </div>
+            <div class="flow-item" style="border-left:3px solid var(--accent-2);">
+              <div class="fi-name">Employee turnover</div>
+              <div class="fi-desc">Engagement predicts voluntary attrition</div>
+              <div style="margin-top:6px;"><span class="badge info">12% annualized — healthy</span></div>
+            </div>
+          </div>
+        </div>
+
+        <div class="callout" style="margin-top:12px;">
+          <h4>Signal to watch</h4>
+          <p><strong>Support tickets rose 18% MoM</strong> — historically this predicts a churn uptick 6–8 weeks out. The mid-market segment accounts for 70% of the increase. Recommend: targeted CSM outreach to top 15 at-risk accounts before end of February.</p>
+        </div>
+      </div>
+
+      <div class="ftr">
+        <div class="brand"><span class="mark"></span> Gratia (sample)</div>
+        <div class="trust">Sanitized excerpt • Prepared by Gratia • Jan 2026</div>
+        <div>3</div>
+      </div>
+    </section>
+
+    <!-- Slide 4: Threshold Table -->
+    <section class="slide" data-slide="4">
+      <div class="hdr">
+        <div class="hdr-left">
+          <div class="kicker">Alert configuration</div>
+          <h1>Threshold definitions with owners, escalation paths, and review cadence</h1>
+          <p class="sub">Each KPI has explicit green/amber/red boundaries so teams don't debate status — they act on it. Color-coded cells enable at-a-glance monitoring.</p>
+        </div>
+        <div class="hdr-right">
+          <div class="pill"><span class="dot"></span><span>Actionable</span></div>
+        </div>
+      </div>
+
+      <div class="slide-inner">
+        <table aria-label="KPI threshold definitions">
+          <thead>
+            <tr>
+              <th style="width:170px;">KPI</th>
+              <th style="width:110px;">Green</th>
+              <th style="width:110px;">Amber</th>
+              <th style="width:110px;">Red</th>
+              <th style="width:120px;">Owner</th>
+              <th style="width:130px;">Review cadence</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Revenue (TTM)</strong></td>
+              <td class="cell-g">≥ $48M</td>
+              <td class="cell-a">$44–48M</td>
+              <td class="cell-r">< $44M</td>
+              <td>VP Sales</td>
+              <td>Monthly</td>
+            </tr>
+            <tr>
+              <td><strong>Pipeline coverage</strong></td>
+              <td class="cell-g">≥ 3.0×</td>
+              <td class="cell-a">2.5–3.0×</td>
+              <td class="cell-r">< 2.5×</td>
+              <td>VP Sales</td>
+              <td>Weekly</td>
+            </tr>
+            <tr>
+              <td><strong>On-time delivery</strong></td>
+              <td class="cell-g">≥ 95%</td>
+              <td class="cell-a">92–95%</td>
+              <td class="cell-r">< 92%</td>
+              <td>VP Operations</td>
+              <td>Weekly</td>
+            </tr>
+            <tr>
+              <td><strong>Cost per shipment</strong></td>
+              <td class="cell-g">≤ $150</td>
+              <td class="cell-a">$150–165</td>
+              <td class="cell-r">> $165</td>
+              <td>VP Operations</td>
+              <td>Monthly</td>
+            </tr>
+            <tr>
+              <td><strong>NPS</strong></td>
+              <td class="cell-g">≥ 55</td>
+              <td class="cell-a">45–55</td>
+              <td class="cell-r">< 45</td>
+              <td>VP Customer Success</td>
+              <td>Quarterly</td>
+            </tr>
+            <tr>
+              <td><strong>Logo retention</strong></td>
+              <td class="cell-g">≥ 90%</td>
+              <td class="cell-a">85–90%</td>
+              <td class="cell-r">< 85%</td>
+              <td>VP Customer Success</td>
+              <td>Monthly</td>
+            </tr>
+            <tr>
+              <td><strong>Gross margin</strong></td>
+              <td class="cell-g">≥ 32%</td>
+              <td class="cell-a">28–32%</td>
+              <td class="cell-r">< 28%</td>
+              <td>CFO</td>
+              <td>Monthly</td>
+            </tr>
+            <tr>
+              <td><strong>EBITDA margin</strong></td>
+              <td class="cell-g">≥ 10%</td>
+              <td class="cell-a">7–10%</td>
+              <td class="cell-r">< 7%</td>
+              <td>CFO</td>
+              <td>Monthly</td>
+            </tr>
+          </tbody>
+        </table>
+
+        <div class="grid-2" style="margin-top:12px;">
+          <div class="callout">
+            <h4>Escalation protocol</h4>
+            <p><strong>Amber:</strong> Owner investigates within 48 hours, presents root cause at next review. <strong>Red:</strong> Escalate to leadership within 24 hours with action plan. Two consecutive red readings trigger a dedicated working session.</p>
+          </div>
+          <div class="callout" style="border-left-color:var(--accent-2); background:rgba(14,165,233,.06); border-color:rgba(14,165,233,.18);">
+            <h4>Implementation note</h4>
+            <p>These thresholds should be loaded into your BI tool (Looker, Tableau, Power BI) as conditional formatting rules. Automated Slack/email alerts on amber/red transitions reduce response lag from days to hours.</p>
+          </div>
+        </div>
+      </div>
+
+      <div class="ftr">
+        <div class="brand"><span class="mark"></span> Gratia (sample)</div>
+        <div class="trust">Sanitized excerpt • Prepared by Gratia • Jan 2026</div>
+        <div>4</div>
+      </div>
+    </section>
+
+  </div>
+
+  <script>
+    (function(){
+      const slides = Array.from(document.querySelectorAll('.slide'));
+      let idx = 0;
+
+      function show(i){
+        idx = Math.max(0, Math.min(slides.length - 1, i));
+        slides.forEach((s, k) => s.classList.toggle('active', k === idx));
+        window.location.hash = `slide-${idx+1}`;
+      }
+
+      function fromHash(){
+        const m = (window.location.hash || '').match(/slide-(\d+)/);
+        if(!m) return;
+        const n = parseInt(m[1], 10);
+        if(!isNaN(n)) show(n-1);
+      }
+
+      document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === 'PageDown') show(idx + 1);
+        if (e.key === 'ArrowLeft' || e.key === 'PageUp') show(idx - 1);
+        if (e.key === 'Home') show(0);
+        if (e.key === 'End') show(slides.length - 1);
+      });
+
+      window.addEventListener('hashchange', fromHash);
+      fromHash();
+    })();
+  </script>
+<a href="../" style="position:fixed;top:12px;right:16px;z-index:99999;background:#111827;color:#e2e8f0;padding:6px 16px;border-radius:8px;font-size:13px;font-weight:600;text-decoration:none;border:1px solid #475569;font-family:system-ui,sans-serif;transition:background .15s;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#111827'">← Gallery</a>
+</body>
+</html>

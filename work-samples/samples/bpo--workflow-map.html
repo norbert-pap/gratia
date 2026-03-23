@@ -1,0 +1,636 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Workflow Map: End-to-End Load Booking & Dispatch</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
+            background: #f8f8f8;
+            color: #1a1a1a;
+            line-height: 1.6;
+        }
+
+        .document {
+            max-width: 900px;
+            margin: 40px auto;
+            background: white;
+            padding: 60px 50px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            border-radius: 2px;
+        }
+
+        .header-block {
+            border-bottom: 3px solid #18A873;
+            padding-bottom: 30px;
+            margin-bottom: 40px;
+        }
+
+        .header-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #666;
+        }
+
+        h1 {
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #1a1a1a;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            color: #666;
+            font-weight: 400;
+        }
+
+        /* Metrics Bar */
+        .metrics-bar {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin: 40px 0;
+            padding: 24px;
+            background: #f0f8f5;
+            border-left: 4px solid #18A873;
+            border-radius: 2px;
+        }
+
+        .metric {
+            text-align: center;
+        }
+
+        .metric-label {
+            font-size: 11px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 8px;
+        }
+
+        .metric-current {
+            font-size: 24px;
+            font-weight: 700;
+            color: #c00000;
+        }
+
+        .metric-arrow {
+            color: #999;
+            margin: 4px 0;
+            font-size: 14px;
+        }
+
+        .metric-target {
+            font-size: 24px;
+            font-weight: 700;
+            color: #18A873;
+        }
+
+        h2 {
+            font-size: 28px;
+            font-weight: 700;
+            margin: 50px 0 30px 0;
+            color: #1a1a1a;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #18A873;
+        }
+
+        h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin: 24px 0 16px 0;
+            color: #1a1a1a;
+        }
+
+        p {
+            margin-bottom: 16px;
+            color: #333;
+        }
+
+        /* Swimlane Diagram */
+        .swimlane-container {
+            background: white;
+            border: 1px solid #e0e0e0;
+            margin-bottom: 30px;
+            border-radius: 2px;
+            overflow-x: auto;
+        }
+
+        /* Pain Point Cards */
+        .pain-points {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .pain-card {
+            padding: 20px;
+            border-radius: 2px;
+            border-left: 5px solid #c00000;
+            background: #fff5f5;
+        }
+
+        .pain-card h3 {
+            margin-top: 0;
+            color: #c00000;
+            font-size: 15px;
+        }
+
+        .pain-metric {
+            font-size: 20px;
+            font-weight: 700;
+            color: #c00000;
+            margin: 8px 0 4px 0;
+        }
+
+        .pain-desc {
+            font-size: 12px;
+            color: #333;
+            margin-bottom: 8px;
+        }
+
+        .pain-cost {
+            font-size: 12px;
+            color: #999;
+            font-weight: 600;
+        }
+
+        /* Quadrant Chart */
+        .quadrant-container {
+            background: white;
+            border: 1px solid #e0e0e0;
+            padding: 20px;
+            margin-bottom: 30px;
+            border-radius: 2px;
+        }
+
+        /* Improvement Table */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        th {
+            background: #f5f5f5;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            color: #1a1a1a;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        td {
+            padding: 14px 12px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        tr:nth-child(even) {
+            background: #fafafa;
+        }
+
+        .effort-high {
+            color: #c00000;
+            font-weight: 600;
+        }
+
+        .impact-high {
+            color: #18A873;
+            font-weight: 600;
+        }
+
+        .priority-1 {
+            background: #f0f8f5;
+            font-weight: 600;
+        }
+
+        /* Footer */
+        .document-footer {
+            margin-top: 60px;
+            padding-top: 30px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            font-size: 12px;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+    <div class="document">
+        <div class="header-block">
+            <div class="header-meta">
+                <div>
+                    <div>Anchor Logistics</div>
+                    <div>January 2026 · v2.0</div>
+                    <div style="margin-top: 6px; font-size: 11px;">Process Owner: Director of Operations</div>
+                </div>
+            </div>
+            <h1>Workflow Map</h1>
+            <p class="subtitle">End-to-End Load Booking & Dispatch</p>
+        </div>
+
+        <div class="metrics-bar">
+            <div class="metric">
+                <div class="metric-label">Avg. Booking Time</div>
+                <div class="metric-current">47 min</div>
+                <div class="metric-arrow">↓</div>
+                <div class="metric-target">12 min</div>
+            </div>
+            <div class="metric">
+                <div class="metric-label">Touch Points</div>
+                <div class="metric-current">11 steps</div>
+                <div class="metric-arrow">↓</div>
+                <div class="metric-target">5 steps</div>
+            </div>
+            <div class="metric">
+                <div class="metric-label">Error Rate</div>
+                <div class="metric-current">8.2%</div>
+                <div class="metric-arrow">↓</div>
+                <div class="metric-target">&lt; 2%</div>
+            </div>
+            <div class="metric">
+                <div class="metric-label">Annual Rework Cost</div>
+                <div class="metric-current">$340K</div>
+                <div class="metric-arrow">↓</div>
+                <div class="metric-target">$85K</div>
+            </div>
+        </div>
+
+        <h2>Current State Process Map</h2>
+        <p>Full swimlane diagram showing 5 roles and 11 process steps. Red flags identify three critical bottlenecks.</p>
+
+        <div class="swimlane-container">
+            <svg width="1000" height="500" viewBox="0 0 1000 500" xmlns="http://www.w3.org/2000/svg">
+                <!-- Swimlane headers -->
+                <text x="20" y="30" font-size="13" fill="#1a1a1a" font-weight="600">SALES</text>
+                <text x="20" y="130" font-size="13" fill="#1a1a1a" font-weight="600">OPS</text>
+                <text x="20" y="230" font-size="13" fill="#1a1a1a" font-weight="600">DISPATCH</text>
+                <text x="20" y="330" font-size="13" fill="#1a1a1a" font-weight="600">CARRIER</text>
+                <text x="20" y="430" font-size="13" fill="#1a1a1a" font-weight="600">BILLING</text>
+
+                <!-- Swimlane lines -->
+                <line x1="50" y1="50" x2="980" y2="50" stroke="#e0e0e0" stroke-width="1"/>
+                <line x1="50" y1="150" x2="980" y2="150" stroke="#e0e0e0" stroke-width="1"/>
+                <line x1="50" y1="250" x2="980" y2="250" stroke="#e0e0e0" stroke-width="1"/>
+                <line x1="50" y1="350" x2="980" y2="350" stroke="#e0e0e0" stroke-width="1"/>
+                <line x1="50" y1="450" x2="980" y2="450" stroke="#e0e0e0" stroke-width="1"/>
+
+                <!-- Process steps -->
+                <!-- Step 1: Customer calls -->
+                <rect x="60" y="70" width="80" height="50" fill="#66d9ef" stroke="#333" stroke-width="1.5" rx="4"/>
+                <text x="100" y="85" font-size="11" fill="white" text-anchor="middle" font-weight="600">1. Customer</text>
+                <text x="100" y="100" font-size="11" fill="white" text-anchor="middle" font-weight="600">Calls</text>
+
+                <!-- Arrow -->
+                <path d="M 140 95 L 170 95" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+
+                <!-- Step 2: Create Manual Quote -->
+                <rect x="170" y="70" width="80" height="50" fill="#ffa94d" stroke="#333" stroke-width="1.5" rx="4"/>
+                <text x="210" y="85" font-size="11" fill="white" text-anchor="middle" font-weight="600">2. Manual</text>
+                <text x="210" y="100" font-size="11" fill="white" text-anchor="middle" font-weight="600">Quote</text>
+
+                <!-- Pain flag 1 -->
+                <text x="210" y="125" font-size="14" fill="#c00000" text-anchor="middle">🚩</text>
+                <text x="210" y="140" font-size="9" fill="#c00000" text-anchor="middle" font-weight="600">15 min</text>
+
+                <!-- Arrow -->
+                <path d="M 250 95 L 280 95" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+
+                <!-- Step 3: Email to Ops -->
+                <rect x="280" y="170" width="80" height="50" fill="#66d9ef" stroke="#333" stroke-width="1.5" rx="4"/>
+                <text x="320" y="185" font-size="11" fill="white" text-anchor="middle" font-weight="600">3. Email</text>
+                <text x="320" y="200" font-size="11" fill="white" text-anchor="middle" font-weight="600">to Ops</text>
+
+                <!-- Arrow -->
+                <path d="M 360 95 L 400 170" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+
+                <!-- Step 4: Validate Load -->
+                <rect x="400" y="170" width="80" height="50" fill="#ffa94d" stroke="#333" stroke-width="1.5" rx="4"/>
+                <text x="440" y="185" font-size="11" fill="white" text-anchor="middle" font-weight="600">4. Validate</text>
+                <text x="440" y="200" font-size="11" fill="white" text-anchor="middle" font-weight="600">Load Data</text>
+
+                <!-- Pain flag 2 -->
+                <text x="440" y="225" font-size="14" fill="#c00000" text-anchor="middle">🚩</text>
+                <text x="440" y="240" font-size="9" fill="#c00000" text-anchor="middle" font-weight="600">12 min</text>
+
+                <!-- Arrow -->
+                <path d="M 480 95 L 520 170" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+
+                <!-- Step 5: Quote Approval -->
+                <rect x="520" y="70" width="80" height="50" fill="#66d9ef" stroke="#333" stroke-width="1.5" rx="4"/>
+                <text x="560" y="85" font-size="11" fill="white" text-anchor="middle" font-weight="600">5. Customer</text>
+                <text x="560" y="100" font-size="11" fill="white" text-anchor="middle" font-weight="600">Approves</text>
+
+                <!-- Decision Diamond -->
+                <polygon points="620,95 645,70 670,95 645,120" fill="white" stroke="#333" stroke-width="1.5"/>
+                <text x="645" y="100" font-size="10" fill="#333" text-anchor="middle" font-weight="600">OK?</text>
+
+                <!-- Yes arrow -->
+                <path d="M 670 95 L 700 95" stroke="#18A873" stroke-width="2" fill="none" marker-end="url(#arrowhead-green)"/>
+                <text x="685" y="85" font-size="10" fill="#18A873" font-weight="600">Yes</text>
+
+                <!-- Step 6: Assign Carrier -->
+                <rect x="700" y="270" width="80" height="50" fill="#66d9ef" stroke="#333" stroke-width="1.5" rx="4"/>
+                <text x="740" y="285" font-size="11" fill="white" text-anchor="middle" font-weight="600">6. Assign</text>
+                <text x="740" y="300" font-size="11" fill="white" text-anchor="middle" font-weight="600">Carrier</text>
+
+                <!-- Arrow -->
+                <path d="M 740 95 L 740 270" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+
+                <!-- Pain flag 3 -->
+                <text x="740" y="325" font-size="14" fill="#c00000" text-anchor="middle">🚩</text>
+                <text x="740" y="340" font-size="9" fill="#c00000" text-anchor="middle" font-weight="600">8 min</text>
+
+                <!-- Step 7: Send Load to Carrier -->
+                <rect x="800" y="270" width="80" height="50" fill="#18A873" stroke="#333" stroke-width="1.5" rx="4"/>
+                <text x="840" y="285" font-size="11" fill="white" text-anchor="middle" font-weight="600">7. Send to</text>
+                <text x="840" y="300" font-size="11" fill="white" text-anchor="middle" font-weight="600">Carrier</text>
+
+                <!-- Arrow -->
+                <path d="M 780 295 L 800 295" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+
+                <!-- Step 8: Carrier Accepts -->
+                <rect x="860" y="370" width="80" height="50" fill="#18A873" stroke="#333" stroke-width="1.5" rx="4"/>
+                <text x="900" y="385" font-size="11" fill="white" text-anchor="middle" font-weight="600">8. Carrier</text>
+                <text x="900" y="400" font-size="11" fill="white" text-anchor="middle" font-weight="600">Accepts</text>
+
+                <!-- Arrow -->
+                <path d="M 840 320 L 880 370" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+
+                <!-- Step 9: Create Invoice -->
+                <rect x="920" y="430" width="50" height="50" fill="#18A873" stroke="#333" stroke-width="1.5" rx="4"/>
+                <text x="945" y="450" font-size="10" fill="white" text-anchor="middle" font-weight="600">9.</text>
+                <text x="945" y="465" font-size="10" fill="white" text-anchor="middle" font-weight="600">Invoice</text>
+
+                <!-- Arrow marker -->
+                <defs>
+                    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto">
+                        <polygon points="0 0, 10 5, 0 10" fill="#333"/>
+                    </marker>
+                    <marker id="arrowhead-green" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto">
+                        <polygon points="0 0, 10 5, 0 10" fill="#18A873"/>
+                    </marker>
+                </defs>
+            </svg>
+        </div>
+
+        <h2>Pain Point Analysis</h2>
+        <p>Three bottlenecks causing delays and rework. Quantified impact and root causes below.</p>
+
+        <div class="pain-points">
+            <div class="pain-card">
+                <h3>Manual Quoting</h3>
+                <div class="pain-metric">15 min / load</div>
+                <div class="pain-desc">Sales manually calculates freight charges, fuel surcharge, and margins using spreadsheet</div>
+                <div class="pain-cost">Monthly: 180 hrs lost</div>
+            </div>
+            <div class="pain-card">
+                <h3>Data Validation</h3>
+                <div class="pain-metric">12 min / load</div>
+                <div class="pain-desc">Ops re-enters load details from email; 8.2% error rate causes rework/chargebacks</div>
+                <div class="pain-cost">Monthly: 144 hrs + $28K rework</div>
+            </div>
+            <div class="pain-card">
+                <h3>Carrier Assignment</h3>
+                <div class="pain-metric">8 min / load</div>
+                <div class="pain-desc">Dispatch manually calls/texts carriers to find availability; no real-time capacity view</div>
+                <div class="pain-cost">Monthly: 96 hrs; 12% rejection rate</div>
+            </div>
+        </div>
+
+        <h2>Improvement Impact Quadrant</h2>
+        <p>Six improvement initiatives plotted by effort (x-axis) and impact (y-axis). "Quick wins" (low effort, high impact) prioritized first.</p>
+
+        <div class="quadrant-container">
+            <svg width="100%" height="350" viewBox="0 0 500 350" xmlns="http://www.w3.org/2000/svg">
+                <!-- Grid -->
+                <line x1="50" y1="150" x2="450" y2="150" stroke="#333" stroke-width="2"/>
+                <line x1="250" y1="20" x2="250" y2="280" stroke="#333" stroke-width="2"/>
+
+                <!-- Quadrant backgrounds -->
+                <rect x="50" y="20" width="200" height="130" fill="#f0f8f5" opacity="0.5"/>
+                <rect x="250" y="20" width="200" height="130" fill="#fff5f5" opacity="0.5"/>
+                <rect x="50" y="150" width="200" height="130" fill="#f5f5f5" opacity="0.5"/>
+                <rect x="250" y="150" width="200" height="130" fill="#fff0f0" opacity="0.5"/>
+
+                <!-- Quadrant labels -->
+                <text x="150" y="40" font-size="11" fill="#18A873" font-weight="600" text-anchor="middle">QUICK WINS</text>
+                <text x="350" y="40" font-size="11" fill="#999" font-weight="600" text-anchor="middle">MAJOR PROJECTS</text>
+                <text x="150" y="280" font-size="11" fill="#999" font-weight="600" text-anchor="middle">FILL-INS</text>
+                <text x="350" y="280" font-size="11" fill="#c00000" font-weight="600" text-anchor="middle">RECONSIDER</text>
+
+                <!-- Axis labels -->
+                <text x="250" y="310" font-size="12" fill="#666" text-anchor="middle" font-weight="600">EFFORT →</text>
+                <text x="20" y="150" font-size="12" fill="#666" text-anchor="middle" font-weight="600">IMPACT</text>
+
+                <!-- Improvement dots -->
+                <!-- 1. Quote Automation (low effort, high impact) -->
+                <circle cx="130" cy="70" r="8" fill="#18A873" opacity="0.9"/>
+                <text x="130" y="75" font-size="11" fill="white" font-weight="600" text-anchor="middle">1</text>
+
+                <!-- 2. Load Template (low effort, medium-high impact) -->
+                <circle cx="150" cy="100" r="8" fill="#18A873" opacity="0.9"/>
+                <text x="150" y="105" font-size="11" fill="white" font-weight="600" text-anchor="middle">2</text>
+
+                <!-- 3. Carrier Integration (medium effort, high impact) -->
+                <circle cx="280" cy="60" r="8" fill="#ffa94d" opacity="0.9"/>
+                <text x="280" y="65" font-size="11" fill="white" font-weight="600" text-anchor="middle">3</text>
+
+                <!-- 4. Mobile App (high effort, medium impact) -->
+                <circle cx="380" cy="110" r="8" fill="#c00000" opacity="0.9"/>
+                <text x="380" y="115" font-size="11" fill="white" font-weight="600" text-anchor="middle">4</text>
+
+                <!-- 5. AI Carrier Match (medium-high effort, high impact) -->
+                <circle cx="320" cy="80" r="8" fill="#ffa94d" opacity="0.9"/>
+                <text x="320" y="85" font-size="11" fill="white" font-weight="600" text-anchor="middle">5</text>
+
+                <!-- 6. EDI Integration (high effort, medium-low impact) -->
+                <circle cx="380" cy="180" r="8" fill="#c00000" opacity="0.9"/>
+                <text x="380" y="185" font-size="11" fill="white" font-weight="600" text-anchor="middle">6</text>
+            </svg>
+        </div>
+
+        <h2>Future State Process Map</h2>
+        <p>Redesigned process with 3 major improvements: quote automation, digital intake form, and carrier API. Total time reduced to 12 minutes.</p>
+
+        <div class="swimlane-container">
+            <svg width="900" height="400" viewBox="0 0 900 400" xmlns="http://www.w3.org/2000/svg">
+                <!-- Swimlane headers -->
+                <text x="20" y="30" font-size="13" fill="#1a1a1a" font-weight="600">SALES</text>
+                <text x="20" y="110" font-size="13" fill="#1a1a1a" font-weight="600">OPS</text>
+                <text x="20" y="190" font-size="13" fill="#1a1a1a" font-weight="600">SYSTEM</text>
+                <text x="20" y="270" font-size="13" fill="#1a1a1a" font-weight="600">CARRIER</text>
+                <text x="20" y="350" font-size="13" fill="#1a1a1a" font-weight="600">BILLING</text>
+
+                <!-- Swimlane lines -->
+                <line x1="50" y1="50" x2="880" y2="50" stroke="#e0e0e0" stroke-width="1"/>
+                <line x1="50" y1="130" x2="880" y2="130" stroke="#e0e0e0" stroke-width="1"/>
+                <line x1="50" y1="210" x2="880" y2="210" stroke="#e0e0e0" stroke-width="1"/>
+                <line x1="50" y1="290" x2="880" y2="290" stroke="#e0e0e0" stroke-width="1"/>
+                <line x1="50" y1="370" x2="880" y2="370" stroke="#e0e0e0" stroke-width="1"/>
+
+                <!-- Step 1: Customer fills digital form -->
+                <rect x="60" y="55" width="70" height="45" fill="#18A873" stroke="#333" stroke-width="1.5" rx="4"/>
+                <text x="95" y="75" font-size="10" fill="white" text-anchor="middle" font-weight="600">1. Digital</text>
+                <text x="95" y="88" font-size="10" fill="white" text-anchor="middle" font-weight="600">Form</text>
+
+                <!-- Arrow -->
+                <path d="M 130 77 L 160 77" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+
+                <!-- Step 2: Auto-Quote -->
+                <rect x="160" y="190" width="70" height="45" fill="#18A873" stroke="#333" stroke-width="1.5" rx="4"/>
+                <text x="195" y="205" font-size="10" fill="white" text-anchor="middle" font-weight="600">2. Auto-</text>
+                <text x="195" y="218" font-size="10" fill="white" text-anchor="middle" font-weight="600">Quote</text>
+                <text x="195" y="237" font-size="9" fill="#18A873" text-anchor="middle" font-weight="600">⚡</text>
+
+                <!-- Arrow -->
+                <path d="M 95 100 L 195 190" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+
+                <!-- Arrow back to sales -->
+                <path d="M 160 77 L 130 77" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)" stroke-dasharray="4"/>
+                <text x="145" y="70" font-size="9" fill="#999">validate</text>
+
+                <!-- Step 3: Verify & Submit -->
+                <rect x="240" y="55" width="70" height="45" fill="#18A873" stroke="#333" stroke-width="1.5" rx="4"/>
+                <text x="275" y="75" font-size="10" fill="white" text-anchor="middle" font-weight="600">3. Verify &</text>
+                <text x="275" y="88" font-size="10" fill="white" text-anchor="middle" font-weight="600">Submit</text>
+
+                <!-- Arrow -->
+                <path d="M 230 77 L 240 77" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+
+                <!-- Step 4: API: Find Carrier -->
+                <rect x="320" y="190" width="70" height="45" fill="#18A873" stroke="#333" stroke-width="1.5" rx="4"/>
+                <text x="355" y="205" font-size="10" fill="white" text-anchor="middle" font-weight="600">4. Carrier</text>
+                <text x="355" y="218" font-size="10" fill="white" text-anchor="middle" font-weight="600">Match API</text>
+                <text x="355" y="237" font-size="9" fill="#18A873" text-anchor="middle" font-weight="600">⚡</text>
+
+                <!-- Arrow -->
+                <path d="M 275 100 L 355 190" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+
+                <!-- Step 5: Carrier Accepts -->
+                <rect x="400" y="270" width="70" height="45" fill="#18A873" stroke="#333" stroke-width="1.5" rx="4"/>
+                <text x="435" y="285" font-size="10" fill="white" text-anchor="middle" font-weight="600">5. Carrier</text>
+                <text x="435" y="298" font-size="10" fill="white" text-anchor="middle" font-weight="600">Accepts</text>
+
+                <!-- Arrow -->
+                <path d="M 355 235 L 435 270" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+
+                <!-- Step 6: Auto Invoice -->
+                <rect x="480" y="330" width="70" height="45" fill="#18A873" stroke="#333" stroke-width="1.5" rx="4"/>
+                <text x="515" y="350" font-size="10" fill="white" text-anchor="middle" font-weight="600">6. Auto-</text>
+                <text x="515" y="363" font-size="10" fill="white" text-anchor="middle" font-weight="600">Invoice</text>
+                <text x="515" y="382" font-size="9" fill="#18A873" text-anchor="middle" font-weight="600">⚡</text>
+
+                <!-- Arrow -->
+                <path d="M 435 315 L 515 330" stroke="#333" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+
+                <!-- Arrow marker -->
+                <defs>
+                    <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="5" refY="5" orient="auto">
+                        <polygon points="0 0, 10 5, 0 10" fill="#333"/>
+                    </marker>
+                </defs>
+
+                <!-- Legend -->
+                <text x="600" y="80" font-size="11" fill="#333" font-weight="600">Changes from current state:</text>
+                <text x="600" y="100" font-size="10" fill="#18A873">⚡ Automation added</text>
+                <text x="600" y="120" font-size="10" fill="#333">3 steps eliminated (was 11, now 6)</text>
+                <text x="600" y="140" font-size="10" fill="#18A873" font-weight="600">Time savings: 47 min → 12 min</text>
+            </svg>
+        </div>
+
+        <h2>Implementation Priority</h2>
+        <p>Six initiatives ranked by effort/impact/timeline. Roll out in three phases over 18 weeks.</p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 5%;">ID</th>
+                    <th style="width: 20%;">Initiative</th>
+                    <th style="width: 12%;">Effort</th>
+                    <th style="width: 12%;">Impact</th>
+                    <th style="width: 15%;">Timeline</th>
+                    <th style="width: 15%;">Owner</th>
+                    <th style="width: 21%;">Expected Benefit</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr class="priority-1">
+                    <td><strong>1</strong></td>
+                    <td><strong>Quote Automation Engine</strong></td>
+                    <td>Low</td>
+                    <td class="impact-high">High</td>
+                    <td>Weeks 1–4</td>
+                    <td>Systems Lead</td>
+                    <td>15 min/load saved; 180 hrs/mo recovered</td>
+                </tr>
+                <tr>
+                    <td><strong>2</strong></td>
+                    <td><strong>Digital Load Intake Form</strong></td>
+                    <td>Low</td>
+                    <td class="impact-high">High</td>
+                    <td>Weeks 2–5</td>
+                    <td>UX Lead</td>
+                    <td>Eliminates data re-entry; 8.2% error → &lt;1%</td>
+                </tr>
+                <tr>
+                    <td><strong>3</strong></td>
+                    <td><strong>Carrier Availability API</strong></td>
+                    <td class="effort-high">High</td>
+                    <td class="impact-high">High</td>
+                    <td>Weeks 6–12</td>
+                    <td>Integration Lead</td>
+                    <td>Real-time matching; 8 min/load saved; 12% rejection → 2%</td>
+                </tr>
+                <tr>
+                    <td><strong>4</strong></td>
+                    <td><strong>Mobile Dispatch App</strong></td>
+                    <td class="effort-high">High</td>
+                    <td>Medium</td>
+                    <td>Weeks 8–14</td>
+                    <td>Product Lead</td>
+                    <td>Faster communication; on-road visibility; 3 min/load saved</td>
+                </tr>
+                <tr>
+                    <td><strong>5</strong></td>
+                    <td><strong>AI Carrier Matching</strong></td>
+                    <td>Medium</td>
+                    <td class="impact-high">High</td>
+                    <td>Weeks 10–16</td>
+                    <td>Data Science</td>
+                    <td>Intelligent routing; cost optimization; 5% margin improvement</td>
+                </tr>
+                <tr>
+                    <td><strong>6</strong></td>
+                    <td><strong>EDI Integration (Shipper)</strong></td>
+                    <td class="effort-high">High</td>
+                    <td>Low-Medium</td>
+                    <td>Weeks 12–18</td>
+                    <td>Integration Lead</td>
+                    <td>Automated intake for large accounts; 2 min/load saved</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <div class="document-footer">
+            <p>Sanitized excerpt · Prepared by Gratia · Jan 2026</p>
+        </div>
+    </div>
+<a href="../" style="position:fixed;top:12px;right:16px;z-index:99999;background:#111827;color:#e2e8f0;padding:6px 16px;border-radius:8px;font-size:13px;font-weight:600;text-decoration:none;border:1px solid #475569;font-family:system-ui,sans-serif;transition:background .15s;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#111827'">← Gallery</a>
+</body>
+</html>

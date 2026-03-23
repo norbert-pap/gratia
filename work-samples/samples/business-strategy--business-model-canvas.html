@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Business Model Canvas - Kinetic Labs</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #0f172a;
+            padding: 20px;
+            color: #e2e8f0;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            background: #1e293b;
+            border-radius: 8px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            padding: 24px 32px;
+            border-bottom: 2px solid #38bdf8;
+        }
+
+        .header h1 {
+            font-size: 26px;
+            font-weight: 700;
+            color: #38bdf8;
+            margin-bottom: 6px;
+        }
+
+        .header-meta {
+            font-size: 13px;
+            color: #94a3b8;
+            display: flex;
+            gap: 20px;
+        }
+
+        .canvas-wrapper {
+            flex: 1;
+            padding: 32px;
+            background: #0f172a;
+        }
+
+        .canvas {
+            display: grid;
+            grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
+            grid-template-rows: 1.8fr 1.2fr;
+            gap: 12px;
+            height: 100%;
+            min-height: 600px;
+        }
+
+        .block {
+            background: #1e293b;
+            border: 2px solid #334155;
+            border-radius: 6px;
+            padding: 16px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        .block:hover {
+            border-color: #38bdf8;
+            background: #1a2a3a;
+        }
+
+        .block-title {
+            font-size: 12px;
+            font-weight: 700;
+            color: #38bdf8;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 1px solid #334155;
+            padding-bottom: 6px;
+        }
+
+        .block-content {
+            font-size: 11px;
+            color: #cbd5e1;
+            line-height: 1.4;
+            overflow-y: auto;
+            flex: 1;
+        }
+
+        .block-content ul {
+            list-style: none;
+            padding: 0;
+        }
+
+        .block-content li {
+            margin-bottom: 6px;
+            padding-left: 12px;
+            position: relative;
+        }
+
+        .block-content li:before {
+            content: "•";
+            position: absolute;
+            left: 0;
+            color: #38bdf8;
+        }
+
+        /* Grid positioning */
+        .key-partners { grid-column: 1; grid-row: 1 / 3; }
+        .key-activities { grid-column: 2; grid-row: 1; }
+        .key-resources { grid-column: 2; grid-row: 2; }
+        .value-prop { grid-column: 3; grid-row: 1 / 3; }
+        .customer-relationships { grid-column: 4; grid-row: 1; }
+        .channels { grid-column: 4; grid-row: 2; }
+        .customer-segments { grid-column: 5; grid-row: 1 / 3; }
+        .cost-structure { grid-column: 1 / 3; grid-row: 3; }
+        .revenue-streams { grid-column: 3 / 6; grid-row: 3; }
+
+        /* Value prop gets special treatment */
+        .value-prop {
+            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
+            border: 2px solid #38bdf8;
+        }
+
+        .value-prop .block-title {
+            color: #38bdf8;
+            font-size: 13px;
+        }
+
+        .value-prop .block-content {
+            color: #cbd5e1;
+            font-size: 12px;
+        }
+
+        .metrics-strip {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            padding: 0;
+            background: #1e293b;
+            border-top: 1px solid #334155;
+        }
+
+        .metric-card {
+            padding: 16px;
+            text-align: center;
+            border-right: 1px solid #334155;
+        }
+
+        .metric-card:last-child {
+            border-right: none;
+        }
+
+        .metric-label {
+            font-size: 10px;
+            color: #94a3b8;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
+        }
+
+        .metric-value {
+            font-size: 16px;
+            font-weight: 700;
+            color: #38bdf8;
+        }
+
+        .document-footer {
+            background: #0f172a;
+            padding: 12px 32px;
+            border-top: 1px solid #334155;
+            text-align: center;
+            font-size: 11px;
+            color: #64748b;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>Business Model Canvas: Industrial Equipment Rental Marketplace</h1>
+            <div class="header-meta">
+                <span><strong>Client:</strong> Kinetic Labs</span>
+                <span><strong>Date:</strong> January 8, 2026</span>
+                <span><strong>Version:</strong> 1.2 (Pre-Series A)</span>
+            </div>
+        </div>
+
+        <div class="canvas-wrapper">
+            <div class="canvas">
+                <!-- Key Partners -->
+                <div class="block key-partners">
+                    <div class="block-title">Key Partners</div>
+                    <div class="block-content">
+                        <ul>
+                            <li>Equipment OEMs (Caterpillar, John Deere, AGCO)</li>
+                            <li>Insurance underwriters & brokers</li>
+                            <li>Logistics & delivery providers</li>
+                            <li>Equipment financing partners</li>
+                            <li>Contractor associations & networks</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Key Activities -->
+                <div class="block key-activities">
+                    <div class="block-title">Key Activities</div>
+                    <div class="block-content">
+                        <ul>
+                            <li>Marketplace matching & algorithms</li>
+                            <li>Equipment inspection & certification</li>
+                            <li>Payment processing & settlement</li>
+                            <li>Dispute resolution & arbitration</li>
+                            <li>Data analytics & demand forecasting</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Key Resources -->
+                <div class="block key-resources">
+                    <div class="block-title">Key Resources</div>
+                    <div class="block-content">
+                        <ul>
+                            <li>Proprietary matching algorithm (ML)</li>
+                            <li>Equipment condition database (500K+ units)</li>
+                            <li>400+ verified owner profiles</li>
+                            <li>$2M equipment insurance pool</li>
+                            <li>Technology infrastructure (cloud)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Value Proposition (center, emphasized) -->
+                <div class="block value-prop">
+                    <div class="block-title">Value Proposition</div>
+                    <div class="block-content">
+                        <strong>Rent any industrial equipment in 24hrs</strong> vs 2-week dealer lead time. Full insurance included. No long-term commitment. Transparent pricing. Certified equipment condition.
+                    </div>
+                </div>
+
+                <!-- Customer Relationships -->
+                <div class="block customer-relationships">
+                    <div class="block-title">Customer Relationships</div>
+                    <div class="block-content">
+                        <ul>
+                            <li>Self-serve marketplace</li>
+                            <li>Dedicated account mgrs (>$50K/mo)</li>
+                            <li>24/7 support hotline</li>
+                            <li>In-app chat & knowledge base</li>
+                            <li>Community forum</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Channels -->
+                <div class="block channels">
+                    <div class="block-title">Channels</div>
+                    <div class="block-content">
+                        <ul>
+                            <li>Direct platform (web/mobile app)</li>
+                            <li>Contractor association partnerships</li>
+                            <li>Equipment dealer referral network</li>
+                            <li>Google/LinkedIn/Facebook ads</li>
+                            <li>Industry events & sponsorships</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Customer Segments -->
+                <div class="block customer-segments">
+                    <div class="block-title">Customer Segments</div>
+                    <div class="block-content">
+                        <ul>
+                            <li><strong>General contractors:</strong> $5K-50K/mo</li>
+                            <li><strong>Specialty subs:</strong> $2K-15K/mo (HVAC, electrical)</li>
+                            <li><strong>Municipal/Government:</strong> $10K-100K/mo</li>
+                            <li><strong>Project renters:</strong> Seasonal demand spikes</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Cost Structure -->
+                <div class="block cost-structure">
+                    <div class="block-title">Cost Structure</div>
+                    <div class="block-content">
+                        <ul>
+                            <li>Platform operations & hosting: 35%</li>
+                            <li>Insurance & claims processing: 25%</li>
+                            <li>Sales & marketing: 20%</li>
+                            <li>General & administrative: 12%</li>
+                            <li>Equipment inspection & logistics: 8%</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- Revenue Streams -->
+                <div class="block revenue-streams">
+                    <div class="block-title">Revenue Streams</div>
+                    <div class="block-content">
+                        <ul>
+                            <li><strong>Transaction fee:</strong> 8.5% of rental value</li>
+                            <li><strong>Premium listings:</strong> $299/month (featured placement)</li>
+                            <li><strong>Insurance markup:</strong> 2.5% premium above carrier</li>
+                            <li><strong>Financing referral:</strong> 1% of financed amounts</li>
+                            <li><strong>Data analytics access:</strong> $5K-50K/mo (equipment owners only)</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="metrics-strip">
+            <div class="metric-card">
+                <div class="metric-label">GMV Run Rate</div>
+                <div class="metric-value">$12M</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Take Rate</div>
+                <div class="metric-value">8.5%</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Contribution Margin</div>
+                <div class="metric-value">42%</div>
+            </div>
+            <div class="metric-card">
+                <div class="metric-label">Break-Even GMV</div>
+                <div class="metric-value">$18M</div>
+            </div>
+        </div>
+
+        <div class="document-footer">
+            Sanitized excerpt · Prepared by Gratia · Jan 2026
+        </div>
+    </div>
+<a href="../" style="position:fixed;top:12px;right:16px;z-index:99999;background:#111827;color:#e2e8f0;padding:6px 16px;border-radius:8px;font-size:13px;font-weight:600;text-decoration:none;border:1px solid #475569;font-family:system-ui,sans-serif;transition:background .15s;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#111827'">← Gallery</a>
+</body>
+</html>

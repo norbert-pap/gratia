@@ -1,0 +1,766 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scenario & Sensitivity Analysis: NorthBridge Payments</title>
+    <style>
+        :root {
+            --font-family-display: Arial, sans-serif;
+            --font-weight-display: 600;
+            --font-family-content: Arial, sans-serif;
+            --font-weight-content: 400;
+            --font-size-content: 16px;
+            --line-height-content: 1.4;
+            --slide-w: 1280px;
+            --slide-h: 720px;
+            --radius: 16px;
+            --shadow: 0 10px 24px rgba(0,0,0,.45);
+        }
+
+        body.theme-dark {
+            --color-bg-base: #0f172a;
+            --color-bg-elevated: #020617;
+            --color-bg-surface: #1e293b;
+            --color-bg-muted: #334155;
+            --color-text-primary: #f1f5f9;
+            --color-text-secondary: #cbd5e1;
+            --color-text-muted: #94a3b8;
+            --color-text-accent: #38bdf8;
+            --color-primary: #38bdf8;
+            --color-primary-foreground: #0f172a;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            width: 100%;
+            height: 100%;
+        }
+
+        body {
+            font-family: var(--font-family-content);
+            font-weight: var(--font-weight-content);
+            font-size: var(--font-size-content);
+            line-height: var(--line-height-content);
+            background: var(--color-bg-base);
+            color: var(--color-text-primary);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+        }
+
+        body.theme-dark {
+            background: #0f172a;
+            color: #f1f5f9;
+        }
+
+        .deck {
+            position: relative;
+            width: var(--slide-w);
+            height: var(--slide-h);
+            background: var(--color-bg-base);
+            overflow: hidden;
+        }
+
+        .slide {
+            position: absolute;
+            width: var(--slide-w);
+            height: var(--slide-h);
+            display: flex;
+            flex-direction: column;
+            padding: 40px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease-in-out;
+            background: linear-gradient(135deg, #0f172a 0%, #1a1f3a 100%);
+        }
+
+        .slide.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .slide::after {
+            content: "Sanitized excerpt · Prepared by Gratia · Jan 2026";
+            position: absolute;
+            bottom: 20px;
+            left: 40px;
+            right: 40px;
+            font-size: 12px;
+            color: var(--color-text-muted);
+            text-align: left;
+        }
+
+        .slide-title {
+            font-size: 48px;
+            font-weight: var(--font-weight-display);
+            color: var(--color-text-primary);
+            margin-bottom: 12px;
+            font-family: var(--font-family-display);
+        }
+
+        .slide-subtitle {
+            font-size: 20px;
+            color: var(--color-text-secondary);
+            margin-bottom: 40px;
+        }
+
+        .content {
+            flex: 1;
+            display: flex;
+            gap: 40px;
+        }
+
+        .content-left {
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            gap: 24px;
+        }
+
+        .content-right {
+            flex: 1;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .metric-card {
+            background: rgba(56, 189, 248, 0.1);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            border-radius: var(--radius);
+            padding: 20px;
+            flex: 1;
+        }
+
+        .metric-value {
+            font-size: 32px;
+            font-weight: var(--font-weight-display);
+            color: var(--color-text-accent);
+            margin-bottom: 8px;
+        }
+
+        .metric-label {
+            font-size: 14px;
+            color: var(--color-text-muted);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .findings {
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            border-radius: var(--radius);
+            padding: 24px;
+            flex: 1;
+        }
+
+        .findings h4 {
+            font-size: 13px;
+            text-transform: uppercase;
+            color: var(--color-text-accent);
+            margin-bottom: 16px;
+            font-weight: var(--font-weight-display);
+            letter-spacing: 0.5px;
+        }
+
+        .finding-item {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 12px;
+            font-size: 15px;
+        }
+
+        .finding-item:last-child {
+            margin-bottom: 0;
+        }
+
+        .finding-dot {
+            color: var(--color-text-accent);
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .finding-text {
+            color: var(--color-text-secondary);
+            line-height: 1.5;
+        }
+
+        .full-width {
+            width: 100%;
+            display: flex;
+            flex-direction: column;
+            justify-content: flex-start;
+            gap: 24px;
+        }
+
+        .chart-container {
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            border-radius: var(--radius);
+            padding: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex: 1;
+        }
+
+        .scenario-cards {
+            display: flex;
+            gap: 20px;
+        }
+
+        .scenario-card {
+            flex: 1;
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            border-radius: var(--radius);
+            padding: 24px;
+        }
+
+        .scenario-card h3 {
+            font-size: 18px;
+            color: var(--color-text-accent);
+            margin-bottom: 20px;
+            font-weight: var(--font-weight-display);
+        }
+
+        .scenario-row {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid rgba(56, 189, 248, 0.1);
+            font-size: 14px;
+        }
+
+        .scenario-row:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+
+        .scenario-label {
+            color: var(--color-text-secondary);
+        }
+
+        .scenario-value {
+            color: var(--color-text-accent);
+            font-weight: var(--font-weight-display);
+        }
+
+        .assumption-callout {
+            background: rgba(56, 189, 248, 0.08);
+            border-left: 3px solid var(--color-text-accent);
+            padding: 12px 16px;
+            margin-top: 16px;
+            font-size: 13px;
+            color: var(--color-text-secondary);
+        }
+
+        .decision-table {
+            width: 100%;
+            border-collapse: collapse;
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            border-radius: var(--radius);
+            overflow: hidden;
+            margin-bottom: 24px;
+        }
+
+        .decision-table th, .decision-table td {
+            padding: 14px 16px;
+            text-align: right;
+            border: 1px solid rgba(56, 189, 248, 0.15);
+            font-size: 13px;
+        }
+
+        .decision-table th {
+            background: rgba(56, 189, 248, 0.15);
+            color: var(--color-text-accent);
+            font-weight: var(--font-weight-display);
+        }
+
+        .decision-table td:first-child, .decision-table th:first-child {
+            text-align: left;
+        }
+
+        .callout-box {
+            background: rgba(30, 41, 59, 0.8);
+            border: 1px solid rgba(56, 189, 248, 0.2);
+            border-radius: var(--radius);
+            padding: 20px;
+            flex: 1;
+        }
+
+        .callout-box h4 {
+            font-size: 14px;
+            color: var(--color-text-accent);
+            margin-bottom: 12px;
+            font-weight: var(--font-weight-display);
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .callout-box p {
+            font-size: 13px;
+            color: var(--color-text-secondary);
+            line-height: 1.6;
+        }
+
+        .controls {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            display: flex;
+            gap: 12px;
+            z-index: 1000;
+        }
+
+        .control-btn {
+            background: rgba(56, 189, 248, 0.2);
+            border: 1px solid rgba(56, 189, 248, 0.4);
+            color: var(--color-text-accent);
+            padding: 8px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 12px;
+            transition: all 0.2s;
+        }
+
+        .control-btn:hover {
+            background: rgba(56, 189, 248, 0.3);
+            border-color: rgba(56, 189, 248, 0.6);
+        }
+
+        .slide-counter {
+            position: fixed;
+            bottom: 20px;
+            left: 20px;
+            font-size: 13px;
+            color: var(--color-text-muted);
+        }
+
+        .stat-card {
+            flex: 1;
+            background: rgba(56, 189, 248, 0.1);
+            border: 1px solid rgba(56, 189, 248, 0.3);
+            border-radius: var(--radius);
+            padding: 24px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 36px;
+            font-weight: var(--font-weight-display);
+            color: var(--color-text-accent);
+            margin-bottom: 8px;
+        }
+
+        .stat-label {
+            font-size: 13px;
+            text-transform: uppercase;
+            color: var(--color-text-muted);
+            letter-spacing: 0.5px;
+        }
+    </style>
+</head>
+<body class="theme-dark">
+    <div class="deck">
+        <!-- Slide 1: Executive Overview -->
+        <div class="slide active">
+            <h1 class="slide-title">Scenario & Sensitivity Analysis</h1>
+            <h2 class="slide-subtitle">Risk quantification and key valuation drivers</h2>
+            <div class="content">
+                <div class="content-left">
+                    <div style="display: flex; gap: 16px;">
+                        <div class="metric-card">
+                            <div class="metric-value">$142M</div>
+                            <div class="metric-label">Base 2030 Revenue</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value">$380–520M</div>
+                            <div class="metric-label">Valuation Range</div>
+                        </div>
+                        <div class="metric-card">
+                            <div class="metric-value">±$85M</div>
+                            <div class="metric-label">Rev Growth Impact</div>
+                        </div>
+                    </div>
+                    <div class="findings">
+                        <h4>Key Sensitivities</h4>
+                        <div class="finding-item">
+                            <span class="finding-dot">•</span>
+                            <span class="finding-text">Revenue growth rate is #1 sensitivity driver</span>
+                        </div>
+                        <div class="finding-item">
+                            <span class="finding-dot">•</span>
+                            <span class="finding-text">Churn has asymmetric downside risk (5%→10% = −$120M)</span>
+                        </div>
+                        <div class="finding-item">
+                            <span class="finding-dot">•</span>
+                            <span class="finding-text">WACC matters less than terminal growth assumption</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="content-right">
+                    <svg width="400" height="350" viewBox="0 0 400 350" style="background: rgba(30, 41, 59, 0.6); border-radius: 16px; border: 1px solid rgba(56, 189, 248, 0.2);">
+                        <!-- Tornado chart: Top 5 variables -->
+                        <defs>
+                            <linearGradient id="tornadoGrad1" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" style="stop-color:#38bdf8;stop-opacity:0.8" />
+                                <stop offset="100%" style="stop-color:#0ea5e9;stop-opacity:0.8" />
+                            </linearGradient>
+                            <linearGradient id="tornadoGrad2" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" style="stop-color:#0ea5e9;stop-opacity:0.8" />
+                                <stop offset="100%" style="stop-color:#06b6d4;stop-opacity:0.8" />
+                            </linearGradient>
+                            <linearGradient id="tornadoGrad3" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" style="stop-color:#06b6d4;stop-opacity:0.8" />
+                                <stop offset="100%" style="stop-color:#0891b2;stop-opacity:0.8" />
+                            </linearGradient>
+                            <linearGradient id="tornadoGrad4" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" style="stop-color:#0891b2;stop-opacity:0.8" />
+                                <stop offset="100%" style="stop-color:#067a8c;stop-opacity:0.8" />
+                            </linearGradient>
+                            <linearGradient id="tornadoGrad5" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" style="stop-color:#067a8c;stop-opacity:0.8" />
+                                <stop offset="100%" style="stop-color:#045f6f;stop-opacity:0.8" />
+                            </linearGradient>
+                        </defs>
+                        <!-- Y-axis labels -->
+                        <text x="140" y="50" font-size="12" fill="#cbd5e1" font-weight="bold">Revenue Growth</text>
+                        <text x="155" y="120" font-size="12" fill="#cbd5e1" font-weight="bold">Churn Rate</text>
+                        <text x="140" y="190" font-size="12" fill="#cbd5e1" font-weight="bold">Gross Margin</text>
+                        <text x="165" y="260" font-size="12" fill="#cbd5e1" font-weight="bold">Terminal Growth</text>
+                        <text x="190" y="330" font-size="12" fill="#cbd5e1" font-weight="bold">WACC</text>
+                        <!-- Revenue Growth: ±$95M -->
+                        <rect x="180" y="35" width="150" height="30" fill="url(#tornadoGrad1)" rx="2" />
+                        <text x="260" y="57" font-size="11" fill="#0ea5e9" font-weight="bold">$95M</text>
+                        <!-- Churn Rate: ±$120M -->
+                        <rect x="160" y="105" width="170" height="30" fill="url(#tornadoGrad2)" rx="2" />
+                        <text x="245" y="127" font-size="11" fill="#06b6d4" font-weight="bold">$120M</text>
+                        <!-- Gross Margin: ±$75M -->
+                        <rect x="190" y="175" width="130" height="30" fill="url(#tornadoGrad3)" rx="2" />
+                        <text x="235" y="197" font-size="11" fill="#0891b2" font-weight="bold">$75M</text>
+                        <!-- Terminal Growth: ±$60M -->
+                        <rect x="200" y="245" width="115" height="30" fill="url(#tornadoGrad4)" rx="2" />
+                        <text x="230" y="267" font-size="11" fill="#067a8c" font-weight="bold">$60M</text>
+                        <!-- WACC: ±$45M -->
+                        <rect x="220" y="315" width="85" height="30" fill="url(#tornadoGrad5)" rx="2" />
+                        <text x="225" y="337" font-size="11" fill="#045f6f" font-weight="bold">$45M</text>
+                    </svg>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 2: Scenario Comparison Cards -->
+        <div class="slide">
+            <h1 class="slide-title">Scenario Assumptions & Outcomes</h1>
+            <h2 class="slide-subtitle">Bear / Base / Bull case comparison</h2>
+            <div class="full-width" style="flex: 1;">
+                <div class="scenario-cards">
+                    <div class="scenario-card">
+                        <h3>Bear Case</h3>
+                        <div class="scenario-row">
+                            <span class="scenario-label">Revenue Growth CAGR</span>
+                            <span class="scenario-value">28%</span>
+                        </div>
+                        <div class="scenario-row">
+                            <span class="scenario-label">Annual Churn Rate</span>
+                            <span class="scenario-value">8%</span>
+                        </div>
+                        <div class="scenario-row">
+                            <span class="scenario-label">2030 Gross Margin</span>
+                            <span class="scenario-value">65%</span>
+                        </div>
+                        <div class="scenario-row">
+                            <span class="scenario-label">Discount Rate (WACC)</span>
+                            <span class="scenario-value">11%</span>
+                        </div>
+                        <div class="scenario-row" style="border-bottom: 2px solid rgba(56, 189, 248, 0.3); margin-bottom: 16px; padding-bottom: 16px;">
+                            <span class="scenario-label">Terminal Growth</span>
+                            <span class="scenario-value">2.5%</span>
+                        </div>
+                        <div class="scenario-row">
+                            <span class="scenario-label"><strong>2030 Revenue</strong></span>
+                            <span class="scenario-value"><strong>$110M</strong></span>
+                        </div>
+                        <div class="scenario-row">
+                            <span class="scenario-label"><strong>2030 EBITDA</strong></span>
+                            <span class="scenario-value"><strong>$28M</strong></span>
+                        </div>
+                        <div class="scenario-row">
+                            <span class="scenario-label"><strong>Valuation</strong></span>
+                            <span class="scenario-value"><strong>$280M</strong></span>
+                        </div>
+                    </div>
+                    <div class="scenario-card">
+                        <h3>Base Case</h3>
+                        <div class="scenario-row">
+                            <span class="scenario-label">Revenue Growth CAGR</span>
+                            <span class="scenario-value">35%</span>
+                        </div>
+                        <div class="scenario-row">
+                            <span class="scenario-label">Annual Churn Rate</span>
+                            <span class="scenario-value">5%</span>
+                        </div>
+                        <div class="scenario-row">
+                            <span class="scenario-label">2030 Gross Margin</span>
+                            <span class="scenario-value">71%</span>
+                        </div>
+                        <div class="scenario-row">
+                            <span class="scenario-label">Discount Rate (WACC)</span>
+                            <span class="scenario-value">10%</span>
+                        </div>
+                        <div class="scenario-row" style="border-bottom: 2px solid rgba(56, 189, 248, 0.3); margin-bottom: 16px; padding-bottom: 16px;">
+                            <span class="scenario-label">Terminal Growth</span>
+                            <span class="scenario-value">3.0%</span>
+                        </div>
+                        <div class="scenario-row">
+                            <span class="scenario-label"><strong>2030 Revenue</strong></span>
+                            <span class="scenario-value"><strong>$142M</strong></span>
+                        </div>
+                        <div class="scenario-row">
+                            <span class="scenario-label"><strong>2030 EBITDA</strong></span>
+                            <span class="scenario-value"><strong>$40M</strong></span>
+                        </div>
+                        <div class="scenario-row">
+                            <span class="scenario-label"><strong>Valuation</strong></span>
+                            <span class="scenario-value"><strong>$445M</strong></span>
+                        </div>
+                    </div>
+                    <div class="scenario-card">
+                        <h3>Bull Case</h3>
+                        <div class="scenario-row">
+                            <span class="scenario-label">Revenue Growth CAGR</span>
+                            <span class="scenario-value">42%</span>
+                        </div>
+                        <div class="scenario-row">
+                            <span class="scenario-label">Annual Churn Rate</span>
+                            <span class="scenario-value">2%</span>
+                        </div>
+                        <div class="scenario-row">
+                            <span class="scenario-label">2030 Gross Margin</span>
+                            <span class="scenario-value">75%</span>
+                        </div>
+                        <div class="scenario-row">
+                            <span class="scenario-label">Discount Rate (WACC)</span>
+                            <span class="scenario-value">9%</span>
+                        </div>
+                        <div class="scenario-row" style="border-bottom: 2px solid rgba(56, 189, 248, 0.3); margin-bottom: 16px; padding-bottom: 16px;">
+                            <span class="scenario-label">Terminal Growth</span>
+                            <span class="scenario-value">3.5%</span>
+                        </div>
+                        <div class="scenario-row">
+                            <span class="scenario-label"><strong>2030 Revenue</strong></span>
+                            <span class="scenario-value"><strong>$180M</strong></span>
+                        </div>
+                        <div class="scenario-row">
+                            <span class="scenario-label"><strong>2030 EBITDA</strong></span>
+                            <span class="scenario-value"><strong>$62M</strong></span>
+                        </div>
+                        <div class="scenario-row">
+                            <span class="scenario-label"><strong>Valuation</strong></span>
+                            <span class="scenario-value"><strong>$640M</strong></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 3: Tornado / Sensitivity Chart -->
+        <div class="slide">
+            <h1 class="slide-title">Sensitivity Ranking: Impact on Valuation</h1>
+            <h2 class="slide-subtitle">Tornado chart of key variables (±1 std dev)</h2>
+            <div class="full-width" style="flex: 1;">
+                <div class="chart-container">
+                    <svg width="900" height="320" viewBox="0 0 900 320">
+                        <defs>
+                            <linearGradient id="tornadoMain1" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" style="stop-color:#38bdf8;stop-opacity:0.5" />
+                                <stop offset="100%" style="stop-color:#38bdf8;stop-opacity:0.9" />
+                            </linearGradient>
+                            <linearGradient id="tornadoMain2" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" style="stop-color:#0ea5e9;stop-opacity:0.5" />
+                                <stop offset="100%" style="stop-color:#0ea5e9;stop-opacity:0.9" />
+                            </linearGradient>
+                            <linearGradient id="tornadoMain3" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" style="stop-color:#06b6d4;stop-opacity:0.5" />
+                                <stop offset="100%" style="stop-color:#06b6d4;stop-opacity:0.9" />
+                            </linearGradient>
+                            <linearGradient id="tornadoMain4" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" style="stop-color:#0891b2;stop-opacity:0.5" />
+                                <stop offset="100%" style="stop-color:#0891b2;stop-opacity:0.9" />
+                            </linearGradient>
+                            <linearGradient id="tornadoMain5" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" style="stop-color:#067a8c;stop-opacity:0.5" />
+                                <stop offset="100%" style="stop-color:#067a8c;stop-opacity:0.9" />
+                            </linearGradient>
+                            <linearGradient id="tornadoMain6" x1="0%" y1="0%" x2="100%" y2="0%">
+                                <stop offset="0%" style="stop-color:#045f6f;stop-opacity:0.5" />
+                                <stop offset="100%" style="stop-color:#045f6f;stop-opacity:0.9" />
+                            </linearGradient>
+                        </defs>
+                        <!-- Center line -->
+                        <line x1="450" y1="20" x2="450" y2="290" stroke="#475569" stroke-width="2" stroke-dasharray="4" />
+                        <!-- Base value label -->
+                        <text x="450" y="310" font-size="11" fill="#94a3b8" text-anchor="middle">$445M Base</text>
+                        <!-- Y-axis labels -->
+                        <text x="140" y="45" font-size="12" fill="#cbd5e1" font-weight="bold">1. Revenue Growth</text>
+                        <text x="155" y="100" font-size="12" fill="#cbd5e1" font-weight="bold">2. Churn Rate</text>
+                        <text x="150" y="155" font-size="12" fill="#cbd5e1" font-weight="bold">3. Gross Margin</text>
+                        <text x="140" y="210" font-size="12" fill="#cbd5e1" font-weight="bold">4. Terminal Growth</text>
+                        <text x="160" y="265" font-size="12" fill="#cbd5e1" font-weight="bold">5. WACC Rate</text>
+                        <!-- Revenue Growth: ±$95M -->
+                        <rect x="310" y="30" width="140" height="30" fill="url(#tornadoMain1)" rx="3" />
+                        <rect x="450" y="30" width="140" height="30" fill="url(#tornadoMain1)" rx="3" />
+                        <text x="305" y="52" font-size="10" fill="#cbd5e1">$350M</text>
+                        <text x="605" y="52" font-size="10" fill="#cbd5e1">$540M</text>
+                        <!-- Churn Rate: ±$120M (asymmetric) -->
+                        <rect x="280" y="85" width="170" height="30" fill="url(#tornadoMain2)" rx="3" />
+                        <rect x="450" y="85" width="110" height="30" fill="url(#tornadoMain2)" rx="3" />
+                        <text x="275" y="107" font-size="10" fill="#cbd5e1">$325M</text>
+                        <text x="575" y="107" font-size="10" fill="#cbd5e1">$560M</text>
+                        <!-- Gross Margin: ±$75M -->
+                        <rect x="330" y="140" width="120" height="30" fill="url(#tornadoMain3)" rx="3" />
+                        <rect x="450" y="140" width="120" height="30" fill="url(#tornadoMain3)" rx="3" />
+                        <text x="325" y="162" font-size="10" fill="#cbd5e1">$370M</text>
+                        <text x="585" y="162" font-size="10" fill="#cbd5e1">$520M</text>
+                        <!-- Terminal Growth: ±$60M -->
+                        <rect x="350" y="195" width="100" height="30" fill="url(#tornadoMain4)" rx="3" />
+                        <rect x="450" y="195" width="100" height="30" fill="url(#tornadoMain4)" rx="3" />
+                        <text x="345" y="217" font-size="10" fill="#cbd5e1">$385M</text>
+                        <text x="565" y="217" font-size="10" fill="#cbd5e1">$505M</text>
+                        <!-- WACC: ±$45M -->
+                        <rect x="375" y="250" width="75" height="30" fill="url(#tornadoMain6)" rx="3" />
+                        <rect x="450" y="250" width="75" height="30" fill="url(#tornadoMain6)" rx="3" />
+                        <text x="370" y="272" font-size="10" fill="#cbd5e1">$400M</text>
+                        <text x="540" y="272" font-size="10" fill="#cbd5e1">$490M</text>
+                    </svg>
+                </div>
+                <div class="assumption-callout">
+                    <strong style="color: var(--color-text-accent);">Sensitivity Ranking:</strong> Revenue growth (±$95M) and churn (±$120M, asymmetric downside) dominate valuation swings. Gross margin, terminal growth, and WACC are secondary but material. Most critical: maintain growth trajectory and customer retention.
+                </div>
+            </div>
+        </div>
+
+        <!-- Slide 4: Decision Framework -->
+        <div class="slide">
+            <h1 class="slide-title">Decision Framework & Weighted Valuation</h1>
+            <h2 class="slide-subtitle">Probability-weighted expected value and risk summary</h2>
+            <div class="full-width" style="flex: 1;">
+                <table class="decision-table">
+                    <thead>
+                        <tr>
+                            <th>Scenario</th>
+                            <th>Probability</th>
+                            <th>Valuation</th>
+                            <th>Weighted Value</th>
+                            <th>Key Triggers</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><strong>Bear</strong></td>
+                            <td>20%</td>
+                            <td>$280M</td>
+                            <td>$56M</td>
+                            <td>Competitive pressure, macro slowdown</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Base</strong></td>
+                            <td>55%</td>
+                            <td>$445M</td>
+                            <td>$244M</td>
+                            <td>Execution per plan, 35% growth sustained</td>
+                        </tr>
+                        <tr>
+                            <td><strong>Bull</strong></td>
+                            <td>25%</td>
+                            <td>$640M</td>
+                            <td>$160M</td>
+                            <td>Market expansion, platform adoption, M&A</td>
+                        </tr>
+                    </tbody>
+                </table>
+                <div style="display: flex; gap: 20px;">
+                    <div class="callout-box">
+                        <h4>Risk Factors</h4>
+                        <p>• Customer concentration in top 5 accounts (42% of revenue) creates revenue cliff risk if any large customer churns unexpectedly</p>
+                        <p style="margin-top: 12px;">• Regulatory changes to payment processor rules could compress take rates by 10–20 bps</p>
+                        <p style="margin-top: 12px;">• SMB segment declining faster than forecast (22% YoY vs. 25% assumption) suggests market saturation</p>
+                    </div>
+                    <div class="callout-box">
+                        <h4>Recommended Hedges</h4>
+                        <p>• Diversify customer base: target 5-year path where top 5 represents <30% of revenue</p>
+                        <p style="margin-top: 12px;">• Expand platform fees (highest margin, lowest regulation risk) to 50%+ of mix by 2030</p>
+                        <p style="margin-top: 12px;">• Lock in enterprise contracts with multi-year commitments to reduce churn volatility</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="slide-counter">
+        <span id="current-slide">1</span> / <span id="total-slides">4</span>
+    </div>
+
+    <div class="controls">
+        <button class="control-btn" onclick="previousSlide()">← Prev</button>
+        <button class="control-btn" onclick="nextSlide()">Next →</button>
+    </div>
+
+    <script>
+        let currentSlide = 0;
+        const slides = document.querySelectorAll('.slide');
+        const totalSlides = slides.length;
+
+        function showSlide(n) {
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (n + totalSlides) % totalSlides;
+            slides[currentSlide].classList.add('active');
+            document.getElementById('current-slide').textContent = currentSlide + 1;
+        }
+
+        function nextSlide() {
+            showSlide(currentSlide + 1);
+        }
+
+        function previousSlide() {
+            showSlide(currentSlide - 1);
+        }
+
+        document.addEventListener('keydown', (e) => {
+            if (e.key === 'ArrowRight' || e.key === ' ') {
+                e.preventDefault();
+                nextSlide();
+            } else if (e.key === 'ArrowLeft') {
+                e.preventDefault();
+                previousSlide();
+            } else if (e.key === 'Home') {
+                e.preventDefault();
+                showSlide(0);
+            } else if (e.key === 'End') {
+                e.preventDefault();
+                showSlide(totalSlides - 1);
+            } else if (e.key === 'PageDown') {
+                e.preventDefault();
+                nextSlide();
+            } else if (e.key === 'PageUp') {
+                e.preventDefault();
+                previousSlide();
+            }
+        });
+
+        document.getElementById('total-slides').textContent = totalSlides;
+    </script>
+<a href="../" style="position:fixed;top:12px;right:16px;z-index:99999;background:#111827;color:#e2e8f0;padding:6px 16px;border-radius:8px;font-size:13px;font-weight:600;text-decoration:none;border:1px solid #475569;font-family:system-ui,sans-serif;transition:background .15s;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#111827'">← Gallery</a>
+</body>
+</html>

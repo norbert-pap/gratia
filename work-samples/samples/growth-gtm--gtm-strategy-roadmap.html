@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>GTM Strategy Roadmap: Enterprise Launch Plan</title>
+  <style>
+    :root {
+      --slide-w: 1280px;
+      --slide-h: 720px;
+      --radius: 16px;
+      --shadow: 0 10px 24px rgba(0,0,0,.45);
+      --cyan: #38bdf8;
+      --dark-bg: #0f172a;
+      --card-bg: #1e293b;
+      --border: #334155;
+      --text-primary: #f1f5f9;
+      --text-secondary: #94a3b8;
+    }
+
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+      background: var(--dark-bg);
+      color: var(--text-primary);
+      overflow: hidden;
+    }
+
+    .deck-wrap {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 16px 12px;
+      height: 100vh;
+      justify-content: center;
+    }
+
+    .topbar {
+      width: min(var(--slide-w), 100%);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin: 0 0 10px;
+      color: var(--text-secondary);
+      font-size: 12px;
+    }
+
+    .kbd {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      min-width: 22px;
+      height: 22px;
+      padding: 0 8px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: #0b1220;
+      color: #cbd5e1;
+      font-family: monospace;
+      margin-left: 4px;
+    }
+
+    .deck {
+      width: var(--slide-w);
+      height: var(--slide-h);
+      position: relative;
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      box-shadow: var(--shadow);
+      overflow: hidden;
+    }
+
+    .slide {
+      display: none;
+      width: var(--slide-w);
+      height: var(--slide-h);
+      position: absolute;
+      top: 0;
+      left: 0;
+      overflow: hidden;
+      background: var(--dark-bg);
+      color: var(--text-primary);
+      padding: 2.5rem;
+      flex-direction: column;
+      justify-content: flex-start;
+    }
+
+    .slide.active {
+      display: flex;
+    }
+
+    .slide::after {
+      content: "Sanitized excerpt • Prepared by Gratia • Jan 2026";
+      position: absolute;
+      left: 2.5rem;
+      right: 2.5rem;
+      bottom: 1.1rem;
+      font-size: 0.72rem;
+      color: var(--text-secondary);
+      opacity: 0.9;
+    }
+
+    .slide-title {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 1.5rem;
+      color: var(--cyan);
+    }
+
+    .slide-content {
+      display: flex;
+      gap: 2rem;
+      flex: 1;
+      align-items: stretch;
+      margin-bottom: 3rem;
+    }
+
+    .col {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .metric-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      text-align: center;
+    }
+
+    .metric-value {
+      font-size: 2.2rem;
+      font-weight: 700;
+      color: var(--cyan);
+      margin-bottom: 0.5rem;
+    }
+
+    .metric-label {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
+
+    .findings {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+
+    .finding {
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      padding: 0.75rem;
+      background: rgba(56, 189, 248, 0.05);
+      border-left: 2px solid var(--cyan);
+      border-radius: 4px;
+    }
+
+    .finding-dot {
+      width: 8px;
+      height: 8px;
+      background: var(--cyan);
+      border-radius: 50%;
+      margin-top: 0.3rem;
+      flex-shrink: 0;
+    }
+
+    .finding-text {
+      font-size: 0.9rem;
+      line-height: 1.4;
+      color: var(--text-primary);
+    }
+
+    .viz-container {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      min-height: 250px;
+    }
+
+    .table-container {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 0.9rem;
+    }
+
+    th {
+      text-align: left;
+      padding: 0.75rem;
+      border-bottom: 2px solid var(--border);
+      color: var(--cyan);
+      font-weight: 600;
+    }
+
+    td {
+      padding: 0.75rem;
+      border-bottom: 1px solid var(--border);
+      color: var(--text-primary);
+    }
+
+    .timeline {
+      display: flex;
+      gap: 1rem;
+      margin-top: 1rem;
+    }
+
+    .timeline-phase {
+      flex: 1;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem;
+      text-align: center;
+    }
+
+    .timeline-phase-title {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--cyan);
+      margin-bottom: 0.5rem;
+    }
+
+    .timeline-milestone {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      line-height: 1.3;
+    }
+
+    .persona-row {
+      display: flex;
+      gap: 1.5rem;
+    }
+
+    .persona-card {
+      flex: 1;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 1.5rem;
+    }
+
+    .persona-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--cyan);
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .persona-section {
+      margin-bottom: 1rem;
+    }
+
+    .persona-section-title {
+      font-size: 0.8rem;
+      text-transform: uppercase;
+      color: var(--text-secondary);
+      margin-bottom: 0.5rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+    }
+
+    .persona-text {
+      font-size: 0.85rem;
+      line-height: 1.4;
+      color: var(--text-primary);
+    }
+
+    .channel-row {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .channel-label {
+      width: 120px;
+      font-size: 0.9rem;
+      color: var(--text-primary);
+    }
+
+    .bar-container {
+      flex: 1;
+      height: 32px;
+      background: rgba(56, 189, 248, 0.1);
+      border-radius: 6px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+
+    .bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--cyan), #06b6d4);
+      display: flex;
+      align-items: center;
+      justify-content: flex-end;
+      padding-right: 0.5rem;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: var(--dark-bg);
+    }
+
+    .pricing-tier {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem;
+      text-align: center;
+    }
+
+    .tier-name {
+      font-size: 0.95rem;
+      font-weight: 600;
+      color: var(--cyan);
+      margin-bottom: 0.5rem;
+    }
+
+    .tier-price {
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 0.25rem;
+    }
+
+    .tier-billing {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+    }
+
+    .stat-card-small {
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 1rem;
+      text-align: center;
+    }
+
+    .stat-value {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--cyan);
+    }
+
+    .stat-label {
+      font-size: 0.8rem;
+      color: var(--text-secondary);
+      margin-top: 0.25rem;
+    }
+
+    svg {
+      display: block;
+      width: 100%;
+      height: auto;
+    }
+  </style>
+</head>
+<body>
+  <div class="deck-wrap">
+    <div class="topbar">
+      <span>GTM Strategy Roadmap: Enterprise Launch Plan • Prism Analytics</span>
+      <span><span class="slide-num">1</span> / 4 <span class="kbd">←</span> <span class="kbd">→</span></span>
+    </div>
+
+    <div class="deck">
+      <!-- SLIDE 1: EXEC OVERVIEW -->
+      <div class="slide active">
+        <h1 class="slide-title">Enterprise Launch Strategy</h1>
+        <div class="slide-content">
+          <div class="col">
+            <div class="metric-card">
+              <div class="metric-value">$4.2M</div>
+              <div class="metric-label">Pipeline Target</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-value">90 days</div>
+              <div class="metric-label">Launch Window</div>
+            </div>
+            <div class="metric-card">
+              <div class="metric-value">$85K</div>
+              <div class="metric-label">Target ACV</div>
+            </div>
+            <div class="findings" style="margin-top: 1rem;">
+              <div class="finding">
+                <div class="finding-dot"></div>
+                <div class="finding-text"><strong>Executive sponsor</strong> path required—buying committee avg 5.2 stakeholders</div>
+              </div>
+              <div class="finding">
+                <div class="finding-dot"></div>
+                <div class="finding-text"><strong>Technical eval</strong> is 60% of sales cycle—deep ROI proof needed</div>
+              </div>
+              <div class="finding">
+                <div class="finding-dot"></div>
+                <div class="finding-text"><strong>Partner channel</strong> drives 40% of pipeline in comparable launches</div>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <div class="viz-container">
+              <svg viewBox="0 0 400 280" style="width: 100%; height: 100%;">
+                <!-- Funnel background -->
+                <defs>
+                  <linearGradient id="funnelGrad" x1="0%" y1="0%" x2="100%" y2="0%">
+                    <stop offset="0%" style="stop-color:#38bdf8;stop-opacity:0.8" />
+                    <stop offset="100%" style="stop-color:#06b6d4;stop-opacity:0.8" />
+                  </linearGradient>
+                </defs>
+
+                <!-- Funnel bars -->
+                <rect x="30" y="30" width="340" height="50" fill="url(#funnelGrad)" rx="4"/>
+                <text x="200" y="63" font-size="16" font-weight="bold" fill="#0f172a" text-anchor="middle">MQL: 1,200</text>
+                <text x="200" y="85" font-size="12" fill="#0f172a" text-anchor="middle">100%</text>
+
+                <rect x="60" y="100" width="280" height="45" fill="url(#funnelGrad)" rx="4"/>
+                <text x="200" y="130" font-size="16" font-weight="bold" fill="#0f172a" text-anchor="middle">SQL: 340</text>
+                <text x="200" y="150" font-size="12" fill="#0f172a" text-anchor="middle">28.3%</text>
+
+                <rect x="100" y="165" width="200" height="45" fill="url(#funnelGrad)" rx="4"/>
+                <text x="200" y="195" font-size="16" font-weight="bold" fill="#0f172a" text-anchor="middle">Opp: 85</text>
+                <text x="200" y="215" font-size="12" fill="#0f172a" text-anchor="middle">25.0%</text>
+
+                <rect x="140" y="230" width="120" height="40" fill="url(#funnelGrad)" rx="4"/>
+                <text x="200" y="258" font-size="16" font-weight="bold" fill="#0f172a" text-anchor="middle">Close: 22</text>
+                <text x="200" y="275" font-size="12" fill="#0f172a" text-anchor="middle">25.9%</text>
+              </svg>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 2: BUYER PERSONAS -->
+      <div class="slide">
+        <h1 class="slide-title">Buyer Personas & Messaging</h1>
+        <div class="slide-content" style="margin-bottom: 1rem;">
+          <div class="persona-row">
+            <div class="persona-card">
+              <div class="persona-title">👔 Economic Buyer</div>
+              <div class="persona-section">
+                <div class="persona-section-title">Title</div>
+                <div class="persona-text">VP Analytics, Director of BI</div>
+              </div>
+              <div class="persona-section">
+                <div class="persona-section-title">Priorities</div>
+                <div class="persona-text">ROI, cost control, vendor consolidation, governance</div>
+              </div>
+              <div class="persona-section">
+                <div class="persona-section-title">Key Objection</div>
+                <div class="persona-text">"We have legacy systems; migration risk is high"</div>
+              </div>
+              <div class="persona-section">
+                <div class="persona-section-title">Messaging Hook</div>
+                <div class="persona-text"><strong>Deliver analytics ROI in 6 weeks</strong> with zero legacy disruption</div>
+              </div>
+            </div>
+
+            <div class="persona-card">
+              <div class="persona-title">🔧 Technical Evaluator</div>
+              <div class="persona-section">
+                <div class="persona-section-title">Title</div>
+                <div class="persona-text">Analytics Engineer, BI Developer</div>
+              </div>
+              <div class="persona-section">
+                <div class="persona-section-title">Priorities</div>
+                <div class="persona-text">API flexibility, integrations, query performance, support</div>
+              </div>
+              <div class="persona-section">
+                <div class="persona-section-title">Key Objection</div>
+                <div class="persona-text">"Will I be locked into your platform?"</div>
+              </div>
+              <div class="persona-section">
+                <div class="persona-section-title">Messaging Hook</div>
+                <div class="persona-text"><strong>Open API + SQL engine</strong>—never locked in</div>
+              </div>
+            </div>
+
+            <div class="persona-card">
+              <div class="persona-title">⭐ Project Champion</div>
+              <div class="persona-section">
+                <div class="persona-section-title">Title</div>
+                <div class="persona-text">Senior Analyst, Data Scientist</div>
+              </div>
+              <div class="persona-section">
+                <div class="persona-section-title">Priorities</div>
+                <div class="persona-section-title">Time to insight, usability, collaboration, modern UX</div>
+              </div>
+              <div class="persona-section">
+                <div class="persona-section-title">Key Objection</div>
+                <div class="persona-text">"The UI is clunky compared to Mode/Looker"</div>
+              </div>
+              <div class="persona-section">
+                <div class="persona-section-title">Messaging Hook</div>
+                <div class="persona-text"><strong>Fastest time-to-dashboard</strong> in enterprise BI</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 3: CHANNELS & PRICING -->
+      <div class="slide">
+        <h1 class="slide-title">Go-to-Market Mix</h1>
+        <div class="slide-content">
+          <div class="col">
+            <div style="margin-top: 1rem;">
+              <h3 style="color: var(--cyan); font-size: 1rem; margin-bottom: 1.5rem;">Channel Mix & Contribution</h3>
+              <div class="channel-row">
+                <div class="channel-label">Direct Sales</div>
+                <div class="bar-container">
+                  <div class="bar" style="width: 45%;">45%</div>
+                </div>
+              </div>
+              <div class="channel-row">
+                <div class="channel-label">Partner Channel</div>
+                <div class="bar-container">
+                  <div class="bar" style="width: 40%;">40%</div>
+                </div>
+              </div>
+              <div class="channel-row">
+                <div class="channel-label">Self-Serve / Land</div>
+                <div class="bar-container">
+                  <div class="bar" style="width: 15%;">15%</div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div class="col">
+            <h3 style="color: var(--cyan); font-size: 1rem; margin-bottom: 1.5rem;">Pricing Tiers</h3>
+            <div style="display: flex; flex-direction: column; gap: 1rem;">
+              <div class="pricing-tier">
+                <div class="tier-name">Starter</div>
+                <div class="tier-price">$499<span style="font-size: 0.9rem;">/mo</span></div>
+                <div class="tier-billing">Up to 5 users, 5 dashboards</div>
+              </div>
+              <div class="pricing-tier">
+                <div class="tier-name">Pro</div>
+                <div class="tier-price">$1,499<span style="font-size: 0.9rem;">/mo</span></div>
+                <div class="tier-billing">Unlimited users, 50 dashboards, API access</div>
+              </div>
+              <div class="pricing-tier">
+                <div class="tier-name">Enterprise</div>
+                <div class="tier-price">Custom</div>
+                <div class="tier-billing">Advanced security, dedicated support, SLA</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SLIDE 4: 90-DAY ROADMAP -->
+      <div class="slide">
+        <h1 class="slide-title">90-Day Launch Roadmap</h1>
+        <div style="margin-bottom: 2rem;">
+          <div class="timeline">
+            <div class="timeline-phase">
+              <div class="timeline-phase-title">Days 1–30 • Pre-Launch</div>
+              <div class="timeline-milestone">
+                ✓ Collateral finalize<br/>
+                ✓ Partner onboard<br/>
+                ✓ Sales training
+              </div>
+            </div>
+            <div class="timeline-phase">
+              <div class="timeline-phase-title">Days 31–60 • Launch</div>
+              <div class="timeline-milestone">
+                ✓ Product GA<br/>
+                ✓ Campaign launch<br/>
+                ✓ First 22 closures
+              </div>
+            </div>
+            <div class="timeline-phase">
+              <div class="timeline-phase-title">Days 61–90 • Post-Launch</div>
+              <div class="timeline-milestone">
+                ✓ Reference builds<br/>
+                ✓ Expansion pipeline<br/>
+                ✓ $4.2M pipeline hit
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="slide-content" style="margin-top: 1rem;">
+          <div style="flex: 1;">
+            <h3 style="color: var(--cyan); font-size: 0.95rem; margin-bottom: 1rem;">Key Milestones</h3>
+            <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
+              <div class="stat-card-small">
+                <div class="stat-value">22</div>
+                <div class="stat-label">Closures Target (D90)</div>
+              </div>
+              <div class="stat-card-small">
+                <div class="stat-value">85</div>
+                <div class="stat-label">Open Opportunities</div>
+              </div>
+              <div class="stat-card-small">
+                <div class="stat-value">26%</div>
+                <div class="stat-label">Avg Win Rate</div>
+              </div>
+              <div class="stat-card-small">
+                <div class="stat-value">$4.2M</div>
+                <div class="stat-label">Pipeline Value</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let currentSlide = 0;
+    const slides = document.querySelectorAll('.slide');
+    const totalSlides = slides.length;
+
+    function showSlide(n) {
+      slides[currentSlide].classList.remove('active');
+      currentSlide = (n + totalSlides) % totalSlides;
+      slides[currentSlide].classList.add('active');
+      document.querySelector('.slide-num').textContent = currentSlide + 1;
+    }
+
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'ArrowRight' || e.key === ' ') {
+        showSlide(currentSlide + 1);
+      } else if (e.key === 'ArrowLeft') {
+        showSlide(currentSlide - 1);
+      } else if (e.key === 'Home') {
+        showSlide(0);
+      } else if (e.key === 'End') {
+        showSlide(totalSlides - 1);
+      } else if (e.key === 'PageDown') {
+        showSlide(currentSlide + 1);
+      } else if (e.key === 'PageUp') {
+        showSlide(currentSlide - 1);
+      }
+    });
+  </script>
+<a href="../" style="position:fixed;top:12px;right:16px;z-index:99999;background:#111827;color:#e2e8f0;padding:6px 16px;border-radius:8px;font-size:13px;font-weight:600;text-decoration:none;border:1px solid #475569;font-family:system-ui,sans-serif;transition:background .15s;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#111827'">← Gallery</a>
+</body>
+</html>

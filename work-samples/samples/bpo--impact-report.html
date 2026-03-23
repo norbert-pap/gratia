@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Impact Report - Forge Manufacturing</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+            color: #1a1a1a;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #f8f8f8 0%, #ffffff 100%);
+            padding: 32px;
+            border-bottom: 2px solid #18A873;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+        }
+
+        .header h1 {
+            font-size: 28px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 8px;
+        }
+
+        .header-meta {
+            font-size: 13px;
+            color: #666;
+            display: flex;
+            gap: 24px;
+        }
+
+        .engagement-badge {
+            display: inline-block;
+            background: #e8f5e9;
+            color: #18A873;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .hero-strip {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            padding: 32px;
+            background: #fafafa;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .hero-card {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            padding: 20px;
+            text-align: center;
+        }
+
+        .metric-label {
+            font-size: 11px;
+            color: #666;
+            font-weight: 600;
+            margin-bottom: 12px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .metric-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 12px;
+            margin-bottom: 8px;
+        }
+
+        .metric-before {
+            font-size: 20px;
+            font-weight: 600;
+            color: #999;
+        }
+
+        .metric-arrow {
+            font-size: 16px;
+            color: #18A873;
+            font-weight: 700;
+        }
+
+        .metric-after {
+            font-size: 20px;
+            font-weight: 700;
+            color: #1a1a1a;
+        }
+
+        .metric-delta {
+            font-size: 14px;
+            color: #18A873;
+            font-weight: 700;
+        }
+
+        .middle-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+            padding: 32px;
+            background: white;
+        }
+
+        .section-title {
+            font-size: 14px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid #18A873;
+            padding-bottom: 8px;
+        }
+
+        .interventions {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .intervention-card {
+            background: #f9f9f9;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            padding: 16px;
+            border-left: 4px solid #18A873;
+        }
+
+        .intervention-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 6px;
+        }
+
+        .intervention-desc {
+            font-size: 12px;
+            color: #666;
+            line-height: 1.4;
+        }
+
+        .roi-waterfall {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+        }
+
+        .waterfall-svg {
+            margin-bottom: 16px;
+        }
+
+        .roi-summary {
+            background: #e8f5e9;
+            border: 1px solid #c8e6c9;
+            border-radius: 6px;
+            padding: 16px;
+            text-align: center;
+        }
+
+        .roi-label {
+            font-size: 11px;
+            color: #18A873;
+            font-weight: 600;
+            margin-bottom: 4px;
+        }
+
+        .roi-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: #18A873;
+            margin-bottom: 4px;
+        }
+
+        .roi-period {
+            font-size: 12px;
+            color: #666;
+        }
+
+        .bottom-strip {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            padding: 32px;
+            background: #fafafa;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .bottom-card {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            padding: 16px;
+        }
+
+        .bottom-title {
+            font-size: 12px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 8px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .bottom-content {
+            font-size: 12px;
+            color: #666;
+            line-height: 1.5;
+        }
+
+        .opportunity-highlight {
+            color: #18A873;
+            font-weight: 600;
+        }
+
+        .quote-text {
+            font-style: italic;
+            margin-bottom: 8px;
+        }
+
+        .quote-attribution {
+            font-size: 11px;
+            color: #999;
+        }
+
+        .document-footer {
+            background: #fafafa;
+            padding: 12px 32px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            font-size: 11px;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div>
+                <h1>Impact Report: Lean Process Redesign</h1>
+                <div class="header-meta">
+                    <span><strong>Client:</strong> Forge Manufacturing</span>
+                    <span><strong>Date:</strong> January 10, 2026</span>
+                    <span class="engagement-badge">12-week engagement</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="hero-strip">
+            <div class="hero-card">
+                <div class="metric-label">Cycle Time</div>
+                <div class="metric-row">
+                    <span class="metric-before">18h</span>
+                    <span class="metric-arrow">→</span>
+                    <span class="metric-after">11h</span>
+                </div>
+                <div class="metric-delta">↓ 39%</div>
+            </div>
+            <div class="hero-card">
+                <div class="metric-label">Error Rate</div>
+                <div class="metric-row">
+                    <span class="metric-before">6.2%</span>
+                    <span class="metric-arrow">→</span>
+                    <span class="metric-after">1.8%</span>
+                </div>
+                <div class="metric-delta">↓ 71%</div>
+            </div>
+            <div class="hero-card">
+                <div class="metric-label">Rework</div>
+                <div class="metric-row">
+                    <span class="metric-before">12%</span>
+                    <span class="metric-arrow">→</span>
+                    <span class="metric-after">3.5%</span>
+                </div>
+                <div class="metric-delta">↓ 71%</div>
+            </div>
+            <div class="hero-card">
+                <div class="metric-label">Labor hrs/unit</div>
+                <div class="metric-row">
+                    <span class="metric-before">4.2</span>
+                    <span class="metric-arrow">→</span>
+                    <span class="metric-after">2.8</span>
+                </div>
+                <div class="metric-delta">↓ 33%</div>
+            </div>
+        </div>
+
+        <div class="middle-section">
+            <div>
+                <div class="section-title">What We Changed</div>
+                <div class="interventions">
+                    <div class="intervention-card">
+                        <div class="intervention-title">Standardized Work Elimination</div>
+                        <div class="intervention-desc">Removed 8 non-value-added steps from assembly flow; implemented single-piece flow with visual controls and kanban signaling.</div>
+                    </div>
+                    <div class="intervention-card">
+                        <div class="intervention-title">Machine Wait-Time Reduction</div>
+                        <div class="intervention-desc">Installed predictive maintenance schedule; reduced queue time between operations from 4.2h to 1.1h through line balancing.</div>
+                    </div>
+                    <div class="intervention-card">
+                        <div class="intervention-title">First-Pass Quality Improvement</div>
+                        <div class="intervention-desc">Deployed in-line quality checklist; cross-trained inspection team. Defect detection moved upstream, reducing downstream rework.</div>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <div class="section-title">Financial Impact</div>
+                <div class="roi-waterfall">
+                    <svg class="waterfall-svg" width="100%" height="180" viewBox="0 0 400 180" style="border: 1px solid #e0e0e0; border-radius: 4px; background: white; padding: 12px;">
+                        <!-- X-axis -->
+                        <line x1="40" y1="140" x2="380" y2="140" stroke="#d0d0d0" stroke-width="1"/>
+                        <!-- Y-axis -->
+                        <line x1="40" y1="20" x2="40" y2="140" stroke="#d0d0d0" stroke-width="1"/>
+                        
+                        <!-- Grid lines -->
+                        <line x1="40" y1="110" x2="380" y2="110" stroke="#f0f0f0" stroke-width="1" stroke-dasharray="2,2"/>
+                        <line x1="40" y1="80" x2="380" y2="80" stroke="#f0f0f0" stroke-width="1" stroke-dasharray="2,2"/>
+                        <line x1="40" y1="50" x2="380" y2="50" stroke="#f0f0f0" stroke-width="1" stroke-dasharray="2,2"/>
+                        
+                        <!-- Bars -->
+                        <!-- Investment -->
+                        <rect x="70" y="110" width="40" height="30" fill="#ef4444" opacity="0.7"/>
+                        <text x="90" y="155" text-anchor="middle" font-size="11" font-weight="600">Investment</text>
+                        <text x="90" y="148" text-anchor="middle" font-size="10" fill="#ef4444" font-weight="600">-$485K</text>
+                        
+                        <!-- Arrow -->
+                        <path d="M 130 120 L 150 120" stroke="#999" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+                        
+                        <!-- Annual Savings -->
+                        <rect x="160" y="55" width="40" height="85" fill="#18A873" opacity="0.7"/>
+                        <text x="180" y="155" text-anchor="middle" font-size="11" font-weight="600">Annual Savings</text>
+                        <text x="180" y="148" text-anchor="middle" font-size="10" fill="#18A873" font-weight="600">+$640K</text>
+                        
+                        <!-- Arrow -->
+                        <path d="M 220 100 L 240 100" stroke="#999" stroke-width="2" fill="none" marker-end="url(#arrowhead)"/>
+                        
+                        <!-- Net Value -->
+                        <rect x="250" y="75" width="40" height="65" fill="#18A873"/>
+                        <text x="270" y="155" text-anchor="middle" font-size="11" font-weight="600">Net Value/yr</text>
+                        <text x="270" y="148" text-anchor="middle" font-size="10" fill="#18A873" font-weight="600">+$155K</text>
+                        
+                        <!-- Y-axis labels -->
+                        <text x="35" y="142" text-anchor="end" font-size="9" fill="#999">$0</text>
+                        <text x="35" y="82" text-anchor="end" font-size="9" fill="#999">$400K</text>
+                        
+                        <defs>
+                            <marker id="arrowhead" markerWidth="10" markerHeight="10" refX="5" refY="3" orient="auto">
+                                <polygon points="0 0, 10 3, 0 6" fill="#999"/>
+                            </marker>
+                        </defs>
+                    </svg>
+                    <div class="roi-summary">
+                        <div class="roi-label">Payback Period</div>
+                        <div class="roi-value">9.1 months</div>
+                        <div class="roi-period">Based on $640K annual run-rate savings</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="bottom-strip">
+            <div class="bottom-card">
+                <div class="bottom-title">Sustainability Plan</div>
+                <div class="bottom-content">
+                    KPI ownership assigned to floor supervisor team. Daily standard work audits. Monthly steering committee reviews. Kaizen budget: $50K/quarter for continuous improvement initiatives.
+                </div>
+            </div>
+            <div class="bottom-card">
+                <div class="bottom-title">Next Opportunity</div>
+                <div class="bottom-content">
+                    <span class="opportunity-highlight">Packaging line optimization</span> identified as Phase 2. Estimated savings: $200K/year. Recommended timeline: 8-week engagement, Q1 2026.
+                </div>
+            </div>
+            <div class="bottom-card">
+                <div class="bottom-title">Client Testimonial</div>
+                <div class="bottom-content">
+                    <div class="quote-text">"Gratia's team embedded with our floor leaders and focused on root causes, not just symptoms. The gains have stuck."</div>
+                    <div class="quote-attribution">VP Operations, Forge Manufacturing</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="document-footer">
+            Sanitized excerpt · Prepared by Gratia · Jan 2026
+        </div>
+    </div>
+<a href="../" style="position:fixed;top:12px;right:16px;z-index:99999;background:#111827;color:#e2e8f0;padding:6px 16px;border-radius:8px;font-size:13px;font-weight:600;text-decoration:none;border:1px solid #475569;font-family:system-ui,sans-serif;transition:background .15s;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#111827'">← Gallery</a>
+</body>
+</html>

@@ -1,0 +1,613 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sales Playbook: Enterprise Outbound Motion</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
+            background: #f8f8f8;
+            color: #1a1a1a;
+            line-height: 1.6;
+        }
+
+        .document {
+            max-width: 900px;
+            margin: 40px auto;
+            background: white;
+            padding: 60px 50px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            border-radius: 2px;
+        }
+
+        /* Header Block */
+        .header-block {
+            border-bottom: 3px solid #18A873;
+            padding-bottom: 30px;
+            margin-bottom: 40px;
+        }
+
+        .header-meta {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 20px;
+            font-size: 12px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: #666;
+        }
+
+        .confidential-tag {
+            background: #C00000;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 2px;
+            font-size: 11px;
+            font-weight: 600;
+        }
+
+        h1 {
+            font-size: 42px;
+            font-weight: 700;
+            margin-bottom: 8px;
+            color: #1a1a1a;
+        }
+
+        .subtitle {
+            font-size: 16px;
+            color: #666;
+            font-weight: 400;
+        }
+
+        /* Quick Reference Bar */
+        .metrics-bar {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin: 40px 0;
+            padding: 24px;
+            background: #f0f8f5;
+            border-left: 4px solid #18A873;
+            border-radius: 2px;
+        }
+
+        .metric {
+            text-align: center;
+        }
+
+        .metric-value {
+            font-size: 28px;
+            font-weight: 700;
+            color: #18A873;
+            margin-bottom: 4px;
+        }
+
+        .metric-label {
+            font-size: 12px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        /* Section Headers */
+        h2 {
+            font-size: 28px;
+            font-weight: 700;
+            margin: 50px 0 30px 0;
+            color: #1a1a1a;
+            padding-bottom: 12px;
+            border-bottom: 2px solid #18A873;
+        }
+
+        h3 {
+            font-size: 16px;
+            font-weight: 600;
+            margin: 24px 0 12px 0;
+            color: #1a1a1a;
+        }
+
+        p {
+            margin-bottom: 16px;
+            color: #333;
+        }
+
+        /* Persona Cards */
+        .personas-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .persona-card {
+            border-left: 5px solid #18A873;
+            padding: 20px;
+            background: #f9f9f9;
+            border-radius: 2px;
+        }
+
+        .persona-card h3 {
+            margin-top: 0;
+            color: #18A873;
+        }
+
+        .card-field {
+            margin-bottom: 12px;
+            font-size: 13px;
+        }
+
+        .card-label {
+            font-weight: 600;
+            color: #666;
+            text-transform: uppercase;
+            font-size: 11px;
+            margin-bottom: 4px;
+            letter-spacing: 0.5px;
+        }
+
+        .card-value {
+            color: #333;
+        }
+
+        /* Tables */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+            font-size: 14px;
+        }
+
+        th {
+            background: #f5f5f5;
+            padding: 12px;
+            text-align: left;
+            font-weight: 600;
+            color: #1a1a1a;
+            border-bottom: 2px solid #e0e0e0;
+        }
+
+        td {
+            padding: 14px 12px;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        tr:nth-child(even) {
+            background: #fafafa;
+        }
+
+        /* Battlecard Grid */
+        .battlecards-row {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .battlecard {
+            border: 1px solid #e0e0e0;
+            padding: 20px;
+            border-radius: 2px;
+            background: white;
+        }
+
+        .battlecard h3 {
+            margin-top: 0;
+            font-size: 14px;
+            color: #18A873;
+            margin-bottom: 16px;
+        }
+
+        .battlecard-section {
+            margin-bottom: 14px;
+            padding-bottom: 12px;
+            border-bottom: 1px solid #f0f0f0;
+        }
+
+        .battlecard-section:last-child {
+            border-bottom: none;
+        }
+
+        .battlecard-label {
+            font-size: 10px;
+            color: #999;
+            text-transform: uppercase;
+            font-weight: 600;
+            margin-bottom: 4px;
+            letter-spacing: 0.5px;
+        }
+
+        .battlecard-text {
+            font-size: 13px;
+            color: #333;
+            line-height: 1.5;
+        }
+
+        .quote {
+            font-style: italic;
+            color: #666;
+        }
+
+        /* Discovery Questions */
+        .discovery-list {
+            list-style: none;
+            margin-bottom: 30px;
+        }
+
+        .discovery-list li {
+            margin-bottom: 16px;
+            padding-left: 24px;
+            position: relative;
+        }
+
+        .discovery-list li:before {
+            content: attr(data-num);
+            position: absolute;
+            left: 0;
+            top: 0;
+            font-weight: 600;
+            color: #18A873;
+        }
+
+        .question {
+            font-weight: 500;
+            margin-bottom: 4px;
+            color: #1a1a1a;
+        }
+
+        .follow-up {
+            font-size: 13px;
+            color: #999;
+            margin-top: 4px;
+        }
+
+        /* Footer */
+        .document-footer {
+            margin-top: 60px;
+            padding-top: 30px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            font-size: 12px;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+    <div class="document">
+        <div class="header-block">
+            <div class="header-meta">
+                <div>
+                    <div>Nexus Security</div>
+                    <div>January 2026 · v1.0</div>
+                </div>
+                <div class="confidential-tag">CONFIDENTIAL</div>
+            </div>
+            <h1>Sales Playbook</h1>
+            <p class="subtitle">Enterprise Outbound Motion for Cybersecurity SaaS</p>
+        </div>
+
+        <div class="metrics-bar">
+            <div class="metric">
+                <div class="metric-value">$180K</div>
+                <div class="metric-label">Target ACV</div>
+            </div>
+            <div class="metric">
+                <div class="metric-value">90</div>
+                <div class="metric-label">Sales Cycle (days)</div>
+            </div>
+            <div class="metric">
+                <div class="metric-value">28%</div>
+                <div class="metric-label">Win Rate Target</div>
+            </div>
+        </div>
+
+        <h2>Target Buyer Profiles</h2>
+        <p>Enterprise buyer landscape for outbound campaigns. Each persona represents a distinct entry point, priority set, and required value positioning.</p>
+
+        <div class="personas-row">
+            <div class="persona-card">
+                <h3>Chief Information Security Officer (CISO)</h3>
+                <div class="card-field">
+                    <div class="card-label">Title & Budget</div>
+                    <div class="card-value">C-suite executive; owns security budget & strategy</div>
+                </div>
+                <div class="card-field">
+                    <div class="card-label">Key Priorities</div>
+                    <div class="card-value">Risk reduction, compliance, board reporting, incident response capability</div>
+                </div>
+                <div class="card-field">
+                    <div class="card-label">Top Objection</div>
+                    <div class="card-value">"We already have tools. Why add more complexity?"</div>
+                </div>
+                <div class="card-field">
+                    <div class="card-label">Messaging Hook</div>
+                    <div class="card-value">Consolidation, real-time visibility, reduced MTTR, board confidence</div>
+                </div>
+                <div class="card-field">
+                    <div class="card-label">Proof Points</div>
+                    <div class="card-value">3x faster incident detection, 40% lower MTTD, Fortune 500 customer case study</div>
+                </div>
+            </div>
+
+            <div class="persona-card">
+                <h3>Security Engineering Manager</h3>
+                <div class="card-field">
+                    <div class="card-label">Title & Budget</div>
+                    <div class="card-value">Manager of analysts; operational security team owner</div>
+                </div>
+                <div class="card-field">
+                    <div class="card-label">Key Priorities</div>
+                    <div class="card-value">Team productivity, alert fatigue, usability, integration, on-call burden</div>
+                </div>
+                <div class="card-field">
+                    <div class="card-label">Top Objection</div>
+                    <div class="card-value">"Will this require our team to retrain? Too much overhead."</div>
+                </div>
+                <div class="card-field">
+                    <div class="card-label">Messaging Hook</div>
+                    <div class="card-value">Ease of use, faster deployment, reduction in false positives, API-first design</div>
+                </div>
+                <div class="card-field">
+                    <div class="card-label">Proof Points</div>
+                    <div class="card-value">30-min onboarding, 2-week deployment, 50% alert reduction, free tier for pilots</div>
+                </div>
+            </div>
+
+            <div class="persona-card">
+                <h3>CTO / VP Engineering</h3>
+                <div class="card-field">
+                    <div class="card-label">Title & Budget</div>
+                    <div class="card-value">Tech infrastructure decision maker; influenced by security team</div>
+                </div>
+                <div class="card-field">
+                    <div class="card-label">Key Priorities</div>
+                    <div class="card-value">Architecture fit, uptime SLA, data residency, API design, DevSecOps integration</div>
+                </div>
+                <div class="card-field">
+                    <div class="card-label">Top Objection</div>
+                    <div class="card-value">"Does it integrate with our existing stack? What if vendor becomes unreliable?"</div>
+                </div>
+                <div class="card-field">
+                    <div class="card-label">Messaging Hook</div>
+                    <div class="card-value">Open APIs, SOC 2 Type II, 99.99% uptime, cloud-agnostic, no vendor lock-in</div>
+                </div>
+                <div class="card-field">
+                    <div class="card-label">Proof Points</div>
+                    <div class="card-value">500+ API endpoints, Terraform modules, containerized architecture, 10+ vendor integrations</div>
+                </div>
+            </div>
+        </div>
+
+        <h2>Sales Process & Qualification (MEDDPICC)</h2>
+        <p>Structured qualification framework. Each stage requires specific evidence before advancing to next phase.</p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 8%;">Stage</th>
+                    <th style="width: 30%;">Question to Ask</th>
+                    <th style="width: 32%;">What Good Looks Like</th>
+                    <th style="width: 30%;">Red Flags</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>M</strong><br/>Metrics</td>
+                    <td>What does success look like? How do you measure it?</td>
+                    <td>Specific metrics: MTTR &lt;30m, alert reduction ±40%, compliance pass within 6 months, cost savings $X</td>
+                    <td>Vague answers ("better security"), no budget allocated, no executive alignment on ROI</td>
+                </tr>
+                <tr>
+                    <td><strong>E</strong><br/>Economic Buyer</td>
+                    <td>Who owns the security or IT budget? Do they support this initiative?</td>
+                    <td>CISO or CFO confirmed as decision-maker; they've expressed interest in conversation; budget cycle known</td>
+                    <td>Only technical buyer available, budget owner skeptical, decision deferred indefinitely</td>
+                </tr>
+                <tr>
+                    <td><strong>D</strong><br/>Decision Criteria</td>
+                    <td>How will you decide between vendors? What matters most?</td>
+                    <td>Written evaluation criteria shared; clear scoring rubric (features, price, support, integration)</td>
+                    <td>"We'll know it when we see it," no formal RFP, criteria keep changing mid-evaluation</td>
+                </tr>
+                <tr>
+                    <td><strong>D</strong><br/>Decision Process</td>
+                    <td>Walk me through your approval process. How long does it take?</td>
+                    <td>Clear timeline: vendor selection by [date], approval by [date], deployment by [date]</td>
+                    <td>Process unclear, timeline "to be determined," multiple layers of governance, no deadline</td>
+                </tr>
+                <tr>
+                    <td><strong>P</strong><br/>Pain</td>
+                    <td>What's keeping you up at night? What's the cost of inaction?</td>
+                    <td>Specific incidents, quantified impact ($X per breach), regulatory pressure (upcoming audit), team burnout</td>
+                    <td>No sense of urgency, pain is "nice to have," pain shared only by one stakeholder</td>
+                </tr>
+                <tr>
+                    <td><strong>P</strong><br/>Pitch</td>
+                    <td>What message resonates with your team? How do we position this?</td>
+                    <td>Buyer confirms our positioning aligns with their needs; specific language they use</td>
+                    <td>Buyer silent or says "that won't fly here," competing narrative from another vendor takes hold</td>
+                </tr>
+                <tr>
+                    <td><strong>I</strong><br/>Influencers</td>
+                    <td>Who else needs to be consulted? Who are the skeptics?</td>
+                    <td>Map of all stakeholders identified; roles and positions mapped; skeptics engaged early</td>
+                    <td>Unknown stakeholders emerge late; one person can block decision; influencers won't return calls</td>
+                </tr>
+                <tr>
+                    <td><strong>C</strong><br/>Champion</td>
+                    <td>Who is your internal advocate? Will they fight for you?</td>
+                    <td>Economic or technical buyer actively championing deal; has credibility with decision-maker</td>
+                    <td>No internal advocate, key champion leaves organization, champion loses credibility</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>Objection Handling Matrix</h2>
+        <p>Six common objections and proven response frameworks.</p>
+
+        <table>
+            <thead>
+                <tr>
+                    <th style="width: 15%;">Objection</th>
+                    <th style="width: 20%;">Root Cause</th>
+                    <th style="width: 35%;">Response Framework</th>
+                    <th style="width: 30%;">Proof Point</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>"We already have a solution"</strong></td>
+                    <td>Perceived replacement threat; not understanding differentiation; switching cost concern</td>
+                    <td>"I understand. [Competitor name] is solid. We typically complement existing tools rather than replace. Can I ask—are you getting [specific capability] from your current stack?" Reposition as addition, not replacement.</td>
+                    <td>60% of customers retain legacy tools; average time to ROI is 4 weeks when paired with existing solution</td>
+                </tr>
+                <tr>
+                    <td><strong>"Too expensive / no budget"</strong></td>
+                    <td>Price objection often masks real concern (lack of business case, wrong stakeholder, budget timing)</td>
+                    <td>"Cost is always important. Help me understand—is this a budget constraint right now, or are you unsure about ROI? [If ROI:] What would need to change for this to justify the investment?" Create business case together. Reference TCO.</td>
+                    <td>Average payback in 6 months; cost per incident prevented ranges from $200–$500K; case study: $2.4M saved in Year 1</td>
+                </tr>
+                <tr>
+                    <td><strong>"We need to evaluate other vendors"</strong></td>
+                    <td>Legitimate need for diligence OR lack of conviction; fear of missing out on competitors; requirement to show multiple bids</td>
+                    <td>"Absolutely. Evaluation is smart. To help—what are your top 3–5 must-haves for this to work in your environment?" Ask to be included in RFP; ask for timeline and decision criteria.</td>
+                    <td>We rank in top 2 for 90% of feature comparisons; most used in production trials; customer reference calls available</td>
+                </tr>
+                <tr>
+                    <td><strong>"Integration concerns / doesn't fit our stack"</strong></td>
+                    <td>Technical blocker is real; worry about data flow; vendor lock-in fear; engineering team skepticism</td>
+                    <td>"Integration is critical. Let's get your engineering team involved. Can I demo our API and our pre-built connectors with your stack?" Schedule technical deep dive; offer PoC to verify fit.</td>
+                    <td>500+ API endpoints; 50+ pre-built integrations (Splunk, ELK, Sumo, etc.); REST-first architecture; Terraform modules available</td>
+                </tr>
+                <tr>
+                    <td><strong>"This seems like another tool we'll have to manage"</strong></td>
+                    <td>Concern about alert fatigue, team burden, slow deployment, difficult UX; tired of adding tools</td>
+                    <td>"I hear that. Most teams tell us the opposite—they get 40% fewer alerts, 2-week deployment, zero custom coding. Let me show you the onboarding—it takes about 30 minutes." Demo speed, simplicity, and time savings. Show admin experience. Reference ease of use rankings.</td>
+                    <td>Gartner EaseOfUse rating 9.2/10; deployment &lt; 2 weeks; 30-min admin onboarding; API auto-discovery removes manual mapping</td>
+                </tr>
+                <tr>
+                    <td><strong>"Let's revisit this next year"</strong></td>
+                    <td>No urgency; procurement timing misaligned; waiting for budget reset; hoping problem goes away</td>
+                    <td>"I respect that. Before we table it—can I ask what would need to happen in the next 30–60 days to move this forward? Any compliance deadline, audit, or incident driving timeline?" Create urgency around cost of delay. Offer short pilot now, full rollout next cycle.</td>
+                    <td>Cost of delay: each incident costs $X; compliance risk grows; team continues burning hours on manual work. Quantify in their language.</td>
+                </tr>
+            </tbody>
+        </table>
+
+        <h2>Competitive Battlecards</h2>
+        <p>Three primary competitive threats and our counter-positioning.</p>
+
+        <div class="battlecards-row">
+            <div class="battlecard">
+                <h3>vs. CrowdStrike</h3>
+                <div class="battlecard-section">
+                    <div class="battlecard-label">Their Pitch</div>
+                    <div class="battlecard-text quote">"Single platform security. Zero trust. One agent, one console, complete visibility."</div>
+                </div>
+                <div class="battlecard-section">
+                    <div class="battlecard-label">Their Weakness</div>
+                    <div class="battlecard-text">Endpoint-centric (doesn't cover cloud, network, API threats). Expensive. Requires their agent everywhere. Hard to integrate with non-CrowdStrike tooling.</div>
+                </div>
+                <div class="battlecard-section">
+                    <div class="battlecard-label">Our Counter</div>
+                    <div class="battlecard-text">We're cloud-native and agnostic. We see threats across endpoints, cloud, API, and network—without requiring agent. Better for multi-vendor shops. Lower cost per threat detected.</div>
+                </div>
+                <div class="battlecard-section">
+                    <div class="battlecard-label">Trap Question</div>
+                    <div class="battlecard-text">"If you go all-in on CrowdStrike, what happens to your existing Splunk/Sumo investment?"</div>
+                </div>
+            </div>
+
+            <div class="battlecard">
+                <h3>vs. Palo Alto Networks</h3>
+                <div class="battlecard-section">
+                    <div class="battlecard-label">Their Pitch</div>
+                    <div class="battlecard-text quote">"Unified security operations platform. Cortex. Cloud-scale threat intelligence."</div>
+                </div>
+                <div class="battlecard-section">
+                    <div class="battlecard-label">Their Weakness</div>
+                    <div class="battlecard-text">Costly ($500K+ enterprise deals). Slow to deploy (3–6 months). Requires Palo Alto firewall lock-in. Complex licensing. Poor UX for SOC analysts.</div>
+                </div>
+                <div class="battlecard-section">
+                    <div class="battlecard-label">Our Counter</div>
+                    <div class="battlecard-text">Faster deployment (2 weeks). Work with any firewall. Transparent pricing. Built for analysts, not just CISOs. Better automation and response playbooks.</div>
+                </div>
+                <div class="battlecard-section">
+                    <div class="battlecard-label">Trap Question</div>
+                    <div class="battlecard-text">"How many months has Palo Alto taken to deploy in similar organizations?"</div>
+                </div>
+            </div>
+
+            <div class="battlecard">
+                <h3>vs. Build In-House</h3>
+                <div class="battlecard-section">
+                    <div class="battlecard-label">Their Pitch</div>
+                    <div class="battlecard-text quote">"We can build this ourselves with ELK/Splunk + custom scripts and save money."</div>
+                </div>
+                <div class="battlecard-section">
+                    <div class="battlecard-label">Their Weakness</div>
+                    <div class="battlecard-text">Hidden costs (engineering headcount, 18+ month delivery, maintenance burden, talent retention). Security gaps in custom code. No threat intelligence. Team distracted from core business.</div>
+                </div>
+                <div class="battlecard-section">
+                    <div class="battlecard-label">Our Counter</div>
+                    <div class="battlecard-text">We've already built this. Out-of-box threat detection, playbooks, and intelligence. Your team stays focused on business. Lower TCO. Faster time to value.</div>
+                </div>
+                <div class="battlecard-section">
+                    <div class="battlecard-label">Trap Question</div>
+                    <div class="battlecard-text">"Can you allocate 2 FTEs for the next 18 months? What's the true cost of that vs. our annual platform fee?"</div>
+                </div>
+            </div>
+        </div>
+
+        <h2>Discovery Call Script</h2>
+        <p>Eight structured questions organized by MEDDPICC stage. Use follow-ups to dig into objections.</p>
+
+        <ul class="discovery-list">
+            <li data-num="1">
+                <div class="question">What's driving the conversation around security tooling right now?</div>
+                <div class="follow-up">Listen for pain (breach, audit, tool sprawl, team burnout). If generic, push: "Is there a specific incident or compliance deadline?"</div>
+            </li>
+            <li data-num="2">
+                <div class="question">How is your security team currently handling threat detection and response?</div>
+                <div class="follow-up">Understand current tools, team size, MTTR, alert fatigue level. Dig: "On average, how long from alert to resolution?"</div>
+            </li>
+            <li data-num="3">
+                <div class="question">What would need to change for this to be a priority this year?</div>
+                <div class="follow-up">Uncover decision criteria and timeline. "Is there a budget cycle we should align with?"</div>
+            </li>
+            <li data-num="4">
+                <div class="question">Who else is involved in the security tooling decision?</div>
+                <div class="follow-up">Map the committee: CISO, CFO, CTO, Security Engineering Manager. Ask: "Who would be the strongest advocate for change?"</div>
+            </li>
+            <li data-num="5">
+                <div class="question">If we could cut your MTTR by half and reduce alert noise by 40%, what would that mean for your team?</div>
+                <div class="follow-up">Test value messaging. Watch for resonance. Adjust pitch based on response.</div>
+            </li>
+            <li data-num="6">
+                <div class="question">What does your current vendor evaluation process look like?</div>
+                <div class="follow-up">RFP? Bake-off? Timeline? "When do you hope to make a decision?"</div>
+            </li>
+            <li data-num="7">
+                <div class="question">Are there any must-haves or deal-breakers we should know about?</div>
+                <div class="follow-up">Uncover non-negotiables: integration, uptime SLA, data residency, compliance. "What would disqualify a vendor?"</div>
+            </li>
+            <li data-num="8">
+                <div class="question">What's the best next step? Would a technical demo or customer reference call be helpful?</div>
+                <div class="follow-up">Advance the deal. "Who should attend the demo?" Get budget confirmation: "Are we in scope from a budget perspective?"</div>
+            </li>
+        </ul>
+
+        <div class="document-footer">
+            <p>Sanitized excerpt · Prepared by Gratia · Jan 2026</p>
+        </div>
+    </div>
+<a href="../" style="position:fixed;top:12px;right:16px;z-index:99999;background:#111827;color:#e2e8f0;padding:6px 16px;border-radius:8px;font-size:13px;font-weight:600;text-decoration:none;border:1px solid #475569;font-family:system-ui,sans-serif;transition:background .15s;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#111827'">← Gallery</a>
+</body>
+</html>

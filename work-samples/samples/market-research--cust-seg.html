@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Customer Segmentation Map - SMB Banking</title>
+<style>
+:root {
+  --font-family-display: Arial, sans-serif;
+  --font-weight-display: 600;
+  --font-family-content: Arial, sans-serif;
+  --font-weight-content: 400;
+  --font-size-content: 16px;
+  --line-height-content: 1.4;
+  --slide-w: 1280px;
+  --slide-h: 720px;
+  --radius: 16px;
+  --shadow: 0 10px 24px rgba(0,0,0,.45);
+}
+body.theme-dark {
+  --color-bg-base: #0f172a;
+  --color-bg-elevated: #020617;
+  --color-bg-surface: #1e293b;
+  --color-bg-muted: #334155;
+  --color-text-primary: #f1f5f9;
+  --color-text-secondary: #cbd5e1;
+  --color-text-muted: #94a3b8;
+  --color-text-accent: #38bdf8;
+  --color-primary: #38bdf8;
+  --color-primary-foreground: #0f172a;
+}
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body {
+  font-family: var(--font-family-content);
+  font-weight: var(--font-weight-content);
+  font-size: var(--font-size-content);
+  line-height: var(--line-height-content);
+  overflow-x: hidden;
+  background: var(--color-bg-base);
+  color: var(--color-text-primary);
+}
+.deck-wrap{ display:flex; flex-direction:column; align-items:center; padding: 16px 12px; }
+.topbar{
+  width: min(var(--slide-w), 100%);
+  display:flex; align-items:center; justify-content:space-between;
+  gap: 12px; flex-wrap: wrap; margin: 0 0 10px;
+  color: var(--color-text-muted); font-size: 12px;
+}
+.kbd{
+  display:inline-flex; align-items:center; justify-content:center;
+  min-width: 22px; height: 22px; padding: 0 8px;
+  border: 1px solid #334155; border-radius: 10px;
+  background: #0b1220; color: var(--color-text-secondary);
+  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace;
+}
+.deck{
+  width: var(--slide-w); height: var(--slide-h);
+  position: relative;
+  transform: scale(var(--scale, 1)); transform-origin: top center;
+}
+.slide {
+  display:none; width: var(--slide-w); height: var(--slide-h);
+  flex-shrink: 0; overflow: hidden;
+  background: var(--color-bg-base); color: var(--color-text-primary);
+  border: 1px solid #334155; border-radius: var(--radius);
+  box-shadow: var(--shadow);
+}
+.slide.active{ display:flex; }
+.col { flex-direction: column; }
+.fill-height { flex: 1; display: flex; flex-direction: column; }
+
+.p-16 { padding: 2.5rem 3rem 4.25rem; }
+.mb-2 { margin-bottom: 0.5rem; }
+.mb-4 { margin-bottom: 1rem; }
+.mb-6 { margin-bottom: 1.5rem; }
+.mt-4 { margin-top: 1rem; }
+
+h1, h2, h3, h4 {
+  font-family: var(--font-family-display);
+  font-weight: var(--font-weight-display);
+  line-height: 1.2; margin: 0;
+  color: var(--color-primary);
+}
+h1 { font-size: 2.25rem; }
+h2 { font-size: 1.75rem; }
+h3 { font-size: 1.25rem; }
+p, li { color: var(--color-text-secondary); }
+strong { color: var(--color-primary); }
+.muted { color: var(--color-text-muted) !important; }
+.text-sm { font-size: 0.875rem; }
+.text-xs { font-size: 0.75rem; }
+.font-semibold { font-weight: 600; }
+
+.slide::after {
+  content: "Sanitized excerpt \2022  Prepared by Gratia \2022  Jan 2026";
+  position: absolute; left: 4rem; right: 4rem; bottom: 1.1rem;
+  font-size: 0.72rem; color: #94a3b8; opacity: 0.9;
+}
+
+/* Metric row */
+.metric-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0.6rem; }
+.metric-card {
+  padding: 0.75rem; background: #1e293b; border: 1px solid #334155;
+  border-left: 4px solid #38bdf8;
+}
+.metric-val { font-size: 1.6rem; font-weight: 700; margin-bottom: 0.1rem; }
+.metric-label { font-size: 0.65rem; text-transform: uppercase; letter-spacing: 0.05em; color: #94a3b8; }
+.metric-desc { font-size: 0.75rem; color: #cbd5e1; margin-top: 0.15rem; }
+
+/* Cards */
+.card-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; }
+.info-card { padding: 0.75rem; background: #1e293b; border: 1px solid #334155; }
+.info-card h4 { font-size: 0.8rem; margin-bottom: 0.35rem; color: #38bdf8; }
+.info-card p { font-size: 0.75rem; line-height: 1.4; }
+
+.callout-card {
+  padding: 0.75rem; background: #1e293b; border: 1px solid #334155;
+  border-left: 4px solid #38bdf8;
+}
+.callout-card h4 { font-size: 0.8rem; margin-bottom: 0.35rem; color: #38bdf8; }
+.callout-card ul { margin-left: 1.2rem; margin-top: 0.2rem; }
+.callout-card li { font-size: 0.75rem; margin-bottom: 0.2rem; color: #cbd5e1; }
+
+/* Segment grid */
+.segment-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0.6rem; }
+.segment-box { padding: 0.85rem; background: #1e293b; border: 1px solid #334155; }
+.seg-metric { font-size: 1.4rem; font-weight: 700; margin-bottom: 0.05rem; }
+.seg-label { font-size: 0.7rem; color: #94a3b8; margin-bottom: 0.4rem; }
+.seg-name { font-size: 1rem; font-weight: 600; color: #f1f5f9; margin-bottom: 0.35rem; }
+.seg-detail { font-size: 0.72rem; line-height: 1.4; color: #cbd5e1; margin-bottom: 0.2rem; }
+
+/* Viz frame */
+.viz{ background: #1e293b; border:1px solid #334155; padding:0.75rem; }
+.viz-title{
+  display:flex; align-items:flex-end; justify-content:space-between; margin-bottom:0.5rem;
+}
+.viz-title h3{ font-size:0.95rem; margin:0; color:#38bdf8; }
+.viz-title .note{ font-size:0.75rem; color:#94a3b8; }
+
+/* Heatmap */
+.hm{ display:grid; grid-template-columns: 130px repeat(4, 1fr); gap:0.35rem; }
+.hm-hdr{ padding:0.35rem 0.5rem; font-size:0.7rem; color:#94a3b8; }
+.hm-row{ padding:0.4rem 0.5rem; background:#1e293b; border:1px solid #334155; color:#cbd5e1; font-weight:600; font-size:0.75rem; }
+.hm-cell{ padding:0.4rem 0.5rem; border:1px solid #334155; font-size:0.75rem; color:#e2e8f0; background:#0b1220; }
+.p1{ background: rgba(34,197,94,0.22); }
+.p2{ background: rgba(34,197,94,0.14); }
+.p3{ background: rgba(245,158,11,0.18); }
+.p4{ background: rgba(239,68,68,0.18); }
+
+/* Messaging table */
+.msg-table{ width:100%; border-collapse:collapse; font-size:0.75rem; }
+.msg-table th, .msg-table td{ padding:0.5rem; border-bottom:1px solid #334155; text-align:left; }
+.msg-table th{ color:#38bdf8; font-weight:600; }
+.msg-table td{ color:#cbd5e1; }
+
+@media print{
+  body{ background:#fff; }
+  .deck-wrap{ padding:0; }
+  .topbar{ display:none; }
+  .deck{ width:auto; height:auto; transform:none; }
+  .slide{ display:flex !important; margin: 0 0 18px; page-break-after: always; box-shadow:none; }
+  .slide::after{ display:none; }
+}
+</style>
+</head>
+<body class="theme-dark">
+
+<div class="deck-wrap">
+  <div class="topbar" aria-hidden="true">
+    <div>HTML preview deck &bull; Consulting-style sample</div>
+    <div>
+      <span class="kbd">&larr;</span> <span class="kbd">&rarr;</span> to navigate &bull; <span class="kbd">Cmd</span> + <span class="kbd">P</span> to export PDF
+    </div>
+  </div>
+  <main class="deck" aria-label="Customer segmentation slide deck">
+
+<!-- Slide 1: Executive Overview -->
+<section class="slide active p-16 col">
+  <div style="display:flex; justify-content:space-between; align-items:flex-start; margin-bottom:0.75rem;">
+    <div>
+      <p class="text-xs font-semibold" style="color:#38bdf8; text-transform:uppercase; letter-spacing:0.08em; margin-bottom:0.3rem;">Market Research &amp; Intelligence &mdash; Sample</p>
+      <h1>Customer Segmentation Map</h1>
+      <p class="text-sm" style="color:#94a3b8; margin-top:0.25rem;">SMB Banking Platform for Underserved Verticals</p>
+    </div>
+    <div style="text-align:right; font-size:0.75rem; color:#94a3b8;">
+      <div>Client: Confidential (sample)</div>
+      <div>Date: Jan 2026</div>
+    </div>
+  </div>
+
+  <!-- Split layout: left = segment cards, right = donut + findings -->
+  <div style="display:grid; grid-template-columns:0.55fr 0.45fr; gap:0.75rem; flex:1;">
+    <!-- Left: 2×2 segment hero cards -->
+    <div style="display:grid; grid-template-columns:1fr 1fr; grid-template-rows:1fr 1fr; gap:0.5rem;">
+      <!-- Construction -->
+      <div style="background:linear-gradient(135deg, rgba(56,189,248,0.15), rgba(56,189,248,0.04)); border:1px solid rgba(56,189,248,0.4); border-radius:8px; padding:0.7rem; display:flex; flex-direction:column; justify-content:space-between;">
+        <div>
+          <div style="display:flex; align-items:center; gap:0.4rem; margin-bottom:0.3rem;">
+            <svg width="20" height="20" viewBox="0 0 20 20"><rect x="3" y="8" width="14" height="9" rx="1" fill="none" stroke="#38bdf8" stroke-width="1.5"/><path d="M10 3L17 8H3Z" fill="none" stroke="#38bdf8" stroke-width="1.5" stroke-linejoin="round"/></svg>
+            <span style="font-size:0.8rem; font-weight:600; color:#f1f5f9;">Construction</span>
+          </div>
+          <p style="font-size:0.68rem; color:#94a3b8; line-height:1.35;">Job costing, progress billing, lien waivers</p>
+        </div>
+        <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-top:0.25rem;">
+          <div>
+            <p style="font-size:1.5rem; font-weight:700; color:#38bdf8; line-height:1;">180K</p>
+            <p style="font-size:0.6rem; color:#94a3b8;">firms</p>
+          </div>
+          <div style="text-align:right;">
+            <p style="font-size:0.9rem; font-weight:700; color:#38bdf8;">$150–300</p>
+            <p style="font-size:0.6rem; color:#94a3b8;">/mo WTP</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Professional Services -->
+      <div style="background:linear-gradient(135deg, rgba(6,182,212,0.15), rgba(6,182,212,0.04)); border:1px solid rgba(6,182,212,0.4); border-radius:8px; padding:0.7rem; display:flex; flex-direction:column; justify-content:space-between;">
+        <div>
+          <div style="display:flex; align-items:center; gap:0.4rem; margin-bottom:0.3rem;">
+            <svg width="20" height="20" viewBox="0 0 20 20"><rect x="4" y="3" width="12" height="14" rx="1.5" fill="none" stroke="#06b6d4" stroke-width="1.5"/><line x1="7" y1="7" x2="13" y2="7" stroke="#06b6d4" stroke-width="1.2"/><line x1="7" y1="10" x2="13" y2="10" stroke="#06b6d4" stroke-width="1.2"/><line x1="7" y1="13" x2="11" y2="13" stroke="#06b6d4" stroke-width="1.2"/></svg>
+            <span style="font-size:0.8rem; font-weight:600; color:#f1f5f9;">Professional Services</span>
+          </div>
+          <p style="font-size:0.68rem; color:#94a3b8; line-height:1.35;">Trust accounting, client billing, compliance</p>
+        </div>
+        <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-top:0.25rem;">
+          <div>
+            <p style="font-size:1.5rem; font-weight:700; color:#06b6d4; line-height:1;">95K</p>
+            <p style="font-size:0.6rem; color:#94a3b8;">firms</p>
+          </div>
+          <div style="text-align:right;">
+            <p style="font-size:0.9rem; font-weight:700; color:#06b6d4;">$200–400</p>
+            <p style="font-size:0.6rem; color:#94a3b8;">/mo WTP</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Agencies -->
+      <div style="background:linear-gradient(135deg, rgba(34,211,238,0.12), rgba(34,211,238,0.03)); border:1px solid rgba(34,211,238,0.35); border-radius:8px; padding:0.7rem; display:flex; flex-direction:column; justify-content:space-between;">
+        <div>
+          <div style="display:flex; align-items:center; gap:0.4rem; margin-bottom:0.3rem;">
+            <svg width="20" height="20" viewBox="0 0 20 20"><circle cx="7" cy="8" r="3" fill="none" stroke="#22d3ee" stroke-width="1.5"/><circle cx="13" cy="8" r="3" fill="none" stroke="#22d3ee" stroke-width="1.5"/><path d="M3 16c0-2.5 2-4 4-4s4 1.5 4 4" fill="none" stroke="#22d3ee" stroke-width="1.5"/><path d="M9 16c0-2.5 2-4 4-4s4 1.5 4 4" fill="none" stroke="#22d3ee" stroke-width="1.5"/></svg>
+            <span style="font-size:0.8rem; font-weight:600; color:#f1f5f9;">Agencies</span>
+          </div>
+          <p style="font-size:0.68rem; color:#94a3b8; line-height:1.35;">Project tracking, retainer mgmt, contractor pay</p>
+        </div>
+        <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-top:0.25rem;">
+          <div>
+            <p style="font-size:1.5rem; font-weight:700; color:#22d3ee; line-height:1;">120K</p>
+            <p style="font-size:0.6rem; color:#94a3b8;">firms</p>
+          </div>
+          <div style="text-align:right;">
+            <p style="font-size:0.9rem; font-weight:700; color:#22d3ee;">$100–250</p>
+            <p style="font-size:0.6rem; color:#94a3b8;">/mo WTP</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Home Services -->
+      <div style="background:linear-gradient(135deg, rgba(245,158,11,0.12), rgba(245,158,11,0.03)); border:1px solid rgba(245,158,11,0.35); border-radius:8px; padding:0.7rem; display:flex; flex-direction:column; justify-content:space-between;">
+        <div>
+          <div style="display:flex; align-items:center; gap:0.4rem; margin-bottom:0.3rem;">
+            <svg width="20" height="20" viewBox="0 0 20 20"><path d="M10 3L2 10h3v7h10v-7h3L10 3z" fill="none" stroke="#f59e0b" stroke-width="1.5" stroke-linejoin="round"/></svg>
+            <span style="font-size:0.8rem; font-weight:600; color:#f1f5f9;">Home Services</span>
+          </div>
+          <p style="font-size:0.68rem; color:#94a3b8; line-height:1.35;">Seasonal cash smoothing, equipment finance</p>
+        </div>
+        <div style="display:flex; justify-content:space-between; align-items:flex-end; margin-top:0.25rem;">
+          <div>
+            <p style="font-size:1.5rem; font-weight:700; color:#f59e0b; line-height:1;">240K</p>
+            <p style="font-size:0.6rem; color:#94a3b8;">firms</p>
+          </div>
+          <div style="text-align:right;">
+            <p style="font-size:0.9rem; font-weight:700; color:#f59e0b;">$75–150</p>
+            <p style="font-size:0.6rem; color:#94a3b8;">/mo WTP</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Right column: donut chart + findings + actions -->
+    <div style="display:flex; flex-direction:column; gap:0.5rem;">
+      <!-- Donut chart: market share by segment -->
+      <div style="background:#1e293b; border:1px solid #334155; border-radius:8px; padding:0.6rem; text-align:center;">
+        <p style="font-size:0.7rem; font-weight:600; color:#38bdf8; text-transform:uppercase; letter-spacing:0.05em; margin-bottom:0.25rem;">Addressable market</p>
+        <svg width="160" height="130" viewBox="0 0 160 130" style="display:block; margin:0 auto;">
+          <!-- Donut segments: Construction 180K=28.3%, Prof Svcs 95K=15%, Agencies 120K=18.9%, Home Svcs 240K=37.8% -->
+          <!-- Total circumference for r=48: 2*pi*48 = 301.59 -->
+          <circle cx="80" cy="60" r="48" fill="none" stroke="#1e293b" stroke-width="22"/>
+          <!-- Home Services: 37.8% = 113.9 -->
+          <circle cx="80" cy="60" r="48" fill="none" stroke="#f59e0b" stroke-width="22" stroke-dasharray="113.9 187.7" stroke-dashoffset="0" transform="rotate(-90 80 60)" opacity="0.85"/>
+          <!-- Construction: 28.3% = 85.4 -->
+          <circle cx="80" cy="60" r="48" fill="none" stroke="#38bdf8" stroke-width="22" stroke-dasharray="85.4 216.2" stroke-dashoffset="-113.9" transform="rotate(-90 80 60)" opacity="0.85"/>
+          <!-- Agencies: 18.9% = 57 -->
+          <circle cx="80" cy="60" r="48" fill="none" stroke="#22d3ee" stroke-width="22" stroke-dasharray="57 244.6" stroke-dashoffset="-199.3" transform="rotate(-90 80 60)" opacity="0.85"/>
+          <!-- Prof Svcs: 15% = 45.2 -->
+          <circle cx="80" cy="60" r="48" fill="none" stroke="#06b6d4" stroke-width="22" stroke-dasharray="45.2 256.4" stroke-dashoffset="-256.3" transform="rotate(-90 80 60)" opacity="0.85"/>
+          <!-- Center label -->
+          <text x="80" y="55" text-anchor="middle" fill="#f1f5f9" font-size="18" font-weight="700" font-family="Arial">635K</text>
+          <text x="80" y="70" text-anchor="middle" fill="#94a3b8" font-size="9" font-family="Arial">total firms</text>
+          <!-- Legend row -->
+          <circle cx="12" cy="118" r="4" fill="#f59e0b"/><text x="20" y="121" fill="#94a3b8" font-size="8" font-family="Arial">Home 38%</text>
+          <circle cx="62" cy="118" r="4" fill="#38bdf8"/><text x="70" y="121" fill="#94a3b8" font-size="8" font-family="Arial">Constr 28%</text>
+          <circle cx="112" cy="118" r="4" fill="#22d3ee"/><text x="120" y="121" fill="#94a3b8" font-size="8" font-family="Arial">Agcy 19%</text>
+          <circle cx="148" cy="118" r="4" fill="#06b6d4"/><text x="152" y="121" fill="#94a3b8" font-size="7" font-family="Arial">Prof 15%</text>
+        </svg>
+      </div>
+
+      <!-- Key findings (dot list) -->
+      <div style="background:#1e293b; border:1px solid #334155; border-left:3px solid #38bdf8; border-radius:4px; padding:0.55rem 0.65rem;">
+        <p style="font-size:0.7rem; font-weight:600; color:#38bdf8; margin-bottom:0.25rem;">Key findings</p>
+        <div style="font-size:0.68rem; color:#cbd5e1; line-height:1.45;">
+          <p style="margin-bottom:0.2rem;">&#8226; <strong style="color:#38bdf8;">Construction + Prof Services</strong> are the focus zone — highest WTP ($150–400/mo) and most urgent triggers</p>
+          <p style="margin-bottom:0.2rem;">&#8226; <strong style="color:#f59e0b;">Home Services</strong> has largest base (240K) but lowest WTP; best via PLG where CAC payback is &lt;6 mo</p>
+          <p>&#8226; Triggers cluster around growth events — sales timing should align to project wins, compliance audits, first retainers</p>
+        </div>
+      </div>
+
+      <!-- Actions + sources row -->
+      <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.4rem;">
+        <div style="background:#1e293b; border:1px solid #334155; border-radius:4px; padding:0.5rem 0.6rem;">
+          <p style="font-size:0.65rem; font-weight:600; color:#38bdf8; margin-bottom:0.2rem;">Actions</p>
+          <p style="font-size:0.62rem; color:#cbd5e1; line-height:1.4;"><strong>1.</strong> Launch Construction first via QuickBooks partnerships <strong>2.</strong> Compliance onboarding for Prof Services <strong>3.</strong> PLG engine for Home Services volume</p>
+        </div>
+        <div style="background:#1e293b; border:1px solid #334155; border-radius:4px; padding:0.5rem 0.6rem;">
+          <p style="font-size:0.65rem; font-weight:600; color:#38bdf8; margin-bottom:0.2rem;">Sources</p>
+          <p style="font-size:0.62rem; color:#cbd5e1; line-height:1.4;">45 interviews, 12 lost-deal post-mortems, 6 focus groups. Van Westendorp pricing + benchmarks vs. Chase Business, Mercury, Brex.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- Slide 2: All 4 Segment Profiles -->
+<section class="slide p-16 col">
+  <h2 class="mb-4">Priority segment profiles</h2>
+  <div class="fill-height col" style="gap:0.6rem;">
+    <div class="segment-grid">
+      <div class="segment-box" style="border-left: 4px solid #38bdf8;">
+        <p class="seg-metric" style="color: #38bdf8;">180K</p>
+        <p class="seg-label">firms &bull; $150–300/mo WTP</p>
+        <p class="seg-name">Construction</p>
+        <p class="seg-detail"><strong>Needs:</strong> Job costing, progress billing, lien waivers</p>
+        <p class="seg-detail"><strong>Message:</strong> "Bank that understands job accounting"</p>
+        <p class="seg-detail muted"><strong>Trigger:</strong> Winning first $500K+ project</p>
+      </div>
+
+      <div class="segment-box" style="border-left: 4px solid #06b6d4;">
+        <p class="seg-metric" style="color: #06b6d4;">95K</p>
+        <p class="seg-label">firms &bull; $200–400/mo WTP</p>
+        <p class="seg-name">Professional Services</p>
+        <p class="seg-detail"><strong>Needs:</strong> Trust accounting, client billing, compliance</p>
+        <p class="seg-detail"><strong>Message:</strong> "Trust accounting built-in, not bolted on"</p>
+        <p class="seg-detail muted"><strong>Trigger:</strong> State bar audit flag; adding 5th+ employee</p>
+      </div>
+
+      <div class="segment-box" style="border-left: 4px solid #22d3ee;">
+        <p class="seg-metric" style="color: #22d3ee;">120K</p>
+        <p class="seg-label">firms &bull; $100–250/mo WTP</p>
+        <p class="seg-name">Agencies</p>
+        <p class="seg-detail"><strong>Needs:</strong> Project tracking, retainer mgmt, contractor pay</p>
+        <p class="seg-detail"><strong>Message:</strong> "Billing + payments + projects, one login"</p>
+        <p class="seg-detail muted"><strong>Trigger:</strong> First retainer client; hiring freelancers</p>
+      </div>
+
+      <div class="segment-box" style="border-left: 4px solid #f59e0b;">
+        <p class="seg-metric" style="color: #f59e0b;">240K</p>
+        <p class="seg-label">firms &bull; $75–150/mo WTP</p>
+        <p class="seg-name">Home Services</p>
+        <p class="seg-detail"><strong>Needs:</strong> Seasonal cash smoothing, equipment finance</p>
+        <p class="seg-detail"><strong>Message:</strong> "Bank + credit line, approvals in 24 hours"</p>
+        <p class="seg-detail muted"><strong>Trigger:</strong> Buying first work truck; expanding area</p>
+      </div>
+    </div>
+
+    <div style="display:grid; grid-template-columns:1fr 1fr; gap:0.6rem; margin-top:0.25rem;">
+      <div style="background:#1e293b; border:1px solid #334155; padding:0.6rem;">
+        <p class="text-xs" style="color:#94a3b8;"><strong style="color:#38bdf8;">ICP:</strong> Growing SMB, $500K–$10M annual revenue, 3–50 employees, high monthly payment volume, managing contractors/subs.</p>
+      </div>
+      <table class="msg-table">
+        <thead><tr><th>Segment</th><th>Core message</th><th>Pain language</th></tr></thead>
+        <tbody>
+          <tr><td style="color:#38bdf8; font-weight:600;">Constr.</td><td>Job costing accuracy</td><td>"Track costs by phase"</td></tr>
+          <tr><td style="color:#06b6d4; font-weight:600;">Prof Svcs</td><td>Compliance + trust</td><td>"State bar compliant OOTB"</td></tr>
+          <tr><td style="color:#22d3ee; font-weight:600;">Agencies</td><td>Ops efficiency</td><td>"Stop switching 3 apps"</td></tr>
+          <tr><td style="color:#f59e0b; font-weight:600;">Home Svcs</td><td>Cash flow + speed</td><td>"Get paid Tue, pay subs Wed"</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- Slide 3: Bubble Chart + CAC Heatmap -->
+<section class="slide p-16 col">
+  <h2 class="mb-4">Segment prioritization &amp; unit economics</h2>
+  <div class="fill-height col" style="gap:0.75rem;">
+    <div style="display:grid; grid-template-columns: 1.1fr 0.9fr; gap: 1rem;">
+      <!-- Left: Bubble chart -->
+      <div>
+        <p class="text-xs font-semibold" style="color:#38bdf8; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:0.35rem;">WTP vs. Trigger Urgency</p>
+        <div class="viz">
+          <div class="viz-title">
+            <h3>Segment opportunity map</h3>
+            <div class="note">Bubble = addressable firms</div>
+          </div>
+          <svg width="100%" height="235" viewBox="0 0 580 235" preserveAspectRatio="none" aria-label="Segment bubble chart">
+            <line x1="50" y1="200" x2="540" y2="200" stroke="#334155" stroke-width="2"/>
+            <line x1="50" y1="25"  x2="50"  y2="200" stroke="#334155" stroke-width="2"/>
+            <g opacity="0.8">
+              <line x1="50" y1="155" x2="540" y2="155" stroke="#233044"/>
+              <line x1="50" y1="110" x2="540" y2="110" stroke="#233044"/>
+              <line x1="50" y1="65"  x2="540" y2="65"  stroke="#233044"/>
+              <line x1="170" y1="25" x2="170" y2="200" stroke="#233044"/>
+              <line x1="290" y1="25" x2="290" y2="200" stroke="#233044"/>
+              <line x1="410" y1="25" x2="410" y2="200" stroke="#233044"/>
+              <line x1="530" y1="25" x2="530" y2="200" stroke="#233044"/>
+            </g>
+            <text x="295" y="228" text-anchor="middle" fill="#94a3b8" font-size="11" font-family="Arial">Willingness-to-pay &rarr;</text>
+            <text x="18" y="120" text-anchor="middle" fill="#94a3b8" font-size="11" font-family="Arial" transform="rotate(-90 18 120)">Trigger urgency &uarr;</text>
+
+            <rect x="370" y="40" width="155" height="90" fill="rgba(34,197,94,0.08)" stroke="rgba(34,197,94,0.35)" stroke-width="2" rx="10"/>
+            <text x="447" y="57" text-anchor="middle" fill="#86efac" font-size="11" font-weight="700" font-family="Arial">Focus zone</text>
+
+            <circle cx="420" cy="75" r="30" fill="rgba(56,189,248,0.22)" stroke="#38bdf8" stroke-width="2"/>
+            <text x="420" y="79" text-anchor="middle" fill="#e2e8f0" font-size="11" font-weight="700" font-family="Arial">Construction</text>
+
+            <circle cx="490" cy="70" r="22" fill="rgba(6,182,212,0.20)" stroke="#06b6d4" stroke-width="2"/>
+            <text x="490" y="74" text-anchor="middle" fill="#e2e8f0" font-size="10" font-weight="700" font-family="Arial">Prof Svcs</text>
+
+            <circle cx="340" cy="120" r="24" fill="rgba(34,211,238,0.18)" stroke="#22d3ee" stroke-width="2"/>
+            <text x="340" y="124" text-anchor="middle" fill="#e2e8f0" font-size="11" font-weight="700" font-family="Arial">Agencies</text>
+
+            <circle cx="260" cy="135" r="36" fill="rgba(245,158,11,0.18)" stroke="#fbbf24" stroke-width="2"/>
+            <text x="260" y="139" text-anchor="middle" fill="#e2e8f0" font-size="11" font-weight="700" font-family="Arial">Home Svcs</text>
+          </svg>
+        </div>
+        <p class="text-xs mt-4" style="color:#94a3b8;"><strong style="color:#38bdf8;">Read:</strong> Construction + Prof Services are in the focus zone — high WTP and urgent triggers. Home Services offers volume but lower WTP.</p>
+      </div>
+
+      <!-- Right: CAC heatmap -->
+      <div>
+        <p class="text-xs font-semibold" style="color:#38bdf8; text-transform:uppercase; letter-spacing:0.06em; margin-bottom:0.35rem;">CAC Payback by Channel</p>
+        <div class="viz">
+          <div class="viz-title">
+            <h3>Months to payback</h3>
+            <div class="note">Green = faster</div>
+          </div>
+          <div class="hm" aria-label="CAC payback heatmap">
+            <div class="hm-hdr"></div>
+            <div class="hm-hdr">Outbound</div>
+            <div class="hm-hdr">Partners</div>
+            <div class="hm-hdr">PLG / inbound</div>
+            <div class="hm-hdr">Platform</div>
+
+            <div class="hm-row">Construction</div>
+            <div class="hm-cell p3">9–12</div>
+            <div class="hm-cell p2">6–9</div>
+            <div class="hm-cell p4">12+</div>
+            <div class="hm-cell p2">6–9</div>
+
+            <div class="hm-row">Prof services</div>
+            <div class="hm-cell p2">6–9</div>
+            <div class="hm-cell p3">9–12</div>
+            <div class="hm-cell p3">9–12</div>
+            <div class="hm-cell p2">6–9</div>
+
+            <div class="hm-row">Agencies</div>
+            <div class="hm-cell p3">9–12</div>
+            <div class="hm-cell p2">6–9</div>
+            <div class="hm-cell p2">6–9</div>
+            <div class="hm-cell p3">9–12</div>
+
+            <div class="hm-row">Home services</div>
+            <div class="hm-cell p2">6–9</div>
+            <div class="hm-cell p2">6–9</div>
+            <div class="hm-cell p1">&lt;6</div>
+            <div class="hm-cell p3">9–12</div>
+          </div>
+        </div>
+        <p class="text-xs mt-4" style="color:#94a3b8;"><strong style="color:#38bdf8;">Decision rule:</strong> Start with channels producing &lt;9 month payback for chosen segment; expand to slower channels after activation stabilizes.</p>
+
+        <div style="background:#1e293b; border:1px solid #334155; padding:0.6rem; margin-top:0.6rem;">
+          <p class="text-xs font-semibold" style="color:#38bdf8; margin-bottom:0.25rem;">Recommended GTM sequence</p>
+          <p class="text-xs" style="color:#cbd5e1;"><strong style="color:#38bdf8;">Q1:</strong> Construction via partners + platform embeds. <strong style="color:#38bdf8;">Q2:</strong> Prof Services via outbound + platform. <strong style="color:#38bdf8;">Q3:</strong> Home Services via PLG/inbound at scale.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+  </main>
+</div>
+
+<script>
+(function(){
+  const root = document.documentElement;
+  const slides = Array.from(document.querySelectorAll('.deck .slide'));
+  let idx = 0;
+  function scaleToFit(){
+    const pad = 32;
+    const w = Math.max(320, window.innerWidth - pad);
+    const h = Math.max(320, window.innerHeight - pad);
+    const s = Math.min(w / 1280, h / 720, 1);
+    root.style.setProperty('--scale', String(s));
+  }
+  function show(i){
+    idx = Math.max(0, Math.min(slides.length - 1, i));
+    slides.forEach((s, k) => s.classList.toggle('active', k === idx));
+    window.location.hash = `slide-${idx+1}`;
+  }
+  function fromHash(){
+    const m = (window.location.hash||'').match(/slide-(\d+)/);
+    if(!m) return;
+    const n = parseInt(m[1], 10);
+    if(!Number.isFinite(n)) return;
+    show(n - 1);
+  }
+  document.addEventListener('keydown',(e)=>{
+    if(e.key==='ArrowRight'||e.key==='PageDown') show(idx+1);
+    if(e.key==='ArrowLeft'||e.key==='PageUp') show(idx-1);
+    if(e.key==='Home') show(0);
+    if(e.key==='End') show(slides.length-1);
+  });
+  window.addEventListener('hashchange', fromHash);
+  window.addEventListener('resize', scaleToFit);
+  scaleToFit();
+  fromHash();
+})();
+</script>
+<a href="../" style="position:fixed;top:12px;right:16px;z-index:99999;background:#111827;color:#e2e8f0;padding:6px 16px;border-radius:8px;font-size:13px;font-weight:600;text-decoration:none;border:1px solid #475569;font-family:system-ui,sans-serif;transition:background .15s;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#111827'">← Gallery</a>
+</body>
+</html>

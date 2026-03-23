@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Status Dashboard - Crestview Health EHR</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
+            background: #f5f5f5;
+            padding: 20px;
+            color: #1a1a1a;
+        }
+
+        .container {
+            max-width: 1280px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            min-height: 100vh;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #f8f8f8 0%, #ffffff 100%);
+            padding: 24px 32px;
+            border-bottom: 2px solid #18A873;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .header-left h1 {
+            font-size: 24px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 4px;
+        }
+
+        .header-meta {
+            font-size: 12px;
+            color: #666;
+            display: flex;
+            gap: 16px;
+        }
+
+        .week-badge {
+            display: inline-block;
+            background: #e8f5e9;
+            color: #18A873;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+
+        .status-badge {
+            display: inline-block;
+            background: #fef3c7;
+            color: #b45309;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 13px;
+            font-weight: 700;
+        }
+
+        .rag-summary {
+            display: grid;
+            grid-template-columns: repeat(5, 1fr);
+            gap: 16px;
+            padding: 24px 32px;
+            background: #fafafa;
+            border-bottom: 1px solid #e0e0e0;
+        }
+
+        .rag-card {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 6px;
+            padding: 16px;
+            text-align: center;
+        }
+
+        .rag-dot {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border-radius: 50%;
+            margin-bottom: 8px;
+        }
+
+        .rag-dot.green { background: #18A873; }
+        .rag-dot.amber { background: #f59e0b; }
+        .rag-dot.red { background: #dc2626; }
+
+        .rag-title {
+            font-size: 12px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 4px;
+        }
+
+        .rag-status {
+            font-size: 11px;
+            color: #666;
+            margin-bottom: 6px;
+        }
+
+        .rag-note {
+            font-size: 10px;
+            color: #999;
+            line-height: 1.3;
+        }
+
+        .main-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+            padding: 32px;
+            background: white;
+        }
+
+        .section-title {
+            font-size: 13px;
+            font-weight: 700;
+            color: #1a1a1a;
+            margin-bottom: 16px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            border-bottom: 2px solid #18A873;
+            padding-bottom: 8px;
+        }
+
+        .timeline {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .timeline-item {
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+
+        .timeline-dot {
+            flex-shrink: 0;
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            margin-top: 6px;
+        }
+
+        .timeline-dot.completed { background: #18A873; }
+        .timeline-dot.in-progress { background: #f59e0b; }
+        .timeline-dot.upcoming { background: #d0d0d0; }
+
+        .timeline-content {
+            flex: 1;
+        }
+
+        .timeline-label {
+            font-size: 12px;
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 2px;
+        }
+
+        .timeline-date {
+            font-size: 10px;
+            color: #999;
+        }
+
+        .progress-bar {
+            width: 100%;
+            height: 6px;
+            background: #e0e0e0;
+            border-radius: 3px;
+            overflow: hidden;
+            margin-top: 12px;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: #18A873;
+            width: 67%;
+        }
+
+        .progress-label {
+            font-size: 11px;
+            color: #666;
+            margin-top: 4px;
+            text-align: right;
+        }
+
+        .budget-chart {
+            position: relative;
+            height: 160px;
+            margin-bottom: 12px;
+        }
+
+        .budget-svg {
+            width: 100%;
+            height: 100%;
+        }
+
+        .budget-note {
+            font-size: 11px;
+            color: #18A873;
+            text-align: center;
+            font-weight: 600;
+        }
+
+        .bottom-section {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 32px;
+            padding: 32px;
+            background: #fafafa;
+            border-top: 1px solid #e0e0e0;
+        }
+
+        .risk-issue-list {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .risk-card {
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-left: 3px solid #dc2626;
+            border-radius: 4px;
+            padding: 10px;
+            font-size: 11px;
+        }
+
+        .risk-card.issue {
+            border-left-color: #f59e0b;
+        }
+
+        .risk-title {
+            font-weight: 600;
+            color: #1a1a1a;
+            margin-bottom: 2px;
+        }
+
+        .risk-owner {
+            font-size: 10px;
+            color: #999;
+        }
+
+        .activity-table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 11px;
+            background: white;
+            border: 1px solid #e0e0e0;
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .activity-table th {
+            background: #f0f0f0;
+            padding: 10px 8px;
+            text-align: left;
+            font-weight: 600;
+            color: #333;
+            border-bottom: 1px solid #d0d0d0;
+        }
+
+        .activity-table td {
+            padding: 10px 8px;
+            border-bottom: 1px solid #e8e8e8;
+        }
+
+        .activity-table tbody tr:nth-child(even) {
+            background: #fafafa;
+        }
+
+        .status-dot-small {
+            display: inline-block;
+            width: 6px;
+            height: 6px;
+            border-radius: 50%;
+            margin-right: 4px;
+        }
+
+        .status-dot-small.completed { background: #18A873; }
+        .status-dot-small.in-progress { background: #f59e0b; }
+        .status-dot-small.planned { background: #d0d0d0; }
+
+        .footer-strip {
+            background: #f0f0f0;
+            padding: 16px 32px;
+            border-top: 1px solid #e0e0e0;
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 32px;
+            font-size: 12px;
+            color: #666;
+        }
+
+        .footer-item {
+            display: flex;
+            flex-direction: column;
+            gap: 4px;
+        }
+
+        .footer-item-label {
+            font-weight: 600;
+            color: #333;
+        }
+
+        .document-footer {
+            background: #fafafa;
+            padding: 12px 32px;
+            border-top: 1px solid #e0e0e0;
+            text-align: center;
+            font-size: 11px;
+            color: #999;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div>
+                <h1>Project Status Dashboard: EHR Implementation</h1>
+                <div class="header-meta">
+                    <span class="week-badge">Week 14</span>
+                    <span><strong>Jan 13-17, 2026</strong></span>
+                </div>
+            </div>
+            <div class="status-badge">AMBER</div>
+        </div>
+
+        <div class="rag-summary">
+            <div class="rag-card">
+                <div class="rag-dot amber"></div>
+                <div class="rag-title">Overall</div>
+                <div class="rag-status">On Alert</div>
+                <div class="rag-note">Minor slippage in training timeline; mitigated by extended hours</div>
+            </div>
+            <div class="rag-card">
+                <div class="rag-dot green"></div>
+                <div class="rag-title">Scope</div>
+                <div class="rag-status">On Track</div>
+                <div class="rag-note">All requirements validated; no change orders pending</div>
+            </div>
+            <div class="rag-card">
+                <div class="rag-dot amber"></div>
+                <div class="rag-title">Schedule</div>
+                <div class="rag-status">At Risk</div>
+                <div class="rag-note">UAT delayed 3 days; compensating with parallel track</div>
+            </div>
+            <div class="rag-card">
+                <div class="rag-dot green"></div>
+                <div class="rag-title">Budget</div>
+                <div class="rag-status">On Track</div>
+                <div class="rag-note">2.4% under budget; contingency available</div>
+            </div>
+            <div class="rag-card">
+                <div class="rag-dot green"></div>
+                <div class="rag-title">Quality</div>
+                <div class="rag-status">On Track</div>
+                <div class="rag-note">6 defects found, 5 resolved; zero critical issues</div>
+            </div>
+        </div>
+
+        <div class="main-section">
+            <div>
+                <div class="section-title">Milestones</div>
+                <div class="timeline">
+                    <div class="timeline-item">
+                        <div class="timeline-dot completed"></div>
+                        <div class="timeline-content">
+                            <div class="timeline-label">Design & Build Complete</div>
+                            <div class="timeline-date">Completed Dec 15</div>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot completed"></div>
+                        <div class="timeline-content">
+                            <div class="timeline-label">System Testing (ST) Complete</div>
+                            <div class="timeline-date">Completed Dec 28</div>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot completed"></div>
+                        <div class="timeline-content">
+                            <div class="timeline-label">Training Cohort 1 Delivered</div>
+                            <div class="timeline-date">Completed Jan 8</div>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot completed"></div>
+                        <div class="timeline-content">
+                            <div class="timeline-label">UAT Kickoff & Site 1 Testing</div>
+                            <div class="timeline-date">Completed Jan 13</div>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot in-progress"></div>
+                        <div class="timeline-content">
+                            <div class="timeline-label">UAT All Sites & Cutover Planning</div>
+                            <div class="timeline-date">In Progress (Due Jan 30)</div>
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-dot upcoming"></div>
+                        <div class="timeline-content">
+                            <div class="timeline-label">Go-Live & Production Support</div>
+                            <div class="timeline-date">Planned Feb 2</div>
+                        </div>
+                    </div>
+                </div>
+                <div class="progress-bar">
+                    <div class="progress-fill"></div>
+                </div>
+                <div class="progress-label">67% complete</div>
+            </div>
+
+            <div>
+                <div class="section-title">Budget & Spend</div>
+                <div class="budget-chart">
+                    <svg class="budget-svg" viewBox="0 0 350 160" style="background: white; border: 1px solid #e0e0e0; border-radius: 4px;">
+                        <!-- Grid -->
+                        <line x1="40" y1="130" x2="330" y2="130" stroke="#e0e0e0" stroke-width="1"/>
+                        <line x1="40" y1="95" x2="330" y2="95" stroke="#e0e0e0" stroke-width="1" stroke-dasharray="2,2"/>
+                        <line x1="40" y1="60" x2="330" y2="60" stroke="#e0e0e0" stroke-width="1" stroke-dasharray="2,2"/>
+                        <line x1="40" y1="25" x2="330" y2="25" stroke="#e0e0e0" stroke-width="1" stroke-dasharray="2,2"/>
+
+                        <!-- Planned line -->
+                        <polyline points="40,65 100,58 160,48 220,42 280,25 330,20" stroke="#94a3b8" stroke-width="2" fill="none" stroke-dasharray="5,5"/>
+
+                        <!-- Actual line -->
+                        <polyline points="40,68 100,62 160,52 220,48 280,35 330,32" stroke="#18A873" stroke-width="2.5" fill="none"/>
+
+                        <!-- Y-axis labels -->
+                        <text x="35" y="133" text-anchor="end" font-size="9" fill="#999">$0</text>
+                        <text x="35" y="98" text-anchor="end" font-size="9" fill="#999">$5M</text>
+                        <text x="35" y="63" text-anchor="end" font-size="9" fill="#999">$10M</text>
+                        <text x="35" y="28" text-anchor="end" font-size="9" fill="#999">$15M</text>
+
+                        <!-- X-axis labels -->
+                        <text x="40" y="150" text-anchor="middle" font-size="8" fill="#999">Week 1</text>
+                        <text x="100" y="150" text-anchor="middle" font-size="8" fill="#999">Week 4</text>
+                        <text x="160" y="150" text-anchor="middle" font-size="8" fill="#999">Week 8</text>
+                        <text x="220" y="150" text-anchor="middle" font-size="8" fill="#999">Week 12</text>
+                        <text x="280" y="150" text-anchor="middle" font-size="8" fill="#999">Week 20</text>
+
+                        <!-- Legend -->
+                        <line x1="270" y1="8" x2="290" y2="8" stroke="#94a3b8" stroke-width="2" stroke-dasharray="5,5"/>
+                        <text x="295" font-size="9" fill="#666">Planned</text>
+                        <line x1="270" y1="18" x2="290" y2="18" stroke="#18A873" stroke-width="2"/>
+                        <text x="295" y="22" font-size="9" fill="#666">Actual</text>
+                    </svg>
+                </div>
+                <div class="budget-note">$12.4M actual vs $12.7M planned · -2.4% variance</div>
+            </div>
+        </div>
+
+        <div class="bottom-section">
+            <div>
+                <div class="section-title">Top Risks & Issues</div>
+                <div class="risk-issue-list">
+                    <div class="risk-card">
+                        <div class="risk-title">R1: UAT site access delays</div>
+                        <div class="risk-owner">Owner: Crestview IT · Severity: High</div>
+                    </div>
+                    <div class="risk-card">
+                        <div class="risk-title">R2: Data cutover data completeness</div>
+                        <div class="risk-owner">Owner: Data Lead · Severity: Medium</div>
+                    </div>
+                    <div class="risk-card">
+                        <div class="risk-title">R3: Clinician adoption (training curve)</div>
+                        <div class="risk-owner">Owner: Change Mgr · Severity: Medium</div>
+                    </div>
+                    <div class="risk-card issue">
+                        <div class="risk-title">I1: Pharmacy interface integration</div>
+                        <div class="risk-owner">Owner: Tech Lead · Status: In Resolution</div>
+                    </div>
+                    <div class="risk-card issue">
+                        <div class="risk-title">I2: Lab result upload format mismatch</div>
+                        <div class="risk-owner">Owner: Dev Lead · Status: Resolved</div>
+                    </div>
+                    <div class="risk-card issue">
+                        <div class="risk-title">I3: Report template customizations</div>
+                        <div class="risk-owner">Owner: BA · Status: In Work</div>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <div class="section-title">Next 2 Weeks Activity</div>
+                <table class="activity-table">
+                    <thead>
+                        <tr>
+                            <th>Activity</th>
+                            <th>Owner</th>
+                            <th>Due</th>
+                            <th>Status</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>UAT Site 2 Testing</td>
+                            <td>QA Lead</td>
+                            <td>Jan 20</td>
+                            <td><span class="status-dot-small in-progress"></span>In Progress</td>
+                        </tr>
+                        <tr>
+                            <td>Pharmacy Interface Testing</td>
+                            <td>Tech Lead</td>
+                            <td>Jan 22</td>
+                            <td><span class="status-dot-small in-progress"></span>In Progress</td>
+                        </tr>
+                        <tr>
+                            <td>Training Cohort 2 Delivery</td>
+                            <td>Train Mgr</td>
+                            <td>Jan 27</td>
+                            <td><span class="status-dot-small planned"></span>Planned</td>
+                        </tr>
+                        <tr>
+                            <td>Cutover Plan Finalization</td>
+                            <td>PMO</td>
+                            <td>Jan 28</td>
+                            <td><span class="status-dot-small planned"></span>Planned</td>
+                        </tr>
+                        <tr>
+                            <td>Go-Live Readiness Review</td>
+                            <td>Sponsor</td>
+                            <td>Jan 31</td>
+                            <td><span class="status-dot-small planned"></span>Planned</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="footer-strip">
+            <div class="footer-item">
+                <span class="footer-item-label">Steering Committee Review</span>
+                <span>Tuesday, January 21, 2026 · 3:00 PM EST</span>
+            </div>
+            <div class="footer-item">
+                <span class="footer-item-label">Escalation SLA</span>
+                <span>Critical issues → Sponsor within 4 hours</span>
+            </div>
+        </div>
+
+        <div class="document-footer">
+            Sanitized excerpt · Prepared by Gratia · Jan 2026
+        </div>
+    </div>
+<a href="../" style="position:fixed;top:12px;right:16px;z-index:99999;background:#111827;color:#e2e8f0;padding:6px 16px;border-radius:8px;font-size:13px;font-weight:600;text-decoration:none;border:1px solid #475569;font-family:system-ui,sans-serif;transition:background .15s;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#111827'">← Gallery</a>
+</body>
+</html>
