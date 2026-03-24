@@ -176,82 +176,7 @@
   .insight-green .insight-text { color: #6b7280; }
   .insight-dark .insight-text { color: #d1e8e0; }
 
-  /* ══════════════════════════════════════════
-     SLIDE 2: RAMP TIMELINE
-     ══════════════════════════════════════════ */
-  .ramp-controls {
-    display: flex; align-items: center; gap: 16px; margin-bottom: 16px; flex-wrap: wrap;
-  }
-  .ramp-toggle { display: flex; gap: 0; border-radius: 6px; overflow: hidden; border: 1px solid #e5e7eb; }
-  .ramp-btn {
-    padding: 6px 16px; font-size: 12px; font-weight: 500; border: none;
-    background: #f9fafb; color: #6b7280; cursor: pointer; font-family: inherit;
-    transition: all 0.2s;
-  }
-  .ramp-btn.active { background: #2d8a70; color: #fff; font-weight: 600; }
-  .ramp-btn:not(:last-child) { border-right: 1px solid #e5e7eb; }
 
-  /* Month grid table */
-  .month-grid { width: 100%; border-collapse: collapse; margin-bottom: 16px; }
-  .month-grid th {
-    font-size: 11px; font-weight: 600; color: #6b7280; text-align: center;
-    padding: 6px 4px; border-bottom: 1px solid #e5e7eb;
-  }
-  .month-grid th:first-child { text-align: left; width: 110px; }
-  .month-grid td {
-    font-size: 12px; text-align: center; padding: 8px 4px; border-bottom: 1px solid #f3f4f6;
-    font-weight: 500; color: #374151;
-  }
-  .month-grid td:first-child {
-    text-align: left; font-size: 11px; font-weight: 600; color: #2d8a70;
-    text-transform: uppercase; letter-spacing: 0.5px;
-  }
-  .month-grid tr.row-highlight td { font-weight: 700; }
-  .month-grid td.val-pos { color: #16a34a; }
-  .month-grid td.val-neg { color: #ef4444; }
-  .month-grid td.val-warn { color: #f59e0b; }
-  .month-grid td.tier-cell { background: rgba(37,99,235,0.04); }
-
-  /* Ramp chart */
-  .ramp-chart-wrap { display: flex; gap: 20px; margin-bottom: 16px; }
-  .ramp-bar-chart { flex: 1; display: flex; align-items: flex-end; gap: 6px; height: 140px; padding: 0 4px; }
-  .ramp-bar-group { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 3px; height: 100%; justify-content: flex-end; }
-  .ramp-bar {
-    width: 100%; border-radius: 3px 3px 0 0; transition: height 0.3s ease;
-    position: relative; min-height: 2px;
-  }
-  .ramp-bar.revenue { background: #2d8a70; }
-  .ramp-bar.cost { background: #1a3a3a; }
-  .ramp-bar-label { font-size: 9px; color: #9ca3af; text-align: center; }
-  .ramp-bar-val {
-    position: absolute; bottom: 100%; left: 50%; transform: translateX(-50%);
-    font-size: 9px; font-weight: 600; color: #374151; white-space: nowrap; margin-bottom: 2px;
-  }
-
-  .ramp-legend { display: flex; gap: 14px; margin-bottom: 16px; }
-  .ramp-legend-item { display: flex; align-items: center; gap: 5px; font-size: 11px; color: #6b7280; }
-  .ramp-legend-dot { width: 10px; height: 10px; border-radius: 2px; }
-
-  /* Annual summary */
-  .annual-summary {
-    display: grid; grid-template-columns: 1fr 1fr 1fr 1fr; gap: 0;
-    border-radius: 10px; overflow: hidden; border: 1px solid #e5e7eb; margin-bottom: 16px;
-  }
-  .annual-item {
-    padding: 14px 16px; text-align: center; border-right: 1px solid #e5e7eb;
-  }
-  .annual-item:last-child { border-right: none; }
-  .annual-item.dark { background: #1a3a3a; }
-  .annual-item.light { background: #f9fafb; }
-  .annual-item.accent { background: #f0faf6; }
-  .annual-num { font-size: 20px; font-weight: 700; line-height: 1; margin-bottom: 2px; }
-  .annual-item.dark .annual-num { color: #4ecba5; }
-  .annual-item.light .annual-num { color: #1a3a3a; }
-  .annual-item.accent .annual-num { color: #16a34a; }
-  .annual-item.accent .annual-num.negative { color: #ef4444; }
-  .annual-label { font-size: 11px; }
-  .annual-item.dark .annual-label { color: #a0c4b8; }
-  .annual-item.light .annual-label, .annual-item.accent .annual-label { color: #6b7280; }
 
   /* ══════════════════════════════════════════
      SLIDE 3: STRUCTURE & RISK
@@ -337,7 +262,6 @@
     <div class="nav-brand"><span class="accent">GRATIA</span> <span class="dim">×</span> Apollo — LATAM Captive</div>
     <div class="nav-tabs">
       <button class="nav-tab active" onclick="goTo(0)">P&L Calculator</button>
-      <button class="nav-tab" onclick="goTo(1)">Ramp Timeline</button>
     </div>
   </div>
 
@@ -356,8 +280,7 @@
           <strong style="color:#1a3a3a;">Hours/week</strong> — Drives monthly fees. 40 = standard, 44 = Brazil CLT.<br>
           <strong style="color:#1a3a3a;">Discount</strong> — Applied to billable rates. Tied to commitment tiers (10 FTEs → 15%, 15 → 20%, 20+ → 25%).<br>
           <strong style="color:#1a3a3a;">Overhead trigger</strong> — FTE threshold where EOR, CLT burden, site lead, and office costs kick in. Below it, only analyst costs apply.<br>
-          <strong style="color:#1a3a3a;">CLT burden</strong> — Multiplier on cost rates for Brazil employment taxes + benefits (13th month, FGTS, INSS, etc). ~1.7× is typical.<br>
-          <strong style="color:#1a3a3a;">Ramp Timeline</strong> tab — Models 3-month or 6-month ramp from 10 → 20 FTEs using the blended rates from your team mix.
+          <strong style="color:#1a3a3a;">CLT burden</strong> — Multiplier on cost rates for Brazil employment taxes + benefits (13th month, FGTS, INSS, etc). ~1.7× is typical.
         </div>
 
         <div class="section-label">Team Composition</div>
@@ -464,55 +387,6 @@
       </div>
     </div>
 
-    <!-- ════════════ SLIDE 2: RAMP TIMELINE ════════════ -->
-    <div class="slide" id="slide-1">
-      <div class="page">
-        <h1>Ramp Timeline</h1>
-        <div class="subtitle">10 → 20 FTEs over 3–6 months. Track the revenue build, discount tiers, and cumulative P&L.</div>
-        <div class="divider"></div>
-
-        <div class="ramp-controls">
-          <div class="ramp-toggle">
-            <button class="ramp-btn active" data-ramp="aggressive" onclick="setRamp('aggressive')">3-Month Ramp</button>
-            <button class="ramp-btn" data-ramp="moderate" onclick="setRamp('moderate')">6-Month Ramp</button>
-          </div>
-        </div>
-
-        <div class="ramp-legend">
-          <div class="ramp-legend-item"><div class="ramp-legend-dot" style="background:#2d8a70;"></div> Monthly Revenue</div>
-          <div class="ramp-legend-item"><div class="ramp-legend-dot" style="background:#2d6b5a;"></div> Monthly Cost</div>
-        </div>
-
-        <div class="ramp-bar-chart" id="ramp-chart"></div>
-
-        <div style="overflow-x:auto; margin-top: 16px;">
-          <table class="month-grid" id="ramp-grid">
-            <thead><tr id="ramp-headers"></tr></thead>
-            <tbody id="ramp-body"></tbody>
-          </table>
-        </div>
-
-        <div class="annual-summary" id="ramp-summary">
-          <div class="annual-item dark">
-            <div class="annual-num" id="ramp-total-rev">$0</div>
-            <div class="annual-label">Year 1 Revenue</div>
-          </div>
-          <div class="annual-item light">
-            <div class="annual-num" id="ramp-total-cost">$0</div>
-            <div class="annual-label">Year 1 Cost</div>
-          </div>
-          <div class="annual-item accent">
-            <div class="annual-num" id="ramp-total-profit">$0</div>
-            <div class="annual-label">Year 1 Profit</div>
-          </div>
-          <div class="annual-item dark">
-            <div class="annual-num" id="ramp-avg-margin">0%</div>
-            <div class="annual-label">Avg Margin</div>
-          </div>
-        </div>
-
-      </div>
-    </div>
 
 
   </div><!-- /slide-area -->
@@ -546,16 +420,11 @@ const CAPTIVE = {
   entityAnnual: 40000,
   gratia2026Target: 6000000,
   setupFee: 165000,
-  rampSchedules: {
-    aggressive: [10, 13, 17, 20, 20, 20, 20, 20, 20, 20, 20, 20],
-    moderate:   [10, 10, 12, 14, 16, 18, 20, 20, 20, 20, 20, 20]
-  },
   months: ['Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec','Jan','Feb','Mar']
 };
 
 let currentSlide = 0;
-const totalSlides = 2;
-let activeRamp = 'aggressive';
+const totalSlides = 1;
 
 // ══════════════════════════════════════════
 // NAVIGATION
@@ -781,134 +650,12 @@ function updateCalc() {
 
 }
 
-// ══════════════════════════════════════════
-// SLIDE 2: RAMP TIMELINE
-// ══════════════════════════════════════════
-function setRamp(r) {
-  activeRamp = r;
-  document.querySelectorAll('.ramp-btn').forEach(function(b) {
-    b.classList.toggle('active', b.dataset.ramp === r);
-  });
-  updateRamp();
-}
-
-function updateRamp() {
-  var schedule = CAPTIVE.rampSchedules[activeRamp];
-  var discount = +document.getElementById('calc-discount').value / 100;
-  var eorPPM = +document.getElementById('calc-eor').value;
-  var cltBurden = +document.getElementById('calc-clt').value;
-  var siteLeadAnnual = +document.getElementById('calc-sitelead').value;
-  var triggerFTE = +document.getElementById('calc-trigger').value;
-
-  // Get blended monthly fees from current team mix
-  var mix = getTeamMix();
-  var totalHC = 0, weightedFee = 0, weightedCost = 0;
-  mix.forEach(function(lv) {
-    totalHC += lv.hc;
-    weightedFee += lv.hc * lv.fee;
-    weightedCost += lv.hc * lv.cost;
-  });
-  var blendedFee = totalHC > 0 ? weightedFee / totalHC : 16000;
-  var blendedCost = totalHC > 0 ? weightedCost / totalHC : 8000;
-
-  // Calculate per-month data
-  var months = [];
-  var cumRev = 0, cumCost = 0;
-
-  for (var i = 0; i < 12; i++) {
-    var ftes = schedule[i];
-    var rev = ftes * blendedFee * (1 - discount);
-    var ohActive = ftes >= triggerFTE;
-    var burden = ohActive ? cltBurden : 1.0;
-    var cost = (ftes * blendedCost * burden) +
-               (ohActive ? ftes * eorPPM : 0) +
-               (ohActive ? siteLeadAnnual / 12 : 0) +
-               (ohActive ? CAPTIVE.officeAdmin * (ftes / 20) / 12 : 0);
-    var profit = rev - cost;
-    cumRev += rev;
-    cumCost += cost;
-
-    months.push({ ftes: ftes, discount: discount, rev: rev, cost: cost, profit: profit, cumRev: cumRev, cumCost: cumCost, cumProfit: cumRev - cumCost });
-  }
-
-  // Bar chart
-  const maxVal = Math.max.apply(null, months.map(function(m) { return Math.max(m.rev, m.cost); }));
-  const chartHtml = months.map(function(m, i) {
-    const revH = (m.rev / maxVal * 100).toFixed(1);
-    const costH = (m.cost / maxVal * 100).toFixed(1);
-    return '<div class="ramp-bar-group">' +
-      '<div class="ramp-bar revenue" style="height:' + revH + '%"><span class="ramp-bar-val">' + fmtShort(m.rev) + '</span></div>' +
-      '<div class="ramp-bar cost" style="height:' + costH + '%"></div>' +
-      '<div class="ramp-bar-label">' + CAPTIVE.months[i] + '</div></div>';
-  }).join('');
-  document.getElementById('ramp-chart').innerHTML = chartHtml;
-
-  // Table
-  let headerHtml = '<th></th>';
-  CAPTIVE.months.forEach(function(m) { headerHtml += '<th>' + m + '</th>'; });
-  document.getElementById('ramp-headers').innerHTML = headerHtml;
-
-  let bodyHtml = '';
-
-  // FTEs row
-  bodyHtml += '<tr><td>FTEs</td>';
-  months.forEach(function(m) { bodyHtml += '<td>' + m.ftes + '</td>'; });
-  bodyHtml += '</tr>';
-
-  // Discount tier row
-  bodyHtml += '<tr><td>Discount</td>';
-  months.forEach(function(m) {
-    bodyHtml += '<td class="tier-cell">' + Math.round(m.discount * 100) + '%</td>';
-  });
-  bodyHtml += '</tr>';
-
-  // Revenue row
-  bodyHtml += '<tr><td>Revenue</td>';
-  months.forEach(function(m) { bodyHtml += '<td>' + fmtShort(m.rev) + '</td>'; });
-  bodyHtml += '</tr>';
-
-  // Cost row
-  bodyHtml += '<tr><td>Cost</td>';
-  months.forEach(function(m) { bodyHtml += '<td>' + fmtShort(m.cost) + '</td>'; });
-  bodyHtml += '</tr>';
-
-  // Profit row
-  bodyHtml += '<tr class="row-highlight"><td>Profit</td>';
-  months.forEach(function(m) {
-    const cls = m.profit >= 0 ? 'val-pos' : 'val-neg';
-    bodyHtml += '<td class="' + cls + '">' + (m.profit >= 0 ? '+' : '') + fmtShort(m.profit) + '</td>';
-  });
-  bodyHtml += '</tr>';
-
-  // Cumulative profit row
-  bodyHtml += '<tr><td>Cum. Profit</td>';
-  months.forEach(function(m) {
-    const cls = m.cumProfit >= 0 ? 'val-pos' : 'val-neg';
-    bodyHtml += '<td class="' + cls + '">' + fmtShort(m.cumProfit) + '</td>';
-  });
-  bodyHtml += '</tr>';
-
-  document.getElementById('ramp-body').innerHTML = bodyHtml;
-
-  // Summary
-  const totalRev = months[11].cumRev;
-  const totalCost = months[11].cumCost;
-  const totalProfit = totalRev - totalCost;
-  const avgMargin = totalRev > 0 ? (totalProfit / totalRev * 100) : 0;
-
-  document.getElementById('ramp-total-rev').textContent = fmtShort(totalRev);
-  document.getElementById('ramp-total-cost').textContent = fmtShort(totalCost);
-  document.getElementById('ramp-total-profit').textContent = fmtShort(totalProfit);
-  document.getElementById('ramp-total-profit').className = 'annual-num' + (totalProfit >= 0 ? '' : ' negative');
-  document.getElementById('ramp-avg-margin').textContent = avgMargin.toFixed(0) + '%';
-}
 
 // ══════════════════════════════════════════
 // INIT
 // ══════════════════════════════════════════
 buildLevelTable();
 updateCalc();
-updateRamp();
 </script>
 
 </body>
