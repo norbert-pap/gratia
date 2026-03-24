@@ -155,14 +155,6 @@
   .pl-margin { font-size: 11px; color: #a0c4b8; margin-top: 6px; text-align: right; }
   .pl-margin strong { color: #4ade80; font-size: 16px; }
 
-  /* Discount tier indicator */
-  .tier-badge {
-    display: inline-block; padding: 3px 10px; border-radius: 4px;
-    font-size: 11px; font-weight: 600; letter-spacing: 0.3px;
-  }
-  .tier-15 { background: #d1fae5; color: #065f46; }
-  .tier-20 { background: #a7f3d0; color: #065f46; }
-  .tier-25 { background: #6ee7b7; color: #064e3b; }
 
   /* Insight cards */
   .insights { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 20px; }
@@ -276,11 +268,10 @@
 
         <div style="margin-bottom:18px; padding:14px 20px; background:#f9fafb; border:1px solid #e5e7eb; border-radius:10px; font-size:12px; color:#6b7280; line-height:1.7;">
           <div style="font-size:10px; font-weight:600; color:#2d8a70; text-transform:uppercase; letter-spacing:1px; margin-bottom:6px;">How to use</div>
-          <strong style="color:#1a3a3a;">Team Composition</strong> — Set headcount per Gratia level. Billable and cost rates default to the rate card but can be edited.<br>
-          <strong style="color:#1a3a3a;">Hours/week</strong> — Drives monthly fees. 40 = standard, 44 = Brazil CLT.<br>
-          <strong style="color:#1a3a3a;">Discount</strong> — Applied to billable rates. Tied to commitment tiers (10 FTEs → 15%, 15 → 20%, 20+ → 25%).<br>
-          <strong style="color:#1a3a3a;">Overhead trigger</strong> — FTE threshold where EOR, CLT burden, site lead, and office costs kick in. Below it, only analyst costs apply.<br>
-          <strong style="color:#1a3a3a;">CLT burden</strong> — Multiplier on cost rates for Brazil employment taxes + benefits (13th month, FGTS, INSS, etc). ~1.7× is typical.
+          <strong style="color:#1a3a3a;">Salary/mo</strong> — What Apollo pays per head at each level. This is the fully loaded monthly salary they see.<br>
+          <strong style="color:#1a3a3a;">Base Cost/mo</strong> — Gratia's base salary cost before CLT burden. Editable per level.<br>
+          <strong style="color:#1a3a3a;">CLT burden</strong> — Multiplier on base cost for Brazil employment taxes + benefits (13th month, FGTS, INSS, etc). ~1.7× is typical.<br>
+          <strong style="color:#1a3a3a;">Overhead trigger</strong> — FTE threshold where EOR, CLT burden, site lead, and office costs kick in. Below it, only base costs apply.
         </div>
 
         <div class="section-label">Team Composition</div>
@@ -289,10 +280,10 @@
             <tr>
               <th>Level</th>
               <th>Role</th>
-              <th>Billable/hr</th>
+              <th>Rate/hr</th>
               <th>Cost/hr</th>
-              <th>Monthly Fee</th>
-              <th>Monthly Cost</th>
+              <th>Salary/mo</th>
+              <th>Base Cost/mo</th>
               <th>CLT Loaded</th>
               <th>HC</th>
               <th>Revenue</th>
@@ -315,22 +306,6 @@
         <div class="calc-bottom">
           <div class="calc-controls-mini">
             <div class="section-label">Adjustments</div>
-            <div class="control-group">
-              <div class="control-label">
-                <span>Discount</span>
-                <span class="control-value" id="calc-discount-val">25%</span>
-              </div>
-              <input type="range" id="calc-discount" min="0" max="30" value="25" step="1" oninput="updateCalc()">
-              <div class="control-range"><span>0% (rack)</span><span>30%</span></div>
-            </div>
-            <div class="control-group">
-              <div class="control-label">
-                <span>Hours / week</span>
-                <span class="control-value" id="calc-hpw-val">40</span>
-              </div>
-              <input type="range" id="calc-hpw" min="30" max="50" value="40" step="1" oninput="updateCalc()">
-              <div class="control-range"><span>30</span><span>50</span></div>
-            </div>
             <div class="control-group">
               <div class="control-label">
                 <span>Overhead trigger (FTEs)</span>
@@ -369,10 +344,10 @@
           <div class="calc-output">
             <div class="output-label">Annual Revenue to Gratia</div>
             <div class="output-revenue" id="calc-revenue">$0</div>
-            <div class="output-sub" id="calc-blended">Blended effective rate: $0/hr — <span class="tier-badge tier-25" id="calc-tier-badge">25%</span></div>
+            <div class="output-sub" id="calc-blended">Blended salary: $0/mo per FTE</div>
 
             <div class="pl-divider"></div>
-            <div class="pl-row"><span class="pl-label">Revenue (after discount)</span><span class="pl-value" id="pl-revenue">$0</span></div>
+            <div class="pl-row"><span class="pl-label">Revenue (salaries to Apollo)</span><span class="pl-value" id="pl-revenue">$0</span></div>
             <div class="pl-row"><span class="pl-label" id="pl-team-label">Team cost (salaries)</span><span class="pl-value cost" id="pl-team-cost">$0</span></div>
             <div class="pl-row"><span class="pl-label">EOR overhead</span><span class="pl-value cost" id="pl-eor-cost">$0</span></div>
             <div class="pl-row"><span class="pl-label">Site lead</span><span class="pl-value cost" id="pl-site-lead">$0</span></div>
@@ -400,19 +375,18 @@
 // ══════════════════════════════════════════
 // DATA — GRATIA LEVELS & LATAM CAPTIVE BRIEF
 // ══════════════════════════════════════════
-// Hourly rates from Gratia rate card — monthly fees derived from hours/week setting
+// Monthly salaries — what Apollo pays (salary) vs Gratia's base cost before CLT
 const LEVELS = [
-  { id: 'A1', title: 'Apprentice Analyst',      rackHr: 15,   costHr: 7.50,  defaultHC: 0 },
-  { id: 'A2', title: 'Associate Analyst',        rackHr: 30,   costHr: 15,    defaultHC: 0 },
-  { id: 'A3', title: 'Business Analyst',          rackHr: 50,   costHr: 25,    defaultHC: 3 },
-  { id: 'A4', title: 'Senior Analyst',            rackHr: 75,   costHr: 37.50, defaultHC: 4 },
-  { id: 'E1', title: 'AI/Automation Engineer',    rackHr: 80,   costHr: 40,    defaultHC: 0 },
-  { id: 'L1', title: 'Lead Analyst',              rackHr: 100,  costHr: 50,    defaultHC: 10 },
-  { id: 'M1', title: 'Manager',                   rackHr: 200,  costHr: 100,   defaultHC: 3 },
+  { id: 'A1', title: 'Apprentice Analyst',      rackHr: 15,  costHr: 7.50,  salary: 2400,  baseCost: 1200,  defaultHC: 0 },
+  { id: 'A2', title: 'Associate Analyst',        rackHr: 30,  costHr: 15,    salary: 4800,  baseCost: 2400,  defaultHC: 0 },
+  { id: 'A3', title: 'Business Analyst',          rackHr: 50,  costHr: 25,    salary: 8000,  baseCost: 4000,  defaultHC: 3 },
+  { id: 'A4', title: 'Senior Analyst',            rackHr: 75,  costHr: 37.50, salary: 12000, baseCost: 6000,  defaultHC: 4 },
+  { id: 'E1', title: 'AI/Automation Engineer',    rackHr: 80,  costHr: 40,    salary: 12800, baseCost: 6400,  defaultHC: 0 },
+  { id: 'L1', title: 'Lead Analyst',              rackHr: 100, costHr: 50,    salary: 16000, baseCost: 8000,  defaultHC: 10 },
+  { id: 'M1', title: 'Manager',                   rackHr: 200, costHr: 100,   salary: 32000, baseCost: 16000, defaultHC: 3 },
 ];
 
 const CAPTIVE = {
-  hoursPerMonth: 160,
   eorPerPersonMonth: 600,
   siteLead: 185000,
   officeAdmin: 155000,
@@ -477,33 +451,20 @@ function fmtShort(n) {
   return '$' + Math.round(n);
 }
 
-function getDiscountForFTE(fte) {
-  if (fte >= 20) return 0.25;
-  if (fte >= 15) return 0.20;
-  if (fte >= 10) return 0.15;
-  return 0;
-}
-
 // ══════════════════════════════════════════
 // SLIDE 1: P&L CALCULATOR
 // ══════════════════════════════════════════
-function getMonthlyHours() {
-  var hpw = +document.getElementById('calc-hpw').value;
-  return hpw * 4;
-}
-
 function buildLevelTable() {
   var tbody = document.getElementById('level-body');
-  var moHrs = getMonthlyHours();
   var html = '';
   LEVELS.forEach(function(lv) {
     html += '<tr>' +
       '<td>' + lv.id + '</td>' +
       '<td>' + lv.title + '</td>' +
-      '<td><input class="hc-input" id="bill-' + lv.id + '" type="number" min="0" max="999" value="' + lv.rackHr + '" oninput="updateCalc()" style="width:56px;"></td>' +
-      '<td><input class="hc-input" id="cost-' + lv.id + '" type="number" min="0" max="999" value="' + lv.costHr + '" oninput="updateCalc()" style="width:56px;"></td>' +
-      '<td class="rate-rack" id="mofee-' + lv.id + '">' + fmtShort(lv.rackHr * moHrs) + '</td>' +
-      '<td class="rate-cost" id="mocostfee-' + lv.id + '">' + fmtShort(lv.costHr * moHrs) + '</td>' +
+      '<td class="rate-cost" style="font-size:11px;">$' + lv.rackHr + '</td>' +
+      '<td class="rate-cost" style="font-size:11px;">$' + lv.costHr + '</td>' +
+      '<td><input class="hc-input" id="sal-' + lv.id + '" type="number" min="0" max="99999" value="' + lv.salary + '" oninput="updateCalc()" style="width:72px;"></td>' +
+      '<td><input class="hc-input" id="cost-' + lv.id + '" type="number" min="0" max="99999" value="' + lv.baseCost + '" oninput="updateCalc()" style="width:72px;"></td>' +
       '<td class="rate-cost" id="moloaded-' + lv.id + '">—</td>' +
       '<td><input class="hc-input" id="hc-' + lv.id + '" type="number" min="0" max="99" value="' + lv.defaultHC + '" oninput="updateCalc()"></td>' +
       '<td class="col-rev" id="morev-' + lv.id + '">—</td>' +
@@ -515,28 +476,21 @@ function buildLevelTable() {
 }
 
 function getTeamMix() {
-  var moHrs = getMonthlyHours();
   return LEVELS.map(function(lv) {
     var hc = +(document.getElementById('hc-' + lv.id).value) || 0;
-    var billHr = +(document.getElementById('bill-' + lv.id).value) || 0;
-    var costHr = +(document.getElementById('cost-' + lv.id).value) || 0;
-    return { id: lv.id, title: lv.title, billHr: billHr, costHr: costHr, fee: billHr * moHrs, cost: costHr * moHrs, hc: hc };
+    var salary = +(document.getElementById('sal-' + lv.id).value) || 0;
+    var baseCost = +(document.getElementById('cost-' + lv.id).value) || 0;
+    return { id: lv.id, title: lv.title, salary: salary, baseCost: baseCost, hc: hc };
   });
 }
 
 function updateCalc() {
-  var discount = +document.getElementById('calc-discount').value / 100;
   var eorPPM = +document.getElementById('calc-eor').value;
   var cltBurden = +document.getElementById('calc-clt').value;
   var siteLeadAnnual = +document.getElementById('calc-sitelead').value;
   var triggerFTE = +document.getElementById('calc-trigger').value;
 
-  var hpw = +document.getElementById('calc-hpw').value;
-  var moHrs = hpw * 4;
-
   // Update slider displays
-  document.getElementById('calc-discount-val').textContent = Math.round(discount * 100) + '%';
-  document.getElementById('calc-hpw-val').textContent = hpw;
   document.getElementById('calc-trigger-val').textContent = triggerFTE;
   document.getElementById('calc-eor-val').textContent = '$' + eorPPM;
   document.getElementById('calc-clt-val').textContent = cltBurden.toFixed(2) + '×';
@@ -551,18 +505,15 @@ function updateCalc() {
   // CLT burden only applies when overhead (EOR) is active
   var costMultiplier = overheadActive ? cltBurden : 1.0;
 
-  // Update monthly fee/cost/loaded columns in table
+  // Update CLT loaded column in table
   LEVELS.forEach(function(lv) {
-    var billHr = +(document.getElementById('bill-' + lv.id).value) || 0;
-    var costHr = +(document.getElementById('cost-' + lv.id).value) || 0;
-    document.getElementById('mofee-' + lv.id).textContent = fmtShort(billHr * moHrs);
-    document.getElementById('mocostfee-' + lv.id).textContent = fmtShort(costHr * moHrs);
+    var baseCost = +(document.getElementById('cost-' + lv.id).value) || 0;
     var loadedEl = document.getElementById('moloaded-' + lv.id);
     if (overheadActive) {
-      loadedEl.textContent = fmtShort(costHr * moHrs * cltBurden);
+      loadedEl.textContent = fmtShort(baseCost * cltBurden);
       loadedEl.style.color = '#d97706';
     } else {
-      loadedEl.textContent = '—';
+      loadedEl.textContent = fmtShort(baseCost);
       loadedEl.style.color = '#9ca3af';
     }
   });
@@ -578,8 +529,8 @@ function updateCalc() {
   var totalMonthlyRev = 0, totalMonthlyCost = 0;
 
   mix.forEach(function(lv) {
-    var moRev = lv.hc * lv.fee * (1 - discount);
-    var moCost = lv.hc * lv.cost * costMultiplier;
+    var moRev = lv.hc * lv.salary;
+    var moCost = lv.hc * lv.baseCost * costMultiplier;
     var moMargin = moRev - moCost;
     totalMonthlyRev += moRev;
     totalMonthlyCost += moCost;
@@ -600,7 +551,7 @@ function updateCalc() {
   marginEl.textContent = fmtShort(totalMoMargin);
   marginEl.style.color = totalMoMargin >= 0 ? '#2d8a70' : '#ef4444';
 
-  // Annual P&L — overhead already factored into monthly costs above
+  // Annual P&L
   var annualRevenue = totalMonthlyRev * 12;
   var annualTeamCost = totalMonthlyCost * 12;
   var annualEOR = overheadActive ? totalHC * eorPPM * 12 : 0;
@@ -620,25 +571,15 @@ function updateCalc() {
   var profit = annualRevenue - annualTotalCost;
   var margin_pct = annualRevenue > 0 ? (profit / annualRevenue * 100) : 0;
 
-  // Blended monthly FTE fee
-  var blendedFee = totalHC > 0 ? (totalMonthlyRev / (1 - discount)) / totalHC : 0;
-  var blendedEffective = blendedFee * (1 - discount);
+  // Blended monthly salary
+  var blendedSalary = totalHC > 0 ? totalMonthlyRev / totalHC : 0;
 
   document.getElementById('calc-revenue').textContent = fmt(annualRevenue);
-
-  var badge = document.getElementById('calc-tier-badge');
-  badge.textContent = Math.round(discount * 100) + '% DISCOUNT';
-  badge.className = 'tier-badge';
-  if (discount <= 0.15) badge.classList.add('tier-15');
-  else if (discount <= 0.20) badge.classList.add('tier-20');
-  else badge.classList.add('tier-25');
-
-  document.getElementById('calc-blended').innerHTML =
-    'Blended FTE fee: ' + fmtShort(blendedEffective) + '/mo (rack ' + fmtShort(blendedFee) + ') — ' + badge.outerHTML;
+  document.getElementById('calc-blended').textContent = 'Blended salary: ' + fmtShort(blendedSalary) + '/mo per FTE';
 
   // P&L breakdown
   document.getElementById('pl-revenue').textContent = fmt(annualRevenue);
-  document.getElementById('pl-team-label').textContent = overheadActive ? 'Team cost (CLT loaded ' + costMultiplier.toFixed(2) + '×)' : 'Team cost (contractor rates)';
+  document.getElementById('pl-team-label').textContent = overheadActive ? 'Team cost (CLT loaded ' + costMultiplier.toFixed(2) + '×)' : 'Team cost (base salaries)';
   document.getElementById('pl-team-cost').textContent = '-' + fmt(annualTeamCost);
   document.getElementById('pl-eor-cost').textContent = overheadActive ? '-' + fmt(annualEOR) : '$0';
   document.getElementById('pl-site-lead').textContent = overheadActive ? '-' + fmt(activeSiteLead) : '$0';
