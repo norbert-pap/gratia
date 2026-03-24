@@ -162,6 +162,61 @@
     background: #2d8a70; cursor: pointer; border: 2px solid #ffffff;
     box-shadow: 0 1px 3px rgba(0,0,0,0.15);
   }
+
+  /* Monthly breakdown table */
+  .month-table { width: 100%; border-collapse: collapse; }
+  .month-table th {
+    font-size: 9px; padding: 6px; text-align: center; color: #6b7280;
+    text-transform: uppercase; border-bottom: 2px solid #e5e7eb;
+  }
+  .month-table th:first-child { text-align: left; width: 90px; }
+  .month-table td {
+    font-size: 11px; padding: 6px; text-align: center; color: #374151;
+    border-bottom: 1px solid #f3f4f6;
+  }
+  .month-table td:first-child {
+    text-align: left; font-size: 10px; font-weight: 700; color: #2d8a70;
+    text-transform: uppercase; letter-spacing: 0.5px;
+  }
+  .month-table td.pos { color: #2d8a70; font-weight: 700; }
+  .month-table td.neg { color: #ef4444; font-weight: 700; }
+  .month-table td.completed { background: #e8f5f0; }
+
+  /* Toggle */
+  .toggle-row { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }
+  .toggle {
+    width: 36px; height: 20px; background: #d1d5db; border-radius: 10px;
+    position: relative; cursor: pointer; transition: background 0.2s;
+    flex-shrink: 0;
+  }
+  .toggle.on { background: #2d8a70; }
+  .toggle::after {
+    content: ''; position: absolute; top: 2px; left: 2px;
+    width: 16px; height: 16px; background: #ffffff; border-radius: 50%;
+    transition: transform 0.2s;
+  }
+  .toggle.on::after { transform: translateX(16px); }
+  .toggle-label { font-size: 12px; color: #6b7280; }
+
+  /* Summary row */
+  .summary-row {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    border-radius: 10px; border: 1px solid #e5e7eb; overflow: hidden;
+    margin-top: 18px;
+  }
+  .summary-card { padding: 14px 16px; text-align: center; border-right: 1px solid #e5e7eb; }
+  .summary-card:last-child { border-right: none; }
+  .summary-card.dark { background: #1a3a3a; }
+  .summary-card.light { background: #f9fafb; }
+  .summary-card.accent { background: #f0faf6; }
+  .summary-num { font-size: 20px; font-weight: 700; margin-bottom: 2px; }
+  .summary-card.dark .summary-num { color: #4ecba5; }
+  .summary-card.light .summary-num { color: #1a3a3a; }
+  .summary-card.accent .summary-num { color: #2d8a70; }
+  .summary-card.accent .summary-num.neg { color: #ef4444; }
+  .summary-label { font-size: 11px; }
+  .summary-card.dark .summary-label { color: #a0c4b8; }
+  .summary-card.light .summary-label, .summary-card.accent .summary-label { color: #6b7280; }
 </style>
 </head>
 <body>
@@ -255,6 +310,37 @@
         <div class="control-card-sub">Goal / 12</div>
       </div>
     </div>
+
+    <div class="section-label">Monthly Breakdown — 2026</div>
+    <div class="toggle-row">
+      <div class="toggle" id="comp-toggle" onclick="toggleCompensation()"></div>
+      <span class="toggle-label">Compensate shortfalls across remaining months</span>
+    </div>
+    <div style="overflow-x:auto">
+      <table class="month-table">
+        <thead><tr id="month-headers"></tr></thead>
+        <tbody id="month-body"></tbody>
+      </table>
+    </div>
+
+    <div class="summary-row" id="summary-row">
+      <div class="summary-card dark">
+        <div class="summary-num" id="sum-goal">$0</div>
+        <div class="summary-label">Annual Goal</div>
+      </div>
+      <div class="summary-card light">
+        <div class="summary-num" id="sum-projected">$0</div>
+        <div class="summary-label">Projected Revenue</div>
+      </div>
+      <div class="summary-card accent">
+        <div class="summary-num" id="sum-gap">$0</div>
+        <div class="summary-label">Annual Gap</div>
+      </div>
+      <div class="summary-card dark">
+        <div class="summary-num" id="sum-pct">0%</div>
+        <div class="summary-label">% of Goal</div>
+      </div>
+    </div>
   </div>
 
 </div>
@@ -270,6 +356,10 @@ var LEVELS = [
   { id: 'L1', title: 'Lead Analyst',          rateHr: 100, costHr: 50,    defaultHC: 10 },
   { id: 'M1', title: 'Manager',               rateHr: 200, costHr: 100,   defaultHC: 3 },
 ];
+
+var MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+var COMPLETED_MONTHS = 3; // Jan-Mar hardcoded as completed
+var compensationOn = false;
 
 /* ── Format helpers ── */
 function fmt(n) {
@@ -396,6 +486,181 @@ function updateAll() {
   /* Monthly target */
   var monthlyTarget = goal / 12;
   document.getElementById('ctrl-target').textContent = fmt(monthlyTarget);
+
+  /* Monthly breakdown */
+  updateMonthly();
+}
+
+/* ── Compensation toggle ── */
+function toggleCompensation() {
+  compensationOn = !compensationOn;
+  document.getElementById('comp-toggle').className = 'toggle' + (compensationOn ? ' on' : '');
+  updateAll();
+}
+
+/* ── Monthly forecast ── */
+function updateMonthly() {
+  var mix = getTeamMix();
+  var util = +document.getElementById('ctrl-util').value / 100;
+  var hours = +document.getElementById('ctrl-hours').value;
+  var hiringPace = +document.getElementById('ctrl-pace').value;
+  var goal = parseGoal();
+
+  var totalBaseHC = 0;
+  mix.forEach(function(lv) { totalBaseHC += lv.hc; });
+
+  var monthHCs = [];
+  var monthRevenues = [];
+
+  for (var i = 0; i < 12; i++) {
+    var forecastLevels = mix.map(function(lv) {
+      return { id: lv.id, rateHr: lv.rateHr, costHr: lv.costHr, hc: lv.hc };
+    });
+
+    if (i < COMPLETED_MONTHS) {
+      // Past months: no ramp, use base HC
+      // forecastLevels already have base hc
+    } else {
+      var monthsFromForecastStart = i - COMPLETED_MONTHS + 1;
+      var newHires = hiringPace * monthsFromForecastStart;
+
+      if (totalBaseHC === 0) {
+        // All newHires go to A3
+        forecastLevels.forEach(function(fl) {
+          if (fl.id === 'A3') fl.hc = fl.hc + Math.round(newHires);
+        });
+      } else {
+        var distributed = 0;
+        var largestIdx = 0;
+        var largestHC = -1;
+        forecastLevels.forEach(function(fl, idx) {
+          var share = fl.hc / totalBaseHC;
+          var added = Math.round(newHires * share);
+          fl.hc = fl.hc + added;
+          distributed += added;
+          if (fl.hc > largestHC) { largestHC = fl.hc; largestIdx = idx; }
+        });
+        // Fix rounding
+        var diff = Math.round(newHires) - distributed;
+        forecastLevels[largestIdx].hc += diff;
+      }
+    }
+
+    var monthHC = 0;
+    var monthRev = 0;
+    forecastLevels.forEach(function(fl) {
+      monthHC += fl.hc;
+      monthRev += fl.hc * fl.rateHr * util * hours;
+    });
+    monthHCs.push(monthHC);
+    monthRevenues.push(monthRev);
+  }
+
+  // Calculate targets
+  var targets = [];
+  if (!compensationOn) {
+    for (var i = 0; i < 12; i++) targets.push(goal / 12);
+  } else {
+    var sumCompleted = 0;
+    for (var i = 0; i < COMPLETED_MONTHS; i++) sumCompleted += monthRevenues[i];
+    var remaining = Math.max(0, goal - sumCompleted);
+    var remainingMonths = 12 - COMPLETED_MONTHS;
+    for (var i = 0; i < 12; i++) {
+      if (i < COMPLETED_MONTHS) {
+        targets.push(goal / 12);
+      } else {
+        targets.push(remaining / remainingMonths);
+      }
+    }
+  }
+
+  // Calculate gaps
+  var gaps = [];
+  for (var i = 0; i < 12; i++) gaps.push(monthRevenues[i] - targets[i]);
+
+  // Build header row
+  var headerRow = document.getElementById('month-headers');
+  headerRow.innerHTML = '<th></th>';
+  for (var i = 0; i < 12; i++) {
+    var th = document.createElement('th');
+    th.textContent = MONTHS[i];
+    if (i < COMPLETED_MONTHS) th.className = 'completed';
+    headerRow.appendChild(th);
+  }
+
+  // Build body rows
+  var tbody = document.getElementById('month-body');
+  tbody.innerHTML = '';
+
+  // HC row
+  var hcRow = document.createElement('tr');
+  hcRow.innerHTML = '<td>HC</td>';
+  for (var i = 0; i < 12; i++) {
+    var td = document.createElement('td');
+    td.textContent = monthHCs[i];
+    if (i < COMPLETED_MONTHS) td.className = 'completed';
+    hcRow.appendChild(td);
+  }
+  tbody.appendChild(hcRow);
+
+  // Utilization row
+  var utilRow = document.createElement('tr');
+  utilRow.innerHTML = '<td>Util.</td>';
+  for (var i = 0; i < 12; i++) {
+    var td = document.createElement('td');
+    td.textContent = Math.round(util * 100) + '%';
+    if (i < COMPLETED_MONTHS) td.className = 'completed';
+    utilRow.appendChild(td);
+  }
+  tbody.appendChild(utilRow);
+
+  // Revenue row
+  var revRow = document.createElement('tr');
+  revRow.innerHTML = '<td>Revenue</td>';
+  for (var i = 0; i < 12; i++) {
+    var td = document.createElement('td');
+    td.textContent = fmtShort(monthRevenues[i]);
+    if (i < COMPLETED_MONTHS) td.className = 'completed';
+    revRow.appendChild(td);
+  }
+  tbody.appendChild(revRow);
+
+  // Target row
+  var tgtRow = document.createElement('tr');
+  tgtRow.innerHTML = '<td>Target</td>';
+  for (var i = 0; i < 12; i++) {
+    var td = document.createElement('td');
+    td.textContent = fmtShort(targets[i]);
+    tgtRow.appendChild(td);
+  }
+  tbody.appendChild(tgtRow);
+
+  // Gap row
+  var gapRow = document.createElement('tr');
+  gapRow.innerHTML = '<td>Gap</td>';
+  for (var i = 0; i < 12; i++) {
+    var td = document.createElement('td');
+    var g = gaps[i];
+    td.textContent = (g >= 0 ? '+' : '') + fmtShort(g);
+    td.className = g >= 0 ? 'pos' : 'neg';
+    gapRow.appendChild(td);
+  }
+  tbody.appendChild(gapRow);
+
+  // Update summary bar
+  var totalProjected = 0;
+  for (var i = 0; i < 12; i++) totalProjected += monthRevenues[i];
+  var annualGap = totalProjected - goal;
+
+  document.getElementById('sum-goal').textContent = fmtShort(goal);
+  document.getElementById('sum-projected').textContent = fmtShort(totalProjected);
+
+  var gapEl = document.getElementById('sum-gap');
+  gapEl.textContent = (annualGap >= 0 ? '+' : '') + fmtShort(annualGap);
+  gapEl.className = 'summary-num' + (annualGap < 0 ? ' neg' : '');
+
+  var pctOfGoal = goal > 0 ? Math.round(totalProjected / goal * 100) : 0;
+  document.getElementById('sum-pct').textContent = pctOfGoal + '%';
 }
 
 /* ── Init ── */
