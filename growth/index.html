@@ -198,6 +198,18 @@
   .toggle.on::after { transform: translateX(16px); }
   .toggle-label { font-size: 12px; color: #6b7280; }
 
+  /* Actuals inputs */
+  .actual-input {
+    width: 100%; border: 1px dashed #4ecba5; background: rgba(78,203,165,0.04);
+    text-align: center; font-family: inherit; font-size: 11px; font-weight: 600;
+    padding: 3px 2px; border-radius: 4px; color: #1a3a3a; outline: none;
+  }
+  .actual-input:focus {
+    border-style: solid; border-color: #2d8a70; background: #fff;
+    box-shadow: 0 0 0 2px rgba(45,138,112,0.15);
+  }
+  .actual-input::placeholder { color: #c4c4c4; font-weight: 400; font-style: italic; }
+
   /* Summary row */
   .summary-row {
     display: grid; grid-template-columns: repeat(4, 1fr);
@@ -341,6 +353,10 @@
         <div class="summary-label">% of Goal</div>
       </div>
     </div>
+    <div style="text-align:right; margin-top:8px;">
+      <a href="#" onclick="clearActuals(); return false;"
+         style="font-size:11px; color:#9ca3af;">Clear saved actuals</a>
+    </div>
   </div>
 
 </div>
@@ -450,24 +466,8 @@ function updateAll() {
   totalMarginEl.textContent = fmt(totalMargin);
   totalMarginEl.style.color = totalMargin >= 0 ? '#16a34a' : '#ef4444';
 
-  /* Goal bar */
-  var annualProjected = totalRev * 12;
+  /* Goal bar — updated in updateMonthly() with accurate totals */
   var goal = parseGoal();
-  var pct = goal > 0 ? (annualProjected / goal) * 100 : 0;
-  var barWidth = Math.min(pct, 100);
-
-  var barFill = document.getElementById('goalBarFill');
-  barFill.style.width = barWidth + '%';
-  if (pct >= 100) {
-    barFill.style.background = '#4ecba5';
-  } else if (pct >= 60) {
-    barFill.style.background = '#f59e0b';
-  } else {
-    barFill.style.background = '#ef4444';
-  }
-
-  document.getElementById('goalPct').textContent = pct.toFixed(1) + '%';
-  document.getElementById('projectedRevenue').textContent = fmt(annualProjected);
 
   /* Control card displays */
   document.getElementById('ctrl-util-display').textContent = Math.round(util * 100) + '%';
@@ -498,18 +498,56 @@ function toggleCompensation() {
   updateAll();
 }
 
+/* ── Actuals persistence ── */
+var STORAGE_KEY = 'gratia-growth-calc-actuals';
+
+function loadActuals() {
+  try { return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {}; }
+  catch(e) { return {}; }
+}
+
+function saveActuals() {
+  var data = {};
+  for (var i = 0; i < COMPLETED_MONTHS; i++) {
+    var hcInput = document.getElementById('actual-hc-' + i);
+    var utilInput = document.getElementById('actual-util-' + i);
+    var revInput = document.getElementById('actual-rev-' + i);
+    if (hcInput && hcInput.value) data['hc-' + i] = +hcInput.value;
+    if (utilInput && utilInput.value) data['util-' + i] = +utilInput.value;
+    if (revInput && revInput.value) data['rev-' + i] = +revInput.value;
+  }
+  // Also save Apr HC override if present
+  var aprHC = document.getElementById('actual-hc-3');
+  if (aprHC && aprHC.value) data['hc-3'] = +aprHC.value;
+  localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+}
+
+function clearActuals() {
+  localStorage.removeItem(STORAGE_KEY);
+  updateAll();
+}
+
 /* ── Monthly forecast ── */
 function updateMonthly() {
+  var actuals = loadActuals();
   var mix = getTeamMix();
   var util = +document.getElementById('ctrl-util').value / 100;
   var hours = +document.getElementById('ctrl-hours').value;
   var hiringPace = +document.getElementById('ctrl-pace').value;
   var goal = parseGoal();
 
+  // Calculate blended rate for actuals revenue calculation
   var totalBaseHC = 0;
-  mix.forEach(function(lv) { totalBaseHC += lv.hc; });
+  var weightedRateSum = 0;
+  mix.forEach(function(lv) {
+    totalBaseHC += lv.hc;
+    weightedRateSum += lv.hc * lv.rateHr;
+  });
+  var blendedRate = totalBaseHC > 0 ? weightedRateSum / totalBaseHC : 0;
 
+  var forecastHCs = [];
   var monthHCs = [];
+  var monthUtils = [];
   var monthRevenues = [];
 
   for (var i = 0; i < 12; i++) {
@@ -519,13 +557,11 @@ function updateMonthly() {
 
     if (i < COMPLETED_MONTHS) {
       // Past months: no ramp, use base HC
-      // forecastLevels already have base hc
     } else {
       var monthsFromForecastStart = i - COMPLETED_MONTHS + 1;
       var newHires = hiringPace * monthsFromForecastStart;
 
       if (totalBaseHC === 0) {
-        // All newHires go to A3
         forecastLevels.forEach(function(fl) {
           if (fl.id === 'A3') fl.hc = fl.hc + Math.round(newHires);
         });
@@ -540,20 +576,52 @@ function updateMonthly() {
           distributed += added;
           if (fl.hc > largestHC) { largestHC = fl.hc; largestIdx = idx; }
         });
-        // Fix rounding
         var diff = Math.round(newHires) - distributed;
         forecastLevels[largestIdx].hc += diff;
       }
     }
 
-    var monthHC = 0;
-    var monthRev = 0;
+    var forecastHC = 0;
+    var forecastRev = 0;
     forecastLevels.forEach(function(fl) {
-      monthHC += fl.hc;
-      monthRev += fl.hc * fl.rateHr * util * hours;
+      forecastHC += fl.hc;
+      forecastRev += fl.hc * fl.rateHr * util * hours;
     });
-    monthHCs.push(monthHC);
-    monthRevenues.push(monthRev);
+    forecastHCs.push(forecastHC);
+
+    // Determine effective values using actuals for completed months
+    if (i < COMPLETED_MONTHS) {
+      var effectiveHC = actuals['hc-' + i] !== undefined ? actuals['hc-' + i] : forecastHC;
+      var effectiveUtil = actuals['util-' + i] !== undefined ? actuals['util-' + i] / 100 : util;
+      var effectiveRev;
+      if (actuals['rev-' + i] !== undefined) {
+        effectiveRev = actuals['rev-' + i];
+      } else if (actuals['hc-' + i] !== undefined || actuals['util-' + i] !== undefined) {
+        effectiveRev = effectiveHC * blendedRate * effectiveUtil * hours;
+      } else {
+        effectiveRev = forecastRev;
+      }
+      monthHCs.push(effectiveHC);
+      monthUtils.push(effectiveUtil);
+      monthRevenues.push(effectiveRev);
+    } else if (i === COMPLETED_MONTHS) {
+      // Current month (Apr): HC can be overridden
+      var effectiveHC = actuals['hc-' + i] !== undefined ? actuals['hc-' + i] : forecastHC;
+      // Recalculate revenue with actual HC if overridden
+      var currentRev;
+      if (actuals['hc-' + i] !== undefined) {
+        currentRev = effectiveHC * blendedRate * util * hours;
+      } else {
+        currentRev = forecastRev;
+      }
+      monthHCs.push(effectiveHC);
+      monthUtils.push(util);
+      monthRevenues.push(currentRev);
+    } else {
+      monthHCs.push(forecastHC);
+      monthUtils.push(util);
+      monthRevenues.push(forecastRev);
+    }
   }
 
   // Calculate targets
@@ -597,8 +665,13 @@ function updateMonthly() {
   hcRow.innerHTML = '<td>HC</td>';
   for (var i = 0; i < 12; i++) {
     var td = document.createElement('td');
-    td.textContent = monthHCs[i];
-    if (i < COMPLETED_MONTHS) td.className = 'completed';
+    if (i < COMPLETED_MONTHS || i === COMPLETED_MONTHS) {
+      td.className = i < COMPLETED_MONTHS ? 'completed' : '';
+      var savedVal = actuals['hc-' + i] !== undefined ? actuals['hc-' + i] : '';
+      td.innerHTML = '<input class="actual-input" id="actual-hc-' + i + '" type="number" placeholder="' + forecastHCs[i] + '" value="' + savedVal + '" oninput="saveActuals(); updateAll()">';
+    } else {
+      td.textContent = monthHCs[i];
+    }
     hcRow.appendChild(td);
   }
   tbody.appendChild(hcRow);
@@ -608,8 +681,13 @@ function updateMonthly() {
   utilRow.innerHTML = '<td>Util.</td>';
   for (var i = 0; i < 12; i++) {
     var td = document.createElement('td');
-    td.textContent = Math.round(util * 100) + '%';
-    if (i < COMPLETED_MONTHS) td.className = 'completed';
+    if (i < COMPLETED_MONTHS) {
+      td.className = 'completed';
+      var savedVal = actuals['util-' + i] !== undefined ? actuals['util-' + i] : '';
+      td.innerHTML = '<input class="actual-input" id="actual-util-' + i + '" type="number" placeholder="' + Math.round(util * 100) + '" value="' + savedVal + '" oninput="saveActuals(); updateAll()">';
+    } else {
+      td.textContent = Math.round(util * 100) + '%';
+    }
     utilRow.appendChild(td);
   }
   tbody.appendChild(utilRow);
@@ -619,8 +697,13 @@ function updateMonthly() {
   revRow.innerHTML = '<td>Revenue</td>';
   for (var i = 0; i < 12; i++) {
     var td = document.createElement('td');
-    td.textContent = fmtShort(monthRevenues[i]);
-    if (i < COMPLETED_MONTHS) td.className = 'completed';
+    if (i < COMPLETED_MONTHS) {
+      td.className = 'completed';
+      var savedVal = actuals['rev-' + i] !== undefined ? actuals['rev-' + i] : '';
+      td.innerHTML = '<input class="actual-input" id="actual-rev-' + i + '" type="number" placeholder="' + Math.round(forecastHCs[i] * blendedRate * util * hours) + '" value="' + savedVal + '" oninput="saveActuals(); updateAll()">';
+    } else {
+      td.textContent = fmtShort(monthRevenues[i]);
+    }
     revRow.appendChild(td);
   }
   tbody.appendChild(revRow);
@@ -661,6 +744,21 @@ function updateMonthly() {
 
   var pctOfGoal = goal > 0 ? Math.round(totalProjected / goal * 100) : 0;
   document.getElementById('sum-pct').textContent = pctOfGoal + '%';
+
+  // Update goal bar with accurate monthly totals
+  var pct = goal > 0 ? (totalProjected / goal) * 100 : 0;
+  var barWidth = Math.min(pct, 100);
+  var barFill = document.getElementById('goalBarFill');
+  barFill.style.width = barWidth + '%';
+  if (pct >= 100) {
+    barFill.style.background = '#4ecba5';
+  } else if (pct >= 60) {
+    barFill.style.background = '#f59e0b';
+  } else {
+    barFill.style.background = '#ef4444';
+  }
+  document.getElementById('goalPct').textContent = pct.toFixed(1) + '%';
+  document.getElementById('projectedRevenue').textContent = fmt(totalProjected);
 }
 
 /* ── Init ── */
