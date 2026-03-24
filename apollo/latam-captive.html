@@ -366,7 +366,6 @@
 
   </div><!-- /slide-area -->
 
-  <div class="slide-footer" id="slideFooter"></div>
 
 </div><!-- /deck-wrapper -->
 </div><!-- /deck-content -->
@@ -405,18 +404,6 @@ const totalSlides = 1;
 // ══════════════════════════════════════════
 const slides = document.querySelectorAll('.slide');
 const tabs = document.querySelectorAll('.nav-tab');
-const footer = document.getElementById('slideFooter');
-
-for (let i = 0; i < totalSlides; i++) {
-  const dot = document.createElement('button');
-  dot.className = 'slide-dot' + (i === 0 ? ' active' : '');
-  dot.addEventListener('click', function() { goTo(i); });
-  footer.appendChild(dot);
-}
-const numEl = document.createElement('span');
-numEl.className = 'slide-num';
-numEl.textContent = '1 / ' + totalSlides;
-footer.appendChild(numEl);
 
 function goTo(n) {
   slides[currentSlide].classList.remove('visible');
@@ -425,10 +412,6 @@ function goTo(n) {
   slides[currentSlide].classList.add('visible');
   tabs[currentSlide].classList.add('active');
   document.querySelector('.slide-area').scrollTop = 0;
-  footer.querySelectorAll('.slide-dot').forEach(function(d, i) {
-    d.className = 'slide-dot' + (i === currentSlide ? ' active' : '');
-  });
-  numEl.textContent = (currentSlide + 1) + ' / ' + totalSlides;
 }
 
 document.addEventListener('keydown', function(e) {
@@ -586,8 +569,9 @@ function updateCalc() {
   document.getElementById('pl-office').textContent = '-' + fmt(Math.round(annualOffice));
   document.getElementById('pl-profit').textContent = fmt(profit);
   document.getElementById('pl-profit').className = 'pl-value ' + (profit >= 0 ? 'profit' : 'cost');
-  document.getElementById('pl-margin').innerHTML = 'Margin: <strong id="pl-margin-val">' + margin_pct.toFixed(0) + '%</strong>';
-  document.getElementById('pl-margin-val').style.color = margin_pct >= 30 ? '#4ade80' : margin_pct >= 20 ? '#fbbf24' : '#f87171';
+  var plMarginEl = document.getElementById('pl-margin');
+  plMarginEl.textContent = margin_pct.toFixed(0) + '%';
+  plMarginEl.style.color = margin_pct >= 30 ? '#4ade80' : margin_pct >= 20 ? '#fbbf24' : '#f87171';
 
 }
 
