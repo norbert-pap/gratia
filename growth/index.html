@@ -127,6 +127,41 @@
   .rate-input::-webkit-inner-spin-button { opacity: 1; }
   .rate-input.rate-rack-input { color: #2d8a70; }
   .rate-input.rate-cost-input { color: #6b7280; }
+
+  /* Control cards row */
+  .controls-row {
+    display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 18px;
+  }
+  .control-card {
+    flex: 1; min-width: 140px; background: #f9fafb;
+    border-radius: 10px; padding: 14px 16px;
+  }
+  .control-card-label {
+    font-size: 11px; font-weight: 600; color: #6b7280;
+    text-transform: uppercase; letter-spacing: 0.5px; margin-bottom: 4px;
+  }
+  .control-card-val {
+    font-size: 20px; font-weight: 700; color: #1a3a3a; line-height: 1.3;
+  }
+  .control-card-sub {
+    font-size: 10px; color: #9ca3af; margin-top: 2px;
+  }
+  .control-card input[type="range"] {
+    -webkit-appearance: none; appearance: none;
+    width: 100%; height: 6px; border-radius: 3px;
+    background: #e5e7eb; outline: none; margin-top: 8px; cursor: pointer;
+  }
+  .control-card input[type="range"]::-webkit-slider-thumb {
+    -webkit-appearance: none; appearance: none;
+    width: 16px; height: 16px; border-radius: 50%;
+    background: #2d8a70; cursor: pointer; border: 2px solid #ffffff;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+  }
+  .control-card input[type="range"]::-moz-range-thumb {
+    width: 16px; height: 16px; border-radius: 50%;
+    background: #2d8a70; cursor: pointer; border: 2px solid #ffffff;
+    box-shadow: 0 1px 3px rgba(0,0,0,0.15);
+  }
 </style>
 </head>
 <body>
@@ -190,6 +225,36 @@
         </tr>
       </tfoot>
     </table>
+
+    <!-- Global Adjustments -->
+    <div class="section-label">Global Adjustments</div>
+    <div class="controls-row">
+      <div class="control-card">
+        <div class="control-card-label">Utilization</div>
+        <div class="control-card-val" id="ctrl-util-display">60%</div>
+        <input type="range" id="ctrl-util" min="20" max="100" value="60" step="1" oninput="updateAll()">
+      </div>
+      <div class="control-card">
+        <div class="control-card-label">Hours / Month</div>
+        <div class="control-card-val" id="ctrl-hours-display">160</div>
+        <input type="range" id="ctrl-hours" min="120" max="200" value="160" step="1" oninput="updateAll()">
+      </div>
+      <div class="control-card">
+        <div class="control-card-label">Hiring Pace</div>
+        <div class="control-card-val" id="ctrl-pace-display">+2/month</div>
+        <input type="range" id="ctrl-pace" min="0" max="10" value="2" step="1" oninput="updateAll()">
+      </div>
+      <div class="control-card">
+        <div class="control-card-label">Blended Rate</div>
+        <div class="control-card-val" id="ctrl-blended">$0</div>
+        <div class="control-card-sub">Auto-calculated from team mix</div>
+      </div>
+      <div class="control-card">
+        <div class="control-card-label">Monthly Target</div>
+        <div class="control-card-val" id="ctrl-target">$0</div>
+        <div class="control-card-sub">Goal / 12</div>
+      </div>
+    </div>
   </div>
 
 </div>
@@ -205,9 +270,6 @@ var LEVELS = [
   { id: 'L1', title: 'Lead Analyst',          rateHr: 100, costHr: 50,    defaultHC: 10 },
   { id: 'M1', title: 'Manager',               rateHr: 200, costHr: 100,   defaultHC: 3 },
 ];
-
-var UTIL = 0.60;
-var HOURS = 160;
 
 /* ── Format helpers ── */
 function fmt(n) {
@@ -265,12 +327,16 @@ function getTeamMix() {
 
 /* ── Master update ── */
 function updateAll() {
+  var util = +document.getElementById('ctrl-util').value / 100;
+  var hours = +document.getElementById('ctrl-hours').value;
+  var hiringPace = +document.getElementById('ctrl-pace').value;
+
   var mix = getTeamMix();
   var totalHC = 0, totalRev = 0, totalCost = 0;
 
   mix.forEach(function(lv) {
-    var moRev = lv.hc * lv.rateHr * UTIL * HOURS;
-    var moCost = lv.hc * lv.costHr * HOURS;
+    var moRev = lv.hc * lv.rateHr * util * hours;
+    var moCost = lv.hc * lv.costHr * hours;
     var margin = moRev - moCost;
 
     document.querySelector('td[data-id="' + lv.id + '"][data-cell="rev"]').textContent = fmt(moRev);
@@ -312,6 +378,24 @@ function updateAll() {
 
   document.getElementById('goalPct').textContent = pct.toFixed(1) + '%';
   document.getElementById('projectedRevenue').textContent = fmt(annualProjected);
+
+  /* Control card displays */
+  document.getElementById('ctrl-util-display').textContent = Math.round(util * 100) + '%';
+  document.getElementById('ctrl-hours-display').textContent = hours;
+  document.getElementById('ctrl-pace-display').textContent = '+' + hiringPace + '/month';
+
+  /* Blended rate */
+  var blendedRate = 0;
+  if (totalHC > 0) {
+    var weightedRate = 0;
+    mix.forEach(function(lv) { weightedRate += lv.hc * lv.rateHr; });
+    blendedRate = weightedRate / totalHC;
+  }
+  document.getElementById('ctrl-blended').textContent = '$' + blendedRate.toFixed(0);
+
+  /* Monthly target */
+  var monthlyTarget = goal / 12;
+  document.getElementById('ctrl-target').textContent = fmt(monthlyTarget);
 }
 
 /* ── Init ── */
