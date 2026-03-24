@@ -1,0 +1,322 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gratia — Growth Calculator</title>
+<script src="../auth.js"></script>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;0,9..40,600;0,9..40,700;1,9..40,400&display=swap');
+
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  body {
+    font-family: 'DM Sans', -apple-system, sans-serif;
+    background: #ffffff;
+    color: #1a1a1a;
+    -webkit-font-smoothing: antialiased;
+    min-height: 100vh;
+  }
+
+  /* Nav bar */
+  .nav-bar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 12px 32px; background: #1a3a3a; flex-shrink: 0;
+  }
+  .nav-brand { font-size: 13px; font-weight: 600; color: #ffffff; letter-spacing: 0.3px; }
+  .nav-brand .accent { color: #4ecba5; }
+  .nav-brand .dim { color: #a0c4b8; font-weight: 400; }
+
+  /* Common page */
+  .page { max-width: 1100px; margin: 0 auto; padding: 24px 48px 48px; }
+  h1 { font-size: 20px; font-weight: 700; color: #1a3a3a; line-height: 1.3; margin-bottom: 4px; }
+  .subtitle { font-size: 13px; color: #6b7280; line-height: 1.45; }
+  .divider { height: 2px; background: linear-gradient(90deg, #1a3a3a 0%, #2d8a70 100%); border-radius: 2px; margin: 12px 0 18px; }
+  .section-label {
+    font-size: 10px; font-weight: 600; color: #2d8a70; text-transform: uppercase;
+    letter-spacing: 1px; margin-bottom: 8px;
+  }
+
+  /* Goal row — dark banner */
+  .goal-row {
+    display: flex; align-items: center; gap: 24px;
+    background: #1a3a3a; border-radius: 10px; padding: 18px 24px;
+    margin-bottom: 18px;
+  }
+  .goal-label {
+    font-size: 11px; font-weight: 600; color: #a0c4b8; text-transform: uppercase;
+    letter-spacing: 1px; margin-bottom: 4px;
+  }
+  .goal-input {
+    font-family: inherit; font-size: 28px; font-weight: 700; color: #ffffff;
+    background: transparent; border: none; border-bottom: 2px dashed #4ecba5;
+    outline: none; width: 180px; padding: 2px 0;
+  }
+  .goal-input::placeholder { color: rgba(255,255,255,0.3); }
+
+  .goal-bar-wrap {
+    flex: 1; display: flex; flex-direction: column; gap: 4px;
+  }
+  .goal-bar-label {
+    font-size: 11px; font-weight: 600; color: #a0c4b8;
+    display: flex; justify-content: space-between;
+  }
+  .goal-bar-bg {
+    width: 100%; height: 10px; background: rgba(255,255,255,0.1);
+    border-radius: 5px; overflow: hidden;
+  }
+  .goal-bar-fill {
+    height: 100%; border-radius: 5px; transition: width 0.3s, background 0.3s;
+    background: #4ecba5;
+  }
+
+  .goal-projected {
+    text-align: right; min-width: 140px;
+  }
+  .goal-projected-label {
+    font-size: 11px; font-weight: 600; color: #a0c4b8; text-transform: uppercase;
+    letter-spacing: 1px; margin-bottom: 4px;
+  }
+  .goal-projected-value {
+    font-size: 28px; font-weight: 700; color: #ffffff; line-height: 1;
+  }
+
+  /* Level table */
+  .level-table { width: 100%; border-collapse: collapse; margin-bottom: 16px; }
+  .level-table th {
+    font-size: 10px; font-weight: 600; color: #6b7280; text-transform: uppercase;
+    letter-spacing: 0.5px; text-align: center; padding: 8px 6px;
+    border-bottom: 2px solid #e5e7eb; background: #f9fafb;
+  }
+  .level-table th:first-child, .level-table th:nth-child(2) { text-align: left; }
+  .level-table td {
+    font-size: 12px; text-align: center; padding: 8px 6px;
+    border-bottom: 1px solid #f3f4f6; font-weight: 500; color: #374151;
+  }
+  .level-table td:first-child {
+    text-align: left; font-weight: 700; color: #1a3a3a;
+    font-size: 13px;
+  }
+  .level-table td:nth-child(2) { text-align: left; font-size: 11px; color: #6b7280; }
+  .level-table td.rate-rack { color: #2d8a70; font-weight: 600; }
+  .level-table td.rate-cost { color: #6b7280; }
+  .level-table td.col-rev { color: #1a3a3a; font-weight: 600; }
+  .level-table td.col-cost { color: #9ca3af; }
+  .level-table td.col-margin { font-weight: 700; }
+
+  .level-table tfoot td {
+    font-weight: 700; color: #1a3a3a; border-top: 2px solid #1a3a3a;
+    border-bottom: none; padding-top: 10px; font-size: 13px;
+  }
+  .level-table tfoot td.rate-rack { color: #2d8a70; }
+
+  .hc-input {
+    width: 48px; border: 1px solid #d1d5db; border-radius: 4px;
+    padding: 4px 4px; font-family: inherit; font-size: 13px; font-weight: 700;
+    text-align: center; color: #1a3a3a; outline: none; background: #fff;
+  }
+  .hc-input:focus { border-color: #4ecba5; box-shadow: 0 0 0 2px rgba(78,203,165,0.15); }
+  .hc-input::-webkit-inner-spin-button { opacity: 1; }
+
+  .rate-input {
+    width: 60px; border: 1px solid #d1d5db; border-radius: 4px;
+    padding: 4px 4px; font-family: inherit; font-size: 12px; font-weight: 600;
+    text-align: center; outline: none; background: #fff;
+  }
+  .rate-input:focus { border-color: #4ecba5; box-shadow: 0 0 0 2px rgba(78,203,165,0.15); }
+  .rate-input::-webkit-inner-spin-button { opacity: 1; }
+  .rate-input.rate-rack-input { color: #2d8a70; }
+  .rate-input.rate-cost-input { color: #6b7280; }
+</style>
+</head>
+<body>
+<div id="deck-content">
+
+  <div class="nav-bar">
+    <div class="nav-brand"><span class="accent">GRATIA</span> <span class="dim">Growth Calculator</span></div>
+  </div>
+
+  <div class="page">
+    <h1>Growth Calculator</h1>
+    <p class="subtitle">Model revenue against your annual goal. Adjust team composition, rates, utilization, and headcount ramp.</p>
+    <div class="divider"></div>
+
+    <!-- Goal banner -->
+    <div class="goal-row">
+      <div>
+        <div class="goal-label">Annual Revenue Goal</div>
+        <input type="text" class="goal-input" id="goalInput" value="$6,000,000" oninput="updateAll()">
+      </div>
+      <div class="goal-bar-wrap">
+        <div class="goal-bar-label">
+          <span>Progress to Goal</span>
+          <span id="goalPct">0%</span>
+        </div>
+        <div class="goal-bar-bg">
+          <div class="goal-bar-fill" id="goalBarFill" style="width: 0%"></div>
+        </div>
+      </div>
+      <div class="goal-projected">
+        <div class="goal-projected-label">Projected Annual Revenue</div>
+        <div class="goal-projected-value" id="projectedRevenue">$0</div>
+      </div>
+    </div>
+
+    <!-- Team Composition -->
+    <div class="section-label">Team Composition</div>
+    <table class="level-table">
+      <thead>
+        <tr>
+          <th>Level</th>
+          <th>Role</th>
+          <th>Rate/hr</th>
+          <th>Cost/hr</th>
+          <th>HC</th>
+          <th>Mo. Revenue</th>
+          <th>Mo. Cost</th>
+          <th>Margin</th>
+        </tr>
+      </thead>
+      <tbody id="levelBody"></tbody>
+      <tfoot>
+        <tr>
+          <td colspan="2">Totals</td>
+          <td></td>
+          <td></td>
+          <td id="totalHC">0</td>
+          <td class="col-rev" id="totalRev">$0</td>
+          <td class="col-cost" id="totalCost">$0</td>
+          <td class="col-margin" id="totalMargin">$0</td>
+        </tr>
+      </tfoot>
+    </table>
+  </div>
+
+</div>
+
+<script>
+/* ── Data model ── */
+var LEVELS = [
+  { id: 'A1', title: 'Apprentice Analyst',   rateHr: 15,  costHr: 7.50,  defaultHC: 0 },
+  { id: 'A2', title: 'Associate Analyst',     rateHr: 30,  costHr: 15,    defaultHC: 0 },
+  { id: 'A3', title: 'Business Analyst',      rateHr: 50,  costHr: 25,    defaultHC: 3 },
+  { id: 'A4', title: 'Senior Analyst',        rateHr: 75,  costHr: 37.50, defaultHC: 4 },
+  { id: 'E1', title: 'AI/Automation Engineer',rateHr: 80,  costHr: 40,    defaultHC: 0 },
+  { id: 'L1', title: 'Lead Analyst',          rateHr: 100, costHr: 50,    defaultHC: 10 },
+  { id: 'M1', title: 'Manager',               rateHr: 200, costHr: 100,   defaultHC: 3 },
+];
+
+var UTIL = 0.60;
+var HOURS = 160;
+
+/* ── Format helpers ── */
+function fmt(n) {
+  if (Math.abs(n) >= 1000000) return '$' + (n / 1000000).toFixed(1) + 'M';
+  if (Math.abs(n) >= 1000) return '$' + n.toLocaleString('en-US', { maximumFractionDigits: 0 });
+  return '$' + n.toFixed(0);
+}
+
+function fmtShort(n) {
+  if (Math.abs(n) >= 1000000) return '$' + (n / 1000000).toFixed(1) + 'M';
+  if (Math.abs(n) >= 1000) return '$' + Math.round(n / 1000) + 'K';
+  return '$' + n.toFixed(0);
+}
+
+/* ── Parse goal input ── */
+function parseGoal() {
+  var raw = document.getElementById('goalInput').value.replace(/[^0-9.]/g, '');
+  return parseFloat(raw) || 0;
+}
+
+/* ── Build table ── */
+function buildLevelTable() {
+  var tbody = document.getElementById('levelBody');
+  tbody.innerHTML = '';
+  LEVELS.forEach(function(lv) {
+    var tr = document.createElement('tr');
+    tr.innerHTML =
+      '<td>' + lv.id + '</td>' +
+      '<td>' + lv.title + '</td>' +
+      '<td><input type="number" class="rate-input rate-rack-input" data-id="' + lv.id + '" data-field="rate" value="' + lv.rateHr + '" min="0" step="1" oninput="updateAll()"></td>' +
+      '<td><input type="number" class="rate-input rate-cost-input" data-id="' + lv.id + '" data-field="cost" value="' + lv.costHr + '" min="0" step="0.5" oninput="updateAll()"></td>' +
+      '<td><input type="number" class="hc-input" data-id="' + lv.id + '" data-field="hc" value="' + lv.defaultHC + '" min="0" step="1" oninput="updateAll()"></td>' +
+      '<td class="col-rev" data-id="' + lv.id + '" data-cell="rev">$0</td>' +
+      '<td class="col-cost" data-id="' + lv.id + '" data-cell="cost">$0</td>' +
+      '<td class="col-margin" data-id="' + lv.id + '" data-cell="margin">$0</td>';
+    tbody.appendChild(tr);
+  });
+}
+
+/* ── Read current mix from inputs ── */
+function getTeamMix() {
+  return LEVELS.map(function(lv) {
+    var rateEl = document.querySelector('input[data-id="' + lv.id + '"][data-field="rate"]');
+    var costEl = document.querySelector('input[data-id="' + lv.id + '"][data-field="cost"]');
+    var hcEl = document.querySelector('input[data-id="' + lv.id + '"][data-field="hc"]');
+    return {
+      id: lv.id,
+      title: lv.title,
+      rateHr: parseFloat(rateEl.value) || 0,
+      costHr: parseFloat(costEl.value) || 0,
+      hc: parseInt(hcEl.value, 10) || 0
+    };
+  });
+}
+
+/* ── Master update ── */
+function updateAll() {
+  var mix = getTeamMix();
+  var totalHC = 0, totalRev = 0, totalCost = 0;
+
+  mix.forEach(function(lv) {
+    var moRev = lv.hc * lv.rateHr * UTIL * HOURS;
+    var moCost = lv.hc * lv.costHr * HOURS;
+    var margin = moRev - moCost;
+
+    document.querySelector('td[data-id="' + lv.id + '"][data-cell="rev"]').textContent = fmt(moRev);
+    document.querySelector('td[data-id="' + lv.id + '"][data-cell="cost"]').textContent = fmt(moCost);
+
+    var marginCell = document.querySelector('td[data-id="' + lv.id + '"][data-cell="margin"]');
+    marginCell.textContent = fmt(margin);
+    marginCell.style.color = margin >= 0 ? '#16a34a' : '#ef4444';
+
+    totalHC += lv.hc;
+    totalRev += moRev;
+    totalCost += moCost;
+  });
+
+  var totalMargin = totalRev - totalCost;
+
+  document.getElementById('totalHC').textContent = totalHC;
+  document.getElementById('totalRev').textContent = fmt(totalRev);
+  document.getElementById('totalCost').textContent = fmt(totalCost);
+  var totalMarginEl = document.getElementById('totalMargin');
+  totalMarginEl.textContent = fmt(totalMargin);
+  totalMarginEl.style.color = totalMargin >= 0 ? '#16a34a' : '#ef4444';
+
+  /* Goal bar */
+  var annualProjected = totalRev * 12;
+  var goal = parseGoal();
+  var pct = goal > 0 ? (annualProjected / goal) * 100 : 0;
+  var barWidth = Math.min(pct, 100);
+
+  var barFill = document.getElementById('goalBarFill');
+  barFill.style.width = barWidth + '%';
+  if (pct >= 100) {
+    barFill.style.background = '#4ecba5';
+  } else if (pct >= 60) {
+    barFill.style.background = '#f59e0b';
+  } else {
+    barFill.style.background = '#ef4444';
+  }
+
+  document.getElementById('goalPct').textContent = pct.toFixed(1) + '%';
+  document.getElementById('projectedRevenue').textContent = fmt(annualProjected);
+}
+
+/* ── Init ── */
+buildLevelTable();
+updateAll();
+</script>
+</body>
+</html>
