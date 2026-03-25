@@ -374,7 +374,7 @@ var LEVELS = [
 ];
 
 var MONTHS = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
-var COMPLETED_MONTHS = 3; // Jan-Mar hardcoded as completed
+var COMPLETED_MONTHS = new Date().getMonth(); // auto: Jan=0, Feb=1, Mar=2, Apr=3...
 var compensationOn = false;
 
 /* ── Format helpers ── */
@@ -516,9 +516,9 @@ function saveActuals() {
     if (utilInput && utilInput.value) data['util-' + i] = +utilInput.value;
     if (revInput && revInput.value) data['rev-' + i] = +revInput.value;
   }
-  // Also save Apr HC override if present
-  var aprHC = document.getElementById('actual-hc-3');
-  if (aprHC && aprHC.value) data['hc-3'] = +aprHC.value;
+  // Also save current month's HC override if present
+  var curHC = document.getElementById('actual-hc-' + COMPLETED_MONTHS);
+  if (curHC && curHC.value) data['hc-' + COMPLETED_MONTHS] = +curHC.value;
   localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
 }
 
