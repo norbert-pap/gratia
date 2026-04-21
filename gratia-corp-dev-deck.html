@@ -596,6 +596,48 @@
   .eval-score.mid { background: #fef3c7; color: #92400e; }
   .eval-score.low { background: #fee2e2; color: #991b1b; }
 
+  /* M&A cycle map */
+  .ma-cycle {
+    display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px;
+    margin-top: 16px;
+  }
+  .ma-stage {
+    background: white; border: 1px solid #e5e5e3;
+    border-radius: 10px; padding: 14px; position: relative;
+    display: flex; flex-direction: column;
+  }
+  .ma-stage.excluded {
+    background: #f8f7f6; border: 1px dashed #d0cfcc;
+    opacity: 0.85;
+  }
+  .ma-stage.excluded::before {
+    content: 'Not covered'; position: absolute; top: -8px; left: 14px;
+    background: #ef4444; color: white; font-size: 9px; font-weight: 600;
+    padding: 2px 8px; border-radius: 4px; letter-spacing: 0.5px;
+  }
+  .ma-stage .stage-label {
+    font-size: 10px; font-weight: 600; color: #0d2e2a;
+    text-transform: uppercase; letter-spacing: 0.5px;
+    margin-bottom: 6px;
+  }
+  .ma-stage.excluded .stage-label { color: #999; }
+  .ma-stage h3 {
+    font-size: 13px; font-weight: 600; color: #222;
+    margin-bottom: 8px; line-height: 1.25;
+  }
+  .ma-stage.excluded h3 { color: #888; }
+  .ma-stage ul {
+    list-style: none; padding: 0; margin: 0;
+    font-size: 11px; color: #555; line-height: 1.5;
+  }
+  .ma-stage ul li { padding: 2px 0 2px 12px; position: relative; }
+  .ma-stage ul li::before {
+    content: '·'; position: absolute; left: 4px;
+    color: #0d2e2a; font-weight: 700;
+  }
+  .ma-stage.excluded ul li { color: #999; }
+  .ma-stage.excluded ul li::before { color: #ccc; }
+
   /* Horizontal list (no-card) */
   .h-list { display: flex; gap: 24px; margin-top: 16px; }
   .h-list-item { flex: 1; }
@@ -668,55 +710,109 @@
         <div class="ga-icon" style="padding:0; overflow:hidden; width:36px; height:36px; border-radius:8px; background:none;"><svg width="36" height="36" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><g clip-path="url(#ga-clip)"><path d="M0 0H32V32H0V0Z" fill="#04383A"/><path d="M23.996 24H18.996L20.246 15.25H19.996C18.996 20.625 14.246 23.36 7.99597 23.36V18.11C12.133 17.97 16.746 16.5 17.678 12.154L9.99597 12.5V8H23.996V24Z" fill="#23DD9C"/></g><defs><clipPath id="ga-clip"><rect width="32" height="32" rx="4" fill="white"/></clipPath></defs></svg></div>
         <div class="ga-content">
           <h3>Gratia solves for this</h3>
-          <p>On-demand analyst pods staffed with vetted, banking and consulting-trained talent. Timezone-aligned. Team stood up in weeks and scales with your deal flow. Every engagement has a dedicated manager, structured QA, and weekly reporting.</p>
+          <p>On-demand analyst pods staffed with vetted, banking and consulting-trained talent. A structured model with dedicated manager oversight and QA gives you more control than a freelancer, which matters in M&A contexts. Team stood up in weeks, timezone-aligned, scales with your deal flow.</p>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- SLIDE 2: SERVICES -->
+  <!-- SLIDE 2: WHY GRATIA -->
   <div class="slide light" data-slide="2">
     <div class="slide-inner">
-      <div class="section-label anim" data-d="1">Services</div>
-      <h1 class="anim" data-d="1">Corp dev workstreams we cover</h1>
-      <p class="subtitle anim" data-d="2">Vetted analyst pods managed by experienced leads. Your deal teams stay on strategy while we handle the analytical work.</p>
-      <div class="cards c3 anim" data-d="3">
+      <div class="section-label anim" data-d="1">Why Gratia</div>
+      <h1 class="anim" data-d="1">Tier-1 talent. Integrated delivery. Fair price.</h1>
+      <p class="subtitle anim" data-d="2">What Apollo port cos get with us that they don't get from consultancies or freelancers.</p>
+      <div class="cards c4 anim" data-d="3" style="margin-top:20px">
         <div class="card">
-          <div class="card-icon">🎯</div>
-          <h3>Target Sourcing & Screening</h3>
-          <p>Build and maintain acquisition target lists. Screen for strategic fit, financial profile, and deal feasibility. Outreach to founders and management teams.</p>
+          <div style="font-size:22px; font-weight:700; color:#0d2e2a; margin-bottom:8px;">01</div>
+          <h3>Tier-1 talent</h3>
+          <p>Analysts from MBB, IB, and PE backgrounds. Same quality you'd expect from Bain PEG or a top-tier consultancy.</p>
         </div>
         <div class="card">
-          <div class="card-icon">📊</div>
-          <h3>Financial Modeling</h3>
-          <p>LBO, accretion/dilution, merger models, operating models, and scenario analysis. Built by analysts with IB and PE backgrounds.</p>
+          <div style="font-size:22px; font-weight:700; color:#0d2e2a; margin-bottom:8px;">02</div>
+          <h3>Right price point</h3>
+          <p>Execution-focused model without senior partner overhead. Strong talent, competitive rate, transparent pricing with no surprises.</p>
         </div>
         <div class="card">
-          <div class="card-icon">🔍</div>
-          <h3>Pre-LOI Due Diligence</h3>
-          <p>Commercial and financial diligence workstreams. Market sizing, competitive landscape, customer analysis, financial validation. All pre-LOI, pre-confidential.</p>
+          <div style="font-size:22px; font-weight:700; color:#0d2e2a; margin-bottom:8px;">03</div>
+          <h3>Deeply embedded</h3>
+          <p>We work integrated with your team day-to-day, not parachute-in and hand off. Real ownership, Slack access, weekly cadence.</p>
         </div>
-        <div class="card">
-          <div class="card-icon">🔄</div>
-          <h3>Post-Close Integration Support</h3>
-          <p>Internal coordination, synergy tracking, workstream management, and stakeholder reporting. Supporting the port co team through integration milestones.</p>
-        </div>
-        <div class="card">
-          <div class="card-icon">📈</div>
-          <h3>Market Intelligence</h3>
-          <p>TAM/SAM/SOM sizing, competitor benchmarking, market entry assessments, sector mapping, and landscape analysis.</p>
-        </div>
-        <div class="card">
-          <div class="card-icon">👤</div>
-          <h3>Embedded Analyst Seats</h3>
-          <p>A senior analyst embedded with the port co corp dev team for 3-6 months. Timezone-aligned. Reports to their head of corp dev.</p>
+        <div class="card" style="background:#0d2e2a; border:none; color:white;">
+          <div style="font-size:22px; font-weight:700; color:#23dd9c; margin-bottom:8px;">04</div>
+          <h3 style="color:white;">Apollo context</h3>
+          <p style="color:rgba(255,255,255,0.75);">Already across 12 active projects in 5 Apollo teams. Less ramp, less context-setting, faster delivery.</p>
         </div>
       </div>
     </div>
   </div>
 
-  <!-- SLIDE 3: ANALYST LINEUP -->
+  <!-- SLIDE 3: SERVICES (MECE M&A cycle) -->
   <div class="slide light" data-slide="3">
+    <div class="slide-inner">
+      <div class="section-label anim" data-d="1">Where we play</div>
+      <h1 class="anim" data-d="1">We cover the analytical workstreams across the M&A cycle</h1>
+      <p class="subtitle anim" data-d="2">Deal execution and confidential negotiation stay with your team. Everything else we can own or support.</p>
+      <div class="ma-cycle anim" data-d="3">
+        <div class="ma-stage">
+          <div class="stage-label">Strategy</div>
+          <h3>Thesis & sector mapping</h3>
+          <ul>
+            <li>Market sizing (TAM/SAM/SOM)</li>
+            <li>Sector mapping</li>
+            <li>Acquisition thesis</li>
+            <li>Competitor benchmarking</li>
+          </ul>
+        </div>
+        <div class="ma-stage">
+          <div class="stage-label">Sourcing</div>
+          <h3>Target identification</h3>
+          <ul>
+            <li>Target list building</li>
+            <li>Strategic fit screening</li>
+            <li>Financial profile checks</li>
+            <li>Founder / CEO outreach</li>
+          </ul>
+        </div>
+        <div class="ma-stage">
+          <div class="stage-label">Pre-LOI diligence</div>
+          <h3>Commercial & financial DD</h3>
+          <ul>
+            <li>Commercial DD workstreams</li>
+            <li>Financial modeling (LBO, A/D, merger)</li>
+            <li>Customer & market analysis</li>
+            <li>Investment memos</li>
+          </ul>
+        </div>
+        <div class="ma-stage excluded">
+          <div class="stage-label">Deal execution</div>
+          <h3>LOI → close, legal, negotiation</h3>
+          <ul>
+            <li>Merger agreement drafting</li>
+            <li>Confidential negotiation</li>
+            <li>External counsel coordination</li>
+          </ul>
+        </div>
+        <div class="ma-stage">
+          <div class="stage-label">Post-close</div>
+          <h3>Integration PMO</h3>
+          <ul>
+            <li>Synergy tracking</li>
+            <li>Workstream coordination</li>
+            <li>Stakeholder reporting</li>
+            <li>Milestone management</li>
+          </ul>
+        </div>
+      </div>
+      <div class="anim" data-d="4" style="margin-top:18px; padding:14px 18px; background:white; border:1px solid #e5e5e3; border-radius:10px;">
+        <div style="font-size:11px; font-weight:600; color:#0d2e2a; text-transform:uppercase; letter-spacing:0.5px; margin-bottom:4px;">How we plug in</div>
+        <p style="font-size:12px; color:#555; line-height:1.5;">We deliver on a <strong style="color:#222">dedicated pod</strong> basis (multi-analyst team with a manager), as <strong style="color:#222">embedded seats</strong> reporting into your head of corp dev, or on <strong style="color:#222">project-specific briefs</strong> for bounded deliverables.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- SLIDE 4: ANALYST LINEUP -->
+  <div class="slide light" data-slide="4">
     <div class="slide-inner">
       <div class="section-label anim" data-d="1">Analyst bench</div>
       <h1 class="anim" data-d="1">Examples from our current bench</h1>
@@ -738,8 +834,8 @@
     </div>
   </div>
 
-  <!-- SLIDE 4: TRACK RECORD -->
-  <div class="slide light" data-slide="4">
+  <!-- SLIDE 5: TRACK RECORD -->
+  <div class="slide light" data-slide="5">
     <div class="slide-inner">
       <div class="section-label anim" data-d="1">Track record</div>
       <h1 class="anim" data-d="1">Select engagements</h1>
@@ -780,8 +876,8 @@
     </div>
   </div>
 
-  <!-- SLIDE 5: HOW WE STAFF -->
-  <div class="slide light" data-slide="5">
+  <!-- SLIDE 6: HOW WE STAFF -->
+  <div class="slide light" data-slide="6">
     <div class="slide-inner">
       <div class="section-label anim" data-d="1">Staffing & quality</div>
       <h1 class="anim" data-d="1">How we staff and maintain quality</h1>
@@ -835,8 +931,8 @@
     </div>
   </div>
 
-  <!-- SLIDE 6: ENGAGEMENT MODELS + RATES -->
-  <div class="slide light" data-slide="6">
+  <!-- SLIDE 7: ENGAGEMENT MODELS + RATES -->
+  <div class="slide light" data-slide="7">
     <div class="slide-inner">
       <div class="section-label anim" data-d="1">Engagement & pricing</div>
       <h1 class="anim" data-d="1">Engagement models and rate card</h1>
@@ -872,8 +968,8 @@
     </div>
   </div>
 
-  <!-- SLIDE 7: HOW IT WORKS -->
-  <div class="slide light" data-slide="7">
+  <!-- SLIDE 8: HOW IT WORKS -->
+  <div class="slide light" data-slide="8">
     <div class="slide-inner">
       <div class="section-label anim" data-d="1">Process</div>
       <h1 class="anim" data-d="1">From referral to active team in weeks</h1>
@@ -922,8 +1018,8 @@
     </div>
   </div>
 
-  <!-- SLIDE 8: CTA -->
-  <div class="slide cta-slide" data-slide="8">
+  <!-- SLIDE 9: CTA -->
+  <div class="slide cta-slide" data-slide="9">
     <div class="cta-left">
       <h1 class="anim" data-d="1">Let's work<br>together.</h1>
       <p class="tagline anim" data-d="2">Ready to staff your next deal? Let's talk.</p>
@@ -939,16 +1035,16 @@
     </div>
   </div>
 
-  <!-- SLIDE 9: APPENDIX DIVIDER -->
-  <div class="slide appendix-divider" data-slide="9" style="background:radial-gradient(ellipse at 50% 20%, var(--bg-light) 0%, var(--bg) 70%);">
+  <!-- SLIDE 10: APPENDIX DIVIDER -->
+  <div class="slide appendix-divider" data-slide="10" style="background:radial-gradient(ellipse at 50% 20%, var(--bg-light) 0%, var(--bg) 70%);">
     <div style="text-align:center">
       <div class="section-label anim" data-d="1">Appendix</div>
       <h1 class="anim" data-d="2" style="font-size:40px; color:rgba(255,255,255,0.5);">Proposed recruitment process<br>for corp dev roles</h1>
     </div>
   </div>
 
-  <!-- SLIDE 10: RECRUITMENT PIPELINE -->
-  <div class="slide light" data-slide="10">
+  <!-- SLIDE 11: RECRUITMENT PIPELINE -->
+  <div class="slide light" data-slide="11">
     <div class="slide-inner">
       <div class="section-label anim" data-d="1">Recruitment process</div>
       <h1 class="anim" data-d="1">How we source and vet analysts for corp dev</h1>
@@ -1013,8 +1109,8 @@
     </div>
   </div>
 
-  <!-- SLIDE 11: SKILL AREAS BY ROLE -->
-  <div class="slide light" data-slide="11">
+  <!-- SLIDE 12: SKILL AREAS BY ROLE -->
+  <div class="slide light" data-slide="12">
     <div class="slide-inner">
       <div class="section-label anim" data-d="1">Assessment framework</div>
       <h1 class="anim" data-d="1">Skill areas by workstream</h1>
@@ -1051,8 +1147,8 @@
     </div>
   </div>
 
-  <!-- SLIDE 12: ASSESSMENT PROJECT + EVALUATION -->
-  <div class="slide light" data-slide="12">
+  <!-- SLIDE 13: ASSESSMENT PROJECT + EVALUATION -->
+  <div class="slide light" data-slide="13">
     <div class="slide-inner">
       <div class="section-label anim" data-d="1">Sample assessment</div>
       <h1 class="anim" data-d="1">Example simulation and evaluation</h1>
@@ -1100,7 +1196,7 @@
     </div>
   </div>
 
-  <div class="slide-counter" id="slide-counter">01 / 13</div>
+  <div class="slide-counter" id="slide-counter">01 / 14</div>
 
   <div class="nav-arrows">
     <button class="nav-btn" id="nav-prev">←</button>
