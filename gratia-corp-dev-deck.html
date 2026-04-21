@@ -239,10 +239,29 @@
   .analyst-card-img {
     border-radius: 12px;
     overflow: hidden;
+    position: relative;
+    align-self: start;
   }
   .analyst-card-img img {
     width: 100%;
     display: block;
+  }
+  .analyst-card-img .firm-logo {
+    position: absolute;
+    top: calc(60% + 30px);
+    right: 4%;
+    width: 16%;
+    aspect-ratio: 1;
+    background: white;
+    border-radius: 6px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  .analyst-card-img .firm-logo img {
+    width: 82%;
+    height: 82%;
+    object-fit: contain;
   }
 
   /* Grace skill dots */
@@ -819,7 +838,8 @@
       <p class="subtitle anim" data-d="2">Every analyst is vetted through skill tests, timed project simulations, and live interviews before they reach a client.</p>
       <div style="display:grid; grid-template-columns: repeat(4, 1fr); gap:14px; margin-top:8px;" class="anim" data-d="3">
         <div class="analyst-card-img">
-          <img src="emily.png" alt="Emily Moskowitz, United States">
+          <img src="emily.png" alt="Emily Moskowitz, Manager, ex-Merrill Lynch">
+          <div class="firm-logo"><img src="lynch.png" alt="Merrill Lynch"></div>
         </div>
         <div class="analyst-card-img">
           <img src="chan-kyung-kim-card.png" alt="Chan Kyung Kim, Bain, Brazil">
