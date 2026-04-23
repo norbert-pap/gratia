@@ -1,0 +1,2135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Apollo · Carina Capital 3/30</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body, h1, h2, h3, h4, p, ul, li, figure, div, section, nav, aside, header, main, button { margin: 0; padding: 0; }
+  button { background: none; border: none; color: inherit; cursor: pointer; font: inherit; }
+  ul { list-style: none; }
+
+  :root {
+    --bg: #0b0c0e;
+    --bg-1: #111214;
+    --bg-2: #17181b;
+    --bg-3: #1e1f22;
+    --bg-4: #27282c;
+    --border: #232428;
+    --border-2: #33353b;
+    --ink-0: #edeef1;
+    --ink-1: #d4d6db;
+    --ink-2: #8f9198;
+    --ink-3: #5c5e65;
+    --ink-4: #36383d;
+
+    --gold: #16a38a;
+    --gold-bright: #2cc2a5;
+    --gold-ink: #5ad9bc;
+    --gold-dim: rgba(22, 163, 138, 0.13);
+    --gold-line: rgba(22, 163, 138, 0.30);
+
+    --green: #16a38a;
+    --green-ink: #5ad9bc;
+    --green-dim: rgba(22, 163, 138, 0.14);
+    --green-line: rgba(22, 163, 138, 0.32);
+
+    --amber: #e6b259;
+    --amber-ink: #f2ca85;
+    --amber-dim: rgba(230, 178, 89, 0.14);
+    --amber-line: rgba(230, 178, 89, 0.32);
+
+    --red: #e06f64;
+    --red-ink: #f0928a;
+    --red-dim: rgba(224, 111, 100, 0.14);
+    --red-line: rgba(224, 111, 100, 0.32);
+
+    --shadow: 0 1px 1px rgba(0,0,0,0.3), 0 10px 32px rgba(0,0,0,0.4);
+    --shadow-drawer: -12px 0 48px rgba(0,0,0,0.55);
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--ink-0);
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    letter-spacing: -0.005em;
+    font-feature-settings: 'cv11', 'ss01', 'ss03';
+    overflow-x: hidden;
+  }
+
+  .serif { font-family: 'Inter', system-ui, sans-serif; font-weight: 600; letter-spacing: -0.015em; }
+  .mono { font-family: 'JetBrains Mono', monospace; font-feature-settings: 'ss02'; }
+  .num { font-variant-numeric: tabular-nums; }
+  .eyebrow {
+    font-size: 10.5px; font-weight: 600; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--ink-3);
+  }
+
+  /* ========== APP LAYOUT ========== */
+  .app {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ========== MAIN NAV ========== */
+  .mainnav {
+    height: 58px;
+    display: flex;
+    align-items: stretch;
+    padding: 0 28px;
+    border-bottom: 1px solid var(--border);
+    background: rgba(11, 12, 14, 0.85);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    position: sticky; top: 0; z-index: 20;
+  }
+
+  .nav-brand {
+    display: flex; align-items: center;
+    padding-right: 20px; margin-right: 16px;
+    border-right: 1px solid var(--border);
+    transition: opacity 0.15s;
+    cursor: pointer;
+  }
+  .nav-brand:hover { opacity: 0.8; }
+  .nav-brand img {
+    width: 28px; height: 28px;
+    object-fit: contain; display: block;
+    border-radius: 4px;
+  }
+  .nav-brand-fallback {
+    font-family: 'Inter', sans-serif;
+    font-size: 17px; font-weight: 700;
+    color: var(--gold-ink);
+    letter-spacing: -0.02em;
+    width: 28px; height: 28px;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--gold-dim);
+    border: 1px solid var(--gold-line);
+    border-radius: 4px;
+  }
+
+  .nav-right {
+    margin-left: auto;
+    display: flex; align-items: center;
+    gap: 6px;
+  }
+
+  .avatar-btn {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s;
+  }
+  .avatar-btn:hover { transform: scale(1.04); }
+  .avatar {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: linear-gradient(135deg, #0d6b5a, #16a38a);
+    color: white; font-weight: 600; font-size: 11px;
+    display: flex; align-items: center; justify-content: center;
+    letter-spacing: 0;
+  }
+
+  .icon-btn {
+    width: 32px; height: 32px; border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--ink-2); transition: all 0.15s;
+    position: relative;
+  }
+  .icon-btn:hover { background: var(--bg-2); color: var(--ink-0); }
+  .icon-btn svg { width: 15px; height: 15px; }
+  .icon-btn .badge {
+    position: absolute; top: 7px; right: 7px;
+    width: 6px; height: 6px; background: var(--red); border-radius: 50%;
+    border: 2px solid var(--bg);
+  }
+
+  /* ========== CONTENT ========== */
+  .content {
+    max-width: 1360px;
+    margin: 0 auto;
+    padding: 36px 40px 80px;
+    animation: fadeUp 0.5s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ========== PAGE HEADER ========== */
+  .page-head {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 32px; align-items: end;
+    padding-bottom: 28px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 28px;
+  }
+  .eyebrow-row {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 14px;
+  }
+  .eyebrow-row .status-chip {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 3px 8px 3px 7px; border-radius: 3px;
+    font-size: 10.5px; font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    background: var(--red-dim); color: var(--red-ink);
+    border: 1px solid var(--red-line);
+  }
+  .status-chip .dot-pulse {
+    width: 5px; height: 5px; border-radius: 50%;
+    background: var(--red);
+    animation: pulse 1.8s ease-in-out infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; box-shadow: 0 0 0 0 var(--red); }
+    50% { opacity: 0.6; box-shadow: 0 0 0 4px rgba(224, 115, 104, 0); }
+  }
+  h1.lede {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 26px;
+    font-weight: 600;
+    line-height: 1.22;
+    letter-spacing: -0.018em;
+    color: var(--ink-0);
+    max-width: 680px;
+  }
+  h1.lede em { color: var(--gold-ink); font-style: normal; font-weight: 600; }
+  .sublede {
+    margin-top: 14px;
+    color: var(--ink-2);
+    font-size: 14.5px;
+    max-width: 620px;
+    line-height: 1.55;
+  }
+  .head-actions {
+    display: flex; gap: 8px; align-items: center;
+  }
+  .btn {
+    height: 34px;
+    padding: 0 14px;
+    border-radius: 6px;
+    font-size: 13px; font-weight: 500;
+    display: inline-flex; align-items: center; gap: 8px;
+    transition: all 0.15s;
+    border: 1px solid var(--border-2);
+    color: var(--ink-0);
+    background: var(--bg-2);
+  }
+  .btn:hover { background: var(--bg-3); border-color: var(--ink-4); }
+  .btn.primary {
+    background: var(--gold);
+    color: #1a120a;
+    border-color: var(--gold);
+    font-weight: 600;
+  }
+  .btn.primary:hover { background: var(--gold-bright); border-color: var(--gold-bright); }
+  .btn svg { width: 13px; height: 13px; }
+
+  /* ========== KPI ROW ========== */
+  .kpi-row {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    margin-bottom: 28px;
+  }
+  .kpi {
+    background: var(--bg-1);
+    padding: 18px 20px 20px;
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .kpi .label { font-size: 11px; font-weight: 500; color: var(--ink-2); letter-spacing: 0.03em; text-transform: uppercase; }
+  .kpi .value {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 26px; font-weight: 600; line-height: 1;
+    letter-spacing: -0.018em;
+    color: var(--ink-0);
+    display: flex; align-items: baseline; gap: 3px;
+    font-variant-numeric: tabular-nums;
+  }
+  .kpi .value .unit { font-size: 14px; color: var(--ink-2); font-weight: 500; }
+  .kpi .delta { font-size: 11.5px; color: var(--ink-3); display: flex; align-items: center; gap: 6px; }
+  .kpi .delta.bad { color: var(--red-ink); }
+  .kpi .delta.good { color: var(--green-ink); }
+  .kpi .spark { margin-top: 6px; }
+
+  /* ========== HERO GRID ========== */
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 2.2fr 1fr;
+    gap: 16px;
+    margin-bottom: 28px;
+  }
+  .card {
+    background: var(--bg-1);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+  .card-head {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 20px 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  .card-head h3 {
+    font-size: 13.5px; font-weight: 600; letter-spacing: -0.005em;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .card-head .meta {
+    font-size: 11px; color: var(--ink-3);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .card-body { padding: 18px 20px 20px; }
+
+  /* Pacing SVG */
+  .pacing-svg { width: 100%; height: auto; display: block; }
+  .pacing-svg text { font-family: 'Inter', sans-serif; }
+
+  /* Waffle — named */
+  .waffle-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 4px;
+  }
+  .waffle-cell {
+    padding: 8px 10px;
+    border-radius: 3px;
+    font-size: 11.5px; font-weight: 500;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    display: flex; align-items: center; gap: 7px;
+    cursor: pointer;
+    transition: all 0.14s;
+    border: 1px solid transparent;
+  }
+  .waffle-cell:hover { transform: translateY(-1px); }
+  .waffle-cell .dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
+  .waffle-cell.r { background: var(--red-dim); color: var(--red-ink); border-color: var(--red-line); }
+  .waffle-cell.a { background: var(--amber-dim); color: var(--amber-ink); border-color: var(--amber-line); }
+  .waffle-cell.g { background: var(--green-dim); color: var(--green-ink); border-color: var(--green-line); }
+  .waffle-cell.r .dot { background: var(--red); }
+  .waffle-cell.a .dot { background: var(--amber); }
+  .waffle-cell.g .dot { background: var(--green); }
+
+  .waffle-head-toggle {
+    display: flex; gap: 4px;
+  }
+  .waffle-head-toggle button {
+    font-size: 11px; color: var(--ink-3);
+    padding: 3px 7px; border-radius: 4px;
+  }
+  .waffle-head-toggle button.active { background: var(--bg-3); color: var(--ink-0); }
+
+  /* ========== MATRIX ========== */
+  .matrix-section { margin-bottom: 28px; }
+  .matrix-head {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 14px;
+  }
+  .matrix-head .title-group {
+    display: flex; align-items: baseline; gap: 14px;
+  }
+  .matrix-head h2 {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 17px; font-weight: 600; letter-spacing: -0.014em;
+  }
+  .matrix-head .count { color: var(--ink-3); font-size: 12px; }
+
+  .filter-bar {
+    display: flex; align-items: center; gap: 6px;
+  }
+  .chip {
+    height: 28px; padding: 0 11px;
+    display: inline-flex; align-items: center; gap: 7px;
+    font-size: 12px; font-weight: 500;
+    border-radius: 6px;
+    color: var(--ink-2);
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: all 0.14s;
+  }
+  .chip:hover { color: var(--ink-0); border-color: var(--border-2); }
+  .chip.active {
+    color: var(--ink-0);
+    background: var(--bg-3);
+    border-color: var(--ink-4);
+  }
+  .chip .ct { color: var(--ink-3); font-weight: 500; font-variant-numeric: tabular-nums; }
+  .chip.active .ct { color: var(--ink-2); }
+  .chip .dot { width: 6px; height: 6px; border-radius: 50%; }
+  .chip .dot.r { background: var(--red); }
+  .chip .dot.a { background: var(--amber); }
+  .chip .dot.g { background: var(--green); }
+
+  .matrix {
+    background: var(--bg-1);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .matrix-head-row {
+    display: grid;
+    grid-template-columns: 40px 200px 1fr 130px 130px 60px 18px;
+    gap: 20px;
+    padding: 12px 20px;
+    font-size: 10.5px; font-weight: 600;
+    color: var(--ink-3);
+    letter-spacing: 0.08em; text-transform: uppercase;
+    border-bottom: 1px solid var(--border);
+    align-items: center;
+  }
+  .matrix-head-row .stage-labels {
+    display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px;
+  }
+  .matrix-row {
+    display: grid;
+    grid-template-columns: 40px 200px 1fr 130px 130px 60px 18px;
+    gap: 20px;
+    padding: 13px 20px;
+    align-items: center;
+    cursor: pointer;
+    border-bottom: 1px solid var(--border);
+    transition: background 0.12s;
+    position: relative;
+  }
+  .matrix-row:last-child { border-bottom: none; }
+  .matrix-row:hover { background: rgba(255, 255, 255, 0.013); }
+  .matrix-row:hover .chev { color: var(--gold-bright); transform: translateX(2px); }
+  .matrix-row.hidden { display: none; }
+  .matrix-row .rank {
+    font-size: 11px; color: var(--ink-3);
+    font-variant-numeric: tabular-nums;
+  }
+  .matrix-row .team {
+    font-size: 13.5px; font-weight: 500; color: var(--ink-0);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .matrix-row .team .health {
+    width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0;
+  }
+  .matrix-row .team .health.r { background: var(--red); box-shadow: 0 0 0 3px var(--red-dim); }
+  .matrix-row .team .health.a { background: var(--amber); box-shadow: 0 0 0 3px var(--amber-dim); }
+  .matrix-row .team .health.g { background: var(--green); box-shadow: 0 0 0 3px var(--green-dim); }
+  .matrix-row .stages {
+    display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px;
+    align-items: center;
+  }
+  .matrix-row .seg { height: 4px; border-radius: 1.5px; position: relative; }
+  .matrix-row .seg.done { background: var(--ink-2); }
+  .matrix-row .seg.future { background: var(--bg-4); }
+  .matrix-row .seg.cur-r { background: var(--red); }
+  .matrix-row .seg.cur-a { background: var(--amber); }
+  .matrix-row .seg.cur-g { background: var(--green); }
+  .matrix-row .stage-label {
+    font-size: 12px; color: var(--ink-2);
+    display: flex; align-items: center; gap: 7px; justify-content: flex-end;
+  }
+  .matrix-row .assignee {
+    font-size: 12px; color: var(--ink-2);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .matrix-row .av {
+    width: 22px; height: 22px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 9.5px; font-weight: 600;
+    color: var(--ink-1);
+    background: var(--bg-3);
+    border: 1px solid var(--border-2);
+    letter-spacing: 0;
+  }
+  .matrix-row .days {
+    font-size: 12px; text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+  .matrix-row .days.bad { color: var(--red-ink); font-weight: 500; }
+  .matrix-row .days.warn { color: var(--amber-ink); }
+  .matrix-row .chev {
+    color: var(--ink-4); transition: all 0.15s;
+    display: flex; justify-content: flex-end;
+  }
+
+  /* Bottom cards */
+  .bottom-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  /* Action list */
+  .action-list { padding: 4px 0 10px; }
+  .action-item {
+    display: grid; grid-template-columns: 28px 1fr auto;
+    gap: 12px; padding: 12px 20px;
+    border-bottom: 1px solid var(--border);
+    align-items: flex-start;
+    cursor: pointer;
+    transition: background 0.12s;
+  }
+  .action-item:hover { background: rgba(255, 255, 255, 0.013); }
+  .action-item:last-child { border-bottom: none; }
+  .action-item .num-circle {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: var(--red-dim); color: var(--red-ink);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 600;
+    border: 1px solid var(--red-line);
+    font-variant-numeric: tabular-nums;
+  }
+  .action-item .body { font-size: 13px; color: var(--ink-0); line-height: 1.45; }
+  .action-item .body .sub { font-size: 12px; color: var(--ink-2); margin-top: 3px; }
+  .action-item .body em { color: var(--gold-bright); font-style: normal; font-weight: 500; }
+  .action-item .cta {
+    font-size: 11.5px;
+    color: var(--ink-3);
+    padding: 3px 8px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    transition: all 0.15s;
+  }
+  .action-item:hover .cta { color: var(--gold-bright); border-color: var(--gold-line); background: var(--gold-dim); }
+
+  /* Bullets */
+  .bullet-list { padding: 4px 20px 20px; }
+  .bullet-row {
+    display: grid;
+    grid-template-columns: 120px 1fr 40px 56px;
+    gap: 14px;
+    align-items: center;
+    padding: 9px 0;
+  }
+  .bullet-row .stage-name { font-size: 12.5px; color: var(--ink-0); font-weight: 500; }
+  .bullet-row .bar-wrap {
+    height: 6px; background: var(--bg-4); border-radius: 3px;
+    position: relative;
+  }
+  .bullet-row .bar-fill {
+    height: 100%; border-radius: 3px;
+    position: absolute; left: 0; top: 0;
+  }
+  .bullet-row .bar-fill.r { background: var(--red); }
+  .bullet-row .bar-fill.a { background: var(--amber); }
+  .bullet-row .bar-fill.g { background: var(--green); }
+  .bullet-row .target-mark {
+    position: absolute; top: -4px; bottom: -4px; width: 2px;
+    background: var(--ink-0);
+    border-radius: 1px;
+  }
+  .bullet-row .count {
+    font-variant-numeric: tabular-nums;
+    font-size: 13px;
+    font-weight: 500;
+    text-align: right;
+  }
+  .bullet-row .delta {
+    font-size: 10.5px; font-weight: 600;
+    padding: 2px 5px;
+    border-radius: 3px;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+    border: 1px solid transparent;
+  }
+  .delta.bad { background: var(--red-dim); color: var(--red-ink); border-color: var(--red-line); }
+  .delta.warn { background: var(--amber-dim); color: var(--amber-ink); border-color: var(--amber-line); }
+  .delta.good { background: var(--green-dim); color: var(--green-ink); border-color: var(--green-line); }
+
+  /* ========== DRAWER ========== */
+  .drawer-overlay {
+    position: fixed; inset: 0;
+    background: rgba(5, 3, 1, 0.55);
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.25s;
+    z-index: 50;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+  }
+  .drawer-overlay.open { opacity: 1; pointer-events: auto; }
+  .drawer {
+    position: fixed; top: 0; right: 0;
+    width: 480px; max-width: 100vw;
+    height: 100vh;
+    background: var(--bg-1);
+    border-left: 1px solid var(--border);
+    box-shadow: var(--shadow-drawer);
+    transform: translateX(100%);
+    transition: transform 0.32s cubic-bezier(0.22, 0.61, 0.36, 1);
+    z-index: 51;
+    overflow-y: auto;
+  }
+  .drawer.open { transform: translateX(0); }
+  .drawer-head {
+    padding: 22px 28px 20px;
+    border-bottom: 1px solid var(--border);
+    position: sticky; top: 0; background: var(--bg-1);
+    z-index: 2;
+  }
+  .drawer-head .close {
+    position: absolute; top: 16px; right: 18px;
+  }
+  .drawer-head .team-label {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 20px; font-weight: 600; line-height: 1.2;
+    letter-spacing: -0.018em;
+    margin-bottom: 6px;
+  }
+  .drawer-head .lead {
+    font-size: 12.5px; color: var(--ink-2);
+    display: flex; align-items: center; gap: 6px;
+  }
+  .drawer-body {
+    padding: 20px 28px 40px;
+    display: flex; flex-direction: column; gap: 26px;
+  }
+  .drawer-status {
+    display: grid; grid-template-columns: 1fr 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 6px; overflow: hidden;
+  }
+  .drawer-stat {
+    padding: 12px 14px;
+    background: var(--bg-2);
+  }
+  .drawer-stat .k { font-size: 10px; font-weight: 600; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; }
+  .drawer-stat .v { font-size: 15px; font-weight: 500; color: var(--ink-0); }
+  .drawer-stat .v.r { color: var(--red-ink); }
+  .drawer-stat .v.a { color: var(--amber-ink); }
+  .drawer-stat .v.g { color: var(--green-ink); }
+
+  .drawer-section h4 {
+    font-size: 11px; font-weight: 600; color: var(--ink-3);
+    text-transform: uppercase; letter-spacing: 0.1em;
+    margin-bottom: 10px;
+  }
+  .blocker-card {
+    background: var(--red-dim);
+    border: 1px solid var(--red-line);
+    border-radius: 6px;
+    padding: 14px 16px;
+    color: var(--ink-0);
+    font-size: 13.5px; line-height: 1.55;
+  }
+  .blocker-card .who {
+    font-size: 11.5px; color: var(--red-ink); font-weight: 600;
+    letter-spacing: 0.04em; text-transform: uppercase;
+    margin-bottom: 5px;
+  }
+  .blocker-card em { color: var(--gold-bright); font-style: normal; font-weight: 500; }
+
+  .dep-pill-row {
+    display: flex; flex-wrap: wrap; gap: 6px;
+  }
+  .dep-pill {
+    padding: 4px 9px;
+    font-size: 12px;
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--ink-1);
+    display: flex; align-items: center; gap: 6px;
+  }
+  .dep-pill .dot { width: 5px; height: 5px; border-radius: 50%; }
+  .dep-pill .dot.r { background: var(--red); }
+  .dep-pill .dot.a { background: var(--amber); }
+  .dep-pill .dot.g { background: var(--green); }
+
+  .activity-list { display: flex; flex-direction: column; position: relative; }
+  .activity-list::before {
+    content: ''; position: absolute;
+    left: 5px; top: 12px; bottom: 12px; width: 1px;
+    background: var(--border-2);
+  }
+  .activity-item {
+    display: grid; grid-template-columns: 12px 1fr auto;
+    gap: 14px;
+    padding: 10px 0;
+    align-items: flex-start;
+    position: relative;
+  }
+  .activity-item .node {
+    width: 11px; height: 11px; border-radius: 50%;
+    background: var(--bg-2);
+    border: 2px solid var(--border-2);
+    margin-top: 3px;
+    position: relative; z-index: 1;
+  }
+  .activity-item.key .node {
+    background: var(--gold);
+    border-color: var(--gold);
+  }
+  .activity-item.bad .node {
+    background: var(--red);
+    border-color: var(--red);
+  }
+  .activity-item .detail {
+    font-size: 13px; color: var(--ink-1); line-height: 1.45;
+  }
+  .activity-item .detail .sub {
+    font-size: 11.5px; color: var(--ink-3); margin-top: 2px;
+  }
+  .activity-item .when {
+    font-size: 11px; color: var(--ink-3);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+
+  .drawer-actions {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  /* ========== FOOTER ========== */
+  .foot {
+    padding: 24px 0 0;
+    border-top: 1px solid var(--border);
+    color: var(--ink-3);
+    font-size: 11.5px;
+    display: flex; justify-content: space-between;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  /* ========== HELPERS ========== */
+  .legend-inline {
+    display: flex; align-items: center; gap: 16px;
+    font-size: 11px; color: var(--ink-3);
+  }
+  .legend-inline .it { display: flex; align-items: center; gap: 5px; }
+  .legend-inline .bar {
+    width: 14px; height: 4px; border-radius: 1.5px;
+  }
+
+  .glow {
+    position: absolute; pointer-events: none;
+    top: 0; right: 0; width: 620px; height: 380px;
+    background: radial-gradient(ellipse at top right, rgba(22, 163, 138, 0.08), transparent 65%);
+    z-index: 0;
+  }
+
+  /* ========== TABS (in main nav) ========== */
+  .tabs {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    margin: 0;
+    padding: 0;
+    border: none;
+    height: 100%;
+  }
+  .tab-btn {
+    height: 100%;
+    padding: 0 16px;
+    font-size: 13.5px;
+    font-weight: 500;
+    color: var(--ink-2);
+    position: relative;
+    transition: color 0.15s;
+    display: inline-flex; align-items: center; gap: 7px;
+  }
+  .tab-btn:hover { color: var(--ink-0); }
+  .tab-btn.active { color: var(--ink-0); }
+  .tab-btn.active::after {
+    content: ''; position: absolute;
+    left: 14px; right: 14px;
+    bottom: -1px;
+    height: 2px; background: var(--gold);
+    border-radius: 1px;
+  }
+  .tab-btn .ct {
+    color: var(--ink-3);
+    font-variant-numeric: tabular-nums;
+    font-size: 11.5px;
+  }
+  .tab-btn.active .ct { color: var(--ink-2); }
+
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; animation: fadeUp 0.4s cubic-bezier(0.22, 0.61, 0.36, 1) both; }
+
+  /* ========== PERSONAS ========== */
+  .personas-intro { margin-bottom: 28px; }
+  .personas-intro .eyebrow { margin-bottom: 12px; }
+  .personas-intro h1 {
+    font-size: 28px; font-weight: 600;
+    letter-spacing: -0.02em;
+    margin-bottom: 10px;
+    color: var(--ink-0);
+  }
+  .personas-intro p {
+    font-size: 14.5px; color: var(--ink-2);
+    max-width: 640px; line-height: 1.55;
+  }
+
+  .personas-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .persona-card {
+    background: var(--bg-1);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 24px 26px 22px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.2s;
+    box-shadow: var(--shadow);
+  }
+  .persona-card:hover { border-color: var(--border-2); transform: translateY(-1px); }
+  .persona-card::before {
+    content: ''; position: absolute;
+    top: 0; left: 0; right: 0; height: 3px;
+    background: var(--persona-accent);
+  }
+  .persona-card[data-accent="green"] {
+    --persona-accent: #16a38a;
+    --persona-dim: rgba(22, 163, 138, 0.13);
+    --persona-line: rgba(22, 163, 138, 0.30);
+  }
+  .persona-card[data-accent="blue"] {
+    --persona-accent: #4a8de0;
+    --persona-dim: rgba(74, 141, 224, 0.12);
+    --persona-line: rgba(74, 141, 224, 0.28);
+  }
+  .persona-card[data-accent="amber"] {
+    --persona-accent: #e6b259;
+    --persona-dim: rgba(230, 178, 89, 0.13);
+    --persona-line: rgba(230, 178, 89, 0.30);
+  }
+  .persona-card[data-accent="purple"] {
+    --persona-accent: #b07ce0;
+    --persona-dim: rgba(176, 124, 224, 0.12);
+    --persona-line: rgba(176, 124, 224, 0.28);
+  }
+  .persona-card[data-accent="teal"] {
+    --persona-accent: #2ab5a8;
+    --persona-dim: rgba(42, 181, 168, 0.12);
+    --persona-line: rgba(42, 181, 168, 0.28);
+  }
+  .persona-card[data-accent="rose"] {
+    --persona-accent: #e06a8d;
+    --persona-dim: rgba(224, 106, 141, 0.12);
+    --persona-line: rgba(224, 106, 141, 0.28);
+  }
+
+  .persona-badge {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--persona-accent);
+    background: var(--persona-dim);
+    border: 1px solid var(--persona-line);
+    padding: 3px 8px;
+    border-radius: 3px;
+    margin-bottom: 18px;
+  }
+
+  .persona-head {
+    display: flex; gap: 16px;
+    align-items: center;
+    margin-bottom: 22px;
+  }
+  .persona-avatar {
+    width: 60px; height: 60px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+    position: relative;
+    background: var(--persona-dim);
+    box-shadow: 0 0 0 3px var(--persona-line), 0 0 0 1px var(--persona-accent);
+  }
+  .persona-avatar img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+    filter: saturate(1.02);
+  }
+  .persona-avatar .initials {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--persona-accent);
+    font-weight: 600; font-size: 17px;
+    letter-spacing: -0.005em;
+  }
+  .persona-info h3 {
+    font-size: 16px; font-weight: 600;
+    letter-spacing: -0.018em;
+    margin-bottom: 3px;
+    color: var(--ink-0);
+  }
+  .persona-role {
+    font-size: 12.5px;
+    color: var(--ink-1);
+    margin-bottom: 2px;
+  }
+  .persona-meta {
+    font-size: 11px;
+    color: var(--ink-3);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .persona-quote {
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--ink-0);
+    padding: 14px 16px;
+    background: var(--persona-dim);
+    border-left: 2px solid var(--persona-accent);
+    border-radius: 0 4px 4px 0;
+    margin-bottom: 22px;
+    font-style: normal;
+  }
+  .persona-quote em {
+    color: var(--persona-accent);
+    font-style: italic;
+    font-weight: 500;
+  }
+
+  .persona-sections {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 22px;
+  }
+  .persona-section h4 {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin-bottom: 10px;
+  }
+  .persona-section ul {
+    font-size: 12.5px;
+    color: var(--ink-1);
+    line-height: 1.55;
+  }
+  .persona-section li {
+    padding-left: 13px;
+    position: relative;
+    margin-bottom: 6px;
+  }
+  .persona-section li::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 9px;
+    width: 6px; height: 1px;
+    background: var(--ink-3);
+  }
+
+  .persona-stats {
+    display: grid;
+    grid-template-columns: auto auto 1fr;
+    gap: 22px;
+    padding-top: 18px;
+    border-top: 1px solid var(--border);
+    align-items: flex-start;
+  }
+  .persona-stat .value {
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: -0.018em;
+    color: var(--ink-0);
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+    margin-bottom: 5px;
+  }
+  .persona-stat .value .unit {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--ink-2);
+    margin-left: 2px;
+  }
+  .persona-stat .label {
+    font-size: 9.5px;
+    font-weight: 600;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+  .persona-stat-tools .label { margin-bottom: 7px; }
+  .persona-tags {
+    display: flex; flex-wrap: wrap; gap: 4px;
+  }
+  .persona-tag {
+    font-size: 10.5px;
+    padding: 2.5px 7px;
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    color: var(--ink-1);
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  /* Pain → Feature mapping */
+  .pain-map {
+    padding: 14px 16px;
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    margin-bottom: 22px;
+  }
+  .pain-map h4 {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin-bottom: 10px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .pain-map h4::after {
+    content: ''; height: 1px;
+    background: var(--border); flex: 1;
+  }
+  .pain-row {
+    display: grid;
+    grid-template-columns: 1fr 20px 1.2fr;
+    gap: 10px;
+    align-items: flex-start;
+    padding: 8px 0;
+    border-bottom: 1px dashed var(--border);
+    font-size: 12px;
+    line-height: 1.45;
+  }
+  .pain-row:last-child { border-bottom: none; padding-bottom: 2px; }
+  .pain-row:first-of-type { padding-top: 2px; }
+  .pain-row .pain {
+    color: var(--ink-2);
+    font-style: italic;
+  }
+  .pain-row .arrow {
+    color: var(--persona-accent);
+    font-size: 14px;
+    text-align: center;
+    padding-top: 0;
+    font-weight: 600;
+    line-height: 1.3;
+  }
+  .pain-row .feature {
+    color: var(--ink-0);
+    font-weight: 500;
+  }
+</style>
+</head>
+<body>
+
+<div class="glow"></div>
+
+<div class="app">
+
+  <!-- ========== MAIN NAV ========== -->
+  <header class="mainnav">
+    <div class="nav-brand" title="Apollo">
+      <img src="https://logo.clearbit.com/apollo.com" alt="Apollo"
+           onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'nav-brand-fallback',textContent:'A'}))" />
+    </div>
+    <nav class="tabs">
+      <button class="tab-btn active" data-tab="dashboard">Dashboard</button>
+      <button class="tab-btn" data-tab="personas">Personas <span class="ct">6</span></button>
+    </nav>
+    <div class="nav-right">
+      <button class="icon-btn" title="Notifications">
+        <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M18 16v-5a6 6 0 10-12 0v5l-2 2h16l-2-2z" stroke-linejoin="round"/><path d="M10 20a2 2 0 004 0" stroke-linecap="round"/></svg>
+        <span class="badge"></span>
+      </button>
+      <button class="avatar-btn" title="Norbert Pap">
+        <span class="avatar">NP</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ========== CONTENT ========== -->
+  <main class="content">
+
+      <div id="tab-dashboard" class="tab-panel active">
+
+      <!-- ===== PAGE HEAD ===== -->
+      <section class="page-head">
+        <div>
+          <div class="eyebrow-row">
+            <span class="eyebrow">Carina Capital · ISG SMA · Day 14 of 30</span>
+            <span class="status-chip"><span class="dot-pulse"></span>Off track</span>
+          </div>
+          <h1 class="lede">10 teams off-track. Settlements chain is blocking <em>13 downstream</em> workstreams.</h1>
+          <p class="sublede">Reconciliation, Settlements, and Performance haven't cleared Impact Assessment. Root cause: ISG Legal contract review, 9 days in queue.</p>
+        </div>
+        <div class="head-actions">
+          <button class="btn">
+            <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M3 7l9 6 9-6M3 7v10a1 1 0 001 1h16a1 1 0 001-1V7M3 7l1-1h16l1 1" stroke-linejoin="round"/></svg>
+            Message leads
+          </button>
+          <button class="btn primary">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2l2.5 7h7l-5.5 4 2 7-6-4.5-6 4.5 2-7L2.5 9h7L12 2z" stroke-linejoin="round"/></svg>
+            Escalate now
+          </button>
+        </div>
+      </section>
+
+      <!-- ===== KPI ROW ===== -->
+      <section class="kpi-row">
+        <div class="kpi">
+          <div class="label">Completion</div>
+          <div class="value num">9<span class="unit">%</span></div>
+          <div class="delta bad">
+            <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            −39% vs plan
+          </div>
+        </div>
+        <div class="kpi">
+          <div class="label">Off-track teams</div>
+          <div class="value num" style="color: var(--red-ink);">10<span class="unit">/23</span></div>
+          <div class="delta bad">+4 since last week</div>
+        </div>
+        <div class="kpi">
+          <div class="label">Days remaining</div>
+          <div class="value num">0</div>
+          <div class="delta bad">Past due · 0d</div>
+        </div>
+        <div class="kpi">
+          <div class="label">SLA breaches</div>
+          <div class="value num" style="color: var(--amber-ink);">3</div>
+          <div class="delta" style="color: var(--amber-ink);">2 critical</div>
+        </div>
+        <div class="kpi">
+          <div class="label">Projected go-live</div>
+          <div class="value num" style="font-size:26px;">May 13</div>
+          <div class="delta bad">+30d vs plan</div>
+        </div>
+      </section>
+
+      <!-- ===== HERO: PACING + WAFFLE ===== -->
+      <section class="hero-grid">
+
+        <!-- Pacing -->
+        <div class="card">
+          <div class="card-head">
+            <h3>
+              Pacing vs target
+              <svg width="12" height="12" fill="none" stroke="var(--ink-3)" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16v0" stroke-linecap="round"/></svg>
+            </h3>
+            <div class="meta">
+              <div class="legend-inline">
+                <div class="it"><span class="bar" style="background: var(--ink-3); height:1px; border-top: 1px dashed var(--ink-3);"></span>Plan</div>
+                <div class="it"><span class="bar" style="background: var(--red); height: 2px;"></span>Actual</div>
+                <div class="it"><span class="bar" style="border-top: 1.5px dashed var(--red); opacity: 0.55;"></span>Projected</div>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+            <svg class="pacing-svg" viewBox="0 0 720 300" preserveAspectRatio="xMidYMid meet">
+              <defs>
+                <linearGradient id="apolloRedGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" stop-color="#e06f64" stop-opacity="0.24"/>
+                  <stop offset="1" stop-color="#e06f64" stop-opacity="0.01"/>
+                </linearGradient>
+              </defs>
+
+              <!-- Gap area -->
+              <path d="M 60 240 L 340 225 L 680 212 L 680 30 Z" fill="url(#apolloRedGrad)"/>
+
+              <!-- Axes -->
+              <line x1="60" y1="30" x2="60" y2="240" stroke="#33353b" stroke-width="1"/>
+              <line x1="60" y1="240" x2="680" y2="240" stroke="#33353b" stroke-width="1"/>
+
+              <!-- Y grid -->
+              <line x1="60" y1="30" x2="680" y2="30" stroke="#232428" stroke-dasharray="2 4"/>
+              <line x1="60" y1="135" x2="680" y2="135" stroke="#232428" stroke-dasharray="2 4"/>
+
+              <!-- Y labels -->
+              <text x="52" y="34" font-size="10" fill="#5c5e65" text-anchor="end">23</text>
+              <text x="52" y="139" font-size="10" fill="#5c5e65" text-anchor="end">12</text>
+              <text x="52" y="244" font-size="10" fill="#5c5e65" text-anchor="end">0</text>
+              <text x="52" y="20" font-size="9.5" fill="#5c5e65" text-anchor="end" letter-spacing="1">TEAMS</text>
+
+              <!-- Plan curve (S-curve ideal) -->
+              <path d="M 60 240 Q 200 230, 340 140 T 680 30"
+                    fill="none" stroke="#5c5e65" stroke-width="1.4" stroke-dasharray="4 4"/>
+
+              <!-- Actual curve -->
+              <path d="M 60 240 C 120 239, 200 235, 340 225"
+                    fill="none" stroke="#e06f64" stroke-width="2.5" stroke-linecap="round"/>
+
+              <!-- Projection -->
+              <path d="M 340 225 C 440 220, 560 215, 680 212"
+                    fill="none" stroke="#e06f64" stroke-width="1.8" stroke-dasharray="3 4" opacity="0.5"/>
+
+              <!-- Today vertical -->
+              <line x1="340" y1="12" x2="340" y2="252" stroke="#5c5e65" stroke-width="0.8" stroke-dasharray="1 3"/>
+
+              <!-- Day markers -->
+              <g>
+                <circle cx="60" cy="240" r="3" fill="#33353b"/>
+                <circle cx="200" cy="234" r="3" fill="#33353b"/>
+                <circle cx="340" cy="225" r="5" fill="#e06f64"/>
+                <circle cx="340" cy="225" r="2" fill="#17181b"/>
+                <circle cx="680" cy="212" r="4" fill="none" stroke="#e06f64" stroke-width="1.5" opacity="0.55"/>
+              </g>
+
+              <!-- Callout today -->
+              <g>
+                <rect x="352" y="198" width="138" height="52" rx="4" fill="#17181b" stroke="#33353b" stroke-width="1"/>
+                <text x="364" y="216" font-size="10" fill="#8f9198" letter-spacing="1">TODAY · DAY 14</text>
+                <text x="364" y="232" font-size="13" fill="#f0928a" font-weight="600">2 of 23 complete</text>
+                <text x="364" y="246" font-size="11" fill="#8f9198">Plan expected: 11</text>
+              </g>
+
+              <!-- Endpoint label -->
+              <text x="678" y="24" font-size="10.5" fill="#5c5e65" text-anchor="end">Target · 23 teams</text>
+              <text x="678" y="226" font-size="10.5" fill="#f0928a" text-anchor="end">Projected: ~4</text>
+
+              <!-- X labels -->
+              <text x="60" y="262" font-size="10" fill="#5c5e65" text-anchor="middle">Day 0 · Mar 14</text>
+              <text x="340" y="262" font-size="10" fill="#edeef1" text-anchor="middle" font-weight="500">Today · Day 14</text>
+              <text x="680" y="262" font-size="10" fill="#5c5e65" text-anchor="end">Due · Apr 13</text>
+
+              <!-- Milestone markers -->
+              <text x="200" y="262" font-size="9.5" fill="#36383d" text-anchor="middle">Day 7</text>
+              <text x="510" y="262" font-size="9.5" fill="#36383d" text-anchor="middle">Day 21</text>
+            </svg>
+          </div>
+        </div>
+
+        <!-- Waffle -->
+        <div class="card">
+          <div class="card-head">
+            <h3>Team health</h3>
+            <div class="waffle-head-toggle">
+              <button class="active">Grid</button>
+              <button>List</button>
+            </div>
+          </div>
+          <div class="card-body">
+            <div id="waffle" class="waffle-grid"></div>
+            <div style="display: flex; justify-content: space-between; padding-top: 14px; margin-top: 14px; border-top: 1px solid var(--border); font-size: 11.5px;" class="num">
+              <span style="display: flex; align-items: center; gap: 6px; color: var(--red-ink);"><span style="width:6px; height:6px; background: var(--red); border-radius:50%;"></span>10 off track</span>
+              <span style="display: flex; align-items: center; gap: 6px; color: var(--amber-ink);"><span style="width:6px; height:6px; background: var(--amber); border-radius:50%;"></span>5 pending</span>
+              <span style="display: flex; align-items: center; gap: 6px; color: var(--green-ink);"><span style="width:6px; height:6px; background: var(--green); border-radius:50%;"></span>8 on track</span>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      <!-- ===== TEAM MATRIX ===== -->
+      <section class="matrix-section">
+        <div class="matrix-head">
+          <div class="title-group">
+            <h2>23 teams</h2>
+            <span class="count">Sorted by risk · most urgent first</span>
+          </div>
+          <div class="filter-bar" id="filters">
+            <button class="chip active" data-filter="all">All<span class="ct">23</span></button>
+            <button class="chip" data-filter="r"><span class="dot r"></span>Off track<span class="ct">10</span></button>
+            <button class="chip" data-filter="a"><span class="dot a"></span>Pending<span class="ct">5</span></button>
+            <button class="chip" data-filter="g"><span class="dot g"></span>On track<span class="ct">8</span></button>
+          </div>
+        </div>
+
+        <div class="matrix">
+          <div class="matrix-head-row">
+            <div></div>
+            <div>Team</div>
+            <div class="stage-labels">
+              <div>Impact</div>
+              <div>Scope</div>
+              <div>Build</div>
+              <div>UAT</div>
+              <div>Live</div>
+            </div>
+            <div style="text-align:right">Stage</div>
+            <div>Lead</div>
+            <div style="text-align:right">Days</div>
+            <div></div>
+          </div>
+
+          <div id="matrix-rows"></div>
+        </div>
+      </section>
+
+      <!-- ===== BOTTOM GRID: STAGE BACKLOG + ACTIONS ===== -->
+      <section class="bottom-grid">
+
+        <!-- Stage backlog bullets -->
+        <div class="card">
+          <div class="card-head">
+            <h3>Stage backlog</h3>
+            <div class="meta" style="font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase;">
+              <span>Actual vs plan · day 14</span>
+            </div>
+          </div>
+          <div class="bullet-list">
+            <div class="bullet-row">
+              <div class="stage-name">Impact Assess.</div>
+              <div class="bar-wrap">
+                <div class="bar-fill r" style="width: 50%;"></div>
+                <div class="target-mark" style="left: 0%;"></div>
+              </div>
+              <div class="count">6</div>
+              <div class="delta bad">+6</div>
+            </div>
+            <div class="bullet-row">
+              <div class="stage-name">Scope</div>
+              <div class="bar-wrap">
+                <div class="bar-fill r" style="width: 33.3%;"></div>
+                <div class="target-mark" style="left: 0%;"></div>
+              </div>
+              <div class="count">4</div>
+              <div class="delta bad">+4</div>
+            </div>
+            <div class="bullet-row">
+              <div class="stage-name">Build</div>
+              <div class="bar-wrap">
+                <div class="bar-fill a" style="width: 66.6%;"></div>
+                <div class="target-mark" style="left: 33.3%;"></div>
+              </div>
+              <div class="count">8</div>
+              <div class="delta warn">+4</div>
+            </div>
+            <div class="bullet-row">
+              <div class="stage-name">UAT</div>
+              <div class="bar-wrap">
+                <div class="bar-fill g" style="width: 25%;"></div>
+                <div class="target-mark" style="left: 16.7%;"></div>
+              </div>
+              <div class="count">3</div>
+              <div class="delta good">+1</div>
+            </div>
+            <div class="bullet-row">
+              <div class="stage-name">Live</div>
+              <div class="bar-wrap">
+                <div class="bar-fill r" style="width: 16.7%;"></div>
+                <div class="target-mark" style="left: 83.3%;"></div>
+              </div>
+              <div class="count">2</div>
+              <div class="delta bad">−8</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Action queue -->
+        <div class="card">
+          <div class="card-head">
+            <h3>Do today</h3>
+            <div class="meta" style="font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase;">
+              <span style="color: var(--gold-bright);">5 actions</span>
+            </div>
+          </div>
+          <div class="action-list">
+            <div class="action-item" onclick="openDrawer('Reconciliation')">
+              <div class="num-circle">1</div>
+              <div class="body">
+                Unblock <em>Reconciliation</em> — 14 days in Impact Assessment.
+                <div class="sub">Escalate to Sarah Chen · blocks 4 downstream teams</div>
+              </div>
+              <div class="cta">Open</div>
+            </div>
+            <div class="action-item" onclick="openDrawer('Settlements')">
+              <div class="num-circle">2</div>
+              <div class="body">
+                <em>Settlements</em> waiting on ISG Legal contract review (9d).
+                <div class="sub">Ping Michael Patel · legal SLA breached</div>
+              </div>
+              <div class="cta">Open</div>
+            </div>
+            <div class="action-item" onclick="openDrawer('Performance')">
+              <div class="num-circle">3</div>
+              <div class="body">
+                <em>Performance</em> missing benchmark specification.
+                <div class="sub">Client hasn't responded in 6 days</div>
+              </div>
+              <div class="cta">Open</div>
+            </div>
+            <div class="action-item" onclick="openDrawer('Allocations')">
+              <div class="num-circle">4</div>
+              <div class="body">
+                <em>Allocations</em> test file errors blocking UAT sign-off.
+                <div class="sub">2 SLA breaches this week</div>
+              </div>
+              <div class="cta">Open</div>
+            </div>
+            <div class="action-item" onclick="openDrawer('Client Solutions')">
+              <div class="num-circle">5</div>
+              <div class="body">
+                <em>Client Solutions</em> SSO config outstanding.
+                <div class="sub">Pending client IT</div>
+              </div>
+              <div class="cta">Open</div>
+            </div>
+          </div>
+        </div>
+
+      </section>
+
+      </div> <!-- /#tab-dashboard -->
+
+      <!-- ==================================================== -->
+      <!-- ============ PERSONAS TAB ============ -->
+      <!-- ==================================================== -->
+      <div id="tab-personas" class="tab-panel">
+
+        <section class="personas-intro">
+          <div class="eyebrow">Product · Users</div>
+          <h1>Six archetypes interact with Apollo onboarding.</h1>
+          <p>The dashboard is optimized for Roxanne — the Transitions lead whose Point system depends on inputs from every team. Leadership skims the portfolio weekly. Team Leads manage their own slice. Team Members just want their task list. Client Services owns upstream data entry. Client Solutions is a hybrid tracker-plus-subflow-runner.</p>
+        </section>
+
+        <div class="personas-grid">
+
+          <!-- ===== Roxanne Boulet · Transitions ===== -->
+          <article class="persona-card" data-accent="green">
+            <div class="persona-badge">Primary user</div>
+            <div class="persona-head">
+              <div class="persona-avatar">
+                <img src="https://randomuser.me/api/portraits/women/50.jpg" alt="Roxanne Boulet"
+                     onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'initials',textContent:'RB'}))" />
+              </div>
+              <div class="persona-info">
+                <h3>Roxanne Boulet</h3>
+                <div class="persona-role">Transitions Lead</div>
+                <div class="persona-meta">ISG SMA · owns <strong>Point</strong> system</div>
+              </div>
+            </div>
+            <blockquote class="persona-quote">
+              Every team's inputs eventually land in Point. I need to see <em>whose</em> are late — before downstream breaks.
+            </blockquote>
+            <div class="persona-sections">
+              <div class="persona-section">
+                <h4>Jobs to be done</h4>
+                <ul>
+                  <li>Monitor onboarding progress across all teams</li>
+                  <li>Track which teams have completed required inputs</li>
+                  <li>Identify dependencies and data gaps</li>
+                  <li>Step in to unblock teams or supply info</li>
+                  <li>Receive all Point data fields cleanly</li>
+                </ul>
+              </div>
+              <div class="persona-section">
+                <h4>Frustrations</h4>
+                <ul>
+                  <li>Input quality varies by team</li>
+                  <li>Late inputs cascade into Point delays</li>
+                  <li>Chases teams for missing fields manually</li>
+                </ul>
+              </div>
+            </div>
+            <div class="pain-map">
+              <h4>Pain → Apollo feature</h4>
+              <div class="pain-row">
+                <div class="pain">Late inputs cascade into Point</div>
+                <div class="arrow">→</div>
+                <div class="feature">Required-field tracking per team · SLA alerts</div>
+              </div>
+              <div class="pain-row">
+                <div class="pain">Data quality varies by team</div>
+                <div class="arrow">→</div>
+                <div class="feature">Schema-validated inputs with error surfacing</div>
+              </div>
+              <div class="pain-row">
+                <div class="pain">Manual chasing</div>
+                <div class="arrow">→</div>
+                <div class="feature">Auto-nudge upstream team leads</div>
+              </div>
+            </div>
+            <div class="persona-stats">
+              <div class="persona-stat">
+                <div class="value num">10<span class="unit">×/day</span></div>
+                <div class="label">Opens Apollo</div>
+              </div>
+              <div class="persona-stat">
+                <div class="value num">23</div>
+                <div class="label">Teams monitored</div>
+              </div>
+              <div class="persona-stat-tools persona-stat">
+                <div class="label">Lives alongside</div>
+                <div class="persona-tags">
+                  <span class="persona-tag">Point</span>
+                  <span class="persona-tag">Kissflow</span>
+                  <span class="persona-tag">Slack</span>
+                  <span class="persona-tag">Excel</span>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <!-- ===== John Liang · Leadership ===== -->
+          <article class="persona-card" data-accent="amber">
+            <div class="persona-badge">Glance-only</div>
+            <div class="persona-head">
+              <div class="persona-avatar">
+                <img src="https://randomuser.me/api/portraits/men/52.jpg" alt="John Liang"
+                     onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'initials',textContent:'JL'}))" />
+              </div>
+              <div class="persona-info">
+                <h3>John Liang</h3>
+                <div class="persona-role">Leadership · Managing Director</div>
+                <div class="persona-meta">ISG SMA · portfolio-level oversight</div>
+              </div>
+            </div>
+            <blockquote class="persona-quote">
+              I don't need the details. Tell me which client is going to miss — and who I need to call.
+            </blockquote>
+            <div class="persona-sections">
+              <div class="persona-section">
+                <h4>Jobs to be done</h4>
+                <ul>
+                  <li>Track client-level onboarding status (on / off track)</li>
+                  <li>Monitor proximity to trading readiness dates</li>
+                  <li>Identify bottlenecks across teams</li>
+                  <li>Flag delays early and step in where needed</li>
+                </ul>
+              </div>
+              <div class="persona-section">
+                <h4>Frustrations</h4>
+                <ul>
+                  <li>Dashboards too dense for his level</li>
+                  <li>Missing the "why" behind every red</li>
+                  <li>Learns about slips too late in the week</li>
+                </ul>
+              </div>
+            </div>
+            <div class="pain-map">
+              <h4>Pain → Apollo feature</h4>
+              <div class="pain-row">
+                <div class="pain">Too dense at leadership level</div>
+                <div class="arrow">→</div>
+                <div class="feature">Portfolio view: RAG + days to trading per client</div>
+              </div>
+              <div class="pain-row">
+                <div class="pain">Where's the bottleneck?</div>
+                <div class="arrow">→</div>
+                <div class="feature">Stage bottleneck view across all clients</div>
+              </div>
+              <div class="pain-row">
+                <div class="pain">Wants "why", not numbers</div>
+                <div class="arrow">→</div>
+                <div class="feature">Auto-narrated root-cause per red client</div>
+              </div>
+            </div>
+            <div class="persona-stats">
+              <div class="persona-stat">
+                <div class="value num">2<span class="unit">×/wk</span></div>
+                <div class="label">Opens Apollo</div>
+              </div>
+              <div class="persona-stat">
+                <div class="value num">12</div>
+                <div class="label">Active clients</div>
+              </div>
+              <div class="persona-stat-tools persona-stat">
+                <div class="label">Lives alongside</div>
+                <div class="persona-tags">
+                  <span class="persona-tag">Outlook</span>
+                  <span class="persona-tag">Teams</span>
+                  <span class="persona-tag">PowerPoint</span>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <!-- ===== Team Leads (general) ===== -->
+          <article class="persona-card" data-accent="blue">
+            <div class="persona-badge">Team lead</div>
+            <div class="persona-head">
+              <div class="persona-avatar">
+                <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Sarah Chen"
+                     onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'initials',textContent:'SC'}))" />
+              </div>
+              <div class="persona-info">
+                <h3>Sarah Chen</h3>
+                <div class="persona-role">Team Lead · representative</div>
+                <div class="persona-meta">ISG SMA · scope varies by team</div>
+              </div>
+            </div>
+            <blockquote class="persona-quote">
+              Tell me if my team is in scope. Give me the tasks. Let me sign them off when we're done.
+            </blockquote>
+            <div class="persona-sections">
+              <div class="persona-section">
+                <h4>Jobs to be done</h4>
+                <ul>
+                  <li>Indicate whether her team is impacted</li>
+                  <li>Select &amp; assign tasks from onboarding inputs</li>
+                  <li>Track team progress and individual contributions</li>
+                  <li>Provide formal sign-off once tasks complete</li>
+                </ul>
+              </div>
+              <div class="persona-section">
+                <h4>Frustrations</h4>
+                <ul>
+                  <li>Scope changes land in Slack, not the tool</li>
+                  <li>Task assignment is still manual</li>
+                  <li>No view of who's waiting on her team</li>
+                </ul>
+              </div>
+            </div>
+            <div class="pain-map">
+              <h4>Pain → Apollo feature</h4>
+              <div class="pain-row">
+                <div class="pain">"Are we in scope?"</div>
+                <div class="arrow">→</div>
+                <div class="feature">Impact Assessment checklist at intake</div>
+              </div>
+              <div class="pain-row">
+                <div class="pain">Manual task assignment</div>
+                <div class="arrow">→</div>
+                <div class="feature">Task templates per onboarding type</div>
+              </div>
+              <div class="pain-row">
+                <div class="pain">Sign-off in meetings</div>
+                <div class="arrow">→</div>
+                <div class="feature">One-click sign-off with audit trail</div>
+              </div>
+            </div>
+            <div class="persona-stats">
+              <div class="persona-stat">
+                <div class="value num">4<span class="unit">×/day</span></div>
+                <div class="label">Opens Apollo</div>
+              </div>
+              <div class="persona-stat">
+                <div class="value num">5</div>
+                <div class="label">Direct reports</div>
+              </div>
+              <div class="persona-stat-tools persona-stat">
+                <div class="label">Variations</div>
+                <div class="persona-tags">
+                  <span class="persona-tag">Pre-trading</span>
+                  <span class="persona-tag">Post-event</span>
+                  <span class="persona-tag">Both</span>
+                  <span class="persona-tag">Lead=Doer</span>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <!-- ===== Team Members (execution) ===== -->
+          <article class="persona-card" data-accent="purple">
+            <div class="persona-badge">Execution</div>
+            <div class="persona-head">
+              <div class="persona-avatar">
+                <img src="https://randomuser.me/api/portraits/women/79.jpg" alt="Priya Shah"
+                     onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'initials',textContent:'PS'}))" />
+              </div>
+              <div class="persona-info">
+                <h3>Priya Shah</h3>
+                <div class="persona-role">Team Member · representative</div>
+                <div class="persona-meta">ISG SMA · execution user</div>
+              </div>
+            </div>
+            <blockquote class="persona-quote">
+              Just show me my tasks for today. I don't need to see the whole program.
+            </blockquote>
+            <div class="persona-sections">
+              <div class="persona-section">
+                <h4>Jobs to be done</h4>
+                <ul>
+                  <li>View assigned tasks clearly</li>
+                  <li>Complete required actions efficiently</li>
+                  <li>Update status as work finishes</li>
+                  <li>Minimal broader-workflow context needed</li>
+                </ul>
+              </div>
+              <div class="persona-section">
+                <h4>Frustrations</h4>
+                <ul>
+                  <li>Dashboard shows more than she needs</li>
+                  <li>Context switching across 6+ apps</li>
+                  <li>Manual status updates take time</li>
+                </ul>
+              </div>
+            </div>
+            <div class="pain-map">
+              <h4>Pain → Apollo feature</h4>
+              <div class="pain-row">
+                <div class="pain">Dashboard too noisy</div>
+                <div class="arrow">→</div>
+                <div class="feature">"My tasks" focused view, no program chrome</div>
+              </div>
+              <div class="pain-row">
+                <div class="pain">Tool sprawl</div>
+                <div class="arrow">→</div>
+                <div class="feature">Unified task queue · inline completion</div>
+              </div>
+              <div class="pain-row">
+                <div class="pain">Manual status updates</div>
+                <div class="arrow">→</div>
+                <div class="feature">Complete task = auto-status</div>
+              </div>
+            </div>
+            <div class="persona-stats">
+              <div class="persona-stat">
+                <div class="value num">15<span class="unit">×/day</span></div>
+                <div class="label">Opens Apollo</div>
+              </div>
+              <div class="persona-stat">
+                <div class="value num">6</div>
+                <div class="label">Active tasks</div>
+              </div>
+              <div class="persona-stat-tools persona-stat">
+                <div class="label">Lives alongside</div>
+                <div class="persona-tags">
+                  <span class="persona-tag">Kissflow</span>
+                  <span class="persona-tag">Slack</span>
+                  <span class="persona-tag">Excel</span>
+                  <span class="persona-tag">Bloomberg</span>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <!-- ===== Client Services (data input owners) ===== -->
+          <article class="persona-card" data-accent="teal">
+            <div class="persona-badge">Data input</div>
+            <div class="persona-head">
+              <div class="persona-avatar">
+                <img src="https://randomuser.me/api/portraits/women/30.jpg" alt="Maya Okonkwo"
+                     onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'initials',textContent:'MO'}))" />
+              </div>
+              <div class="persona-info">
+                <h3>Maya Okonkwo</h3>
+                <div class="persona-role">Client Services · representative</div>
+                <div class="persona-meta">ISG SMA · upstream data owner</div>
+              </div>
+            </div>
+            <blockquote class="persona-quote">
+              I'm the bridge between the client and everyone downstream. If I miss a field, the <em>whole</em> chain stalls.
+            </blockquote>
+            <div class="persona-sections">
+              <div class="persona-section">
+                <h4>Jobs to be done</h4>
+                <ul>
+                  <li>Capture client information into the system</li>
+                  <li>Structure inputs for downstream consumption</li>
+                  <li>Ensure data completeness and usability</li>
+                  <li>Rapid, efficient entry across many fields</li>
+                </ul>
+              </div>
+              <div class="persona-section">
+                <h4>Frustrations</h4>
+                <ul>
+                  <li>Forms are long, dense, unprioritized</li>
+                  <li>Unclear which fields matter most downstream</li>
+                  <li>Validation errors surface after submit</li>
+                </ul>
+              </div>
+            </div>
+            <div class="pain-map">
+              <h4>Pain → Apollo feature</h4>
+              <div class="pain-row">
+                <div class="pain">Long, dense forms</div>
+                <div class="arrow">→</div>
+                <div class="feature">Progressive disclosure · field priority</div>
+              </div>
+              <div class="pain-row">
+                <div class="pain">Unclear downstream impact</div>
+                <div class="arrow">→</div>
+                <div class="feature">Field-level downstream dependency hints</div>
+              </div>
+              <div class="pain-row">
+                <div class="pain">Post-submit validation</div>
+                <div class="arrow">→</div>
+                <div class="feature">Real-time schema validation &amp; warnings</div>
+              </div>
+            </div>
+            <div class="persona-stats">
+              <div class="persona-stat">
+                <div class="value num">6<span class="unit">×/day</span></div>
+                <div class="label">Opens Apollo</div>
+              </div>
+              <div class="persona-stat">
+                <div class="value num">~90</div>
+                <div class="label">Fields / client</div>
+              </div>
+              <div class="persona-stat-tools persona-stat">
+                <div class="label">Lives alongside</div>
+                <div class="persona-tags">
+                  <span class="persona-tag">Kissflow</span>
+                  <span class="persona-tag">Excel</span>
+                  <span class="persona-tag">Outlook</span>
+                  <span class="persona-tag">CRM</span>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <!-- ===== Lidiya Sokolova · Client Solutions ===== -->
+          <article class="persona-card" data-accent="rose">
+            <div class="persona-badge">Coordinator</div>
+            <div class="persona-head">
+              <div class="persona-avatar">
+                <img src="https://randomuser.me/api/portraits/women/24.jpg" alt="Lidiya Sokolova"
+                     onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'initials',textContent:'LS'}))" />
+              </div>
+              <div class="persona-info">
+                <h3>Lidiya Sokolova</h3>
+                <div class="persona-role">Client Solutions</div>
+                <div class="persona-meta">ISG SMA · hybrid tracker + runner</div>
+              </div>
+            </div>
+            <blockquote class="persona-quote">
+              I live between teams. My dashboard is half tracker, half launch pad for <em>sub-workflows</em>.
+            </blockquote>
+            <div class="persona-sections">
+              <div class="persona-section">
+                <h4>Jobs to be done</h4>
+                <ul>
+                  <li>Monitor team-level progress and overall status</li>
+                  <li>Coordinate across teams where needed</li>
+                  <li>Execute specific subflows (e.g., reporting with Eng.)</li>
+                  <li>Maintain execution + dependency visibility</li>
+                </ul>
+              </div>
+              <div class="persona-section">
+                <h4>Frustrations</h4>
+                <ul>
+                  <li>Tracker + subflows live in different tools</li>
+                  <li>Cross-team dependencies unclear day-to-day</li>
+                  <li>Context tax between tracking and doing</li>
+                </ul>
+              </div>
+            </div>
+            <div class="pain-map">
+              <h4>Pain → Apollo feature</h4>
+              <div class="pain-row">
+                <div class="pain">Fragmented tracker vs subflows</div>
+                <div class="arrow">→</div>
+                <div class="feature">Unified: monitor + act in one pane</div>
+              </div>
+              <div class="pain-row">
+                <div class="pain">Cross-team deps unclear</div>
+                <div class="arrow">→</div>
+                <div class="feature">Dependency map · owner surfaced</div>
+              </div>
+              <div class="pain-row">
+                <div class="pain">Context-switching tax</div>
+                <div class="arrow">→</div>
+                <div class="feature">In-dashboard subflow runners</div>
+              </div>
+            </div>
+            <div class="persona-stats">
+              <div class="persona-stat">
+                <div class="value num">5<span class="unit">×/day</span></div>
+                <div class="label">Opens Apollo</div>
+              </div>
+              <div class="persona-stat">
+                <div class="value num">3</div>
+                <div class="label">Active subflows</div>
+              </div>
+              <div class="persona-stat-tools persona-stat">
+                <div class="label">Lives alongside</div>
+                <div class="persona-tags">
+                  <span class="persona-tag">Kissflow</span>
+                  <span class="persona-tag">Slack</span>
+                  <span class="persona-tag">Jira</span>
+                  <span class="persona-tag">Outlook</span>
+                </div>
+              </div>
+            </div>
+          </article>
+
+        </div>
+
+      </div>
+
+      <!-- ===== FOOTER ===== -->
+      <footer class="foot">
+        <div>apollo · isg-sma · onboarding · v2.4.1</div>
+        <div>updated 2 min ago</div>
+      </footer>
+
+    </main>
+</div>
+
+<!-- ========== DRAWER ========== -->
+<div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
+<aside class="drawer" id="drawer" role="dialog" aria-hidden="true">
+  <div id="drawerContent"></div>
+</aside>
+
+
+<script>
+  // ========== DATA ==========
+  const STAGES = ['Impact Assessment', 'Scope', 'Build', 'UAT', 'Live'];
+  const STAGE_SHORT = ['Impact', 'Scope', 'Build', 'UAT', 'Live'];
+
+  const teams = [
+    { name: 'Performance',        stageIdx: 0, health: 'r', days: 14, lead: 'Sarah Chen',     leadInit: 'SC', risk: 12, blocker: 'Client hasn\'t returned benchmark specification after 6 reminders.', blocks: ['Allocations', 'Risk Management', 'Fund Accounting'], deps: ['Client (Carina)'] },
+    { name: 'Risk Management',    stageIdx: 0, health: 'r', days: 14, lead: 'Michael Patel',  leadInit: 'MP', risk: 11, blocker: 'Waiting on Performance benchmark before VaR model can be configured.', blocks: ['Compliance'], deps: ['Performance'] },
+    { name: 'Client Service',     stageIdx: 0, health: 'r', days: 14, lead: 'John Loh',       leadInit: 'JL', risk: 11, blocker: 'Pending client contact authorization list.', blocks: [], deps: ['Client (Carina)'] },
+    { name: 'Reconciliation',     stageIdx: 0, health: 'r', days: 14, lead: 'Roberto Romano', leadInit: 'RR', risk: 11, blocker: 'Custodian file format differs from spec — waiting on Reference Data mapping.', blocks: ['Billing', 'Internal Controls', 'Allocations', 'Trade Support'], deps: ['Reference Data'] },
+    { name: 'Performance',        stageIdx: 0, health: 'r', days: 14, lead: 'Sarah Chen',     leadInit: 'SC', risk: 11, blocker: null, blocks: [], deps: [] },
+    { name: 'Tax Services',       stageIdx: 1, health: 'r', days: 14, lead: 'Michael Patel',  leadInit: 'MP', risk: 10, blocker: 'Tax residency documents missing for 2 of 4 entities.', blocks: ['Fund Accounting'], deps: ['ISG Legal'] },
+    { name: 'Corporate Actions',  stageIdx: 1, health: 'r', days: 14, lead: 'Alexander Black',leadInit: 'AB', risk: 10, blocker: 'Event feed source not finalized.', blocks: [], deps: ['Reference Data'] },
+    { name: 'Settlements',        stageIdx: 1, health: 'r', days: 14, lead: 'John Loh',       leadInit: 'JL', risk: 10, blocker: 'ISG Legal contract review outstanding for 9 days — blocks settlement instruction setup.', blocks: ['Custody', 'Transfer Agency', 'Cash Management'], deps: ['ISG Legal'] },
+    { name: 'Allocations',        stageIdx: 2, health: 'r', days: 14, lead: 'Alexander Black',leadInit: 'AB', risk: 9, blocker: 'Test allocation file failing schema validation — 3 SLA breaches.', blocks: ['Reconciliation'], deps: ['Reconciliation'] },
+    { name: 'Client Solutions',   stageIdx: 2, health: 'r', days: 14, lead: 'John Loh',       leadInit: 'JL', risk: 9, blocker: 'Client IT hasn\'t configured SSO IdP endpoint.', blocks: ['Client Service'], deps: ['Client (Carina)'] },
+    { name: 'Transfer Agency',    stageIdx: 2, health: 'r', days: 14, lead: 'Roberto Romano', leadInit: 'RR', risk: 9, blocker: 'Unit-holder file mismatch with Reconciliation counts.', blocks: [], deps: ['Reconciliation'] },
+    { name: 'Cash Management',    stageIdx: 0, health: 'a', days: 14, lead: 'Karthik Dasari', leadInit: 'KD', risk: 7, blocker: null, blocks: [], deps: ['Settlements'] },
+    { name: 'Billing',            stageIdx: 1, health: 'a', days: 14, lead: 'Karthik Dasari', leadInit: 'KD', risk: 6, blocker: null, blocks: [], deps: ['Reconciliation'] },
+    { name: 'Custody',            stageIdx: 2, health: 'a', days: 14, lead: 'Roberto Romano', leadInit: 'RR', risk: 5, blocker: null, blocks: [], deps: ['Settlements'] },
+    { name: 'Treasury',           stageIdx: 2, health: 'a', days: 14, lead: 'Michael Patel',  leadInit: 'MP', risk: 5, blocker: null, blocks: [], deps: [] },
+    { name: 'Compliance',         stageIdx: 3, health: 'a', days: 17, lead: 'Michael Patel',  leadInit: 'MP', risk: 4, blocker: null, blocks: [], deps: ['Risk Management'] },
+    { name: 'Internal Controls',  stageIdx: 0, health: 'g', days: 14, lead: 'Roberto Romano', leadInit: 'RR', risk: 3, blocker: null, blocks: [], deps: [] },
+    { name: 'Middle Office',      stageIdx: 2, health: 'g', days: 13, lead: 'Alexander Black',leadInit: 'AB', risk: 2, blocker: null, blocks: [], deps: [] },
+    { name: 'Trade Support',      stageIdx: 2, health: 'g', days: 12, lead: 'John Loh',       leadInit: 'JL', risk: 2, blocker: null, blocks: [], deps: [] },
+    { name: 'Fund Accounting',    stageIdx: 2, health: 'g', days: 11, lead: 'Karthik Dasari', leadInit: 'KD', risk: 2, blocker: null, blocks: [], deps: [] },
+    { name: 'Reference Data',     stageIdx: 3, health: 'g', days: 16, lead: 'John Loh',       leadInit: 'JL', risk: 1, blocker: null, blocks: [], deps: [] },
+    { name: 'ISG Legal',          stageIdx: 3, health: 'g', days: 15, lead: 'Roberto Romano', leadInit: 'RR', risk: 1, blocker: null, blocks: [], deps: [] },
+    { name: 'Portfolio Admin',    stageIdx: 4, health: 'g', days: 18, lead: 'John Loh',       leadInit: 'JL', risk: 0, blocker: null, blocks: [], deps: [] },
+    { name: 'Client Engineering', stageIdx: 4, health: 'g', days: 19, lead: 'Alexander Black',leadInit: 'AB', risk: 0, blocker: null, blocks: [], deps: [] },
+  ];
+
+  // Dedupe Performance (kept only once)
+  const seen = new Set();
+  const uniqueTeams = teams.filter(t => {
+    if (seen.has(t.name)) return false;
+    seen.add(t.name);
+    return true;
+  });
+
+  const HEALTH_LABEL = { r: 'Off track', a: 'Pending info', g: 'On track' };
+  const HEALTH_VAR = { g: 'var(--green)', a: 'var(--amber)', r: 'var(--red)' };
+
+  // ========== WAFFLE ==========
+  const waffleEl = document.getElementById('waffle');
+  const waffleSorted = [...uniqueTeams].sort((a, b) => {
+    const p = { r: 0, a: 1, g: 2 };
+    return p[a.health] - p[b.health];
+  });
+  waffleSorted.forEach(t => {
+    const cell = document.createElement('div');
+    cell.className = `waffle-cell ${t.health}`;
+    cell.innerHTML = `<span class="dot"></span>${t.name}`;
+    cell.title = `${t.name} · ${HEALTH_LABEL[t.health]} · ${STAGES[t.stageIdx]}`;
+    cell.onclick = () => openDrawer(t.name);
+    waffleEl.appendChild(cell);
+  });
+
+  // ========== MATRIX ==========
+  const matrixRows = document.getElementById('matrix-rows');
+  const sortedByRisk = [...uniqueTeams].sort((a, b) => b.risk - a.risk);
+  sortedByRisk.forEach((t, i) => {
+    const segs = STAGES.map((_, idx) => {
+      if (idx < t.stageIdx) return '<div class="seg done"></div>';
+      if (idx === t.stageIdx) return `<div class="seg cur-${t.health}"></div>`;
+      return '<div class="seg future"></div>';
+    }).join('');
+
+    const row = document.createElement('div');
+    row.className = 'matrix-row';
+    row.dataset.health = t.health;
+    row.dataset.team = t.name;
+    row.onclick = () => openDrawer(t.name);
+
+    const daysClass = t.health === 'r' ? 'bad' : t.health === 'a' ? 'warn' : '';
+
+    row.innerHTML = `
+      <div class="rank">${String(i + 1).padStart(2, '0')}</div>
+      <div class="team">
+        <span class="health ${t.health}"></span>
+        ${t.name}
+      </div>
+      <div class="stages">${segs}</div>
+      <div class="stage-label">${STAGES[t.stageIdx]}</div>
+      <div class="assignee">
+        <span class="av">${t.leadInit}</span>
+        <span>${t.lead.split(' ').slice(-1)[0]}</span>
+      </div>
+      <div class="days ${daysClass}">${t.days}d</div>
+      <div class="chev">
+        <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </div>
+    `;
+
+    matrixRows.appendChild(row);
+  });
+
+  // ========== FILTERS ==========
+  const filterChips = document.querySelectorAll('#filters .chip');
+  filterChips.forEach(chip => {
+    chip.onclick = () => {
+      filterChips.forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      const filter = chip.dataset.filter;
+      document.querySelectorAll('.matrix-row').forEach(r => {
+        if (filter === 'all' || r.dataset.health === filter) {
+          r.classList.remove('hidden');
+        } else {
+          r.classList.add('hidden');
+        }
+      });
+    };
+  });
+
+  // ========== DRAWER ==========
+  const drawer = document.getElementById('drawer');
+  const drawerOverlay = document.getElementById('drawerOverlay');
+  const drawerContent = document.getElementById('drawerContent');
+
+  function teamByName(name) {
+    return uniqueTeams.find(t => t.name === name);
+  }
+
+  function openDrawer(name) {
+    const t = teamByName(name);
+    if (!t) return;
+
+    const activity = buildActivity(t);
+    const deps = (t.deps || []).map(d => {
+      const dep = uniqueTeams.find(x => x.name === d);
+      const h = dep ? dep.health : 'a';
+      return `<span class="dep-pill"><span class="dot ${h}"></span>${d}</span>`;
+    }).join('');
+    const blocks = (t.blocks || []).map(b => {
+      const bt = uniqueTeams.find(x => x.name === b);
+      const h = bt ? bt.health : 'r';
+      return `<span class="dep-pill"><span class="dot ${h}"></span>${b}</span>`;
+    }).join('');
+
+    drawerContent.innerHTML = `
+      <div class="drawer-head">
+        <button class="icon-btn close" onclick="closeDrawer()">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" stroke-linecap="round"/></svg>
+        </button>
+        <div class="eyebrow" style="margin-bottom: 8px;">${HEALTH_LABEL[t.health]} · Day ${t.days} of 30</div>
+        <div class="team-label serif">${t.name}</div>
+        <div class="lead">
+          <span class="av" style="width:18px; height:18px; font-size: 9px; margin-right: 2px;">${t.leadInit}</span>
+          ${t.lead} · Lead
+        </div>
+      </div>
+
+      <div class="drawer-body">
+
+        <div class="drawer-status">
+          <div class="drawer-stat">
+            <div class="k">Stage</div>
+            <div class="v">${STAGES[t.stageIdx]}</div>
+          </div>
+          <div class="drawer-stat">
+            <div class="k">Health</div>
+            <div class="v ${t.health}">${HEALTH_LABEL[t.health]}</div>
+          </div>
+          <div class="drawer-stat">
+            <div class="k">Risk score</div>
+            <div class="v num">${t.risk}/12</div>
+          </div>
+        </div>
+
+        ${t.blocker ? `
+          <div class="drawer-section">
+            <h4>Current blocker</h4>
+            <div class="blocker-card">
+              <div class="who">Blocker · ${t.days}d</div>
+              ${t.blocker.replace(/ISG Legal/g, '<em>ISG Legal</em>').replace(/Reference Data/g, '<em>Reference Data</em>').replace(/Performance/g, '<em>Performance</em>').replace(/Reconciliation/g, '<em>Reconciliation</em>')}
+            </div>
+          </div>
+        ` : ''}
+
+        ${blocks ? `
+          <div class="drawer-section">
+            <h4>Blocks ${t.blocks.length} downstream team${t.blocks.length > 1 ? 's' : ''}</h4>
+            <div class="dep-pill-row">${blocks}</div>
+          </div>
+        ` : ''}
+
+        ${deps ? `
+          <div class="drawer-section">
+            <h4>Waiting on</h4>
+            <div class="dep-pill-row">${deps}</div>
+          </div>
+        ` : ''}
+
+        <div class="drawer-section">
+          <h4>Activity</h4>
+          <div class="activity-list">${activity}</div>
+        </div>
+
+        <div class="drawer-actions">
+          <button class="btn">
+            <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M4 6l8 6 8-6M4 6v12l8-6M4 6h16v12H4" stroke-linejoin="round"/></svg>
+            Message ${t.lead.split(' ')[0]}
+          </button>
+          <button class="btn primary">
+            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2l2.5 7h7l-5.5 4 2 7-6-4.5-6 4.5 2-7L2.5 9h7L12 2z" stroke-linejoin="round"/></svg>
+            Escalate
+          </button>
+        </div>
+      </div>
+    `;
+
+    drawer.classList.add('open');
+    drawerOverlay.classList.add('open');
+    drawer.setAttribute('aria-hidden', 'false');
+  }
+
+  function closeDrawer() {
+    drawer.classList.remove('open');
+    drawerOverlay.classList.remove('open');
+    drawer.setAttribute('aria-hidden', 'true');
+  }
+
+  function buildActivity(t) {
+    const items = [];
+    items.push({ when: `${t.days}d ago`, detail: `<strong>Onboarding requested</strong>`, sub: 'Submitted by Norbert Pap', kind: 'key' });
+
+    if (t.health === 'r' && t.blocker) {
+      items.push({ when: `${Math.max(1, t.days - 3)}d ago`, detail: `<strong>Reached ${STAGES[t.stageIdx]}</strong>`, sub: 'Stage entry logged', kind: '' });
+      items.push({ when: '5d ago', detail: `<strong>Blocker raised</strong>`, sub: t.blocker.length > 80 ? t.blocker.slice(0, 80) + '…' : t.blocker, kind: 'bad' });
+      items.push({ when: '2d ago', detail: `<strong>Reminder sent</strong>`, sub: 'Auto-notification to upstream team', kind: '' });
+      items.push({ when: 'Today', detail: `<strong>SLA breached</strong>`, sub: 'Team marked off track', kind: 'bad' });
+    } else if (t.health === 'a') {
+      items.push({ when: `${Math.max(1, t.days - 5)}d ago`, detail: `<strong>Reached ${STAGES[t.stageIdx]}</strong>`, sub: '', kind: '' });
+      items.push({ when: '3d ago', detail: `<strong>Information requested</strong>`, sub: 'Awaiting response from upstream', kind: '' });
+      items.push({ when: 'Yesterday', detail: `<strong>Follow-up sent</strong>`, sub: '', kind: '' });
+    } else {
+      items.push({ when: `${Math.max(1, t.days - 10)}d ago`, detail: `<strong>Impact assessment complete</strong>`, sub: '', kind: 'key' });
+      items.push({ when: `${Math.max(1, t.days - 6)}d ago`, detail: `<strong>Scope signed off</strong>`, sub: '', kind: '' });
+      items.push({ when: `${Math.max(1, t.days - 3)}d ago`, detail: `<strong>Reached ${STAGES[t.stageIdx]}</strong>`, sub: '', kind: '' });
+      if (t.stageIdx === 4) {
+        items.push({ when: 'Today', detail: `<strong>Onboarding complete</strong>`, sub: 'Ready for Carina go-live', kind: 'key' });
+      }
+    }
+
+    return items.map(i => `
+      <div class="activity-item ${i.kind}">
+        <div class="node"></div>
+        <div class="detail">${i.detail}${i.sub ? `<div class="sub">${i.sub}</div>` : ''}</div>
+        <div class="when">${i.when}</div>
+      </div>
+    `).join('');
+  }
+
+  // Keyboard
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeDrawer();
+  });
+
+  // ========== TABS ==========
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.onclick = () => {
+      const tab = btn.dataset.tab;
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b === btn));
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.toggle('active', p.id === `tab-${tab}`));
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+  });
+</script>
+
+</body>
+</html>
