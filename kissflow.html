@@ -273,8 +273,10 @@
     display: grid;
     grid-template-columns: 2.2fr 1fr;
     gap: 16px;
-    margin-bottom: 28px;
+    margin-bottom: 16px;
   }
+  .hero-grid > .card { display: flex; flex-direction: column; }
+  .hero-grid > .card > .card-body { flex: 1; display: flex; flex-direction: column; justify-content: center; }
   .card {
     background: var(--bg-1);
     border: 1px solid var(--border);
@@ -303,15 +305,15 @@
 
   /* Waffle — named */
   .waffle-grid {
-    display: grid; grid-template-columns: 1fr 1fr;
-    gap: 4px;
+    display: grid; grid-template-columns: 1fr 1fr 1fr;
+    gap: 3px;
   }
   .waffle-cell {
-    padding: 8px 10px;
+    padding: 5px 8px;
     border-radius: 3px;
-    font-size: 11.5px; font-weight: 500;
+    font-size: 10.5px; font-weight: 500;
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-    display: flex; align-items: center; gap: 7px;
+    display: flex; align-items: center; gap: 6px;
     cursor: pointer;
     transition: all 0.14s;
     border: 1px solid transparent;
@@ -384,8 +386,8 @@
   }
   .matrix-head-row {
     display: grid;
-    grid-template-columns: 40px 200px 1fr 130px 130px 60px 18px;
-    gap: 20px;
+    grid-template-columns: 64px 240px 1fr 110px 110px 50px 18px;
+    gap: 18px;
     padding: 12px 20px;
     font-size: 10.5px; font-weight: 600;
     color: var(--ink-3);
@@ -398,8 +400,8 @@
   }
   .matrix-row {
     display: grid;
-    grid-template-columns: 40px 200px 1fr 130px 130px 60px 18px;
-    gap: 20px;
+    grid-template-columns: 64px 240px 1fr 110px 110px 50px 18px;
+    gap: 18px;
     padding: 13px 20px;
     align-items: center;
     cursor: pointer;
@@ -1026,6 +1028,212 @@
     color: var(--ink-0);
     font-weight: 500;
   }
+
+  /* ========== CLIENT SELECTOR ========== */
+  .client-select {
+    height: 26px;
+    padding: 0 9px 0 11px;
+    display: inline-flex; align-items: center; gap: 7px;
+    font-size: 11.5px; font-weight: 500;
+    border-radius: 5px;
+    color: var(--ink-1);
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: all 0.14s;
+    margin-left: 4px;
+    letter-spacing: 0;
+  }
+  .client-select:hover { color: var(--ink-0); border-color: var(--border-2); background: var(--bg-3); }
+  .client-select svg { width: 10px; height: 10px; color: var(--ink-3); }
+
+  /* ========== TOOLTIP ========== */
+  .tip {
+    position: relative; display: inline-flex; cursor: help;
+  }
+  .tip[data-tip]:hover::after,
+  .tip[data-tip]:focus::after {
+    content: attr(data-tip);
+    position: absolute;
+    bottom: calc(100% + 8px); left: 50%;
+    transform: translateX(-50%);
+    background: var(--bg-3);
+    color: var(--ink-0);
+    border: 1px solid var(--border-2);
+    padding: 7px 10px;
+    border-radius: 5px;
+    font-size: 11.5px; font-weight: 500;
+    white-space: nowrap;
+    z-index: 30;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.45);
+    pointer-events: none;
+    letter-spacing: -0.002em;
+  }
+  .tip[data-tip]:hover::before {
+    content: '';
+    position: absolute;
+    bottom: calc(100% + 4px); left: 50%;
+    transform: translateX(-50%) rotate(45deg);
+    width: 6px; height: 6px;
+    background: var(--bg-3);
+    border-right: 1px solid var(--border-2);
+    border-bottom: 1px solid var(--border-2);
+    z-index: 30;
+    pointer-events: none;
+  }
+
+  /* ========== REF NUM + PENDING BADGE ========== */
+  .matrix-row .ref {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px;
+    color: var(--ink-3);
+    font-weight: 500;
+    letter-spacing: 0.02em;
+  }
+  .matrix-row .team .pending-tag {
+    display: inline-flex; align-items: center;
+    font-size: 9.5px; font-weight: 600;
+    padding: 1.5px 5px;
+    border-radius: 3px;
+    background: var(--amber-dim);
+    color: var(--amber-ink);
+    border: 1px solid var(--amber-line);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .matrix-row .team .pending-tag.client {
+    background: rgba(74, 141, 224, 0.12);
+    color: #87b3ec;
+    border-color: rgba(74, 141, 224, 0.28);
+  }
+
+  /* ========== INTERACTIVE STAGE ROW (chart) ========== */
+  .pacing-svg .stage-row { cursor: pointer; }
+  .pacing-svg .stage-row .stage-row-bg { transition: fill 0.15s; }
+  .pacing-svg .stage-row:hover .stage-row-bg { fill: rgba(255, 255, 255, 0.025); }
+  .pacing-svg .stage-row.active .stage-row-bg { fill: var(--gold-dim); }
+  .pacing-svg .stage-row.active text:first-of-type { fill: var(--gold-ink); }
+
+  /* Stage backlog clickable */
+  .bullet-row {
+    cursor: pointer;
+    border-radius: 4px;
+    padding: 9px 8px !important;
+    margin: 0 -8px;
+    transition: background 0.14s;
+  }
+  .bullet-row:hover { background: rgba(255, 255, 255, 0.022); }
+  .bullet-row.active { background: var(--gold-dim); }
+
+  /* KPI hover polish */
+  .kpi { transition: background 0.15s; }
+  .kpi:hover { background: var(--bg-2); }
+
+  /* Pulse on red health dots */
+  .matrix-row .team .health.r {
+    animation: redPulse 2.4s ease-in-out infinite;
+  }
+  @keyframes redPulse {
+    0%, 100% { box-shadow: 0 0 0 3px var(--red-dim); }
+    50% { box-shadow: 0 0 0 5px rgba(224, 111, 100, 0.10); }
+  }
+
+  /* ========== TOAST ========== */
+  .toast-stack {
+    position: fixed; bottom: 24px; right: 24px;
+    display: flex; flex-direction: column; gap: 10px;
+    z-index: 80; pointer-events: none;
+  }
+  .toast {
+    pointer-events: auto;
+    background: var(--bg-2);
+    border: 1px solid var(--border-2);
+    border-left: 3px solid var(--gold);
+    color: var(--ink-0);
+    padding: 12px 18px 12px 14px;
+    border-radius: 6px;
+    font-size: 13px; font-weight: 500;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.45);
+    display: flex; align-items: center; gap: 10px;
+    min-width: 260px;
+    animation: toastIn 0.32s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+    letter-spacing: -0.005em;
+  }
+  .toast.leaving { animation: toastOut 0.28s cubic-bezier(0.4, 0, 1, 1) both; }
+  .toast svg { width: 16px; height: 16px; flex-shrink: 0; color: var(--gold-ink); }
+  .toast .sub { font-size: 11.5px; color: var(--ink-2); font-weight: 400; margin-top: 2px; }
+  @keyframes toastIn {
+    from { transform: translateX(8px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+  }
+  @keyframes toastOut {
+    from { transform: translateX(0); opacity: 1; }
+    to { transform: translateX(20px); opacity: 0; }
+  }
+
+  /* Smooth hide/show on matrix rows */
+  .matrix-row { transition: opacity 0.18s, padding 0.18s; }
+  .matrix-row.hidden { display: none; }
+
+  /* Active stage filter banner */
+  .stage-filter-banner {
+    display: none;
+    align-items: center; gap: 8px;
+    font-size: 12px;
+    color: var(--ink-1);
+    background: var(--gold-dim);
+    border: 1px solid var(--gold-line);
+    padding: 4px 10px 4px 12px;
+    border-radius: 5px;
+  }
+  .stage-filter-banner.active { display: inline-flex; }
+  .stage-filter-banner .x {
+    color: var(--gold-ink); cursor: pointer; padding: 2px;
+    border-radius: 3px; transition: background 0.14s;
+    display: flex; align-items: center;
+  }
+  .stage-filter-banner .x:hover { background: var(--gold-line); }
+
+  /* ========== BOTTLENECKS LIST ========== */
+  .bottleneck-item {
+    display: grid; grid-template-columns: 1fr auto;
+    gap: 14px; padding: 12px 20px;
+    border-bottom: 1px solid var(--border);
+    align-items: center;
+    cursor: pointer;
+    transition: background 0.12s;
+  }
+  .bottleneck-item:hover { background: rgba(255, 255, 255, 0.013); }
+  .bottleneck-item:last-child { border-bottom: none; }
+  .bottleneck-item .body { font-size: 13px; color: var(--ink-0); line-height: 1.45; }
+  .bottleneck-item .body em { color: var(--gold-bright); font-style: normal; font-weight: 500; }
+  .bottleneck-item .body .sub {
+    font-size: 11.5px; color: var(--ink-2);
+    margin-top: 3px;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .bottleneck-item .health-pill {
+    width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0;
+  }
+  .bottleneck-item .health-pill.r { background: var(--red); box-shadow: 0 0 0 2px var(--red-dim); }
+  .bottleneck-item .health-pill.a { background: var(--amber); box-shadow: 0 0 0 2px var(--amber-dim); }
+  .bottleneck-item .pending-tag {
+    font-size: 9.5px; font-weight: 600;
+    padding: 1.5px 6px;
+    border-radius: 3px;
+    background: var(--amber-dim);
+    color: var(--amber-ink);
+    border: 1px solid var(--amber-line);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .bottleneck-item .pending-tag.client {
+    background: rgba(74, 141, 224, 0.12);
+    color: #87b3ec;
+    border-color: rgba(74, 141, 224, 0.28);
+  }
 </style>
 </head>
 <body>
@@ -1064,7 +1272,11 @@
       <section class="page-head">
         <div>
           <div class="eyebrow-row">
-            <span class="eyebrow">Carina Capital · ISG SMA · Day 14 of 30</span>
+            <span class="eyebrow">ISG SMA · Day 14 of 30</span>
+            <button class="client-select" title="Filter by client">
+              Carina Capital
+              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            </button>
             <span class="status-chip"><span class="dot-pulse"></span>Off track</span>
           </div>
           <h1 class="lede">10 teams off-track. Settlements chain is blocking <em>13 downstream</em> workstreams.</h1>
@@ -1076,8 +1288,8 @@
             Message leads
           </button>
           <button class="btn primary">
-            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2l2.5 7h7l-5.5 4 2 7-6-4.5-6 4.5 2-7L2.5 9h7L12 2z" stroke-linejoin="round"/></svg>
-            Escalate now
+            <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 6v6l4 2M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Send reminder
           </button>
         </div>
       </section>
@@ -1121,87 +1333,101 @@
         <div class="card">
           <div class="card-head">
             <h3>
-              Pacing vs target
+              Time per stage
               <svg width="12" height="12" fill="none" stroke="var(--ink-3)" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16v0" stroke-linecap="round"/></svg>
             </h3>
             <div class="meta">
               <div class="legend-inline">
-                <div class="it"><span class="bar" style="background: var(--ink-3); height:1px; border-top: 1px dashed var(--ink-3);"></span>Plan</div>
-                <div class="it"><span class="bar" style="background: var(--red); height: 2px;"></span>Actual</div>
-                <div class="it"><span class="bar" style="border-top: 1.5px dashed var(--red); opacity: 0.55;"></span>Projected</div>
+                <div class="it"><span class="bar" style="background: transparent; border: 1px dashed var(--border-2); height: 6px; width: 18px;"></span>Plan</div>
+                <div class="it"><span class="bar" style="background: var(--green); height: 4px; width: 18px; border-radius: 2px;"></span>Under</div>
+                <div class="it"><span class="bar" style="background: var(--amber); height: 4px; width: 18px; border-radius: 2px;"></span>At plan</div>
+                <div class="it"><span class="bar" style="background: var(--red); height: 4px; width: 18px; border-radius: 2px;"></span>Over</div>
               </div>
             </div>
           </div>
           <div class="card-body">
-            <svg class="pacing-svg" viewBox="0 0 720 300" preserveAspectRatio="xMidYMid meet">
-              <defs>
-                <linearGradient id="apolloRedGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0" stop-color="#e06f64" stop-opacity="0.24"/>
-                  <stop offset="1" stop-color="#e06f64" stop-opacity="0.01"/>
-                </linearGradient>
-              </defs>
+            <svg class="pacing-svg" viewBox="0 0 720 240" preserveAspectRatio="xMidYMid meet">
 
-              <!-- Gap area -->
-              <path d="M 60 240 L 340 225 L 680 212 L 680 30 Z" fill="url(#apolloRedGrad)"/>
-
-              <!-- Axes -->
-              <line x1="60" y1="30" x2="60" y2="240" stroke="#33353b" stroke-width="1"/>
-              <line x1="60" y1="240" x2="680" y2="240" stroke="#33353b" stroke-width="1"/>
-
-              <!-- Y grid -->
-              <line x1="60" y1="30" x2="680" y2="30" stroke="#232428" stroke-dasharray="2 4"/>
-              <line x1="60" y1="135" x2="680" y2="135" stroke="#232428" stroke-dasharray="2 4"/>
-
-              <!-- Y labels -->
-              <text x="52" y="34" font-size="10" fill="#5c5e65" text-anchor="end">23</text>
-              <text x="52" y="139" font-size="10" fill="#5c5e65" text-anchor="end">12</text>
-              <text x="52" y="244" font-size="10" fill="#5c5e65" text-anchor="end">0</text>
-              <text x="52" y="20" font-size="9.5" fill="#5c5e65" text-anchor="end" letter-spacing="1">TEAMS</text>
-
-              <!-- Plan curve (S-curve ideal) -->
-              <path d="M 60 240 Q 200 230, 340 140 T 680 30"
-                    fill="none" stroke="#5c5e65" stroke-width="1.4" stroke-dasharray="4 4"/>
-
-              <!-- Actual curve -->
-              <path d="M 60 240 C 120 239, 200 235, 340 225"
-                    fill="none" stroke="#e06f64" stroke-width="2.5" stroke-linecap="round"/>
-
-              <!-- Projection -->
-              <path d="M 340 225 C 440 220, 560 215, 680 212"
-                    fill="none" stroke="#e06f64" stroke-width="1.8" stroke-dasharray="3 4" opacity="0.5"/>
-
-              <!-- Today vertical -->
-              <line x1="340" y1="12" x2="340" y2="252" stroke="#5c5e65" stroke-width="0.8" stroke-dasharray="1 3"/>
-
-              <!-- Day markers -->
-              <g>
-                <circle cx="60" cy="240" r="3" fill="#33353b"/>
-                <circle cx="200" cy="234" r="3" fill="#33353b"/>
-                <circle cx="340" cy="225" r="5" fill="#e06f64"/>
-                <circle cx="340" cy="225" r="2" fill="#17181b"/>
-                <circle cx="680" cy="212" r="4" fill="none" stroke="#e06f64" stroke-width="1.5" opacity="0.55"/>
+              <!-- Vertical grid lines (day markers) -->
+              <g stroke="#232428" stroke-dasharray="2 4">
+                <line x1="80" y1="22" x2="80" y2="208"/>
+                <line x1="195" y1="22" x2="195" y2="208"/>
+                <line x1="310" y1="22" x2="310" y2="208"/>
+                <line x1="425" y1="22" x2="425" y2="208"/>
+                <line x1="540" y1="22" x2="540" y2="208"/>
               </g>
 
-              <!-- Callout today -->
-              <g>
-                <rect x="352" y="198" width="138" height="52" rx="4" fill="#17181b" stroke="#33353b" stroke-width="1"/>
-                <text x="364" y="216" font-size="10" fill="#8f9198" letter-spacing="1">TODAY · DAY 14</text>
-                <text x="364" y="232" font-size="13" fill="#f0928a" font-weight="600">2 of 23 complete</text>
-                <text x="364" y="246" font-size="11" fill="#8f9198">Plan expected: 11</text>
+              <!-- X axis labels (top) -->
+              <g font-size="10" fill="#5c5e65" text-anchor="middle" letter-spacing="0.04em">
+                <text x="80" y="14">0d</text>
+                <text x="195" y="14">3d</text>
+                <text x="310" y="14">6d</text>
+                <text x="425" y="14">9d</text>
+                <text x="540" y="14">12d</text>
               </g>
 
-              <!-- Endpoint label -->
-              <text x="678" y="24" font-size="10.5" fill="#5c5e65" text-anchor="end">Target · 23 teams</text>
-              <text x="678" y="226" font-size="10.5" fill="#f0928a" text-anchor="end">Projected: ~4</text>
+              <!-- ===== IMPACT row (plan 5d, actual 9d, +4 over) ===== -->
+              <g class="stage-row" data-stage="0">
+                <rect class="stage-row-bg" x="0" y="26" width="720" height="32" fill="transparent"/>
+                <text x="72" y="46" font-size="11" fill="#d4d6db" text-anchor="end" font-weight="500" letter-spacing="0.06em">IMPACT</text>
+                <rect x="80" y="34" width="192" height="14" rx="3" fill="none" stroke="#33353b" stroke-width="1" stroke-dasharray="2 3"/>
+                <rect x="80" y="34" width="192" height="14" rx="3" fill="#e6b259" opacity="0.55"/>
+                <rect x="272" y="34" width="153" height="14" rx="3" fill="#e06f64"/>
+                <text x="555" y="46" font-size="11.5" fill="#f0928a" font-weight="600" font-variant-numeric="tabular-nums">9d</text>
+                <text x="580" y="46" font-size="10.5" fill="#5c5e65" font-variant-numeric="tabular-nums">/ 5d plan</text>
+                <text x="700" y="46" font-size="10.5" fill="#f0928a" font-weight="600" text-anchor="end" font-variant-numeric="tabular-nums">+4d</text>
+              </g>
 
-              <!-- X labels -->
-              <text x="60" y="262" font-size="10" fill="#5c5e65" text-anchor="middle">Day 0 · Mar 14</text>
-              <text x="340" y="262" font-size="10" fill="#edeef1" text-anchor="middle" font-weight="500">Today · Day 14</text>
-              <text x="680" y="262" font-size="10" fill="#5c5e65" text-anchor="end">Due · Apr 13</text>
+              <!-- ===== SCOPE row (plan 5d, actual 6d, +1 slight) ===== -->
+              <g class="stage-row" data-stage="1">
+                <rect class="stage-row-bg" x="0" y="62" width="720" height="32" fill="transparent"/>
+                <text x="72" y="82" font-size="11" fill="#d4d6db" text-anchor="end" font-weight="500" letter-spacing="0.06em">SCOPE</text>
+                <rect x="80" y="70" width="192" height="14" rx="3" fill="none" stroke="#33353b" stroke-width="1" stroke-dasharray="2 3"/>
+                <rect x="80" y="70" width="192" height="14" rx="3" fill="#e6b259" opacity="0.55"/>
+                <rect x="272" y="70" width="38" height="14" rx="3" fill="#e6b259"/>
+                <text x="555" y="82" font-size="11.5" fill="#f2ca85" font-weight="600" font-variant-numeric="tabular-nums">6d</text>
+                <text x="580" y="82" font-size="10.5" fill="#5c5e65" font-variant-numeric="tabular-nums">/ 5d plan</text>
+                <text x="700" y="82" font-size="10.5" fill="#f2ca85" font-weight="600" text-anchor="end" font-variant-numeric="tabular-nums">+1d</text>
+              </g>
 
-              <!-- Milestone markers -->
-              <text x="200" y="262" font-size="9.5" fill="#36383d" text-anchor="middle">Day 7</text>
-              <text x="510" y="262" font-size="9.5" fill="#36383d" text-anchor="middle">Day 21</text>
+              <!-- ===== BUILD row (plan 10d, actual 7d so far, on track) ===== -->
+              <g class="stage-row" data-stage="2">
+                <rect class="stage-row-bg" x="0" y="98" width="720" height="32" fill="transparent"/>
+                <text x="72" y="118" font-size="11" fill="#d4d6db" text-anchor="end" font-weight="500" letter-spacing="0.06em">BUILD</text>
+                <rect x="80" y="106" width="383" height="14" rx="3" fill="none" stroke="#33353b" stroke-width="1" stroke-dasharray="2 3"/>
+                <rect x="80" y="106" width="268" height="14" rx="3" fill="#16a38a" opacity="0.9"/>
+                <text x="555" y="118" font-size="11.5" fill="#5ad9bc" font-weight="600" font-variant-numeric="tabular-nums">7d</text>
+                <text x="580" y="118" font-size="10.5" fill="#5c5e65" font-variant-numeric="tabular-nums">/ 10d plan</text>
+                <text x="700" y="118" font-size="10.5" fill="#5c5e65" text-anchor="end" font-variant-numeric="tabular-nums">−3d</text>
+              </g>
+
+              <!-- ===== VALIDATION row (plan 7d, actual 4d so far) ===== -->
+              <g class="stage-row" data-stage="3">
+                <rect class="stage-row-bg" x="0" y="134" width="720" height="32" fill="transparent"/>
+                <text x="72" y="154" font-size="11" fill="#d4d6db" text-anchor="end" font-weight="500" letter-spacing="0.06em">VALIDATION</text>
+                <rect x="80" y="142" width="268" height="14" rx="3" fill="none" stroke="#33353b" stroke-width="1" stroke-dasharray="2 3"/>
+                <rect x="80" y="142" width="153" height="14" rx="3" fill="#16a38a" opacity="0.9"/>
+                <text x="555" y="154" font-size="11.5" fill="#5ad9bc" font-weight="600" font-variant-numeric="tabular-nums">4d</text>
+                <text x="580" y="154" font-size="10.5" fill="#5c5e65" font-variant-numeric="tabular-nums">/ 7d plan</text>
+                <text x="700" y="154" font-size="10.5" fill="#5c5e65" text-anchor="end" font-variant-numeric="tabular-nums">−3d</text>
+              </g>
+
+              <!-- ===== LIVE row (plan 3d, actual 2d) ===== -->
+              <g class="stage-row" data-stage="4">
+                <rect class="stage-row-bg" x="0" y="170" width="720" height="32" fill="transparent"/>
+                <text x="72" y="190" font-size="11" fill="#d4d6db" text-anchor="end" font-weight="500" letter-spacing="0.06em">LIVE</text>
+                <rect x="80" y="178" width="115" height="14" rx="3" fill="none" stroke="#33353b" stroke-width="1" stroke-dasharray="2 3"/>
+                <rect x="80" y="178" width="77" height="14" rx="3" fill="#16a38a" opacity="0.9"/>
+                <text x="555" y="190" font-size="11.5" fill="#5ad9bc" font-weight="600" font-variant-numeric="tabular-nums">2d</text>
+                <text x="580" y="190" font-size="10.5" fill="#5c5e65" font-variant-numeric="tabular-nums">/ 3d plan</text>
+                <text x="700" y="190" font-size="10.5" fill="#5c5e65" text-anchor="end" font-variant-numeric="tabular-nums">−1d</text>
+              </g>
+
+              <!-- X axis baseline -->
+              <line x1="80" y1="208" x2="540" y2="208" stroke="#33353b" stroke-width="1"/>
+
+              <!-- Footer caption -->
+              <text x="80" y="226" font-size="10" fill="#5c5e65" letter-spacing="0.02em">Avg days teams spend in each stage · 23 teams · day 14 of 30 · click stage to filter</text>
             </svg>
           </div>
         </div>
@@ -1218,9 +1444,9 @@
           <div class="card-body">
             <div id="waffle" class="waffle-grid"></div>
             <div style="display: flex; justify-content: space-between; padding-top: 14px; margin-top: 14px; border-top: 1px solid var(--border); font-size: 11.5px;" class="num">
-              <span style="display: flex; align-items: center; gap: 6px; color: var(--red-ink);"><span style="width:6px; height:6px; background: var(--red); border-radius:50%;"></span>10 off track</span>
-              <span style="display: flex; align-items: center; gap: 6px; color: var(--amber-ink);"><span style="width:6px; height:6px; background: var(--amber); border-radius:50%;"></span>5 pending</span>
-              <span style="display: flex; align-items: center; gap: 6px; color: var(--green-ink);"><span style="width:6px; height:6px; background: var(--green); border-radius:50%;"></span>8 on track</span>
+              <span class="tip" data-tip="Team is off track and not meeting SLAs" style="display: flex; align-items: center; gap: 6px; color: var(--red-ink);"><span style="width:6px; height:6px; background: var(--red); border-radius:50%;"></span>10 off track</span>
+              <span class="tip" data-tip="Team is pending information from other internal teams or client" style="display: flex; align-items: center; gap: 6px; color: var(--amber-ink);"><span style="width:6px; height:6px; background: var(--amber); border-radius:50%;"></span>5 pending</span>
+              <span class="tip" data-tip="On track" style="display: flex; align-items: center; gap: 6px; color: var(--green-ink);"><span style="width:6px; height:6px; background: var(--green); border-radius:50%;"></span>8 on track</span>
             </div>
           </div>
         </div>
@@ -1236,21 +1462,27 @@
           </div>
           <div class="filter-bar" id="filters">
             <button class="chip active" data-filter="all">All<span class="ct">23</span></button>
-            <button class="chip" data-filter="r"><span class="dot r"></span>Off track<span class="ct">10</span></button>
-            <button class="chip" data-filter="a"><span class="dot a"></span>Pending<span class="ct">5</span></button>
-            <button class="chip" data-filter="g"><span class="dot g"></span>On track<span class="ct">8</span></button>
+            <button class="chip" data-filter="r" title="Team is off track and not meeting SLAs"><span class="dot r"></span>Off track<span class="ct">10</span></button>
+            <button class="chip" data-filter="a" title="Team is pending information from other internal teams or client"><span class="dot a"></span>Pending<span class="ct">5</span></button>
+            <button class="chip" data-filter="g" title="On track"><span class="dot g"></span>On track<span class="ct">8</span></button>
+            <span class="stage-filter-banner" id="stageBanner">
+              <span>Stage: <strong id="stageBannerName"></strong></span>
+              <span class="x" id="stageBannerClear" title="Clear stage filter">
+                <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" stroke-linecap="round"/></svg>
+              </span>
+            </span>
           </div>
         </div>
 
         <div class="matrix">
           <div class="matrix-head-row">
-            <div></div>
+            <div>Ref #</div>
             <div>Team</div>
             <div class="stage-labels">
               <div>Impact</div>
               <div>Scope</div>
               <div>Build</div>
-              <div>UAT</div>
+              <div>Validation</div>
               <div>Live</div>
             </div>
             <div style="text-align:right">Stage</div>
@@ -1274,9 +1506,9 @@
               <span>Actual vs plan · day 14</span>
             </div>
           </div>
-          <div class="bullet-list">
-            <div class="bullet-row">
-              <div class="stage-name">Impact Assess.</div>
+          <div class="bullet-list" id="stage-backlog">
+            <div class="bullet-row" data-stage="0">
+              <div class="stage-name">Impact</div>
               <div class="bar-wrap">
                 <div class="bar-fill r" style="width: 50%;"></div>
                 <div class="target-mark" style="left: 0%;"></div>
@@ -1284,7 +1516,7 @@
               <div class="count">6</div>
               <div class="delta bad">+6</div>
             </div>
-            <div class="bullet-row">
+            <div class="bullet-row" data-stage="1">
               <div class="stage-name">Scope</div>
               <div class="bar-wrap">
                 <div class="bar-fill r" style="width: 33.3%;"></div>
@@ -1293,7 +1525,7 @@
               <div class="count">4</div>
               <div class="delta bad">+4</div>
             </div>
-            <div class="bullet-row">
+            <div class="bullet-row" data-stage="2">
               <div class="stage-name">Build</div>
               <div class="bar-wrap">
                 <div class="bar-fill a" style="width: 66.6%;"></div>
@@ -1302,8 +1534,8 @@
               <div class="count">8</div>
               <div class="delta warn">+4</div>
             </div>
-            <div class="bullet-row">
-              <div class="stage-name">UAT</div>
+            <div class="bullet-row" data-stage="3">
+              <div class="stage-name">Validation</div>
               <div class="bar-wrap">
                 <div class="bar-fill g" style="width: 25%;"></div>
                 <div class="target-mark" style="left: 16.7%;"></div>
@@ -1311,7 +1543,7 @@
               <div class="count">3</div>
               <div class="delta good">+1</div>
             </div>
-            <div class="bullet-row">
+            <div class="bullet-row" data-stage="4">
               <div class="stage-name">Live</div>
               <div class="bar-wrap">
                 <div class="bar-fill r" style="width: 16.7%;"></div>
@@ -1323,56 +1555,15 @@
           </div>
         </div>
 
-        <!-- Action queue -->
+        <!-- Bottlenecks -->
         <div class="card">
           <div class="card-head">
-            <h3>Do today</h3>
+            <h3>Bottlenecks</h3>
             <div class="meta" style="font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase;">
-              <span style="color: var(--gold-bright);">5 actions</span>
+              <span id="bottleneck-count" style="color: var(--amber-ink);"></span>
             </div>
           </div>
-          <div class="action-list">
-            <div class="action-item" onclick="openDrawer('Reconciliation')">
-              <div class="num-circle">1</div>
-              <div class="body">
-                Unblock <em>Reconciliation</em> — 14 days in Impact Assessment.
-                <div class="sub">Escalate to Sarah Chen · blocks 4 downstream teams</div>
-              </div>
-              <div class="cta">Open</div>
-            </div>
-            <div class="action-item" onclick="openDrawer('Settlements')">
-              <div class="num-circle">2</div>
-              <div class="body">
-                <em>Settlements</em> waiting on ISG Legal contract review (9d).
-                <div class="sub">Ping Michael Patel · legal SLA breached</div>
-              </div>
-              <div class="cta">Open</div>
-            </div>
-            <div class="action-item" onclick="openDrawer('Performance')">
-              <div class="num-circle">3</div>
-              <div class="body">
-                <em>Performance</em> missing benchmark specification.
-                <div class="sub">Client hasn't responded in 6 days</div>
-              </div>
-              <div class="cta">Open</div>
-            </div>
-            <div class="action-item" onclick="openDrawer('Allocations')">
-              <div class="num-circle">4</div>
-              <div class="body">
-                <em>Allocations</em> test file errors blocking UAT sign-off.
-                <div class="sub">2 SLA breaches this week</div>
-              </div>
-              <div class="cta">Open</div>
-            </div>
-            <div class="action-item" onclick="openDrawer('Client Solutions')">
-              <div class="num-circle">5</div>
-              <div class="body">
-                <em>Client Solutions</em> SSO config outstanding.
-                <div class="sub">Pending client IT</div>
-              </div>
-              <div class="cta">Open</div>
-            </div>
-          </div>
+          <div id="bottleneck-list" class="action-list"></div>
         </div>
 
       </section>
@@ -1386,22 +1577,22 @@
 
         <section class="personas-intro">
           <div class="eyebrow">Product · Users</div>
-          <h1>Six archetypes interact with Apollo onboarding.</h1>
-          <p>The dashboard is optimized for Roxanne — the Transitions lead whose Point system depends on inputs from every team. Leadership skims the portfolio weekly. Team Leads manage their own slice. Team Members just want their task list. Client Services owns upstream data entry. Client Solutions is a hybrid tracker-plus-subflow-runner.</p>
+          <h1>Six archetypes interact with the Kissflow SMA Onboarding Tool.</h1>
+          <p>The system is designed to support multiple users with different needs (Transitions, Client Solutions, Leadership) and enables both high-level tracking (overall onboarding status, progress) and detailed views (team-level tasks, blockers).</p>
         </section>
 
         <div class="personas-grid">
 
-          <!-- ===== Roxanne Boulet · Transitions ===== -->
+          <!-- ===== Roxanne Bunnel · Transitions ===== -->
           <article class="persona-card" data-accent="green">
             <div class="persona-badge">Primary user</div>
             <div class="persona-head">
               <div class="persona-avatar">
-                <img src="https://randomuser.me/api/portraits/women/50.jpg" alt="Roxanne Boulet"
+                <img src="https://randomuser.me/api/portraits/women/50.jpg" alt="Roxanne Bunnel"
                      onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'initials',textContent:'RB'}))" />
               </div>
               <div class="persona-info">
-                <h3>Roxanne Boulet</h3>
+                <h3>Roxanne Bunnel</h3>
                 <div class="persona-role">Transitions Lead</div>
                 <div class="persona-meta">ISG SMA · owns <strong>Point</strong> system</div>
               </div>
@@ -1449,8 +1640,8 @@
             </div>
             <div class="persona-stats">
               <div class="persona-stat">
-                <div class="value num">10<span class="unit">×/day</span></div>
-                <div class="label">Opens Apollo</div>
+                <div class="value num">1<span class="unit">×/day</span></div>
+                <div class="label">Opens Kissflow SMA Tool</div>
               </div>
               <div class="persona-stat">
                 <div class="value num">23</div>
@@ -1468,16 +1659,91 @@
             </div>
           </article>
 
-          <!-- ===== John Liang · Leadership ===== -->
+          <!-- ===== Lidiya Shutaya · Client Solutions ===== -->
+          <article class="persona-card" data-accent="rose">
+            <div class="persona-badge">Primary user</div>
+            <div class="persona-head">
+              <div class="persona-avatar">
+                <img src="https://randomuser.me/api/portraits/women/24.jpg" alt="Lidiya Shutaya"
+                     onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'initials',textContent:'LS'}))" />
+              </div>
+              <div class="persona-info">
+                <h3>Lidiya Shutaya</h3>
+                <div class="persona-role">Client Solutions</div>
+                <div class="persona-meta">ISG SMA · cross-team tracker</div>
+              </div>
+            </div>
+            <blockquote class="persona-quote">
+              I need to track <em>all teams</em> and ensure onboarding is progressing as expected.
+            </blockquote>
+            <div class="persona-sections">
+              <div class="persona-section">
+                <h4>Jobs to be done</h4>
+                <ul>
+                  <li>Track every team's onboarding progress</li>
+                  <li>Confirm onboarding is progressing as expected</li>
+                  <li>Coordinate across teams where needed</li>
+                  <li>Maintain dependency &amp; blocker visibility</li>
+                </ul>
+              </div>
+              <div class="persona-section">
+                <h4>Frustrations</h4>
+                <ul>
+                  <li>No other tool currently used for tracking</li>
+                  <li>No centralized tool for visibility across teams</li>
+                  <li>Cross-team dependencies unclear day-to-day</li>
+                </ul>
+              </div>
+            </div>
+            <div class="pain-map">
+              <h4>Pain → Tool feature</h4>
+              <div class="pain-row">
+                <div class="pain">No centralized tracking tool</div>
+                <div class="arrow">→</div>
+                <div class="feature">Single pane: every team, every stage</div>
+              </div>
+              <div class="pain-row">
+                <div class="pain">Is onboarding progressing as expected?</div>
+                <div class="arrow">→</div>
+                <div class="feature">Pacing-vs-plan + early slip alerts</div>
+              </div>
+              <div class="pain-row">
+                <div class="pain">Cross-team deps unclear</div>
+                <div class="arrow">→</div>
+                <div class="feature">Dependency map · owner surfaced</div>
+              </div>
+            </div>
+            <div class="persona-stats">
+              <div class="persona-stat">
+                <div class="value num">1<span class="unit">×/day</span></div>
+                <div class="label">Opens Kissflow SMA Tool</div>
+              </div>
+              <div class="persona-stat">
+                <div class="value num">23</div>
+                <div class="label">Teams tracked</div>
+              </div>
+              <div class="persona-stat-tools persona-stat">
+                <div class="label">Lives alongside</div>
+                <div class="persona-tags">
+                  <span class="persona-tag">Kissflow</span>
+                  <span class="persona-tag">Slack</span>
+                  <span class="persona-tag">Excel</span>
+                  <span class="persona-tag">Outlook</span>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <!-- ===== John Loh · Leadership ===== -->
           <article class="persona-card" data-accent="amber">
             <div class="persona-badge">Glance-only</div>
             <div class="persona-head">
               <div class="persona-avatar">
-                <img src="https://randomuser.me/api/portraits/men/52.jpg" alt="John Liang"
+                <img src="https://randomuser.me/api/portraits/men/52.jpg" alt="John Loh"
                      onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'initials',textContent:'JL'}))" />
               </div>
               <div class="persona-info">
-                <h3>John Liang</h3>
+                <h3>John Loh</h3>
                 <div class="persona-role">Leadership · Managing Director</div>
                 <div class="persona-meta">ISG SMA · portfolio-level oversight</div>
               </div>
@@ -1498,18 +1764,18 @@
               <div class="persona-section">
                 <h4>Frustrations</h4>
                 <ul>
-                  <li>Dashboards too dense for his level</li>
-                  <li>Missing the "why" behind every red</li>
+                  <li>No centralized tool for tracking — all in emails and spreadsheets</li>
+                  <li>Lack of visibility into team-level progress</li>
                   <li>Learns about slips too late in the week</li>
                 </ul>
               </div>
             </div>
             <div class="pain-map">
-              <h4>Pain → Apollo feature</h4>
+              <h4>Pain → Tool feature</h4>
               <div class="pain-row">
-                <div class="pain">Too dense at leadership level</div>
+                <div class="pain">Tracking lives in emails &amp; spreadsheets</div>
                 <div class="arrow">→</div>
-                <div class="feature">Portfolio view: RAG + days to trading per client</div>
+                <div class="feature">Single source of truth: portfolio view</div>
               </div>
               <div class="pain-row">
                 <div class="pain">Where's the bottleneck?</div>
@@ -1524,8 +1790,8 @@
             </div>
             <div class="persona-stats">
               <div class="persona-stat">
-                <div class="value num">2<span class="unit">×/wk</span></div>
-                <div class="label">Opens Apollo</div>
+                <div class="value num">1<span class="unit">×/wk</span></div>
+                <div class="label">Opens Kissflow SMA Tool</div>
               </div>
               <div class="persona-stat">
                 <div class="value num">12</div>
@@ -1547,8 +1813,7 @@
             <div class="persona-badge">Team lead</div>
             <div class="persona-head">
               <div class="persona-avatar">
-                <img src="https://randomuser.me/api/portraits/women/68.jpg" alt="Sarah Chen"
-                     onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'initials',textContent:'SC'}))" />
+                <span class="initials">SC</span>
               </div>
               <div class="persona-info">
                 <h3>Sarah Chen</h3>
@@ -1598,8 +1863,8 @@
             </div>
             <div class="persona-stats">
               <div class="persona-stat">
-                <div class="value num">4<span class="unit">×/day</span></div>
-                <div class="label">Opens Apollo</div>
+                <div class="value">Ad hoc</div>
+                <div class="label">Opens Kissflow SMA Tool</div>
               </div>
               <div class="persona-stat">
                 <div class="value num">5</div>
@@ -1617,88 +1882,12 @@
             </div>
           </article>
 
-          <!-- ===== Team Members (execution) ===== -->
-          <article class="persona-card" data-accent="purple">
-            <div class="persona-badge">Execution</div>
-            <div class="persona-head">
-              <div class="persona-avatar">
-                <img src="https://randomuser.me/api/portraits/women/79.jpg" alt="Priya Shah"
-                     onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'initials',textContent:'PS'}))" />
-              </div>
-              <div class="persona-info">
-                <h3>Priya Shah</h3>
-                <div class="persona-role">Team Member · representative</div>
-                <div class="persona-meta">ISG SMA · execution user</div>
-              </div>
-            </div>
-            <blockquote class="persona-quote">
-              Just show me my tasks for today. I don't need to see the whole program.
-            </blockquote>
-            <div class="persona-sections">
-              <div class="persona-section">
-                <h4>Jobs to be done</h4>
-                <ul>
-                  <li>View assigned tasks clearly</li>
-                  <li>Complete required actions efficiently</li>
-                  <li>Update status as work finishes</li>
-                  <li>Minimal broader-workflow context needed</li>
-                </ul>
-              </div>
-              <div class="persona-section">
-                <h4>Frustrations</h4>
-                <ul>
-                  <li>Dashboard shows more than she needs</li>
-                  <li>Context switching across 6+ apps</li>
-                  <li>Manual status updates take time</li>
-                </ul>
-              </div>
-            </div>
-            <div class="pain-map">
-              <h4>Pain → Apollo feature</h4>
-              <div class="pain-row">
-                <div class="pain">Dashboard too noisy</div>
-                <div class="arrow">→</div>
-                <div class="feature">"My tasks" focused view, no program chrome</div>
-              </div>
-              <div class="pain-row">
-                <div class="pain">Tool sprawl</div>
-                <div class="arrow">→</div>
-                <div class="feature">Unified task queue · inline completion</div>
-              </div>
-              <div class="pain-row">
-                <div class="pain">Manual status updates</div>
-                <div class="arrow">→</div>
-                <div class="feature">Complete task = auto-status</div>
-              </div>
-            </div>
-            <div class="persona-stats">
-              <div class="persona-stat">
-                <div class="value num">15<span class="unit">×/day</span></div>
-                <div class="label">Opens Apollo</div>
-              </div>
-              <div class="persona-stat">
-                <div class="value num">6</div>
-                <div class="label">Active tasks</div>
-              </div>
-              <div class="persona-stat-tools persona-stat">
-                <div class="label">Lives alongside</div>
-                <div class="persona-tags">
-                  <span class="persona-tag">Kissflow</span>
-                  <span class="persona-tag">Slack</span>
-                  <span class="persona-tag">Excel</span>
-                  <span class="persona-tag">Bloomberg</span>
-                </div>
-              </div>
-            </div>
-          </article>
-
           <!-- ===== Client Services (data input owners) ===== -->
           <article class="persona-card" data-accent="teal">
-            <div class="persona-badge">Data input</div>
+            <div class="persona-badge">Data input · forms not in use yet</div>
             <div class="persona-head">
               <div class="persona-avatar">
-                <img src="https://randomuser.me/api/portraits/women/30.jpg" alt="Maya Okonkwo"
-                     onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'initials',textContent:'MO'}))" />
+                <span class="initials">MO</span>
               </div>
               <div class="persona-info">
                 <h3>Maya Okonkwo</h3>
@@ -1707,49 +1896,49 @@
               </div>
             </div>
             <blockquote class="persona-quote">
-              I'm the bridge between the client and everyone downstream. If I miss a field, the <em>whole</em> chain stalls.
+              I'm the bridge between the client and everyone downstream. I keep <em>chasing</em> the same info three different ways.
             </blockquote>
             <div class="persona-sections">
               <div class="persona-section">
                 <h4>Jobs to be done</h4>
                 <ul>
-                  <li>Capture client information into the system</li>
-                  <li>Structure inputs for downstream consumption</li>
-                  <li>Ensure data completeness and usability</li>
-                  <li>Rapid, efficient entry across many fields</li>
+                  <li>Gather information from the client</li>
+                  <li>Relay required inputs to each internal team</li>
+                  <li>Track open requests and follow-ups</li>
+                  <li>Ensure data completeness for downstream consumption</li>
                 </ul>
               </div>
               <div class="persona-section">
                 <h4>Frustrations</h4>
                 <ul>
-                  <li>Forms are long, dense, unprioritized</li>
-                  <li>Unclear which fields matter most downstream</li>
-                  <li>Validation errors surface after submit</li>
+                  <li>Lack of clarity on which data points are needed by each team</li>
+                  <li>Waiting long for information from the client</li>
+                  <li>Has to send multiple requests and follow-ups</li>
                 </ul>
               </div>
             </div>
             <div class="pain-map">
-              <h4>Pain → Apollo feature</h4>
+              <h4>Pain → Tool feature</h4>
               <div class="pain-row">
-                <div class="pain">Long, dense forms</div>
+                <div class="pain">"What does each team actually need?"</div>
                 <div class="arrow">→</div>
-                <div class="feature">Progressive disclosure · field priority</div>
+                <div class="feature">Per-team data requirements surfaced upfront</div>
               </div>
               <div class="pain-row">
-                <div class="pain">Unclear downstream impact</div>
+                <div class="pain">Waiting on client info</div>
                 <div class="arrow">→</div>
-                <div class="feature">Field-level downstream dependency hints</div>
+                <div class="feature">Status visibility on outstanding client asks</div>
               </div>
               <div class="pain-row">
-                <div class="pain">Post-submit validation</div>
+                <div class="pain">Multiple requests &amp; follow-ups</div>
                 <div class="arrow">→</div>
-                <div class="feature">Real-time schema validation &amp; warnings</div>
+                <div class="feature">Consolidated client request, with auto-reminders</div>
               </div>
             </div>
             <div class="persona-stats">
               <div class="persona-stat">
-                <div class="value num">6<span class="unit">×/day</span></div>
-                <div class="label">Opens Apollo</div>
+                <div class="value">Ad hoc</div>
+                <div class="label">Opens Kissflow SMA Tool</div>
               </div>
               <div class="persona-stat">
                 <div class="value num">~90</div>
@@ -1758,7 +1947,7 @@
               <div class="persona-stat-tools persona-stat">
                 <div class="label">Lives alongside</div>
                 <div class="persona-tags">
-                  <span class="persona-tag">Kissflow</span>
+                  <span class="persona-tag">Email</span>
                   <span class="persona-tag">Excel</span>
                   <span class="persona-tag">Outlook</span>
                   <span class="persona-tag">CRM</span>
@@ -1767,76 +1956,75 @@
             </div>
           </article>
 
-          <!-- ===== Lidiya Sokolova · Client Solutions ===== -->
-          <article class="persona-card" data-accent="rose">
-            <div class="persona-badge">Coordinator</div>
+          <!-- ===== Team Members (execution) ===== -->
+          <article class="persona-card" data-accent="purple">
+            <div class="persona-badge">Execution</div>
             <div class="persona-head">
               <div class="persona-avatar">
-                <img src="https://randomuser.me/api/portraits/women/24.jpg" alt="Lidiya Sokolova"
-                     onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'initials',textContent:'LS'}))" />
+                <span class="initials">PS</span>
               </div>
               <div class="persona-info">
-                <h3>Lidiya Sokolova</h3>
-                <div class="persona-role">Client Solutions</div>
-                <div class="persona-meta">ISG SMA · hybrid tracker + runner</div>
+                <h3>Priya Shah</h3>
+                <div class="persona-role">Team Member · representative</div>
+                <div class="persona-meta">ISG SMA · not expected in dashboards</div>
               </div>
             </div>
             <blockquote class="persona-quote">
-              I live between teams. My dashboard is half tracker, half launch pad for <em>sub-workflows</em>.
+              Just tell me what's on my plate. Half the time I'm not sure what's expected.
             </blockquote>
             <div class="persona-sections">
               <div class="persona-section">
                 <h4>Jobs to be done</h4>
                 <ul>
-                  <li>Monitor team-level progress and overall status</li>
-                  <li>Coordinate across teams where needed</li>
-                  <li>Execute specific subflows (e.g., reporting with Eng.)</li>
-                  <li>Maintain execution + dependency visibility</li>
+                  <li>Receive clear task assignments</li>
+                  <li>Understand what "done" looks like per task</li>
+                  <li>Complete required actions efficiently</li>
+                  <li>Confirm completion back to lead</li>
                 </ul>
               </div>
               <div class="persona-section">
                 <h4>Frustrations</h4>
                 <ul>
-                  <li>Tracker + subflows live in different tools</li>
-                  <li>Cross-team dependencies unclear day-to-day</li>
-                  <li>Context tax between tracking and doing</li>
+                  <li>Lack of clarity on what needs to be done</li>
+                  <li>Vague handoffs from lead — needs context</li>
+                  <li>Definition of done varies by stage / team</li>
                 </ul>
               </div>
             </div>
             <div class="pain-map">
-              <h4>Pain → Apollo feature</h4>
+              <h4>Pain → Tool feature</h4>
               <div class="pain-row">
-                <div class="pain">Fragmented tracker vs subflows</div>
+                <div class="pain">Vague task assignments</div>
                 <div class="arrow">→</div>
-                <div class="feature">Unified: monitor + act in one pane</div>
+                <div class="feature">Templated tasks with explicit done criteria</div>
               </div>
               <div class="pain-row">
-                <div class="pain">Cross-team deps unclear</div>
+                <div class="pain">Where do I see what's mine?</div>
                 <div class="arrow">→</div>
-                <div class="feature">Dependency map · owner surfaced</div>
+                <div class="feature">Email / Slack notification, no dashboard required</div>
               </div>
               <div class="pain-row">
-                <div class="pain">Context-switching tax</div>
+                <div class="pain">Confirming completion</div>
                 <div class="arrow">→</div>
-                <div class="feature">In-dashboard subflow runners</div>
+                <div class="feature">One-click sign-off with audit trail</div>
               </div>
             </div>
             <div class="persona-stats">
               <div class="persona-stat">
-                <div class="value num">5<span class="unit">×/day</span></div>
-                <div class="label">Opens Apollo</div>
+                <div class="value">Ad hoc</div>
+                <div class="label">Opens Kissflow SMA Tool</div>
               </div>
               <div class="persona-stat">
-                <div class="value num">3</div>
-                <div class="label">Active subflows</div>
+                <div class="value num">6</div>
+                <div class="label">Active tasks</div>
               </div>
               <div class="persona-stat-tools persona-stat">
                 <div class="label">Lives alongside</div>
                 <div class="persona-tags">
-                  <span class="persona-tag">Kissflow</span>
-                  <span class="persona-tag">Slack</span>
-                  <span class="persona-tag">Jira</span>
                   <span class="persona-tag">Outlook</span>
+                  <span class="persona-tag">Slack</span>
+                  <span class="persona-tag">Excel</span>
+                  <span class="persona-tag">Bloomberg</span>
                 </div>
               </div>
             </div>
@@ -1864,35 +2052,41 @@
 
 <script>
   // ========== DATA ==========
-  const STAGES = ['Impact Assessment', 'Scope', 'Build', 'UAT', 'Live'];
-  const STAGE_SHORT = ['Impact', 'Scope', 'Build', 'UAT', 'Live'];
+  const STAGES = ['Impact Assessment', 'Scope', 'Build', 'Validation', 'Live'];
+  const STAGE_SHORT = ['Impact', 'Scope', 'Build', 'Validation', 'Live'];
 
   const teams = [
-    { name: 'Performance',        stageIdx: 0, health: 'r', days: 14, lead: 'Sarah Chen',     leadInit: 'SC', risk: 12, blocker: 'Client hasn\'t returned benchmark specification after 6 reminders.', blocks: ['Allocations', 'Risk Management', 'Fund Accounting'], deps: ['Client (Carina)'] },
-    { name: 'Risk Management',    stageIdx: 0, health: 'r', days: 14, lead: 'Michael Patel',  leadInit: 'MP', risk: 11, blocker: 'Waiting on Performance benchmark before VaR model can be configured.', blocks: ['Compliance'], deps: ['Performance'] },
-    { name: 'Client Service',     stageIdx: 0, health: 'r', days: 14, lead: 'John Loh',       leadInit: 'JL', risk: 11, blocker: 'Pending client contact authorization list.', blocks: [], deps: ['Client (Carina)'] },
-    { name: 'Reconciliation',     stageIdx: 0, health: 'r', days: 14, lead: 'Roberto Romano', leadInit: 'RR', risk: 11, blocker: 'Custodian file format differs from spec — waiting on Reference Data mapping.', blocks: ['Billing', 'Internal Controls', 'Allocations', 'Trade Support'], deps: ['Reference Data'] },
-    { name: 'Performance',        stageIdx: 0, health: 'r', days: 14, lead: 'Sarah Chen',     leadInit: 'SC', risk: 11, blocker: null, blocks: [], deps: [] },
-    { name: 'Tax Services',       stageIdx: 1, health: 'r', days: 14, lead: 'Michael Patel',  leadInit: 'MP', risk: 10, blocker: 'Tax residency documents missing for 2 of 4 entities.', blocks: ['Fund Accounting'], deps: ['ISG Legal'] },
-    { name: 'Corporate Actions',  stageIdx: 1, health: 'r', days: 14, lead: 'Alexander Black',leadInit: 'AB', risk: 10, blocker: 'Event feed source not finalized.', blocks: [], deps: ['Reference Data'] },
-    { name: 'Settlements',        stageIdx: 1, health: 'r', days: 14, lead: 'John Loh',       leadInit: 'JL', risk: 10, blocker: 'ISG Legal contract review outstanding for 9 days — blocks settlement instruction setup.', blocks: ['Custody', 'Transfer Agency', 'Cash Management'], deps: ['ISG Legal'] },
-    { name: 'Allocations',        stageIdx: 2, health: 'r', days: 14, lead: 'Alexander Black',leadInit: 'AB', risk: 9, blocker: 'Test allocation file failing schema validation — 3 SLA breaches.', blocks: ['Reconciliation'], deps: ['Reconciliation'] },
-    { name: 'Client Solutions',   stageIdx: 2, health: 'r', days: 14, lead: 'John Loh',       leadInit: 'JL', risk: 9, blocker: 'Client IT hasn\'t configured SSO IdP endpoint.', blocks: ['Client Service'], deps: ['Client (Carina)'] },
-    { name: 'Transfer Agency',    stageIdx: 2, health: 'r', days: 14, lead: 'Roberto Romano', leadInit: 'RR', risk: 9, blocker: 'Unit-holder file mismatch with Reconciliation counts.', blocks: [], deps: ['Reconciliation'] },
-    { name: 'Cash Management',    stageIdx: 0, health: 'a', days: 14, lead: 'Karthik Dasari', leadInit: 'KD', risk: 7, blocker: null, blocks: [], deps: ['Settlements'] },
-    { name: 'Billing',            stageIdx: 1, health: 'a', days: 14, lead: 'Karthik Dasari', leadInit: 'KD', risk: 6, blocker: null, blocks: [], deps: ['Reconciliation'] },
-    { name: 'Custody',            stageIdx: 2, health: 'a', days: 14, lead: 'Roberto Romano', leadInit: 'RR', risk: 5, blocker: null, blocks: [], deps: ['Settlements'] },
-    { name: 'Treasury',           stageIdx: 2, health: 'a', days: 14, lead: 'Michael Patel',  leadInit: 'MP', risk: 5, blocker: null, blocks: [], deps: [] },
-    { name: 'Compliance',         stageIdx: 3, health: 'a', days: 17, lead: 'Michael Patel',  leadInit: 'MP', risk: 4, blocker: null, blocks: [], deps: ['Risk Management'] },
-    { name: 'Internal Controls',  stageIdx: 0, health: 'g', days: 14, lead: 'Roberto Romano', leadInit: 'RR', risk: 3, blocker: null, blocks: [], deps: [] },
-    { name: 'Middle Office',      stageIdx: 2, health: 'g', days: 13, lead: 'Alexander Black',leadInit: 'AB', risk: 2, blocker: null, blocks: [], deps: [] },
-    { name: 'Trade Support',      stageIdx: 2, health: 'g', days: 12, lead: 'John Loh',       leadInit: 'JL', risk: 2, blocker: null, blocks: [], deps: [] },
-    { name: 'Fund Accounting',    stageIdx: 2, health: 'g', days: 11, lead: 'Karthik Dasari', leadInit: 'KD', risk: 2, blocker: null, blocks: [], deps: [] },
-    { name: 'Reference Data',     stageIdx: 3, health: 'g', days: 16, lead: 'John Loh',       leadInit: 'JL', risk: 1, blocker: null, blocks: [], deps: [] },
-    { name: 'ISG Legal',          stageIdx: 3, health: 'g', days: 15, lead: 'Roberto Romano', leadInit: 'RR', risk: 1, blocker: null, blocks: [], deps: [] },
-    { name: 'Portfolio Admin',    stageIdx: 4, health: 'g', days: 18, lead: 'John Loh',       leadInit: 'JL', risk: 0, blocker: null, blocks: [], deps: [] },
-    { name: 'Client Engineering', stageIdx: 4, health: 'g', days: 19, lead: 'Alexander Black',leadInit: 'AB', risk: 0, blocker: null, blocks: [], deps: [] },
+    { name: 'Performance',        ref: 'CK-2401', stageIdx: 0, health: 'r', days: 14, lead: 'Sarah Chen',     leadInit: 'SC', risk: 12, blocker: 'Client hasn\'t returned benchmark specification after 6 reminders.', blocks: ['Allocations', 'Risk Management', 'Fund Accounting'], deps: ['Client (Carina)'] },
+    { name: 'Risk Management',    ref: 'CK-2402', stageIdx: 0, health: 'r', days: 14, lead: 'Michael Patel',  leadInit: 'MP', risk: 11, blocker: 'Waiting on Performance benchmark before VaR model can be configured.', blocks: ['Compliance'], deps: ['Performance'] },
+    { name: 'Client Service',     ref: 'CK-2403', stageIdx: 0, health: 'r', days: 14, lead: 'John Loh',       leadInit: 'JL', risk: 11, blocker: 'Pending client contact authorization list.', blocks: [], deps: ['Client (Carina)'] },
+    { name: 'Reconciliation',     ref: 'CK-2404', stageIdx: 0, health: 'r', days: 14, lead: 'Roberto Romano', leadInit: 'RR', risk: 11, blocker: 'Custodian file format differs from spec — waiting on Reference Data mapping.', blocks: ['Billing', 'Internal Controls', 'Allocations', 'Trade Support'], deps: ['Reference Data'] },
+    { name: 'Tax Services',       ref: 'CK-2405', stageIdx: 1, health: 'r', days: 14, lead: 'Michael Patel',  leadInit: 'MP', risk: 10, blocker: 'Tax residency documents missing for 2 of 4 entities.', blocks: ['Fund Accounting'], deps: ['ISG Legal'] },
+    { name: 'Corporate Actions',  ref: 'CK-2406', stageIdx: 1, health: 'r', days: 14, lead: 'Alexander Black',leadInit: 'AB', risk: 10, blocker: 'Event feed source not finalized.', blocks: [], deps: ['Reference Data'] },
+    { name: 'Settlements',        ref: 'CK-2407', stageIdx: 1, health: 'r', days: 14, lead: 'John Loh',       leadInit: 'JL', risk: 10, blocker: 'ISG Legal contract review outstanding for 9 days — blocks settlement instruction setup.', blocks: ['Custody', 'Transfer Agency', 'Cash Management'], deps: ['ISG Legal'] },
+    { name: 'Allocations',        ref: 'CK-2408', stageIdx: 2, health: 'r', days: 14, lead: 'Alexander Black',leadInit: 'AB', risk: 9, blocker: 'Test allocation file failing schema validation — 3 SLA breaches.', blocks: ['Reconciliation'], deps: ['Reconciliation'] },
+    { name: 'Client Solutions',   ref: 'CK-2409', stageIdx: 2, health: 'r', days: 14, lead: 'John Loh',       leadInit: 'JL', risk: 9, blocker: 'Client IT hasn\'t configured SSO IdP endpoint.', blocks: ['Client Service'], deps: ['Client (Carina)'] },
+    { name: 'Transfer Agency',    ref: 'CK-2410', stageIdx: 2, health: 'r', days: 14, lead: 'Roberto Romano', leadInit: 'RR', risk: 9, blocker: 'Unit-holder file mismatch with Reconciliation counts.', blocks: [], deps: ['Reconciliation'] },
+    { name: 'Cash Management',    ref: 'CK-2411', stageIdx: 0, health: 'a', days: 14, lead: 'Karthik Dasari', leadInit: 'KD', risk: 7, blocker: 'Awaiting Settlements instruction template before account setup.', blocks: [], deps: ['Settlements'] },
+    { name: 'Billing',            ref: 'CK-2412', stageIdx: 1, health: 'a', days: 14, lead: 'Karthik Dasari', leadInit: 'KD', risk: 6, blocker: 'Awaiting reconciled position file from Reconciliation.', blocks: [], deps: ['Reconciliation'] },
+    { name: 'Custody',            ref: 'CK-2413', stageIdx: 2, health: 'a', days: 14, lead: 'Roberto Romano', leadInit: 'RR', risk: 5, blocker: 'Awaiting Settlements instruction set.', blocks: [], deps: ['Settlements'] },
+    { name: 'Treasury',           ref: 'CK-2414', stageIdx: 2, health: 'a', days: 14, lead: 'Michael Patel',  leadInit: 'MP', risk: 5, blocker: 'Awaiting client banking authorisations.', blocks: [], deps: ['Client (Carina)'] },
+    { name: 'Compliance',         ref: 'CK-2415', stageIdx: 3, health: 'a', days: 17, lead: 'Michael Patel',  leadInit: 'MP', risk: 4, blocker: 'Waiting on Risk Management VaR sign-off.', blocks: [], deps: ['Risk Management'] },
+    { name: 'Internal Controls',  ref: 'CK-2416', stageIdx: 0, health: 'g', days: 14, lead: 'Roberto Romano', leadInit: 'RR', risk: 3, blocker: null, blocks: [], deps: [] },
+    { name: 'Middle Office',      ref: 'CK-2417', stageIdx: 2, health: 'g', days: 13, lead: 'Alexander Black',leadInit: 'AB', risk: 2, blocker: null, blocks: [], deps: [] },
+    { name: 'Trade Support',      ref: 'CK-2418', stageIdx: 2, health: 'g', days: 12, lead: 'John Loh',       leadInit: 'JL', risk: 2, blocker: null, blocks: [], deps: [] },
+    { name: 'Fund Accounting',    ref: 'CK-2419', stageIdx: 2, health: 'g', days: 11, lead: 'Karthik Dasari', leadInit: 'KD', risk: 2, blocker: null, blocks: [], deps: [] },
+    { name: 'Reference Data',     ref: 'CK-2420', stageIdx: 3, health: 'g', days: 16, lead: 'John Loh',       leadInit: 'JL', risk: 1, blocker: null, blocks: [], deps: [] },
+    { name: 'ISG Legal',          ref: 'CK-2421', stageIdx: 3, health: 'g', days: 15, lead: 'Roberto Romano', leadInit: 'RR', risk: 1, blocker: null, blocks: [], deps: [] },
+    { name: 'Portfolio Admin',    ref: 'CK-2422', stageIdx: 4, health: 'g', days: 18, lead: 'John Loh',       leadInit: 'JL', risk: 0, blocker: null, blocks: [], deps: [] },
+    { name: 'Client Engineering', ref: 'CK-2423', stageIdx: 4, health: 'g', days: 19, lead: 'Alexander Black',leadInit: 'AB', risk: 0, blocker: null, blocks: [], deps: [] },
   ];
+
+  // Pending source: 'client' if any dep references the client, otherwise 'internal'
+  function pendingSource(t) {
+    if (t.health === 'g') return null;
+    const hasClient = (t.deps || []).some(d => /client/i.test(d));
+    return hasClient ? 'client' : 'internal';
+  }
 
   // Dedupe Performance (kept only once)
   const seen = new Set();
@@ -1903,6 +2097,11 @@
   });
 
   const HEALTH_LABEL = { r: 'Off track', a: 'Pending info', g: 'On track' };
+  const HEALTH_DESC = {
+    r: 'Team is off track and not meeting SLAs',
+    a: 'Team is pending information from other internal teams or client',
+    g: 'On track',
+  };
   const HEALTH_VAR = { g: 'var(--green)', a: 'var(--amber)', r: 'var(--red)' };
 
   // ========== WAFFLE ==========
@@ -1915,7 +2114,7 @@
     const cell = document.createElement('div');
     cell.className = `waffle-cell ${t.health}`;
     cell.innerHTML = `<span class="dot"></span>${t.name}`;
-    cell.title = `${t.name} · ${HEALTH_LABEL[t.health]} · ${STAGES[t.stageIdx]}`;
+    cell.title = `${t.name} · ${HEALTH_DESC[t.health]} · ${STAGES[t.stageIdx]}`;
     cell.onclick = () => openDrawer(t.name);
     waffleEl.appendChild(cell);
   });
@@ -1934,15 +2133,22 @@
     row.className = 'matrix-row';
     row.dataset.health = t.health;
     row.dataset.team = t.name;
+    row.dataset.stage = String(t.stageIdx);
     row.onclick = () => openDrawer(t.name);
 
     const daysClass = t.health === 'r' ? 'bad' : t.health === 'a' ? 'warn' : '';
 
+    const pSrc = pendingSource(t);
+    const pendingBadge = pSrc
+      ? `<span class="pending-tag ${pSrc === 'client' ? 'client' : ''}">Pending (${pSrc === 'client' ? 'Client' : 'Internal'})</span>`
+      : '';
+
     row.innerHTML = `
-      <div class="rank">${String(i + 1).padStart(2, '0')}</div>
+      <div class="ref">${t.ref}</div>
       <div class="team">
-        <span class="health ${t.health}"></span>
-        ${t.name}
+        <span class="tip" data-tip="${HEALTH_DESC[t.health]}"><span class="health ${t.health}"></span></span>
+        <span>${t.name}</span>
+        ${pendingBadge}
       </div>
       <div class="stages">${segs}</div>
       <div class="stage-label">${STAGES[t.stageIdx]}</div>
@@ -1959,21 +2165,118 @@
     matrixRows.appendChild(row);
   });
 
-  // ========== FILTERS ==========
+  // ========== BOTTLENECKS ==========
+  const bottleneckList = document.getElementById('bottleneck-list');
+  const bottleneckCount = document.getElementById('bottleneck-count');
+  const pendingTeams = [...uniqueTeams]
+    .filter(t => t.health !== 'g' && t.blocker)
+    .sort((a, b) => b.risk - a.risk);
+  bottleneckCount.textContent = `${pendingTeams.length} pending`;
+  pendingTeams.forEach(t => {
+    const pSrc = pendingSource(t);
+    const tagClass = pSrc === 'client' ? 'client' : '';
+    const tagLabel = pSrc === 'client' ? 'Pending (Client)' : 'Pending (Internal)';
+    const item = document.createElement('div');
+    item.className = 'bottleneck-item';
+    item.onclick = () => openDrawer(t.name);
+    item.innerHTML = `
+      <div class="body">
+        <em>${t.name}</em> — ${t.blocker}
+        <div class="sub">
+          <span class="health-pill ${t.health}"></span>
+          ${STAGES[t.stageIdx]} · ${t.days}d · ${t.lead}
+        </div>
+      </div>
+      <span class="pending-tag ${tagClass}">${tagLabel}</span>
+    `;
+    bottleneckList.appendChild(item);
+  });
+
+  // ========== FILTERS (health + stage, combined) ==========
+  let healthFilter = 'all';
+  let stageFilter = null;
+
+  function applyFilters() {
+    document.querySelectorAll('.matrix-row').forEach(r => {
+      const healthOk = (healthFilter === 'all') || r.dataset.health === healthFilter;
+      const stageOk = (stageFilter === null) || r.dataset.stage === String(stageFilter);
+      r.classList.toggle('hidden', !(healthOk && stageOk));
+    });
+    document.querySelectorAll('.pacing-svg .stage-row').forEach(g => {
+      g.classList.toggle('active', stageFilter !== null && Number(g.dataset.stage) === stageFilter);
+    });
+    document.querySelectorAll('#stage-backlog .bullet-row').forEach(r => {
+      r.classList.toggle('active', stageFilter !== null && Number(r.dataset.stage) === stageFilter);
+    });
+    const banner = document.getElementById('stageBanner');
+    const bannerName = document.getElementById('stageBannerName');
+    if (stageFilter !== null) {
+      banner.classList.add('active');
+      bannerName.textContent = STAGES[stageFilter];
+    } else {
+      banner.classList.remove('active');
+    }
+  }
+
   const filterChips = document.querySelectorAll('#filters .chip');
   filterChips.forEach(chip => {
     chip.onclick = () => {
       filterChips.forEach(c => c.classList.remove('active'));
       chip.classList.add('active');
-      const filter = chip.dataset.filter;
-      document.querySelectorAll('.matrix-row').forEach(r => {
-        if (filter === 'all' || r.dataset.health === filter) {
-          r.classList.remove('hidden');
-        } else {
-          r.classList.add('hidden');
-        }
-      });
+      healthFilter = chip.dataset.filter;
+      applyFilters();
     };
+  });
+
+  function setStageFilter(idx) {
+    stageFilter = (stageFilter === idx) ? null : idx;
+    applyFilters();
+  }
+
+  document.querySelectorAll('.pacing-svg .stage-row').forEach(g => {
+    g.addEventListener('click', () => setStageFilter(Number(g.dataset.stage)));
+  });
+  document.querySelectorAll('#stage-backlog .bullet-row').forEach(r => {
+    r.addEventListener('click', () => setStageFilter(Number(r.dataset.stage)));
+  });
+  document.getElementById('stageBannerClear').addEventListener('click', e => {
+    e.stopPropagation();
+    stageFilter = null;
+    applyFilters();
+  });
+
+  // ========== TOAST ==========
+  const toastStack = document.createElement('div');
+  toastStack.className = 'toast-stack';
+  document.body.appendChild(toastStack);
+
+  function showToast(title, sub) {
+    const t = document.createElement('div');
+    t.className = 'toast';
+    t.innerHTML = `
+      <svg fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <div><div>${title}</div>${sub ? `<div class="sub">${sub}</div>` : ''}</div>
+    `;
+    toastStack.appendChild(t);
+    setTimeout(() => {
+      t.classList.add('leaving');
+      t.addEventListener('animationend', () => t.remove(), { once: true });
+    }, 2600);
+  }
+
+  // Send reminder buttons (page-head + drawer)
+  document.addEventListener('click', e => {
+    const btn = e.target.closest('.btn');
+    if (!btn) return;
+    const label = btn.textContent.trim();
+    if (label === 'Send reminder') {
+      const targetTeam = drawer.classList.contains('open') ? (drawer.querySelector('.team-label')?.textContent || 'team leads') : 'all team leads';
+      showToast('Reminder sent', `Notified ${targetTeam} via Slack and email`);
+    } else if (label === 'Message leads') {
+      showToast('Message draft opened', 'Pre-filled with risk summary');
+    } else if (label.startsWith('Message ')) {
+      showToast(`Message draft opened`, `${label.replace('Message ', '')} · Slack`);
+    }
   });
 
   // ========== DRAWER ==========
@@ -2066,8 +2369,8 @@
             Message ${t.lead.split(' ')[0]}
           </button>
           <button class="btn primary">
-            <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M12 2l2.5 7h7l-5.5 4 2 7-6-4.5-6 4.5 2-7L2.5 9h7L12 2z" stroke-linejoin="round"/></svg>
-            Escalate
+            <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 6v6l4 2M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Send reminder
           </button>
         </div>
       </div>
