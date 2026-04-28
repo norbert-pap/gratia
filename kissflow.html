@@ -20,7 +20,7 @@
 </script>
 <style>
   *, *::before, *::after { box-sizing: border-box; }
-  html, body, h1, h2, h3, h4, p, ul, li, figure, div, section, nav, aside, header, main, button { margin: 0; padding: 0; }
+  html, body, h1, h2, h3, h4, p, ul, li, figure, div, section, nav, aside, header, main, button, blockquote { margin: 0; padding: 0; }
   button { background: none; border: none; color: inherit; cursor: pointer; font: inherit; }
   ul { list-style: none; }
 
@@ -818,23 +818,21 @@
   }
 
   /* ========== KISSFLOW SHELL (mock chrome — dark) ========== */
+  .kf-frame {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    margin: -8px 0 28px;
+    background: var(--bg);
+  }
   .kf-shell {
     background: var(--bg-1);
     color: var(--ink-1);
-    border: 1px solid var(--border);
-    border-radius: 8px;
-    margin: -8px 0 28px;
-    overflow: hidden;
+    border-bottom: 1px solid var(--border);
     font-family: 'Inter', system-ui, sans-serif;
-    position: relative;
   }
-  .kf-shell::before {
-    content: 'Kissflow chrome';
-    position: absolute; top: 9px; right: 14px;
-    font-size: 9px; font-weight: 600;
-    letter-spacing: 0.12em; text-transform: uppercase;
-    color: var(--ink-4);
-    pointer-events: none;
+  .kf-body {
+    padding: 28px;
   }
   .kf-title-row {
     display: flex; align-items: center; justify-content: space-between;
@@ -1569,6 +1567,9 @@
 
       <div id="tab-dashboard" class="tab-panel active">
 
+      <!-- ===== KISSFLOW EMBED FRAME ===== -->
+      <div class="kf-frame">
+
       <!-- ===== KISSFLOW SHELL (context band) ===== -->
       <section class="kf-shell" aria-label="Kissflow context">
         <div class="kf-title-row">
@@ -1609,6 +1610,8 @@
           <button class="kf-subtab kf-more"><svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
         </nav>
       </section>
+
+      <div class="kf-body">
 
       <!-- ===== PAGE HEAD ===== -->
       <section class="page-head">
@@ -1834,6 +1837,9 @@
           <div id="bottleneck-list" class="action-list"></div>
         </div>
       </section>
+
+      </div> <!-- /.kf-body -->
+      </div> <!-- /.kf-frame -->
 
       </div> <!-- /#tab-dashboard -->
 
