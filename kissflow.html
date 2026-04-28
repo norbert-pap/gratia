@@ -261,14 +261,24 @@
     background: var(--red-dim); color: var(--red-ink);
     border: 1px solid var(--red-line);
   }
+  .eyebrow-row .status-chip[data-status="amber"] {
+    background: var(--amber-dim); color: var(--amber-ink);
+    border-color: var(--amber-line);
+  }
+  .eyebrow-row .status-chip[data-status="green"] {
+    background: var(--green-dim); color: var(--green-ink);
+    border-color: var(--green-line);
+  }
   .status-chip .dot-pulse {
     width: 5px; height: 5px; border-radius: 50%;
     background: var(--red);
     animation: pulse 1.8s ease-in-out infinite;
   }
+  .status-chip[data-status="amber"] .dot-pulse { background: var(--amber); }
+  .status-chip[data-status="green"] .dot-pulse { background: var(--green); }
   @keyframes pulse {
-    0%, 100% { opacity: 1; box-shadow: 0 0 0 0 var(--red); }
-    50% { opacity: 0.6; box-shadow: 0 0 0 4px rgba(224, 115, 104, 0); }
+    0%, 100% { opacity: 1; box-shadow: 0 0 0 0 currentColor; }
+    50% { opacity: 0.6; box-shadow: 0 0 0 4px rgba(0, 0, 0, 0); }
   }
   h1.lede {
     font-family: 'Inter', system-ui, sans-serif;
@@ -1641,10 +1651,10 @@
                 <li class="client-menu-item" role="option" data-client="mno">MNO Capital</li>
               </ul>
             </div>
-            <span class="status-chip"><span class="dot-pulse"></span>Slightly behind</span>
+            <span class="status-chip" id="statusChip" data-status="amber"><span class="dot-pulse"></span><span id="statusChipLabel">Slightly behind</span></span>
           </div>
-          <h1 class="lede">5 teams off-track. <em>4 teams already complete</em> — on pace for May 13 go-live.</h1>
-          <p class="sublede">Settlements and Reconciliation are the remaining bottlenecks. ISG Legal contract review cleared this week — Settlements restarting now.</p>
+          <h1 class="lede" id="dashLede">5 teams off-track. <em>4 teams already complete</em> — on pace for May 13 go-live.</h1>
+          <p class="sublede" id="dashSublede">Settlements and Reconciliation are the remaining bottlenecks. ISG Legal contract review cleared this week — Settlements restarting now.</p>
         </div>
         <div class="head-actions">
           <button class="btn primary">
@@ -1658,31 +1668,31 @@
       <section class="kpi-row">
         <div class="kpi">
           <div class="label">Completion</div>
-          <div class="value num">17<span class="unit">%</span></div>
-          <div class="delta">
+          <div class="value num"><span id="kpiCompletionValue">17</span><span class="unit">%</span></div>
+          <div class="delta" id="kpiCompletionDelta">
             <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            4 of 23 complete
+            <span id="kpiCompletionDeltaText">4 of 23 complete</span>
           </div>
         </div>
         <div class="kpi">
           <div class="label">Off-track teams</div>
-          <div class="value num" style="color: var(--red-ink);">5<span class="unit">/23</span></div>
-          <div class="delta">+1 since last week</div>
+          <div class="value num" id="kpiOffTrackValueWrap"><span id="kpiOffTrackValue">5</span><span class="unit">/23</span></div>
+          <div class="delta" id="kpiOffTrackDelta">+1 since last week</div>
         </div>
         <div class="kpi">
           <div class="label">Days remaining</div>
           <div class="value num" id="daysRemainingValue">15</div>
-          <div class="delta bad" id="daysRemainingDelta">Until projected go-live · May 13</div>
+          <div class="delta" id="daysRemainingDelta">Until projected go-live · May 13</div>
         </div>
         <div class="kpi">
           <div class="label">SLA breaches</div>
-          <div class="value num" style="color: var(--amber-ink);">3</div>
-          <div class="delta">Across 2 teams</div>
+          <div class="value num" id="kpiSlaValueWrap"><span id="kpiSlaValue">3</span></div>
+          <div class="delta" id="kpiSlaDelta">Across 2 teams</div>
         </div>
         <div class="kpi">
           <div class="label">Projected go-live</div>
-          <div class="value num" style="font-size:26px;">May 13</div>
-          <div class="delta">+8d vs plan</div>
+          <div class="value num" id="kpiGoLiveValue" style="font-size:26px;">May 13</div>
+          <div class="delta" id="kpiGoLiveDelta">+8d vs plan</div>
         </div>
       </section>
 
@@ -1715,7 +1725,7 @@
               <!-- 18 projected at day 30 (recovering toward plan after Settlements unblock): y ≈ 78 -->
 
               <!-- Gap fill (between plan and actual/projected) -->
-              <path d="M 60 250 L 370 212 L 690 78 L 690 30 Z" fill="url(#gapGrad)"/>
+              <path id="pacingGap" d="M 60 250 L 370 212 L 690 78 L 690 30 Z" fill="url(#gapGrad)"/>
 
               <!-- Axes -->
               <line class="ax" x1="60" y1="30" x2="60" y2="250" stroke-width="1"/>
@@ -1734,20 +1744,20 @@
               <line class="plan-line" x1="60" y1="250" x2="690" y2="30" stroke-dasharray="3 3" stroke-width="1.4"/>
 
               <!-- Actual line: 0 at day 0 → 4 of 23 at day 14 (today) -->
-              <line class="actual-line" x1="60" y1="250" x2="370" y2="212" stroke-width="2.4"/>
+              <line id="pacingActual" class="actual-line" x1="60" y1="250" x2="370" y2="212" stroke-width="2.4"/>
 
               <!-- Projection: extends from today, recovering toward plan (~18 by day 30) -->
-              <line class="projected" x1="370" y1="212" x2="690" y2="78" stroke-width="2" stroke-dasharray="3 4" opacity="0.65"/>
+              <line id="pacingProjected" class="projected" x1="370" y1="212" x2="690" y2="78" stroke-width="2" stroke-dasharray="3 4" opacity="0.65"/>
 
               <!-- Today vertical -->
               <line class="today-line" x1="370" y1="22" x2="370" y2="262" stroke-width="0.9" stroke-dasharray="2 3"/>
 
               <!-- Endpoint dot at today -->
-              <circle class="actual-dot-out" cx="370" cy="212" r="5"/>
-              <circle class="actual-dot-in" cx="370" cy="212" r="2.2"/>
+              <circle id="pacingDot1" class="actual-dot-out" cx="370" cy="212" r="5"/>
+              <circle id="pacingDot2" class="actual-dot-in" cx="370" cy="212" r="2.2"/>
 
               <!-- End of projection -->
-              <circle class="end-dot" cx="690" cy="78" r="3.5" fill="none" stroke-width="1.6" opacity="0.7"/>
+              <circle id="pacingEndDot" class="end-dot" cx="690" cy="78" r="3.5" fill="none" stroke-width="1.6" opacity="0.7"/>
 
               <!-- X-axis labels -->
               <g font-size="10.5" font-family="Inter">
@@ -1757,13 +1767,13 @@
               </g>
 
               <!-- Today callout -->
-              <rect class="callout-bg" x="380" y="188" width="116" height="38" rx="4" stroke-width="1"/>
-              <text class="red-text" x="388" y="203" font-size="12" font-weight="600" font-family="Inter">4 of 23 done</text>
-              <text class="label-mid" x="388" y="218" font-size="10.5" font-family="Inter">Plan: 11 by today</text>
+              <rect id="pacingCalloutBg" class="callout-bg" x="380" y="188" width="116" height="38" rx="4" stroke-width="1"/>
+              <text id="pacingCalloutDone" class="red-text" x="388" y="203" font-size="12" font-weight="600" font-family="Inter">4 of 23 done</text>
+              <text id="pacingCalloutPlan" class="label-mid" x="388" y="218" font-size="10.5" font-family="Inter">Plan: 11 by today</text>
 
               <!-- End-of-window labels -->
               <text class="label" x="685" y="42" font-size="10.5" text-anchor="end" font-style="italic" font-family="Inter">Target · 23</text>
-              <text class="red-text" x="685" y="72" font-size="10.5" text-anchor="end" font-family="Inter" font-weight="500">Projected: ~18</text>
+              <text id="pacingProjectedLabel" class="red-text" x="685" y="72" font-size="10.5" text-anchor="end" font-family="Inter" font-weight="500">Projected: ~18</text>
 
               <!-- Footer caption -->
               <text class="label" x="60" y="298" font-size="10" letter-spacing="0.02em" font-family="Inter">Cumulative team completions · 23 teams · day 14 of 30</text>
@@ -1783,9 +1793,9 @@
           <div class="card-body">
             <div id="waffle" class="waffle-grid"></div>
             <div style="display: flex; justify-content: space-between; padding-top: 14px; margin-top: 14px; border-top: 1px solid var(--border); font-size: 11.5px;" class="num">
-              <span class="tip" data-tip="Team is off track and not meeting SLAs" style="display: flex; align-items: center; gap: 6px; color: var(--red-ink);"><span style="width:6px; height:6px; background: var(--red); border-radius:50%;"></span>5 off track</span>
-              <span class="tip" data-tip="Team is pending information from other internal teams or client" style="display: flex; align-items: center; gap: 6px; color: var(--amber-ink);"><span style="width:6px; height:6px; background: var(--amber); border-radius:50%;"></span>5 pending</span>
-              <span class="tip" data-tip="On track" style="display: flex; align-items: center; gap: 6px; color: var(--green-ink);"><span style="width:6px; height:6px; background: var(--green); border-radius:50%;"></span>13 on track</span>
+              <span class="tip" data-tip="Team is off track and not meeting SLAs" style="display: flex; align-items: center; gap: 6px; color: var(--red-ink);"><span style="width:6px; height:6px; background: var(--red); border-radius:50%;"></span><span id="waffleCountR">5</span> off track</span>
+              <span class="tip" data-tip="Team is pending information from other internal teams or client" style="display: flex; align-items: center; gap: 6px; color: var(--amber-ink);"><span style="width:6px; height:6px; background: var(--amber); border-radius:50%;"></span><span id="waffleCountA">5</span> pending</span>
+              <span class="tip" data-tip="On track" style="display: flex; align-items: center; gap: 6px; color: var(--green-ink);"><span style="width:6px; height:6px; background: var(--green); border-radius:50%;"></span><span id="waffleCountG">13</span> on track</span>
             </div>
           </div>
         </div>
@@ -1796,14 +1806,14 @@
       <section class="matrix-section">
         <div class="matrix-head">
           <div class="title-group">
-            <h2>23 teams</h2>
+            <h2><span id="matrixTeamCount">23</span> teams</h2>
             <span class="count">Sorted by risk · most urgent first</span>
           </div>
           <div class="filter-bar" id="filters">
-            <button class="chip active" data-filter="all">All<span class="ct">23</span></button>
-            <button class="chip" data-filter="r" title="Team is off track and not meeting SLAs"><span class="dot r"></span>Off track<span class="ct">5</span></button>
-            <button class="chip" data-filter="a" title="Team is pending information from other internal teams or client"><span class="dot a"></span>Pending<span class="ct">5</span></button>
-            <button class="chip" data-filter="g" title="On track"><span class="dot g"></span>On track<span class="ct">13</span></button>
+            <button class="chip active" data-filter="all">All<span class="ct" id="chipCountAll">23</span></button>
+            <button class="chip" data-filter="r" title="Team is off track and not meeting SLAs"><span class="dot r"></span>Off track<span class="ct" id="chipCountR">5</span></button>
+            <button class="chip" data-filter="a" title="Team is pending information from other internal teams or client"><span class="dot a"></span>Pending<span class="ct" id="chipCountA">5</span></button>
+            <button class="chip" data-filter="g" title="On track"><span class="dot g"></span>On track<span class="ct" id="chipCountG">13</span></button>
             <span class="stage-filter-banner" id="stageBanner">
               <span>Stage: <strong id="stageBannerName"></strong></span>
               <span class="x" id="stageBannerClear" title="Clear stage filter">
@@ -2339,50 +2349,150 @@
 <script>
   // ========== DATA ==========
   const STAGES = ['Impact Assessment', 'Tasks Selection & Assignment', 'In Progress', 'Ready for Trading', 'Completed'];
-  const STAGE_SHORT = ['Impact Assess.', 'Tasks Select.', 'In Progress', 'Ready', 'Completed'];
 
-  const teams = [
-    { name: 'Performance',        ref: 'CK-2401', stageIdx: 1, health: 'r', days: 14, lead: 'Sarah Chen',     leadInit: 'SC', risk: 12, blocker: 'Client hasn\'t returned benchmark specification after 6 reminders.', blocks: ['Allocations', 'Risk Management', 'Fund Accounting'], deps: ['Client (Carina)'], depTag: 'Pending Client' },
-    { name: 'Reconciliation',     ref: 'CK-2404', stageIdx: 1, health: 'r', days: 14, lead: 'Roberto Romano', leadInit: 'RR', risk: 11, blocker: 'Custodian file format differs from spec — waiting on Reference Data mapping.', blocks: ['Billing', 'Internal Controls', 'Allocations', 'Trade Support'], deps: ['Reference Data'], depTag: 'Pending Ref Data' },
-    { name: 'Tax Services',       ref: 'CK-2405', stageIdx: 1, health: 'r', days: 14, lead: 'Michael Patel',  leadInit: 'MP', risk: 10, blocker: 'Tax residency documents missing for 2 of 4 entities.', blocks: ['Fund Accounting'], deps: ['ISG Legal'], depTag: 'Pending IMA' },
-    { name: 'Settlements',        ref: 'CK-2407', stageIdx: 2, health: 'r', days: 14, lead: 'John Loh',       leadInit: 'JL', risk: 10, blocker: 'ISG Legal contract review just cleared — settlement instruction setup restarting.', blocks: ['Custody', 'Transfer Agency', 'Cash Management'], deps: ['ISG Legal'], depTag: 'Pending ISG Legal' },
-    { name: 'Allocations',        ref: 'CK-2408', stageIdx: 2, health: 'r', days: 14, lead: 'Alexander Black',leadInit: 'AB', risk: 9, blocker: 'Test allocation file failing schema validation — fix in progress.', blocks: ['Reconciliation'], deps: ['Reconciliation'], depTag: 'Pending Recon' },
-
-    { name: 'Risk Management',    ref: 'CK-2402', stageIdx: 1, health: 'a', days: 14, lead: 'Michael Patel',  leadInit: 'MP', risk: 7, blocker: 'Waiting on Performance benchmark before VaR model can be configured.', blocks: ['Compliance'], deps: ['Performance'], depTag: 'Pending Performance' },
-    { name: 'Client Service',     ref: 'CK-2403', stageIdx: 1, health: 'a', days: 14, lead: 'John Loh',       leadInit: 'JL', risk: 6, blocker: 'Pending client contact authorization list.', blocks: [], deps: ['Client (Carina)'], depTag: 'Pending Client' },
-    { name: 'Corporate Actions',  ref: 'CK-2406', stageIdx: 2, health: 'a', days: 14, lead: 'Alexander Black',leadInit: 'AB', risk: 6, blocker: 'Event feed source pending finalisation.', blocks: [], deps: ['Reference Data'], depTag: 'Pending Ref Data' },
-    { name: 'Client Solutions',   ref: 'CK-2409', stageIdx: 2, health: 'a', days: 14, lead: 'John Loh',       leadInit: 'JL', risk: 5, blocker: 'Client IT configuring SSO IdP endpoint.', blocks: ['Client Service'], deps: ['Client (Carina)'], depTag: 'Pending Client' },
-    { name: 'Cash Management',    ref: 'CK-2411', stageIdx: 2, health: 'a', days: 14, lead: 'Karthik Dasari', leadInit: 'KD', risk: 5, blocker: 'Awaiting Settlements instruction template before account setup.', blocks: [], deps: ['Settlements'], depTag: 'Pending Settlements' },
-
-    { name: 'Transfer Agency',    ref: 'CK-2410', stageIdx: 2, health: 'g', days: 14, lead: 'Roberto Romano', leadInit: 'RR', risk: 3, blocker: null, blocks: [], deps: [] },
-    { name: 'Billing',            ref: 'CK-2412', stageIdx: 2, health: 'g', days: 14, lead: 'Karthik Dasari', leadInit: 'KD', risk: 3, blocker: null, blocks: [], deps: [] },
-    { name: 'Custody',            ref: 'CK-2413', stageIdx: 3, health: 'g', days: 14, lead: 'Roberto Romano', leadInit: 'RR', risk: 2, blocker: null, blocks: [], deps: [] },
-    { name: 'Treasury',           ref: 'CK-2414', stageIdx: 3, health: 'g', days: 14, lead: 'Michael Patel',  leadInit: 'MP', risk: 2, blocker: null, blocks: [], deps: [] },
-    { name: 'Compliance',         ref: 'CK-2415', stageIdx: 3, health: 'g', days: 17, lead: 'Michael Patel',  leadInit: 'MP', risk: 2, blocker: null, blocks: [], deps: [] },
-    { name: 'Internal Controls',  ref: 'CK-2416', stageIdx: 3, health: 'g', days: 14, lead: 'Roberto Romano', leadInit: 'RR', risk: 1, blocker: null, blocks: [], deps: [] },
-    { name: 'Middle Office',      ref: 'CK-2417', stageIdx: 3, health: 'g', days: 13, lead: 'Alexander Black',leadInit: 'AB', risk: 1, blocker: null, blocks: [], deps: [] },
-    { name: 'Trade Support',      ref: 'CK-2418', stageIdx: 3, health: 'g', days: 12, lead: 'John Loh',       leadInit: 'JL', risk: 1, blocker: null, blocks: [], deps: [] },
-    { name: 'Fund Accounting',    ref: 'CK-2419', stageIdx: 3, health: 'g', days: 11, lead: 'Karthik Dasari', leadInit: 'KD', risk: 1, blocker: null, blocks: [], deps: [] },
-    { name: 'Reference Data',     ref: 'CK-2420', stageIdx: 4, health: 'g', days: 16, lead: 'John Loh',       leadInit: 'JL', risk: 0, blocker: null, blocks: [], deps: [] },
-    { name: 'ISG Legal',          ref: 'CK-2421', stageIdx: 4, health: 'g', days: 15, lead: 'Roberto Romano', leadInit: 'RR', risk: 0, blocker: null, blocks: [], deps: [] },
-    { name: 'Portfolio Admin',    ref: 'CK-2422', stageIdx: 4, health: 'g', days: 18, lead: 'John Loh',       leadInit: 'JL', risk: 0, blocker: null, blocks: [], deps: [] },
-    { name: 'Client Engineering', ref: 'CK-2423', stageIdx: 4, health: 'g', days: 19, lead: 'Alexander Black',leadInit: 'AB', risk: 0, blocker: null, blocks: [], deps: [] },
+  // Fixed metadata for each functional team (consistent across every client)
+  const TEAM_META = [
+    { name: 'Performance',        ref: 'CK-2401', lead: 'Sarah Chen',     leadInit: 'SC', blocks: ['Allocations', 'Risk Management', 'Fund Accounting'], deps: ['Client'] },
+    { name: 'Risk Management',    ref: 'CK-2402', lead: 'Michael Patel',  leadInit: 'MP', blocks: ['Compliance'], deps: ['Performance'] },
+    { name: 'Client Service',     ref: 'CK-2403', lead: 'John Loh',       leadInit: 'JL', blocks: [], deps: ['Client'] },
+    { name: 'Reconciliation',     ref: 'CK-2404', lead: 'Roberto Romano', leadInit: 'RR', blocks: ['Billing', 'Internal Controls', 'Allocations', 'Trade Support'], deps: ['Reference Data'] },
+    { name: 'Tax Services',       ref: 'CK-2405', lead: 'Michael Patel',  leadInit: 'MP', blocks: ['Fund Accounting'], deps: ['ISG Legal'] },
+    { name: 'Corporate Actions',  ref: 'CK-2406', lead: 'Alexander Black',leadInit: 'AB', blocks: [], deps: ['Reference Data'] },
+    { name: 'Settlements',        ref: 'CK-2407', lead: 'John Loh',       leadInit: 'JL', blocks: ['Custody', 'Transfer Agency', 'Cash Management'], deps: ['ISG Legal'] },
+    { name: 'Allocations',        ref: 'CK-2408', lead: 'Alexander Black',leadInit: 'AB', blocks: ['Reconciliation'], deps: ['Reconciliation'] },
+    { name: 'Client Solutions',   ref: 'CK-2409', lead: 'John Loh',       leadInit: 'JL', blocks: ['Client Service'], deps: ['Client'] },
+    { name: 'Transfer Agency',    ref: 'CK-2410', lead: 'Roberto Romano', leadInit: 'RR', blocks: [], deps: ['Reconciliation'] },
+    { name: 'Cash Management',    ref: 'CK-2411', lead: 'Karthik Dasari', leadInit: 'KD', blocks: [], deps: ['Settlements'] },
+    { name: 'Billing',            ref: 'CK-2412', lead: 'Karthik Dasari', leadInit: 'KD', blocks: [], deps: ['Reconciliation'] },
+    { name: 'Custody',            ref: 'CK-2413', lead: 'Roberto Romano', leadInit: 'RR', blocks: [], deps: ['Settlements'] },
+    { name: 'Treasury',           ref: 'CK-2414', lead: 'Michael Patel',  leadInit: 'MP', blocks: [], deps: ['Client'] },
+    { name: 'Compliance',         ref: 'CK-2415', lead: 'Michael Patel',  leadInit: 'MP', blocks: [], deps: ['Risk Management'] },
+    { name: 'Internal Controls',  ref: 'CK-2416', lead: 'Roberto Romano', leadInit: 'RR', blocks: [], deps: [] },
+    { name: 'Middle Office',      ref: 'CK-2417', lead: 'Alexander Black',leadInit: 'AB', blocks: [], deps: [] },
+    { name: 'Trade Support',      ref: 'CK-2418', lead: 'John Loh',       leadInit: 'JL', blocks: [], deps: [] },
+    { name: 'Fund Accounting',    ref: 'CK-2419', lead: 'Karthik Dasari', leadInit: 'KD', blocks: [], deps: [] },
+    { name: 'Reference Data',     ref: 'CK-2420', lead: 'John Loh',       leadInit: 'JL', blocks: [], deps: [] },
+    { name: 'ISG Legal',          ref: 'CK-2421', lead: 'Roberto Romano', leadInit: 'RR', blocks: [], deps: [] },
+    { name: 'Portfolio Admin',    ref: 'CK-2422', lead: 'John Loh',       leadInit: 'JL', blocks: [], deps: [] },
+    { name: 'Client Engineering', ref: 'CK-2423', lead: 'Alexander Black',leadInit: 'AB', blocks: [], deps: [] },
   ];
 
-  // Pending source: 'client' if any dep references the client, otherwise 'internal'
-  function pendingSource(t) {
-    if (t.health === 'g') return null;
-    const hasClient = (t.deps || []).some(d => /client/i.test(d));
-    return hasClient ? 'client' : 'internal';
-  }
+  // 3 archetypes — each parallel-indexed to TEAM_META (23 entries each)
+  const ARCHETYPES = {
+    behind: [
+      { stageIdx: 1, health: 'r', days: 14, risk: 12, blocker: "Client hasn't returned benchmark specification after 6 reminders.", depTag: 'Pending Client' },
+      { stageIdx: 1, health: 'a', days: 14, risk: 7,  blocker: 'Waiting on Performance benchmark before VaR model can be configured.', depTag: 'Pending Performance' },
+      { stageIdx: 1, health: 'a', days: 14, risk: 6,  blocker: 'Pending client contact authorization list.', depTag: 'Pending Client' },
+      { stageIdx: 1, health: 'r', days: 14, risk: 11, blocker: 'Custodian file format differs from spec — waiting on Reference Data mapping.', depTag: 'Pending Ref Data' },
+      { stageIdx: 1, health: 'r', days: 14, risk: 10, blocker: 'Tax residency documents missing for 2 of 4 entities.', depTag: 'Pending IMA' },
+      { stageIdx: 2, health: 'a', days: 14, risk: 6,  blocker: 'Event feed source pending finalisation.', depTag: 'Pending Ref Data' },
+      { stageIdx: 2, health: 'r', days: 14, risk: 10, blocker: 'ISG Legal contract review just cleared — settlement instruction setup restarting.', depTag: 'Pending ISG Legal' },
+      { stageIdx: 2, health: 'r', days: 14, risk: 9,  blocker: 'Test allocation file failing schema validation — fix in progress.', depTag: 'Pending Recon' },
+      { stageIdx: 2, health: 'a', days: 14, risk: 5,  blocker: 'Client IT configuring SSO IdP endpoint.', depTag: 'Pending Client' },
+      { stageIdx: 2, health: 'g', days: 14, risk: 3,  blocker: null },
+      { stageIdx: 2, health: 'a', days: 14, risk: 5,  blocker: 'Awaiting Settlements instruction template before account setup.', depTag: 'Pending Settlements' },
+      { stageIdx: 2, health: 'g', days: 14, risk: 3,  blocker: null },
+      { stageIdx: 3, health: 'g', days: 14, risk: 2,  blocker: null },
+      { stageIdx: 3, health: 'g', days: 14, risk: 2,  blocker: null },
+      { stageIdx: 3, health: 'g', days: 17, risk: 2,  blocker: null },
+      { stageIdx: 3, health: 'g', days: 14, risk: 1,  blocker: null },
+      { stageIdx: 3, health: 'g', days: 13, risk: 1,  blocker: null },
+      { stageIdx: 3, health: 'g', days: 12, risk: 1,  blocker: null },
+      { stageIdx: 3, health: 'g', days: 11, risk: 1,  blocker: null },
+      { stageIdx: 4, health: 'g', days: 16, risk: 0,  blocker: null },
+      { stageIdx: 4, health: 'g', days: 15, risk: 0,  blocker: null },
+      { stageIdx: 4, health: 'g', days: 18, risk: 0,  blocker: null },
+      { stageIdx: 4, health: 'g', days: 19, risk: 0,  blocker: null },
+    ],
+    ontrack: [
+      { stageIdx: 4, health: 'g', days: 18, risk: 0, blocker: null }, // Performance — complete
+      { stageIdx: 3, health: 'g', days: 14, risk: 0, blocker: null }, // Risk Management — ready
+      { stageIdx: 4, health: 'g', days: 16, risk: 0, blocker: null }, // Client Service — complete
+      { stageIdx: 3, health: 'g', days: 14, risk: 0, blocker: null }, // Reconciliation — ready
+      { stageIdx: 3, health: 'g', days: 14, risk: 0, blocker: null }, // Tax Services — ready
+      { stageIdx: 3, health: 'g', days: 14, risk: 0, blocker: null }, // Corporate Actions — ready
+      { stageIdx: 4, health: 'g', days: 16, risk: 0, blocker: null }, // Settlements — complete
+      { stageIdx: 3, health: 'g', days: 14, risk: 0, blocker: null }, // Allocations — ready
+      { stageIdx: 3, health: 'a', days: 14, risk: 2, blocker: 'Final SSO IdP cutover scheduled for Friday.', depTag: 'Pending Client' }, // Client Solutions
+      { stageIdx: 4, health: 'g', days: 16, risk: 0, blocker: null }, // Transfer Agency — complete
+      { stageIdx: 4, health: 'g', days: 14, risk: 0, blocker: null }, // Cash Management — complete
+      { stageIdx: 3, health: 'g', days: 14, risk: 0, blocker: null }, // Billing — ready
+      { stageIdx: 4, health: 'g', days: 14, risk: 0, blocker: null }, // Custody — complete
+      { stageIdx: 3, health: 'a', days: 14, risk: 2, blocker: 'Final banking authorisation pending — last signature.', depTag: 'Pending Client' }, // Treasury
+      { stageIdx: 4, health: 'g', days: 14, risk: 0, blocker: null }, // Compliance — complete
+      { stageIdx: 4, health: 'g', days: 14, risk: 0, blocker: null }, // Internal Controls — complete
+      { stageIdx: 4, health: 'g', days: 13, risk: 0, blocker: null }, // Middle Office — complete
+      { stageIdx: 3, health: 'g', days: 12, risk: 0, blocker: null }, // Trade Support — ready
+      { stageIdx: 3, health: 'g', days: 11, risk: 0, blocker: null }, // Fund Accounting — ready
+      { stageIdx: 4, health: 'g', days: 16, risk: 0, blocker: null }, // Reference Data — complete
+      { stageIdx: 4, health: 'g', days: 15, risk: 0, blocker: null }, // ISG Legal — complete
+      { stageIdx: 4, health: 'g', days: 18, risk: 0, blocker: null }, // Portfolio Admin — complete
+      { stageIdx: 4, health: 'g', days: 19, risk: 0, blocker: null }, // Client Engineering — complete
+    ],
+    offtrack: [
+      { stageIdx: 0, health: 'r', days: 14, risk: 14, blocker: 'Client unresponsive on benchmark spec — 11 reminders sent.', depTag: 'Pending Client' },
+      { stageIdx: 0, health: 'r', days: 14, risk: 13, blocker: 'Cannot start without Performance benchmark.', depTag: 'Pending Performance' },
+      { stageIdx: 0, health: 'r', days: 14, risk: 13, blocker: 'Client contact authorization list still missing.', depTag: 'Pending Client' },
+      { stageIdx: 0, health: 'r', days: 14, risk: 13, blocker: 'Custodian file format conflict unresolved.', depTag: 'Pending Ref Data' },
+      { stageIdx: 1, health: 'r', days: 14, risk: 12, blocker: 'Tax residency documents missing for all 4 entities.', depTag: 'Pending IMA' },
+      { stageIdx: 0, health: 'r', days: 14, risk: 12, blocker: 'Event feed source not selected.', depTag: 'Pending Ref Data' },
+      { stageIdx: 0, health: 'r', days: 14, risk: 14, blocker: 'ISG Legal contract review at 18 days outstanding.', depTag: 'Pending ISG Legal' },
+      { stageIdx: 1, health: 'r', days: 14, risk: 11, blocker: 'Schema validation failing — 7 SLA breaches.', depTag: 'Pending Recon' },
+      { stageIdx: 0, health: 'r', days: 14, risk: 11, blocker: 'Client IT not yet engaged on SSO setup.', depTag: 'Pending Client' },
+      { stageIdx: 1, health: 'r', days: 14, risk: 10, blocker: 'Unit-holder file mismatch with Reconciliation — pending fix.', depTag: 'Pending Recon' },
+      { stageIdx: 0, health: 'r', days: 14, risk: 9,  blocker: 'Awaiting Settlements instruction template.', depTag: 'Pending Settlements' },
+      { stageIdx: 1, health: 'r', days: 14, risk: 8,  blocker: 'Awaiting reconciled position file.', depTag: 'Pending Recon' },
+      { stageIdx: 1, health: 'r', days: 14, risk: 8,  blocker: 'Awaiting Settlements instruction set.', depTag: 'Pending Settlements' },
+      { stageIdx: 0, health: 'a', days: 14, risk: 6,  blocker: 'Awaiting client banking authorisations.', depTag: 'Pending Client' },
+      { stageIdx: 0, health: 'a', days: 14, risk: 6,  blocker: 'Waiting on Risk Management VaR sign-off.', depTag: 'Pending Risk Mgmt' },
+      { stageIdx: 1, health: 'a', days: 14, risk: 5,  blocker: null },
+      { stageIdx: 1, health: 'a', days: 13, risk: 5,  blocker: null },
+      { stageIdx: 1, health: 'a', days: 12, risk: 5,  blocker: null },
+      { stageIdx: 0, health: 'a', days: 11, risk: 4,  blocker: null },
+      { stageIdx: 2, health: 'g', days: 16, risk: 1,  blocker: null },
+      { stageIdx: 1, health: 'g', days: 15, risk: 1,  blocker: null },
+      { stageIdx: 2, health: 'g', days: 18, risk: 1,  blocker: null },
+      { stageIdx: 1, health: 'g', days: 19, risk: 1,  blocker: null },
+    ],
+  };
 
-  // Dedupe Performance (kept only once)
-  const seen = new Set();
-  const uniqueTeams = teams.filter(t => {
-    if (seen.has(t.name)) return false;
-    seen.add(t.name);
-    return true;
-  });
+  // Per-archetype pacing chart geometry (y coords + callout text)
+  const PACING = {
+    behind:  { todayY: 212, endY: 78,  doneText: '4 of 23 done',  projectedText: 'Projected: ~18', calloutY: 188 },
+    ontrack: { todayY: 126, endY: 30,  doneText: '13 of 23 done', projectedText: 'Projected: 23',  calloutY: 102 },
+    offtrack:{ todayY: 250, endY: 193, doneText: '0 of 23 done',  projectedText: 'Projected: ~6',  calloutY: 226 },
+  };
+
+  // 9 clients (incl. All) — each points to an archetype + per-client metadata
+  const CLIENTS = {
+    all:    { name: 'All Clients',      archetype: 'behind',   goLive: 'May 13', daysSlip: 8,   statusKey: 'amber', statusLabel: 'Slightly behind',
+              lede: '<em>8 clients in flight.</em> 3 on track, 3 slightly behind, 2 off-track.',
+              sublede: 'Aggregate view across the SMA portfolio. Filter by client to drill in.' },
+    carina: { name: 'Carina Capital',   archetype: 'behind',   goLive: 'May 13', daysSlip: 8,   statusKey: 'amber', statusLabel: 'Slightly behind',
+              lede: '5 teams off-track. <em>4 teams already complete</em> — on pace for May 13 go-live.',
+              sublede: 'Settlements and Reconciliation are the remaining bottlenecks. ISG Legal contract review cleared this week — Settlements restarting now.' },
+    nyl:    { name: 'New York Life',    archetype: 'ontrack',  goLive: 'May 5',  daysSlip: -2,  statusKey: 'green', statusLabel: 'On track',
+              lede: '<em>13 teams already complete</em>; 8 in final review. Ahead of plan.',
+              sublede: 'No active blockers. On pace for early go-live on May 5.' },
+    athene: { name: 'Athene Holding',   archetype: 'offtrack', goLive: 'Jun 18', daysSlip: 35,  statusKey: 'red',   statusLabel: 'Off track',
+              lede: '<em>13 teams off-track.</em> Portfolio at risk — projected go-live slipping to Jun 18.',
+              sublede: 'ISG Legal contract review at 18 days outstanding. Client unresponsive on benchmark spec, SSO config, and contact list.' },
+    abc:    { name: 'ABC Company',      archetype: 'behind',   goLive: 'May 16', daysSlip: 11,  statusKey: 'amber', statusLabel: 'Slightly behind',
+              lede: '5 teams off-track. <em>4 teams complete</em> — projected May 16 go-live.',
+              sublede: 'Performance benchmark received this week. Settlements still working through ISG Legal contract markup.' },
+    def:    { name: 'DEF Organization', archetype: 'offtrack', goLive: 'Jun 11', daysSlip: 28,  statusKey: 'red',   statusLabel: 'Off track',
+              lede: '<em>13 teams off-track.</em> Onboarding stalled — go-live now Jun 11.',
+              sublede: 'Tax residency documentation still missing across entities. Client engagement intermittent since week 1.' },
+    ghi:    { name: 'GHI LLC',          archetype: 'ontrack',  goLive: 'May 7',  daysSlip: 0,   statusKey: 'green', statusLabel: 'On track',
+              lede: '<em>13 teams complete</em>; 8 in final review. Tracking exactly to plan.',
+              sublede: 'Two pending items in last-stage review. Client target date held at May 7.' },
+    jkl:    { name: 'JKL Partners',     archetype: 'behind',   goLive: 'May 18', daysSlip: 13,  statusKey: 'amber', statusLabel: 'Slightly behind',
+              lede: '5 teams off-track. <em>4 teams complete</em> — projected May 18 go-live.',
+              sublede: 'Custodian file mapping in progress. Settlement instruction templates due back from ISG Legal next week.' },
+    mno:    { name: 'MNO Capital',      archetype: 'ontrack',  goLive: 'May 9',  daysSlip: 2,   statusKey: 'green', statusLabel: 'On track',
+              lede: '<em>13 teams complete</em>; 8 in final review. Two-day buffer over plan.',
+              sublede: 'No blockers. Final IT cutover scheduled for next week.' },
+  };
 
   const HEALTH_LABEL = { r: 'Off track', a: 'Pending info', g: 'On track' };
   const HEALTH_DESC = {
@@ -2392,92 +2502,217 @@
   };
   const HEALTH_VAR = { g: 'var(--green)', a: 'var(--amber)', r: 'var(--red)' };
 
-  // ========== WAFFLE ==========
+  function pendingSource(t) {
+    if (t.health === 'g') return null;
+    const hasClient = (t.deps || []).some(d => /client/i.test(d));
+    return hasClient ? 'client' : 'internal';
+  }
+
+  function buildTeams(archetypeKey) {
+    const arch = ARCHETYPES[archetypeKey] || ARCHETYPES.behind;
+    return TEAM_META.map((meta, i) => Object.assign({}, meta, arch[i]));
+  }
+
+  function parseGoLive(label) {
+    const months = { Jan:0, Feb:1, Mar:2, Apr:3, May:4, Jun:5, Jul:6, Aug:7, Sep:8, Oct:9, Nov:10, Dec:11 };
+    const [m, d] = label.split(' ');
+    return new Date(new Date().getFullYear(), months[m] || 0, parseInt(d, 10));
+  }
+
+  // ========== STATE ==========
+  let currentTeams = buildTeams('behind');
+  let currentClientId = 'all';
+
+  // ========== DOM REFS ==========
   const waffleEl = document.getElementById('waffle');
-  const waffleSorted = [...uniqueTeams].sort((a, b) => {
-    const p = { r: 0, a: 1, g: 2 };
-    return p[a.health] - p[b.health];
-  });
-  waffleSorted.forEach(t => {
-    const cell = document.createElement('div');
-    cell.className = `waffle-cell ${t.health}`;
-    cell.innerHTML = `<span class="dot"></span>${t.name}`;
-    cell.title = `${t.name} · ${HEALTH_DESC[t.health]} · ${STAGES[t.stageIdx]}`;
-    cell.onclick = () => openDrawer(t.name);
-    waffleEl.appendChild(cell);
-  });
-
-  // ========== MATRIX ==========
   const matrixRows = document.getElementById('matrix-rows');
-  const sortedByRisk = [...uniqueTeams].sort((a, b) => b.risk - a.risk);
-  sortedByRisk.forEach((t, i) => {
-    const segs = STAGES.map((_, idx) => {
-      if (idx < t.stageIdx) return '<div class="seg done"></div>';
-      if (idx === t.stageIdx) return `<div class="seg cur-${t.health}"></div>`;
-      return '<div class="seg future"></div>';
-    }).join('');
-
-    const row = document.createElement('div');
-    row.className = 'matrix-row';
-    row.dataset.health = t.health;
-    row.dataset.team = t.name;
-    row.dataset.stage = String(t.stageIdx);
-    row.onclick = () => openDrawer(t.name);
-
-    const daysClass = t.health === 'r' ? 'bad' : t.health === 'a' ? 'warn' : '';
-
-    // Dependency cell: only show on amber (pending) teams, with custom text
-    const depCell = (t.health === 'a' && t.depTag)
-      ? `<span class="dep-tag">${t.depTag}</span>`
-      : '<span class="dep-empty">—</span>';
-
-    row.innerHTML = `
-      <div class="ref">${t.ref}</div>
-      <div class="team">
-        <span class="tip" data-tip="${HEALTH_DESC[t.health]}"><span class="health ${t.health}"></span></span>
-        <span>${t.name}</span>
-      </div>
-      <div class="stages">${segs}</div>
-      <div class="dep-cell">${depCell}</div>
-      <div class="assignee">
-        <span class="av">${t.leadInit}</span>
-        <span>${t.lead.split(' ').slice(-1)[0]}</span>
-      </div>
-      <div class="days ${daysClass}">${t.days}d</div>
-      <div class="chev">
-        <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      </div>
-    `;
-
-    matrixRows.appendChild(row);
-  });
-
-  // ========== BOTTLENECKS ==========
   const bottleneckList = document.getElementById('bottleneck-list');
   const bottleneckCount = document.getElementById('bottleneck-count');
-  const pendingTeams = [...uniqueTeams]
-    .filter(t => t.health !== 'g' && t.blocker)
-    .sort((a, b) => b.risk - a.risk);
-  bottleneckCount.textContent = `${pendingTeams.length} pending`;
-  pendingTeams.forEach(t => {
-    const pSrc = pendingSource(t);
-    const tagClass = pSrc === 'client' ? 'client' : '';
-    const tagLabel = pSrc === 'client' ? 'Pending (Client)' : 'Pending (Internal)';
-    const item = document.createElement('div');
-    item.className = 'bottleneck-item';
-    item.onclick = () => openDrawer(t.name);
-    item.innerHTML = `
-      <div class="body">
-        <em>${t.name}</em> — ${t.blocker}
-        <div class="sub">
-          <span class="health-pill ${t.health}"></span>
-          ${STAGES[t.stageIdx]} · ${t.days}d · ${t.lead}
+
+  // ========== RENDERERS ==========
+  function renderWaffle(teams) {
+    waffleEl.innerHTML = '';
+    const sorted = [...teams].sort((a, b) => {
+      const p = { r: 0, a: 1, g: 2 };
+      return p[a.health] - p[b.health];
+    });
+    sorted.forEach(t => {
+      const cell = document.createElement('div');
+      cell.className = `waffle-cell ${t.health}`;
+      cell.innerHTML = `<span class="dot"></span>${t.name}`;
+      cell.title = `${t.name} · ${HEALTH_DESC[t.health]} · ${STAGES[t.stageIdx]}`;
+      cell.onclick = () => openDrawer(t.name);
+      waffleEl.appendChild(cell);
+    });
+  }
+
+  function renderMatrix(teams) {
+    matrixRows.innerHTML = '';
+    const sorted = [...teams].sort((a, b) => b.risk - a.risk);
+    sorted.forEach(t => {
+      const segs = STAGES.map((_, idx) => {
+        if (idx < t.stageIdx) return '<div class="seg done"></div>';
+        if (idx === t.stageIdx) return `<div class="seg cur-${t.health}"></div>`;
+        return '<div class="seg future"></div>';
+      }).join('');
+
+      const row = document.createElement('div');
+      row.className = 'matrix-row';
+      row.dataset.health = t.health;
+      row.dataset.team = t.name;
+      row.dataset.stage = String(t.stageIdx);
+      row.onclick = () => openDrawer(t.name);
+
+      const daysClass = t.health === 'r' ? 'bad' : t.health === 'a' ? 'warn' : '';
+      const depCell = (t.health === 'a' && t.depTag)
+        ? `<span class="dep-tag">${t.depTag}</span>`
+        : '<span class="dep-empty">—</span>';
+
+      row.innerHTML = `
+        <div class="ref">${t.ref}</div>
+        <div class="team">
+          <span class="tip" data-tip="${HEALTH_DESC[t.health]}"><span class="health ${t.health}"></span></span>
+          <span>${t.name}</span>
         </div>
-      </div>
-      <span class="pending-tag ${tagClass}">${tagLabel}</span>
-    `;
-    bottleneckList.appendChild(item);
-  });
+        <div class="stages">${segs}</div>
+        <div class="dep-cell">${depCell}</div>
+        <div class="assignee">
+          <span class="av">${t.leadInit}</span>
+          <span>${t.lead.split(' ').slice(-1)[0]}</span>
+        </div>
+        <div class="days ${daysClass}">${t.days}d</div>
+        <div class="chev">
+          <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+      `;
+      matrixRows.appendChild(row);
+    });
+  }
+
+  function renderBottlenecks(teams) {
+    bottleneckList.innerHTML = '';
+    const pending = [...teams]
+      .filter(t => t.health !== 'g' && t.blocker)
+      .sort((a, b) => b.risk - a.risk)
+      .slice(0, 10);
+    bottleneckCount.textContent = pending.length === 0 ? 'No active blockers' : `${pending.length} pending`;
+    pending.forEach(t => {
+      const pSrc = pendingSource(t);
+      const tagClass = pSrc === 'client' ? 'client' : '';
+      const tagLabel = pSrc === 'client' ? 'Pending (Client)' : 'Pending (Internal)';
+      const item = document.createElement('div');
+      item.className = 'bottleneck-item';
+      item.onclick = () => openDrawer(t.name);
+      item.innerHTML = `
+        <div class="body">
+          <em>${t.name}</em> — ${t.blocker}
+          <div class="sub">
+            <span class="health-pill ${t.health}"></span>
+            ${STAGES[t.stageIdx]} · ${t.days}d · ${t.lead}
+          </div>
+        </div>
+        <span class="pending-tag ${tagClass}">${tagLabel}</span>
+      `;
+      bottleneckList.appendChild(item);
+    });
+  }
+
+  function renderHeader(config) {
+    document.getElementById('clientSelectLabel').textContent = config.name;
+    document.getElementById('dashLede').innerHTML = config.lede;
+    document.getElementById('dashSublede').textContent = config.sublede;
+    const chip = document.getElementById('statusChip');
+    chip.dataset.status = config.statusKey;
+    document.getElementById('statusChipLabel').textContent = config.statusLabel;
+  }
+
+  function renderKpis(teams, config) {
+    const completed = teams.filter(t => t.stageIdx === 4).length;
+    const offtrack = teams.filter(t => t.health === 'r').length;
+    const pending = teams.filter(t => t.health === 'a').length;
+    const ontrack = teams.filter(t => t.health === 'g').length;
+
+    document.getElementById('kpiCompletionValue').textContent = String(Math.round(completed / teams.length * 100));
+    document.getElementById('kpiCompletionDeltaText').textContent = `${completed} of ${teams.length} complete`;
+
+    document.getElementById('kpiOffTrackValue').textContent = String(offtrack);
+    const otWrap = document.getElementById('kpiOffTrackValueWrap');
+    otWrap.style.color = offtrack > 7 ? 'var(--red-ink)' : offtrack > 0 ? 'var(--amber-ink)' : 'var(--green-ink)';
+    const otDelta = config.archetype === 'ontrack' ? 'No teams blocked'
+                  : config.archetype === 'behind'  ? '+1 since last week'
+                  : '+5 since last week';
+    document.getElementById('kpiOffTrackDelta').textContent = otDelta;
+
+    const slaCount = config.archetype === 'ontrack' ? 0 : config.archetype === 'behind' ? 3 : 12;
+    const slaTeams = config.archetype === 'ontrack' ? 0 : config.archetype === 'behind' ? 2 : 7;
+    document.getElementById('kpiSlaValue').textContent = String(slaCount);
+    document.getElementById('kpiSlaValueWrap').style.color = slaCount === 0 ? 'var(--green-ink)' : slaCount > 5 ? 'var(--red-ink)' : 'var(--amber-ink)';
+    document.getElementById('kpiSlaDelta').textContent = slaCount === 0 ? 'None this period' : `Across ${slaTeams} teams`;
+
+    const goLive = parseGoLive(config.goLive);
+    const today = new Date(); today.setHours(0,0,0,0);
+    const days = Math.max(0, Math.round((goLive.getTime() - today.getTime()) / 86400000));
+    document.getElementById('daysRemainingValue').textContent = String(days);
+    document.getElementById('daysRemainingDelta').textContent = days === 0
+      ? 'Past due · 0d'
+      : `Until projected go-live · ${config.goLive}`;
+
+    document.getElementById('kpiGoLiveValue').textContent = config.goLive;
+    const slipText = config.daysSlip > 0 ? `+${config.daysSlip}d vs plan`
+                   : config.daysSlip < 0 ? `${config.daysSlip}d vs plan`
+                   : 'On plan';
+    document.getElementById('kpiGoLiveDelta').textContent = slipText;
+
+    document.getElementById('waffleCountR').textContent = String(offtrack);
+    document.getElementById('waffleCountA').textContent = String(pending);
+    document.getElementById('waffleCountG').textContent = String(ontrack);
+
+    document.getElementById('chipCountAll').textContent = String(teams.length);
+    document.getElementById('chipCountR').textContent = String(offtrack);
+    document.getElementById('chipCountA').textContent = String(pending);
+    document.getElementById('chipCountG').textContent = String(ontrack);
+
+    document.getElementById('matrixTeamCount').textContent = String(teams.length);
+  }
+
+  function renderPacingChart(archetypeKey) {
+    const p = PACING[archetypeKey];
+    if (!p) return;
+    document.getElementById('pacingGap').setAttribute('d', `M 60 250 L 370 ${p.todayY} L 690 ${p.endY} L 690 30 Z`);
+    document.getElementById('pacingActual').setAttribute('y2', String(p.todayY));
+    const proj = document.getElementById('pacingProjected');
+    proj.setAttribute('y1', String(p.todayY));
+    proj.setAttribute('y2', String(p.endY));
+    document.getElementById('pacingDot1').setAttribute('cy', String(p.todayY));
+    document.getElementById('pacingDot2').setAttribute('cy', String(p.todayY));
+    document.getElementById('pacingEndDot').setAttribute('cy', String(p.endY));
+    document.getElementById('pacingCalloutBg').setAttribute('y', String(p.calloutY));
+    const calloutDone = document.getElementById('pacingCalloutDone');
+    const calloutPlan = document.getElementById('pacingCalloutPlan');
+    calloutDone.setAttribute('y', String(p.calloutY + 15));
+    calloutPlan.setAttribute('y', String(p.calloutY + 30));
+    calloutDone.textContent = p.doneText;
+    const projLabel = document.getElementById('pacingProjectedLabel');
+    projLabel.setAttribute('y', String(p.endY - 6));
+    projLabel.textContent = p.projectedText;
+  }
+
+  function renderClient(clientId) {
+    const config = CLIENTS[clientId] || CLIENTS.all;
+    currentClientId = clientId;
+    currentTeams = buildTeams(config.archetype);
+    renderHeader(config);
+    renderKpis(currentTeams, config);
+    renderWaffle(currentTeams);
+    renderMatrix(currentTeams);
+    renderBottlenecks(currentTeams);
+    renderPacingChart(config.archetype);
+    // Reset filters on client change
+    healthFilter = 'all';
+    stageFilter = null;
+    document.querySelectorAll('#filters .chip').forEach(c => c.classList.toggle('active', c.dataset.filter === 'all'));
+    applyFilters();
+  }
 
   // ========== FILTERS (health + stage, combined) ==========
   let healthFilter = 'all';
@@ -2553,7 +2788,7 @@
   const drawerContent = document.getElementById('drawerContent');
 
   function teamByName(name) {
-    return uniqueTeams.find(t => t.name === name);
+    return currentTeams.find(t => t.name === name);
   }
 
   function openDrawer(name) {
@@ -2562,12 +2797,12 @@
 
     const activity = buildActivity(t);
     const deps = (t.deps || []).map(d => {
-      const dep = uniqueTeams.find(x => x.name === d);
+      const dep = currentTeams.find(x => x.name === d);
       const h = dep ? dep.health : 'a';
       return `<span class="dep-pill"><span class="dot ${h}"></span>${d}</span>`;
     }).join('');
     const blocks = (t.blocks || []).map(b => {
-      const bt = uniqueTeams.find(x => x.name === b);
+      const bt = currentTeams.find(x => x.name === b);
       const h = bt ? bt.health : 'r';
       return `<span class="dep-pill"><span class="dot ${h}"></span>${b}</span>`;
     }).join('');
@@ -2712,29 +2947,11 @@
     });
   })();
 
-  // ========== DAYS REMAINING (today → projected go-live) ==========
-  (function setDaysRemaining() {
-    const goLive = new Date(2026, 4, 13); // May 13, 2026
-    const today = new Date();
-    today.setHours(0, 0, 0, 0);
-    const diffMs = goLive.getTime() - today.getTime();
-    const days = Math.max(0, Math.round(diffMs / 86400000));
-    const valEl = document.getElementById('daysRemainingValue');
-    const deltaEl = document.getElementById('daysRemainingDelta');
-    if (valEl) valEl.textContent = String(days);
-    if (deltaEl) {
-      deltaEl.textContent = days === 0
-        ? 'Past due · 0d'
-        : 'Until projected go-live · May 13';
-    }
-  })();
-
   // ========== CLIENT FILTER DROPDOWN ==========
   (function clientDropdown() {
     const btn = document.getElementById('clientSelectBtn');
     const menu = document.getElementById('clientMenu');
-    const label = document.getElementById('clientSelectLabel');
-    if (!btn || !menu || !label) return;
+    if (!btn || !menu) return;
 
     function open() {
       menu.hidden = false;
@@ -2752,7 +2969,10 @@
       const item = e.target.closest('.client-menu-item');
       if (!item) return;
       menu.querySelectorAll('.client-menu-item').forEach(i => i.classList.toggle('active', i === item));
-      label.textContent = item.textContent.trim();
+      const clientId = item.dataset.client;
+      if (clientId && CLIENTS[clientId]) {
+        renderClient(clientId);
+      }
       close();
     });
     document.addEventListener('click', e => {
@@ -2762,6 +2982,9 @@
       if (e.key === 'Escape') close();
     });
   })();
+
+  // ========== INITIAL RENDER ==========
+  renderClient('all');
 </script>
 
 </body>
