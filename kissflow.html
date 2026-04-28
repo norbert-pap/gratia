@@ -7,13 +7,24 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>
+  // Apply saved theme before paint to avoid flash
+  (function () {
+    try {
+      const saved = localStorage.getItem('apollo-theme');
+      if (saved === 'light' || saved === 'dark') {
+        document.documentElement.setAttribute('data-theme', saved);
+      }
+    } catch (e) {}
+  })();
+</script>
 <style>
   *, *::before, *::after { box-sizing: border-box; }
   html, body, h1, h2, h3, h4, p, ul, li, figure, div, section, nav, aside, header, main, button { margin: 0; padding: 0; }
   button { background: none; border: none; color: inherit; cursor: pointer; font: inherit; }
   ul { list-style: none; }
 
-  :root {
+  :root, [data-theme="dark"] {
     --bg: #0b0c0e;
     --bg-1: #111214;
     --bg-2: #17181b;
@@ -50,6 +61,63 @@
 
     --shadow: 0 1px 1px rgba(0,0,0,0.3), 0 10px 32px rgba(0,0,0,0.4);
     --shadow-drawer: -12px 0 48px rgba(0,0,0,0.55);
+
+    --nav-bg: rgba(11, 12, 14, 0.85);
+    --glow: radial-gradient(ellipse at top right, rgba(22, 163, 138, 0.08), transparent 65%);
+    --kf-subtab-bg: rgba(0, 0, 0, 0.2);
+    --avatar-grad: linear-gradient(135deg, #0d6b5a, #16a38a);
+    --row-hover: rgba(255, 255, 255, 0.013);
+    --kf-blue: #87b3ec;
+    --kf-blue-line: rgba(74, 141, 224, 0.4);
+    --kf-blue-dim: rgba(74, 141, 224, 0.18);
+  }
+
+  [data-theme="light"] {
+    --bg: #fafaf8;
+    --bg-1: #ffffff;
+    --bg-2: #f4f4f1;
+    --bg-3: #ebebe7;
+    --bg-4: #d8d8d3;
+    --border: #e6e6e1;
+    --border-2: #d2d2cc;
+    --ink-0: #1a1a1c;
+    --ink-1: #3a3b3e;
+    --ink-2: #65676c;
+    --ink-3: #93959a;
+    --ink-4: #c2c3c7;
+
+    --gold: #0e8a73;
+    --gold-bright: #16a38a;
+    --gold-ink: #0e8a73;
+    --gold-dim: rgba(22, 163, 138, 0.10);
+    --gold-line: rgba(22, 163, 138, 0.32);
+
+    --green: #0e8a73;
+    --green-ink: #0e8a73;
+    --green-dim: rgba(22, 163, 138, 0.10);
+    --green-line: rgba(22, 163, 138, 0.32);
+
+    --amber: #c98a2b;
+    --amber-ink: #a8721d;
+    --amber-dim: rgba(230, 178, 89, 0.16);
+    --amber-line: rgba(201, 138, 43, 0.32);
+
+    --red: #d04a3d;
+    --red-ink: #b53a2e;
+    --red-dim: rgba(208, 74, 61, 0.10);
+    --red-line: rgba(208, 74, 61, 0.32);
+
+    --shadow: 0 1px 2px rgba(20, 22, 30, 0.04), 0 8px 24px rgba(20, 22, 30, 0.06);
+    --shadow-drawer: -8px 0 32px rgba(20, 22, 30, 0.12);
+
+    --nav-bg: rgba(255, 255, 255, 0.88);
+    --glow: radial-gradient(ellipse at top right, rgba(22, 163, 138, 0.06), transparent 65%);
+    --kf-subtab-bg: rgba(0, 0, 0, 0.025);
+    --avatar-grad: linear-gradient(135deg, #16a38a, #0e8a73);
+    --row-hover: rgba(0, 0, 0, 0.025);
+    --kf-blue: #1f6cd9;
+    --kf-blue-line: rgba(31, 108, 217, 0.35);
+    --kf-blue-dim: rgba(31, 108, 217, 0.10);
   }
 
   body {
@@ -87,7 +155,7 @@
     align-items: stretch;
     padding: 0 28px;
     border-bottom: 1px solid var(--border);
-    background: rgba(11, 12, 14, 0.85);
+    background: var(--nav-bg);
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
     position: sticky; top: 0; z-index: 20;
@@ -133,7 +201,7 @@
   .avatar-btn:hover { transform: scale(1.04); }
   .avatar {
     width: 28px; height: 28px; border-radius: 50%;
-    background: linear-gradient(135deg, #0d6b5a, #16a38a);
+    background: var(--avatar-grad);
     color: white; font-weight: 600; font-size: 11px;
     display: flex; align-items: center; justify-content: center;
     letter-spacing: 0;
@@ -152,6 +220,12 @@
     width: 6px; height: 6px; background: var(--red); border-radius: 50%;
     border: 2px solid var(--bg);
   }
+
+  /* Theme toggle: show the icon for the OPPOSITE theme (what clicking switches to) */
+  .theme-toggle .ti-sun { display: block; }
+  .theme-toggle .ti-moon { display: none; }
+  [data-theme="light"] .theme-toggle .ti-sun { display: none; }
+  [data-theme="light"] .theme-toggle .ti-moon { display: block; }
 
   /* ========== CONTENT ========== */
   .content {
@@ -230,7 +304,7 @@
   .btn:hover { background: var(--bg-3); border-color: var(--ink-4); }
   .btn.primary {
     background: var(--gold);
-    color: #1a120a;
+    color: #ffffff;
     border-color: var(--gold);
     font-weight: 600;
   }
@@ -386,7 +460,7 @@
   }
   .matrix-head-row {
     display: grid;
-    grid-template-columns: 64px 240px 1fr 110px 110px 50px 18px;
+    grid-template-columns: 64px 220px 1fr 130px 110px 50px 18px;
     gap: 18px;
     padding: 12px 20px;
     font-size: 10.5px; font-weight: 600;
@@ -400,7 +474,7 @@
   }
   .matrix-row {
     display: grid;
-    grid-template-columns: 64px 240px 1fr 110px 110px 50px 18px;
+    grid-template-columns: 64px 220px 1fr 130px 110px 50px 18px;
     gap: 18px;
     padding: 13px 20px;
     align-items: center;
@@ -409,8 +483,29 @@
     transition: background 0.12s;
     position: relative;
   }
+  .matrix-row .dep-cell {
+    display: flex; align-items: center;
+    min-width: 0;
+  }
+  .matrix-row .dep-tag {
+    display: inline-flex; align-items: center;
+    font-size: 10.5px; font-weight: 600;
+    padding: 2px 7px;
+    border-radius: 3px;
+    background: var(--amber-dim);
+    color: var(--amber-ink);
+    border: 1px solid var(--amber-line);
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+    overflow: hidden; text-overflow: ellipsis;
+    max-width: 100%;
+  }
+  .matrix-row .dep-empty {
+    color: var(--ink-4);
+    font-size: 12px;
+  }
   .matrix-row:last-child { border-bottom: none; }
-  .matrix-row:hover { background: rgba(255, 255, 255, 0.013); }
+  .matrix-row:hover { background: var(--row-hover); }
   .matrix-row:hover .chev { color: var(--gold-bright); transform: translateX(2px); }
   .matrix-row.hidden { display: none; }
   .matrix-row .rank {
@@ -470,6 +565,7 @@
     display: grid; grid-template-columns: 1fr 1fr;
     gap: 16px;
   }
+  .bottom-grid.single { grid-template-columns: 1fr; }
   /* Action list */
   .action-list { padding: 4px 0 10px; }
   .action-item {
@@ -480,7 +576,7 @@
     cursor: pointer;
     transition: background 0.12s;
   }
-  .action-item:hover { background: rgba(255, 255, 255, 0.013); }
+  .action-item:hover { background: var(--row-hover); }
   .action-item:last-child { border-bottom: none; }
   .action-item .num-circle {
     width: 22px; height: 22px;
@@ -717,8 +813,151 @@
   .glow {
     position: absolute; pointer-events: none;
     top: 0; right: 0; width: 620px; height: 380px;
-    background: radial-gradient(ellipse at top right, rgba(22, 163, 138, 0.08), transparent 65%);
+    background: var(--glow);
     z-index: 0;
+  }
+
+  /* ========== KISSFLOW SHELL (mock chrome — dark) ========== */
+  .kf-shell {
+    background: var(--bg-1);
+    color: var(--ink-1);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin: -8px 0 28px;
+    overflow: hidden;
+    font-family: 'Inter', system-ui, sans-serif;
+    position: relative;
+  }
+  .kf-shell::before {
+    content: 'Kissflow chrome';
+    position: absolute; top: 9px; right: 14px;
+    font-size: 9px; font-weight: 600;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--ink-4);
+    pointer-events: none;
+  }
+  .kf-title-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 11px 16px 11px 18px;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg-2);
+  }
+  .kf-title {
+    display: flex; align-items: center; gap: 9px;
+    font-size: 14px; font-weight: 600;
+    color: var(--ink-0);
+    letter-spacing: -0.01em;
+  }
+  .kf-title svg { color: var(--ink-2); }
+  .kf-edit {
+    padding: 3px;
+    border-radius: 3px;
+    color: var(--ink-3);
+    transition: all 0.12s;
+  }
+  .kf-edit:hover { background: var(--bg-3); color: var(--ink-0); }
+
+  .kf-title-actions {
+    display: flex; align-items: center; gap: 6px;
+  }
+  .kf-pill {
+    height: 28px;
+    padding: 0 8px 0 10px;
+    border: 1px solid var(--border-2);
+    border-radius: 4px;
+    background: var(--bg-2);
+    color: var(--ink-1);
+    font-size: 12px;
+    display: inline-flex; align-items: center; gap: 6px;
+    transition: all 0.12s;
+  }
+  .kf-pill:hover { border-color: var(--ink-4); background: var(--bg-3); }
+  .kf-pill .kf-pill-k { color: var(--ink-3); font-weight: 500; }
+  .kf-pill .kf-pill-v { color: var(--ink-0); font-weight: 500; margin-right: 2px; }
+  .kf-pill svg { color: var(--ink-3); }
+
+  .kf-btn {
+    height: 28px;
+    padding: 0 11px;
+    border: 1px solid var(--border-2);
+    border-radius: 4px;
+    background: var(--bg-2);
+    color: var(--ink-0);
+    font-size: 12px; font-weight: 500;
+    display: inline-flex; align-items: center;
+    transition: all 0.12s;
+  }
+  .kf-btn:hover { background: var(--bg-3); border-color: var(--ink-4); }
+  .kf-btn.primary {
+    background: var(--kf-blue-dim);
+    color: var(--kf-blue);
+    border-color: var(--kf-blue-line);
+  }
+  .kf-btn.primary:hover { filter: brightness(1.08); }
+
+  .kf-icon {
+    width: 28px; height: 28px;
+    border: 1px solid var(--border-2);
+    border-radius: 4px;
+    background: var(--bg-2);
+    color: var(--ink-2);
+    display: inline-flex; align-items: center; justify-content: center;
+    transition: all 0.12s;
+  }
+  .kf-icon:hover { background: var(--bg-3); color: var(--ink-0); }
+
+  .kf-tabs {
+    display: flex; align-items: stretch;
+    padding: 0 12px;
+    background: var(--bg-1);
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+  }
+  .kf-tab {
+    height: 38px;
+    padding: 0 14px;
+    font-size: 13px; font-weight: 500;
+    color: var(--ink-2);
+    position: relative;
+    white-space: nowrap;
+    transition: color 0.12s;
+  }
+  .kf-tab:hover { color: var(--ink-0); }
+  .kf-tab.active { color: var(--kf-blue); }
+  .kf-tab.active::after {
+    content: ''; position: absolute;
+    left: 12px; right: 12px; bottom: -1px;
+    height: 2px; background: var(--kf-blue);
+    border-radius: 1px;
+  }
+
+  .kf-subtabs {
+    display: flex; align-items: stretch;
+    padding: 0 12px;
+    background: var(--kf-subtab-bg);
+    overflow-x: auto;
+    scrollbar-width: thin;
+  }
+  .kf-subtab {
+    height: 32px;
+    padding: 0 12px;
+    font-size: 12px; font-weight: 500;
+    color: var(--ink-2);
+    border-right: 1px solid var(--border);
+    white-space: nowrap;
+    transition: all 0.12s;
+  }
+  .kf-subtab:first-child { border-left: 1px solid var(--border); }
+  .kf-subtab:hover { background: var(--bg-2); color: var(--ink-0); }
+  .kf-subtab.active {
+    background: var(--bg-1);
+    color: var(--kf-blue);
+    font-weight: 600;
+    box-shadow: inset 0 -2px 0 var(--kf-blue);
+  }
+  .kf-subtab.kf-more {
+    color: var(--ink-3);
+    padding: 0 10px;
   }
 
   /* ========== TABS (in main nav) ========== */
@@ -1030,6 +1269,7 @@
   }
 
   /* ========== CLIENT SELECTOR ========== */
+  .client-filter { position: relative; }
   .client-select {
     height: 26px;
     padding: 0 9px 0 11px;
@@ -1044,8 +1284,49 @@
     margin-left: 4px;
     letter-spacing: 0;
   }
-  .client-select:hover { color: var(--ink-0); border-color: var(--border-2); background: var(--bg-3); }
-  .client-select svg { width: 10px; height: 10px; color: var(--ink-3); }
+  .client-select:hover,
+  .client-select[aria-expanded="true"] { color: var(--ink-0); border-color: var(--border-2); background: var(--bg-3); }
+  .client-select svg { width: 10px; height: 10px; color: var(--ink-3); transition: transform 0.15s; }
+  .client-select[aria-expanded="true"] svg { transform: rotate(180deg); }
+
+  .client-menu {
+    position: absolute;
+    top: calc(100% + 6px); left: 4px;
+    min-width: 200px;
+    background: var(--bg-2);
+    border: 1px solid var(--border-2);
+    border-radius: 6px;
+    box-shadow: 0 8px 28px rgba(0,0,0,0.5);
+    padding: 4px 0;
+    z-index: 30;
+    list-style: none;
+    animation: fadeUp 0.18s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+  }
+  .client-menu[hidden] { display: none; }
+  .client-menu-label {
+    font-size: 9.5px; font-weight: 600;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--ink-3);
+    padding: 8px 12px 6px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 4px;
+  }
+  .client-menu-item {
+    padding: 7px 12px;
+    font-size: 12px; font-weight: 500;
+    color: var(--ink-1);
+    cursor: pointer;
+    transition: background 0.12s;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .client-menu-item:hover { background: var(--bg-3); color: var(--ink-0); }
+  .client-menu-item.active {
+    background: var(--gold-dim); color: var(--gold-ink);
+  }
+  .client-menu-item.active::before {
+    content: ''; width: 4px; height: 4px; border-radius: 50%;
+    background: var(--gold-ink);
+  }
 
   /* ========== TOOLTIP ========== */
   .tip {
@@ -1103,17 +1384,33 @@
     white-space: nowrap;
   }
   .matrix-row .team .pending-tag.client {
-    background: rgba(74, 141, 224, 0.12);
-    color: #87b3ec;
-    border-color: rgba(74, 141, 224, 0.28);
+    background: var(--kf-blue-dim);
+    color: var(--kf-blue);
+    border-color: var(--kf-blue-line);
   }
 
   /* ========== INTERACTIVE STAGE ROW (chart) ========== */
   .pacing-svg .stage-row { cursor: pointer; }
   .pacing-svg .stage-row .stage-row-bg { transition: fill 0.15s; }
-  .pacing-svg .stage-row:hover .stage-row-bg { fill: rgba(255, 255, 255, 0.025); }
+  .pacing-svg .stage-row:hover .stage-row-bg { fill: var(--row-hover); }
   .pacing-svg .stage-row.active .stage-row-bg { fill: var(--gold-dim); }
   .pacing-svg .stage-row.active text:first-of-type { fill: var(--gold-ink); }
+
+  /* Pacing chart — theme-aware fills/strokes */
+  .pacing-svg .ax       { stroke: var(--border-2); }
+  .pacing-svg .ax-grid  { stroke: var(--border); }
+  .pacing-svg .label    { fill: var(--ink-3); }
+  .pacing-svg .label-mid    { fill: var(--ink-2); }
+  .pacing-svg .label-bright { fill: var(--ink-1); }
+  .pacing-svg .plan-line   { stroke: var(--ink-3); }
+  .pacing-svg .today-line  { stroke: var(--ink-2); }
+  .pacing-svg .actual-line { stroke: var(--red); }
+  .pacing-svg .actual-dot-out { fill: var(--red); }
+  .pacing-svg .actual-dot-in  { fill: var(--bg); }
+  .pacing-svg .projected   { stroke: var(--red); }
+  .pacing-svg .end-dot     { stroke: var(--red); }
+  .pacing-svg .red-text    { fill: var(--red-ink); }
+  .pacing-svg .callout-bg  { fill: var(--bg-2); stroke: var(--border-2); }
 
   /* Stage backlog clickable */
   .bullet-row {
@@ -1204,7 +1501,7 @@
     cursor: pointer;
     transition: background 0.12s;
   }
-  .bottleneck-item:hover { background: rgba(255, 255, 255, 0.013); }
+  .bottleneck-item:hover { background: var(--row-hover); }
   .bottleneck-item:last-child { border-bottom: none; }
   .bottleneck-item .body { font-size: 13px; color: var(--ink-0); line-height: 1.45; }
   .bottleneck-item .body em { color: var(--gold-bright); font-style: normal; font-weight: 500; }
@@ -1230,9 +1527,9 @@
     white-space: nowrap;
   }
   .bottleneck-item .pending-tag.client {
-    background: rgba(74, 141, 224, 0.12);
-    color: #87b3ec;
-    border-color: rgba(74, 141, 224, 0.28);
+    background: var(--kf-blue-dim);
+    color: var(--kf-blue);
+    border-color: var(--kf-blue-line);
   }
 </style>
 </head>
@@ -1253,6 +1550,10 @@
       <button class="tab-btn" data-tab="personas">Personas <span class="ct">6</span></button>
     </nav>
     <div class="nav-right">
+      <button class="icon-btn theme-toggle" id="themeToggle" title="Toggle theme" aria-label="Toggle theme">
+        <svg class="ti-moon" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <svg class="ti-sun" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" stroke-linecap="round"/></svg>
+      </button>
       <button class="icon-btn" title="Notifications">
         <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M18 16v-5a6 6 0 10-12 0v5l-2 2h16l-2-2z" stroke-linejoin="round"/><path d="M10 20a2 2 0 004 0" stroke-linecap="round"/></svg>
         <span class="badge"></span>
@@ -1268,25 +1569,76 @@
 
       <div id="tab-dashboard" class="tab-panel active">
 
+      <!-- ===== KISSFLOW SHELL (context band) ===== -->
+      <section class="kf-shell" aria-label="Kissflow context">
+        <div class="kf-title-row">
+          <div class="kf-title">
+            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
+            <span>ISG SMA Onboarding</span>
+            <button class="kf-edit" title="Rename"><svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 113 3L7 19l-4 1 1-4L16.5 3.5z" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          </div>
+          <div class="kf-title-actions">
+            <button class="kf-pill"><span class="kf-pill-k">Viewing as</span><span class="kf-pill-v">Allocations</span><svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            <button class="kf-btn">Manage</button>
+            <button class="kf-btn primary">Deploy</button>
+            <button class="kf-icon"><svg width="13" height="13" fill="currentColor" viewBox="0 0 24 24"><circle cx="6" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="18" cy="12" r="1.6"/></svg></button>
+          </div>
+        </div>
+        <nav class="kf-tabs">
+          <button class="kf-tab">Lead Dashboard</button>
+          <button class="kf-tab">All Requests</button>
+          <button class="kf-tab">Team Lead Tasks</button>
+          <button class="kf-tab">Team Tasks</button>
+          <button class="kf-tab">Request Tasks</button>
+          <button class="kf-tab active">Dashboards</button>
+          <button class="kf-tab">Instructions</button>
+        </nav>
+        <nav class="kf-subtabs" aria-label="Team filter">
+          <button class="kf-subtab active">All Teams</button>
+          <button class="kf-subtab">Portfolio Admin</button>
+          <button class="kf-subtab">ISG Portfolio Control</button>
+          <button class="kf-subtab">Client Engineering</button>
+          <button class="kf-subtab">Client Solutions</button>
+          <button class="kf-subtab">Client Service</button>
+          <button class="kf-subtab">Reference Data</button>
+          <button class="kf-subtab">ISG Legal</button>
+          <button class="kf-subtab">Reconciliation</button>
+          <button class="kf-subtab">Billing</button>
+          <button class="kf-subtab">Internal Controls</button>
+          <button class="kf-subtab">Performance</button>
+          <button class="kf-subtab kf-more"><svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+        </nav>
+      </section>
+
       <!-- ===== PAGE HEAD ===== -->
       <section class="page-head">
         <div>
           <div class="eyebrow-row">
             <span class="eyebrow">ISG SMA · Day 14 of 30</span>
-            <button class="client-select" title="Filter by client">
-              Carina Capital
-              <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            </button>
+            <div class="client-filter">
+              <button class="client-select" id="clientSelectBtn" title="Filter by client" aria-haspopup="listbox" aria-expanded="false">
+                <span id="clientSelectLabel">Carina Capital</span>
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+              <ul class="client-menu" id="clientMenu" role="listbox" hidden>
+                <li class="client-menu-label">Client name</li>
+                <li class="client-menu-item active" role="option" data-client="all">All Clients</li>
+                <li class="client-menu-item" role="option" data-client="carina">Carina Capital</li>
+                <li class="client-menu-item" role="option" data-client="nyl">New York Life</li>
+                <li class="client-menu-item" role="option" data-client="athene">Athene Holding</li>
+                <li class="client-menu-item" role="option" data-client="abc">ABC Company</li>
+                <li class="client-menu-item" role="option" data-client="def">DEF Organization</li>
+                <li class="client-menu-item" role="option" data-client="ghi">GHI LLC</li>
+                <li class="client-menu-item" role="option" data-client="jkl">JKL Partners</li>
+                <li class="client-menu-item" role="option" data-client="mno">MNO Capital</li>
+              </ul>
+            </div>
             <span class="status-chip"><span class="dot-pulse"></span>Off track</span>
           </div>
           <h1 class="lede">10 teams off-track. Settlements chain is blocking <em>13 downstream</em> workstreams.</h1>
           <p class="sublede">Reconciliation, Settlements, and Performance haven't cleared Impact Assessment. Root cause: ISG Legal contract review, 9 days in queue.</p>
         </div>
         <div class="head-actions">
-          <button class="btn">
-            <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M3 7l9 6 9-6M3 7v10a1 1 0 001 1h16a1 1 0 001-1V7M3 7l1-1h16l1 1" stroke-linejoin="round"/></svg>
-            Message leads
-          </button>
           <button class="btn primary">
             <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 6v6l4 2M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round"/></svg>
             Send reminder
@@ -1311,8 +1663,8 @@
         </div>
         <div class="kpi">
           <div class="label">Days remaining</div>
-          <div class="value num">0</div>
-          <div class="delta bad">Past due · 0d</div>
+          <div class="value num" id="daysRemainingValue">15</div>
+          <div class="delta bad" id="daysRemainingDelta">Until projected go-live · May 13</div>
         </div>
         <div class="kpi">
           <div class="label">SLA breaches</div>
@@ -1329,105 +1681,80 @@
       <!-- ===== HERO: PACING + WAFFLE ===== -->
       <section class="hero-grid">
 
-        <!-- Pacing -->
+        <!-- Pacing vs target -->
         <div class="card">
           <div class="card-head">
-            <h3>
-              Time per stage
-              <svg width="12" height="12" fill="none" stroke="var(--ink-3)" stroke-width="2" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 8v5M12 16v0" stroke-linecap="round"/></svg>
-            </h3>
+            <h3>Pacing vs target</h3>
             <div class="meta">
               <div class="legend-inline">
-                <div class="it"><span class="bar" style="background: transparent; border: 1px dashed var(--border-2); height: 6px; width: 18px;"></span>Plan</div>
-                <div class="it"><span class="bar" style="background: var(--green); height: 4px; width: 18px; border-radius: 2px;"></span>Under</div>
-                <div class="it"><span class="bar" style="background: var(--amber); height: 4px; width: 18px; border-radius: 2px;"></span>At plan</div>
-                <div class="it"><span class="bar" style="background: var(--red); height: 4px; width: 18px; border-radius: 2px;"></span>Over</div>
+                <div class="it"><span class="bar" style="background: transparent; border-top: 1px dashed var(--ink-3); height: 0; width: 18px;"></span>Plan</div>
+                <div class="it"><span class="bar" style="background: var(--red); height: 2px; width: 18px;"></span>Actual</div>
+                <div class="it"><span class="bar" style="border-top: 1.5px dashed var(--red); opacity: 0.6; height: 0; width: 18px;"></span>Projected</div>
               </div>
             </div>
           </div>
           <div class="card-body">
-            <svg class="pacing-svg" viewBox="0 0 720 240" preserveAspectRatio="xMidYMid meet">
+            <svg class="pacing-svg" viewBox="0 0 720 320" preserveAspectRatio="xMidYMid meet">
+              <defs>
+                <linearGradient id="gapGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" stop-color="var(--red)" stop-opacity="0.14"/>
+                  <stop offset="1" stop-color="var(--red)" stop-opacity="0.02"/>
+                </linearGradient>
+              </defs>
 
-              <!-- Vertical grid lines (day markers) -->
-              <g stroke="#232428" stroke-dasharray="2 4">
-                <line x1="80" y1="22" x2="80" y2="208"/>
-                <line x1="195" y1="22" x2="195" y2="208"/>
-                <line x1="310" y1="22" x2="310" y2="208"/>
-                <line x1="425" y1="22" x2="425" y2="208"/>
-                <line x1="540" y1="22" x2="540" y2="208"/>
+              <!-- Gap fill (between plan and actual/projected) -->
+              <path d="M 60 250 L 370 232 L 690 211 L 690 30 Z" fill="url(#gapGrad)"/>
+
+              <!-- Axes -->
+              <line class="ax" x1="60" y1="30" x2="60" y2="250" stroke-width="1"/>
+              <line class="ax" x1="60" y1="250" x2="690" y2="250" stroke-width="1"/>
+              <line class="ax-grid" x1="60" y1="30" x2="690" y2="30" stroke-dasharray="2 4" stroke-width="1"/>
+
+              <!-- Y-axis ticks -->
+              <g class="label" font-size="10.5" text-anchor="end" font-family="Inter">
+                <text x="52" y="35">23</text>
+                <text x="52" y="142">12</text>
+                <text x="52" y="254">0</text>
+              </g>
+              <line class="ax-grid" x1="58" y1="142" x2="690" y2="142" stroke-dasharray="2 4" stroke-width="1"/>
+
+              <!-- Plan diagonal (0 → 23 over 30 days) -->
+              <line class="plan-line" x1="60" y1="250" x2="690" y2="30" stroke-dasharray="3 3" stroke-width="1.4"/>
+
+              <!-- Actual line: 0 at day 0 → 2 of 23 at day 14 (today) -->
+              <line class="actual-line" x1="60" y1="250" x2="370" y2="232" stroke-width="2.4"/>
+
+              <!-- Projection: extends from today onwards on current pace -->
+              <line class="projected" x1="370" y1="232" x2="690" y2="211" stroke-width="2" stroke-dasharray="3 4" opacity="0.65"/>
+
+              <!-- Today vertical -->
+              <line class="today-line" x1="370" y1="22" x2="370" y2="262" stroke-width="0.9" stroke-dasharray="2 3"/>
+
+              <!-- Endpoint dot at today -->
+              <circle class="actual-dot-out" cx="370" cy="232" r="5"/>
+              <circle class="actual-dot-in" cx="370" cy="232" r="2.2"/>
+
+              <!-- End of projection -->
+              <circle class="end-dot" cx="690" cy="211" r="3.5" fill="none" stroke-width="1.6" opacity="0.7"/>
+
+              <!-- X-axis labels -->
+              <g font-size="10.5" font-family="Inter">
+                <text class="label" x="60" y="272" text-anchor="middle">Day 0</text>
+                <text class="label-bright" x="370" y="272" text-anchor="middle" font-weight="500">Today · Day 14</text>
+                <text class="label" x="690" y="272" text-anchor="end">Due · Day 30</text>
               </g>
 
-              <!-- X axis labels (top) -->
-              <g font-size="10" fill="#5c5e65" text-anchor="middle" letter-spacing="0.04em">
-                <text x="80" y="14">0d</text>
-                <text x="195" y="14">3d</text>
-                <text x="310" y="14">6d</text>
-                <text x="425" y="14">9d</text>
-                <text x="540" y="14">12d</text>
-              </g>
+              <!-- Today callout -->
+              <rect class="callout-bg" x="380" y="208" width="116" height="38" rx="4" stroke-width="1"/>
+              <text class="red-text" x="388" y="223" font-size="12" font-weight="600" font-family="Inter">2 of 23 done</text>
+              <text class="label-mid" x="388" y="238" font-size="10.5" font-family="Inter">Plan: 11 by today</text>
 
-              <!-- ===== IMPACT row (plan 5d, actual 9d, +4 over) ===== -->
-              <g class="stage-row" data-stage="0">
-                <rect class="stage-row-bg" x="0" y="26" width="720" height="32" fill="transparent"/>
-                <text x="72" y="46" font-size="11" fill="#d4d6db" text-anchor="end" font-weight="500" letter-spacing="0.06em">IMPACT</text>
-                <rect x="80" y="34" width="192" height="14" rx="3" fill="none" stroke="#33353b" stroke-width="1" stroke-dasharray="2 3"/>
-                <rect x="80" y="34" width="192" height="14" rx="3" fill="#e6b259" opacity="0.55"/>
-                <rect x="272" y="34" width="153" height="14" rx="3" fill="#e06f64"/>
-                <text x="555" y="46" font-size="11.5" fill="#f0928a" font-weight="600" font-variant-numeric="tabular-nums">9d</text>
-                <text x="580" y="46" font-size="10.5" fill="#5c5e65" font-variant-numeric="tabular-nums">/ 5d plan</text>
-                <text x="700" y="46" font-size="10.5" fill="#f0928a" font-weight="600" text-anchor="end" font-variant-numeric="tabular-nums">+4d</text>
-              </g>
-
-              <!-- ===== SCOPE row (plan 5d, actual 6d, +1 slight) ===== -->
-              <g class="stage-row" data-stage="1">
-                <rect class="stage-row-bg" x="0" y="62" width="720" height="32" fill="transparent"/>
-                <text x="72" y="82" font-size="11" fill="#d4d6db" text-anchor="end" font-weight="500" letter-spacing="0.06em">SCOPE</text>
-                <rect x="80" y="70" width="192" height="14" rx="3" fill="none" stroke="#33353b" stroke-width="1" stroke-dasharray="2 3"/>
-                <rect x="80" y="70" width="192" height="14" rx="3" fill="#e6b259" opacity="0.55"/>
-                <rect x="272" y="70" width="38" height="14" rx="3" fill="#e6b259"/>
-                <text x="555" y="82" font-size="11.5" fill="#f2ca85" font-weight="600" font-variant-numeric="tabular-nums">6d</text>
-                <text x="580" y="82" font-size="10.5" fill="#5c5e65" font-variant-numeric="tabular-nums">/ 5d plan</text>
-                <text x="700" y="82" font-size="10.5" fill="#f2ca85" font-weight="600" text-anchor="end" font-variant-numeric="tabular-nums">+1d</text>
-              </g>
-
-              <!-- ===== BUILD row (plan 10d, actual 7d so far, on track) ===== -->
-              <g class="stage-row" data-stage="2">
-                <rect class="stage-row-bg" x="0" y="98" width="720" height="32" fill="transparent"/>
-                <text x="72" y="118" font-size="11" fill="#d4d6db" text-anchor="end" font-weight="500" letter-spacing="0.06em">BUILD</text>
-                <rect x="80" y="106" width="383" height="14" rx="3" fill="none" stroke="#33353b" stroke-width="1" stroke-dasharray="2 3"/>
-                <rect x="80" y="106" width="268" height="14" rx="3" fill="#16a38a" opacity="0.9"/>
-                <text x="555" y="118" font-size="11.5" fill="#5ad9bc" font-weight="600" font-variant-numeric="tabular-nums">7d</text>
-                <text x="580" y="118" font-size="10.5" fill="#5c5e65" font-variant-numeric="tabular-nums">/ 10d plan</text>
-                <text x="700" y="118" font-size="10.5" fill="#5c5e65" text-anchor="end" font-variant-numeric="tabular-nums">−3d</text>
-              </g>
-
-              <!-- ===== VALIDATION row (plan 7d, actual 4d so far) ===== -->
-              <g class="stage-row" data-stage="3">
-                <rect class="stage-row-bg" x="0" y="134" width="720" height="32" fill="transparent"/>
-                <text x="72" y="154" font-size="11" fill="#d4d6db" text-anchor="end" font-weight="500" letter-spacing="0.06em">VALIDATION</text>
-                <rect x="80" y="142" width="268" height="14" rx="3" fill="none" stroke="#33353b" stroke-width="1" stroke-dasharray="2 3"/>
-                <rect x="80" y="142" width="153" height="14" rx="3" fill="#16a38a" opacity="0.9"/>
-                <text x="555" y="154" font-size="11.5" fill="#5ad9bc" font-weight="600" font-variant-numeric="tabular-nums">4d</text>
-                <text x="580" y="154" font-size="10.5" fill="#5c5e65" font-variant-numeric="tabular-nums">/ 7d plan</text>
-                <text x="700" y="154" font-size="10.5" fill="#5c5e65" text-anchor="end" font-variant-numeric="tabular-nums">−3d</text>
-              </g>
-
-              <!-- ===== LIVE row (plan 3d, actual 2d) ===== -->
-              <g class="stage-row" data-stage="4">
-                <rect class="stage-row-bg" x="0" y="170" width="720" height="32" fill="transparent"/>
-                <text x="72" y="190" font-size="11" fill="#d4d6db" text-anchor="end" font-weight="500" letter-spacing="0.06em">LIVE</text>
-                <rect x="80" y="178" width="115" height="14" rx="3" fill="none" stroke="#33353b" stroke-width="1" stroke-dasharray="2 3"/>
-                <rect x="80" y="178" width="77" height="14" rx="3" fill="#16a38a" opacity="0.9"/>
-                <text x="555" y="190" font-size="11.5" fill="#5ad9bc" font-weight="600" font-variant-numeric="tabular-nums">2d</text>
-                <text x="580" y="190" font-size="10.5" fill="#5c5e65" font-variant-numeric="tabular-nums">/ 3d plan</text>
-                <text x="700" y="190" font-size="10.5" fill="#5c5e65" text-anchor="end" font-variant-numeric="tabular-nums">−1d</text>
-              </g>
-
-              <!-- X axis baseline -->
-              <line x1="80" y1="208" x2="540" y2="208" stroke="#33353b" stroke-width="1"/>
+              <!-- End-of-window labels -->
+              <text class="label" x="685" y="42" font-size="10.5" text-anchor="end" font-style="italic" font-family="Inter">Target · 23</text>
+              <text class="red-text" x="685" y="205" font-size="10.5" text-anchor="end" font-family="Inter" font-weight="500">Projected: ~4</text>
 
               <!-- Footer caption -->
-              <text x="80" y="226" font-size="10" fill="#5c5e65" letter-spacing="0.02em">Avg days teams spend in each stage · 23 teams · day 14 of 30 · click stage to filter</text>
+              <text class="label" x="60" y="298" font-size="10" letter-spacing="0.02em" font-family="Inter">Cumulative team completions · 23 teams · day 14 of 30</text>
             </svg>
           </div>
         </div>
@@ -1435,7 +1762,7 @@
         <!-- Waffle -->
         <div class="card">
           <div class="card-head">
-            <h3>Team health</h3>
+            <h3>Status</h3>
             <div class="waffle-head-toggle">
               <button class="active">Grid</button>
               <button>List</button>
@@ -1479,13 +1806,13 @@
             <div>Ref #</div>
             <div>Team</div>
             <div class="stage-labels">
-              <div>Impact</div>
-              <div>Scope</div>
-              <div>Build</div>
-              <div>Validation</div>
-              <div>Live</div>
+              <div>Impact Assess.</div>
+              <div>Tasks Select.</div>
+              <div>In Progress</div>
+              <div>Ready</div>
+              <div>Completed</div>
             </div>
-            <div style="text-align:right">Stage</div>
+            <div>Dependency</div>
             <div>Lead</div>
             <div style="text-align:right">Days</div>
             <div></div>
@@ -1495,67 +1822,8 @@
         </div>
       </section>
 
-      <!-- ===== BOTTOM GRID: STAGE BACKLOG + ACTIONS ===== -->
-      <section class="bottom-grid">
-
-        <!-- Stage backlog bullets -->
-        <div class="card">
-          <div class="card-head">
-            <h3>Stage backlog</h3>
-            <div class="meta" style="font-size: 10.5px; letter-spacing: 0.08em; text-transform: uppercase;">
-              <span>Actual vs plan · day 14</span>
-            </div>
-          </div>
-          <div class="bullet-list" id="stage-backlog">
-            <div class="bullet-row" data-stage="0">
-              <div class="stage-name">Impact</div>
-              <div class="bar-wrap">
-                <div class="bar-fill r" style="width: 50%;"></div>
-                <div class="target-mark" style="left: 0%;"></div>
-              </div>
-              <div class="count">6</div>
-              <div class="delta bad">+6</div>
-            </div>
-            <div class="bullet-row" data-stage="1">
-              <div class="stage-name">Scope</div>
-              <div class="bar-wrap">
-                <div class="bar-fill r" style="width: 33.3%;"></div>
-                <div class="target-mark" style="left: 0%;"></div>
-              </div>
-              <div class="count">4</div>
-              <div class="delta bad">+4</div>
-            </div>
-            <div class="bullet-row" data-stage="2">
-              <div class="stage-name">Build</div>
-              <div class="bar-wrap">
-                <div class="bar-fill a" style="width: 66.6%;"></div>
-                <div class="target-mark" style="left: 33.3%;"></div>
-              </div>
-              <div class="count">8</div>
-              <div class="delta warn">+4</div>
-            </div>
-            <div class="bullet-row" data-stage="3">
-              <div class="stage-name">Validation</div>
-              <div class="bar-wrap">
-                <div class="bar-fill g" style="width: 25%;"></div>
-                <div class="target-mark" style="left: 16.7%;"></div>
-              </div>
-              <div class="count">3</div>
-              <div class="delta good">+1</div>
-            </div>
-            <div class="bullet-row" data-stage="4">
-              <div class="stage-name">Live</div>
-              <div class="bar-wrap">
-                <div class="bar-fill r" style="width: 16.7%;"></div>
-                <div class="target-mark" style="left: 83.3%;"></div>
-              </div>
-              <div class="count">2</div>
-              <div class="delta bad">−8</div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Bottlenecks -->
+      <!-- ===== BOTTLENECKS ===== -->
+      <section class="bottom-grid single">
         <div class="card">
           <div class="card-head">
             <h3>Bottlenecks</h3>
@@ -1565,7 +1833,6 @@
           </div>
           <div id="bottleneck-list" class="action-list"></div>
         </div>
-
       </section>
 
       </div> <!-- /#tab-dashboard -->
@@ -1588,8 +1855,7 @@
             <div class="persona-badge">Primary user</div>
             <div class="persona-head">
               <div class="persona-avatar">
-                <img src="https://randomuser.me/api/portraits/women/50.jpg" alt="Roxanne Bunnel"
-                     onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'initials',textContent:'RB'}))" />
+                <span class="initials">RB</span>
               </div>
               <div class="persona-info">
                 <h3>Roxanne Bunnel</h3>
@@ -1614,6 +1880,7 @@
               <div class="persona-section">
                 <h4>Frustrations</h4>
                 <ul>
+                  <li>Lack of visibility into team-level SLAs</li>
                   <li>Input quality varies by team</li>
                   <li>Late inputs cascade into Point delays</li>
                   <li>Chases teams for missing fields manually</li>
@@ -1622,6 +1889,11 @@
             </div>
             <div class="pain-map">
               <h4>Pain → Apollo feature</h4>
+              <div class="pain-row">
+                <div class="pain">Lack of SLA visibility</div>
+                <div class="arrow">→</div>
+                <div class="feature">Dashboards for tracking SLAs across teams</div>
+              </div>
               <div class="pain-row">
                 <div class="pain">Late inputs cascade into Point</div>
                 <div class="arrow">→</div>
@@ -1635,7 +1907,7 @@
               <div class="pain-row">
                 <div class="pain">Manual chasing</div>
                 <div class="arrow">→</div>
-                <div class="feature">Auto-nudge upstream team leads</div>
+                <div class="feature">In-system team reminders · auto-nudge upstream leads</div>
               </div>
             </div>
             <div class="persona-stats">
@@ -1650,10 +1922,10 @@
               <div class="persona-stat-tools persona-stat">
                 <div class="label">Lives alongside</div>
                 <div class="persona-tags">
+                  <span class="persona-tag">Aladdin</span>
+                  <span class="persona-tag">Thinkfolio</span>
+                  <span class="persona-tag">PAM</span>
                   <span class="persona-tag">Point</span>
-                  <span class="persona-tag">Kissflow</span>
-                  <span class="persona-tag">Slack</span>
-                  <span class="persona-tag">Excel</span>
                 </div>
               </div>
             </div>
@@ -1664,8 +1936,7 @@
             <div class="persona-badge">Primary user</div>
             <div class="persona-head">
               <div class="persona-avatar">
-                <img src="https://randomuser.me/api/portraits/women/24.jpg" alt="Lidiya Shutaya"
-                     onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'initials',textContent:'LS'}))" />
+                <span class="initials">LS</span>
               </div>
               <div class="persona-info">
                 <h3>Lidiya Shutaya</h3>
@@ -1710,7 +1981,7 @@
               <div class="pain-row">
                 <div class="pain">Cross-team deps unclear</div>
                 <div class="arrow">→</div>
-                <div class="feature">Dependency map · owner surfaced</div>
+                <div class="feature">Dependency tracking within the dashboards</div>
               </div>
             </div>
             <div class="persona-stats">
@@ -1726,7 +1997,7 @@
                 <div class="label">Lives alongside</div>
                 <div class="persona-tags">
                   <span class="persona-tag">Kissflow</span>
-                  <span class="persona-tag">Slack</span>
+                  <span class="persona-tag">Teams</span>
                   <span class="persona-tag">Excel</span>
                   <span class="persona-tag">Outlook</span>
                 </div>
@@ -1739,8 +2010,7 @@
             <div class="persona-badge">Glance-only</div>
             <div class="persona-head">
               <div class="persona-avatar">
-                <img src="https://randomuser.me/api/portraits/men/52.jpg" alt="John Loh"
-                     onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'initials',textContent:'JL'}))" />
+                <span class="initials">JL</span>
               </div>
               <div class="persona-info">
                 <h3>John Loh</h3>
@@ -1808,57 +2078,58 @@
             </div>
           </article>
 
-          <!-- ===== Team Leads (general) ===== -->
+          <!-- ===== Team Leads (Jon Acenas) ===== -->
           <article class="persona-card" data-accent="blue">
             <div class="persona-badge">Team lead</div>
             <div class="persona-head">
               <div class="persona-avatar">
-                <span class="initials">SC</span>
+                <span class="initials">JA</span>
               </div>
               <div class="persona-info">
-                <h3>Sarah Chen</h3>
+                <h3>Jon Acenas</h3>
                 <div class="persona-role">Team Lead · representative</div>
                 <div class="persona-meta">ISG SMA · scope varies by team</div>
               </div>
             </div>
             <blockquote class="persona-quote">
-              Tell me if my team is in scope. Give me the tasks. Let me sign them off when we're done.
+              Give me the information I need to decide if my team is impacted. Keep it simple. <em>I do not want extra tasks.</em>
             </blockquote>
             <div class="persona-sections">
               <div class="persona-section">
                 <h4>Jobs to be done</h4>
                 <ul>
-                  <li>Indicate whether her team is impacted</li>
+                  <li>Decide quickly whether his team is impacted</li>
                   <li>Select &amp; assign tasks from onboarding inputs</li>
-                  <li>Track team progress and individual contributions</li>
+                  <li>Track team progress at the task level</li>
                   <li>Provide formal sign-off once tasks complete</li>
                 </ul>
               </div>
               <div class="persona-section">
                 <h4>Frustrations</h4>
                 <ul>
-                  <li>Scope changes land in Slack, not the tool</li>
-                  <li>Task assignment is still manual</li>
-                  <li>No view of who's waiting on her team</li>
+                  <li>Not enough context to make a quick decision</li>
+                  <li>Asked to dig through unnecessary details</li>
+                  <li>Too many clicks for a simple yes/no</li>
+                  <li>Low visibility into the team's work</li>
                 </ul>
               </div>
             </div>
             <div class="pain-map">
               <h4>Pain → Apollo feature</h4>
               <div class="pain-row">
-                <div class="pain">"Are we in scope?"</div>
+                <div class="pain">Not enough context to decide</div>
                 <div class="arrow">→</div>
-                <div class="feature">Impact Assessment checklist at intake</div>
+                <div class="feature">Easy access to client questionnaire info at every step</div>
               </div>
               <div class="pain-row">
-                <div class="pain">Manual task assignment</div>
+                <div class="pain">Too many clicks for yes/no</div>
                 <div class="arrow">→</div>
-                <div class="feature">Task templates per onboarding type</div>
+                <div class="feature">Customized workflows for some teams</div>
               </div>
               <div class="pain-row">
-                <div class="pain">Sign-off in meetings</div>
+                <div class="pain">Low visibility into team's work</div>
                 <div class="arrow">→</div>
-                <div class="feature">One-click sign-off with audit trail</div>
+                <div class="feature">Team-level dashboards for task-level tracking</div>
               </div>
             </div>
             <div class="persona-stats">
@@ -1882,57 +2153,57 @@
             </div>
           </article>
 
-          <!-- ===== Client Services (data input owners) ===== -->
+          <!-- ===== Client Services (Jen Basow) ===== -->
           <article class="persona-card" data-accent="teal">
-            <div class="persona-badge">Data input · forms not in use yet</div>
+            <div class="persona-badge">Client services · upstream</div>
             <div class="persona-head">
               <div class="persona-avatar">
-                <span class="initials">MO</span>
+                <span class="initials">JB</span>
               </div>
               <div class="persona-info">
-                <h3>Maya Okonkwo</h3>
+                <h3>Jen Basow</h3>
                 <div class="persona-role">Client Services · representative</div>
-                <div class="persona-meta">ISG SMA · upstream data owner</div>
+                <div class="persona-meta">ISG SMA · owns client questionnaire</div>
               </div>
             </div>
             <blockquote class="persona-quote">
-              I'm the bridge between the client and everyone downstream. I keep <em>chasing</em> the same info three different ways.
+              I send <em>one</em> consolidated questionnaire to the client. Once it comes back, I input everything the teams need.
             </blockquote>
             <div class="persona-sections">
               <div class="persona-section">
                 <h4>Jobs to be done</h4>
                 <ul>
-                  <li>Gather information from the client</li>
-                  <li>Relay required inputs to each internal team</li>
-                  <li>Track open requests and follow-ups</li>
-                  <li>Ensure data completeness for downstream consumption</li>
+                  <li>Send the consolidated client questionnaire</li>
+                  <li>Collect responses outside the system</li>
+                  <li>Input the answers into the tool for downstream teams</li>
+                  <li>Ensure all teams have the data they need</li>
                 </ul>
               </div>
               <div class="persona-section">
                 <h4>Frustrations</h4>
                 <ul>
-                  <li>Lack of clarity on which data points are needed by each team</li>
-                  <li>Waiting long for information from the client</li>
-                  <li>Has to send multiple requests and follow-ups</li>
+                  <li>Client requests happen outside the system</li>
+                  <li>Re-keying answers into the tool after the fact</li>
+                  <li>Late client responses delay every downstream team</li>
                 </ul>
               </div>
             </div>
             <div class="pain-map">
               <h4>Pain → Tool feature</h4>
               <div class="pain-row">
-                <div class="pain">"What does each team actually need?"</div>
+                <div class="pain">Client requests outside the system</div>
                 <div class="arrow">→</div>
-                <div class="feature">Per-team data requirements surfaced upfront</div>
+                <div class="feature">Consolidated questionnaire, single source of truth</div>
               </div>
               <div class="pain-row">
-                <div class="pain">Waiting on client info</div>
+                <div class="pain">Teams need different cuts of the same info</div>
                 <div class="arrow">→</div>
-                <div class="feature">Status visibility on outstanding client asks</div>
+                <div class="feature">Per-team views into the same questionnaire</div>
               </div>
               <div class="pain-row">
-                <div class="pain">Multiple requests &amp; follow-ups</div>
+                <div class="pain">Manual re-keying after collection</div>
                 <div class="arrow">→</div>
-                <div class="feature">Consolidated client request, with auto-reminders</div>
+                <div class="feature">Inputs cascade once entered — no duplication</div>
               </div>
             </div>
             <div class="persona-stats">
@@ -1941,15 +2212,15 @@
                 <div class="label">Opens Kissflow SMA Tool</div>
               </div>
               <div class="persona-stat">
-                <div class="value num">~90</div>
-                <div class="label">Fields / client</div>
+                <div class="value num">1</div>
+                <div class="label">Questionnaire / client</div>
               </div>
               <div class="persona-stat-tools persona-stat">
                 <div class="label">Lives alongside</div>
                 <div class="persona-tags">
-                  <span class="persona-tag">Email</span>
-                  <span class="persona-tag">Excel</span>
                   <span class="persona-tag">Outlook</span>
+                  <span class="persona-tag">Excel</span>
+                  <span class="persona-tag">Teams</span>
                   <span class="persona-tag">CRM</span>
                 </div>
               </div>
@@ -1970,43 +2241,43 @@
               </div>
             </div>
             <blockquote class="persona-quote">
-              Just tell me what's on my plate. Half the time I'm not sure what's expected.
+              Just tell me what's on my plate. <em>Don't add</em> extra work to my day.
             </blockquote>
             <div class="persona-sections">
               <div class="persona-section">
                 <h4>Jobs to be done</h4>
                 <ul>
-                  <li>Receive clear task assignments</li>
-                  <li>Understand what "done" looks like per task</li>
-                  <li>Complete required actions efficiently</li>
-                  <li>Confirm completion back to lead</li>
+                  <li>Know which tasks are assigned to her</li>
+                  <li>Complete tasks without leaving her main tools</li>
+                  <li>Mark tasks done with minimal effort</li>
+                  <li>Avoid additional admin or duplicate updates</li>
                 </ul>
               </div>
               <div class="persona-section">
                 <h4>Frustrations</h4>
                 <ul>
-                  <li>Lack of clarity on what needs to be done</li>
-                  <li>Vague handoffs from lead — needs context</li>
-                  <li>Definition of done varies by stage / team</li>
+                  <li>Doesn't want extra work on top of the day job</li>
+                  <li>Tracking lives in too many places</li>
+                  <li>Status updates feel like duplicate effort</li>
                 </ul>
               </div>
             </div>
             <div class="pain-map">
               <h4>Pain → Tool feature</h4>
               <div class="pain-row">
-                <div class="pain">Vague task assignments</div>
+                <div class="pain">"Just tell me what to do"</div>
                 <div class="arrow">→</div>
-                <div class="feature">Templated tasks with explicit done criteria</div>
+                <div class="feature">Simple task list — pre-assigned, ready to action</div>
               </div>
               <div class="pain-row">
-                <div class="pain">Where do I see what's mine?</div>
+                <div class="pain">Doesn't want extra work</div>
                 <div class="arrow">→</div>
-                <div class="feature">Email / Slack notification, no dashboard required</div>
+                <div class="feature">Email / Teams notification, no dashboard required</div>
               </div>
               <div class="pain-row">
-                <div class="pain">Confirming completion</div>
+                <div class="pain">Tracking effort</div>
                 <div class="arrow">→</div>
-                <div class="feature">One-click sign-off with audit trail</div>
+                <div class="feature">One-click complete — status auto-updates everywhere</div>
               </div>
             </div>
             <div class="persona-stats">
@@ -2022,7 +2293,7 @@
                 <div class="label">Lives alongside</div>
                 <div class="persona-tags">
                   <span class="persona-tag">Outlook</span>
-                  <span class="persona-tag">Slack</span>
+                  <span class="persona-tag">Teams</span>
                   <span class="persona-tag">Excel</span>
                   <span class="persona-tag">Bloomberg</span>
                 </div>
@@ -2052,25 +2323,25 @@
 
 <script>
   // ========== DATA ==========
-  const STAGES = ['Impact Assessment', 'Scope', 'Build', 'Validation', 'Live'];
-  const STAGE_SHORT = ['Impact', 'Scope', 'Build', 'Validation', 'Live'];
+  const STAGES = ['Impact Assessment', 'Tasks Selection & Assignment', 'In Progress', 'Ready for Trading', 'Completed'];
+  const STAGE_SHORT = ['Impact Assess.', 'Tasks Select.', 'In Progress', 'Ready', 'Completed'];
 
   const teams = [
-    { name: 'Performance',        ref: 'CK-2401', stageIdx: 0, health: 'r', days: 14, lead: 'Sarah Chen',     leadInit: 'SC', risk: 12, blocker: 'Client hasn\'t returned benchmark specification after 6 reminders.', blocks: ['Allocations', 'Risk Management', 'Fund Accounting'], deps: ['Client (Carina)'] },
-    { name: 'Risk Management',    ref: 'CK-2402', stageIdx: 0, health: 'r', days: 14, lead: 'Michael Patel',  leadInit: 'MP', risk: 11, blocker: 'Waiting on Performance benchmark before VaR model can be configured.', blocks: ['Compliance'], deps: ['Performance'] },
-    { name: 'Client Service',     ref: 'CK-2403', stageIdx: 0, health: 'r', days: 14, lead: 'John Loh',       leadInit: 'JL', risk: 11, blocker: 'Pending client contact authorization list.', blocks: [], deps: ['Client (Carina)'] },
-    { name: 'Reconciliation',     ref: 'CK-2404', stageIdx: 0, health: 'r', days: 14, lead: 'Roberto Romano', leadInit: 'RR', risk: 11, blocker: 'Custodian file format differs from spec — waiting on Reference Data mapping.', blocks: ['Billing', 'Internal Controls', 'Allocations', 'Trade Support'], deps: ['Reference Data'] },
-    { name: 'Tax Services',       ref: 'CK-2405', stageIdx: 1, health: 'r', days: 14, lead: 'Michael Patel',  leadInit: 'MP', risk: 10, blocker: 'Tax residency documents missing for 2 of 4 entities.', blocks: ['Fund Accounting'], deps: ['ISG Legal'] },
-    { name: 'Corporate Actions',  ref: 'CK-2406', stageIdx: 1, health: 'r', days: 14, lead: 'Alexander Black',leadInit: 'AB', risk: 10, blocker: 'Event feed source not finalized.', blocks: [], deps: ['Reference Data'] },
-    { name: 'Settlements',        ref: 'CK-2407', stageIdx: 1, health: 'r', days: 14, lead: 'John Loh',       leadInit: 'JL', risk: 10, blocker: 'ISG Legal contract review outstanding for 9 days — blocks settlement instruction setup.', blocks: ['Custody', 'Transfer Agency', 'Cash Management'], deps: ['ISG Legal'] },
-    { name: 'Allocations',        ref: 'CK-2408', stageIdx: 2, health: 'r', days: 14, lead: 'Alexander Black',leadInit: 'AB', risk: 9, blocker: 'Test allocation file failing schema validation — 3 SLA breaches.', blocks: ['Reconciliation'], deps: ['Reconciliation'] },
-    { name: 'Client Solutions',   ref: 'CK-2409', stageIdx: 2, health: 'r', days: 14, lead: 'John Loh',       leadInit: 'JL', risk: 9, blocker: 'Client IT hasn\'t configured SSO IdP endpoint.', blocks: ['Client Service'], deps: ['Client (Carina)'] },
-    { name: 'Transfer Agency',    ref: 'CK-2410', stageIdx: 2, health: 'r', days: 14, lead: 'Roberto Romano', leadInit: 'RR', risk: 9, blocker: 'Unit-holder file mismatch with Reconciliation counts.', blocks: [], deps: ['Reconciliation'] },
-    { name: 'Cash Management',    ref: 'CK-2411', stageIdx: 0, health: 'a', days: 14, lead: 'Karthik Dasari', leadInit: 'KD', risk: 7, blocker: 'Awaiting Settlements instruction template before account setup.', blocks: [], deps: ['Settlements'] },
-    { name: 'Billing',            ref: 'CK-2412', stageIdx: 1, health: 'a', days: 14, lead: 'Karthik Dasari', leadInit: 'KD', risk: 6, blocker: 'Awaiting reconciled position file from Reconciliation.', blocks: [], deps: ['Reconciliation'] },
-    { name: 'Custody',            ref: 'CK-2413', stageIdx: 2, health: 'a', days: 14, lead: 'Roberto Romano', leadInit: 'RR', risk: 5, blocker: 'Awaiting Settlements instruction set.', blocks: [], deps: ['Settlements'] },
-    { name: 'Treasury',           ref: 'CK-2414', stageIdx: 2, health: 'a', days: 14, lead: 'Michael Patel',  leadInit: 'MP', risk: 5, blocker: 'Awaiting client banking authorisations.', blocks: [], deps: ['Client (Carina)'] },
-    { name: 'Compliance',         ref: 'CK-2415', stageIdx: 3, health: 'a', days: 17, lead: 'Michael Patel',  leadInit: 'MP', risk: 4, blocker: 'Waiting on Risk Management VaR sign-off.', blocks: [], deps: ['Risk Management'] },
+    { name: 'Performance',        ref: 'CK-2401', stageIdx: 0, health: 'r', days: 14, lead: 'Sarah Chen',     leadInit: 'SC', risk: 12, blocker: 'Client hasn\'t returned benchmark specification after 6 reminders.', blocks: ['Allocations', 'Risk Management', 'Fund Accounting'], deps: ['Client (Carina)'], depTag: 'Pending Client' },
+    { name: 'Risk Management',    ref: 'CK-2402', stageIdx: 0, health: 'r', days: 14, lead: 'Michael Patel',  leadInit: 'MP', risk: 11, blocker: 'Waiting on Performance benchmark before VaR model can be configured.', blocks: ['Compliance'], deps: ['Performance'], depTag: 'Pending Performance' },
+    { name: 'Client Service',     ref: 'CK-2403', stageIdx: 0, health: 'r', days: 14, lead: 'John Loh',       leadInit: 'JL', risk: 11, blocker: 'Pending client contact authorization list.', blocks: [], deps: ['Client (Carina)'], depTag: 'Pending Client' },
+    { name: 'Reconciliation',     ref: 'CK-2404', stageIdx: 0, health: 'r', days: 14, lead: 'Roberto Romano', leadInit: 'RR', risk: 11, blocker: 'Custodian file format differs from spec — waiting on Reference Data mapping.', blocks: ['Billing', 'Internal Controls', 'Allocations', 'Trade Support'], deps: ['Reference Data'], depTag: 'Pending Ref Data' },
+    { name: 'Tax Services',       ref: 'CK-2405', stageIdx: 1, health: 'r', days: 14, lead: 'Michael Patel',  leadInit: 'MP', risk: 10, blocker: 'Tax residency documents missing for 2 of 4 entities.', blocks: ['Fund Accounting'], deps: ['ISG Legal'], depTag: 'Pending IMA' },
+    { name: 'Corporate Actions',  ref: 'CK-2406', stageIdx: 1, health: 'r', days: 14, lead: 'Alexander Black',leadInit: 'AB', risk: 10, blocker: 'Event feed source not finalized.', blocks: [], deps: ['Reference Data'], depTag: 'Pending Ref Data' },
+    { name: 'Settlements',        ref: 'CK-2407', stageIdx: 1, health: 'r', days: 14, lead: 'John Loh',       leadInit: 'JL', risk: 10, blocker: 'ISG Legal contract review outstanding for 9 days — blocks settlement instruction setup.', blocks: ['Custody', 'Transfer Agency', 'Cash Management'], deps: ['ISG Legal'], depTag: 'Pending ISG Legal' },
+    { name: 'Allocations',        ref: 'CK-2408', stageIdx: 2, health: 'r', days: 14, lead: 'Alexander Black',leadInit: 'AB', risk: 9, blocker: 'Test allocation file failing schema validation — 3 SLA breaches.', blocks: ['Reconciliation'], deps: ['Reconciliation'], depTag: 'Pending Recon' },
+    { name: 'Client Solutions',   ref: 'CK-2409', stageIdx: 2, health: 'r', days: 14, lead: 'John Loh',       leadInit: 'JL', risk: 9, blocker: 'Client IT hasn\'t configured SSO IdP endpoint.', blocks: ['Client Service'], deps: ['Client (Carina)'], depTag: 'Pending Client' },
+    { name: 'Transfer Agency',    ref: 'CK-2410', stageIdx: 2, health: 'r', days: 14, lead: 'Roberto Romano', leadInit: 'RR', risk: 9, blocker: 'Unit-holder file mismatch with Reconciliation counts.', blocks: [], deps: ['Reconciliation'], depTag: 'Pending Recon' },
+    { name: 'Cash Management',    ref: 'CK-2411', stageIdx: 0, health: 'a', days: 14, lead: 'Karthik Dasari', leadInit: 'KD', risk: 7, blocker: 'Awaiting Settlements instruction template before account setup.', blocks: [], deps: ['Settlements'], depTag: 'Pending Settlements' },
+    { name: 'Billing',            ref: 'CK-2412', stageIdx: 1, health: 'a', days: 14, lead: 'Karthik Dasari', leadInit: 'KD', risk: 6, blocker: 'Awaiting reconciled position file from Reconciliation.', blocks: [], deps: ['Reconciliation'], depTag: 'Pending Recon' },
+    { name: 'Custody',            ref: 'CK-2413', stageIdx: 2, health: 'a', days: 14, lead: 'Roberto Romano', leadInit: 'RR', risk: 5, blocker: 'Awaiting Settlements instruction set.', blocks: [], deps: ['Settlements'], depTag: 'Pending Settlements' },
+    { name: 'Treasury',           ref: 'CK-2414', stageIdx: 2, health: 'a', days: 14, lead: 'Michael Patel',  leadInit: 'MP', risk: 5, blocker: 'Awaiting client banking authorisations.', blocks: [], deps: ['Client (Carina)'], depTag: 'Pending Client' },
+    { name: 'Compliance',         ref: 'CK-2415', stageIdx: 3, health: 'a', days: 17, lead: 'Michael Patel',  leadInit: 'MP', risk: 4, blocker: 'Waiting on Risk Management VaR sign-off.', blocks: [], deps: ['Risk Management'], depTag: 'Pending Risk Mgmt' },
     { name: 'Internal Controls',  ref: 'CK-2416', stageIdx: 0, health: 'g', days: 14, lead: 'Roberto Romano', leadInit: 'RR', risk: 3, blocker: null, blocks: [], deps: [] },
     { name: 'Middle Office',      ref: 'CK-2417', stageIdx: 2, health: 'g', days: 13, lead: 'Alexander Black',leadInit: 'AB', risk: 2, blocker: null, blocks: [], deps: [] },
     { name: 'Trade Support',      ref: 'CK-2418', stageIdx: 2, health: 'g', days: 12, lead: 'John Loh',       leadInit: 'JL', risk: 2, blocker: null, blocks: [], deps: [] },
@@ -2138,20 +2409,19 @@
 
     const daysClass = t.health === 'r' ? 'bad' : t.health === 'a' ? 'warn' : '';
 
-    const pSrc = pendingSource(t);
-    const pendingBadge = pSrc
-      ? `<span class="pending-tag ${pSrc === 'client' ? 'client' : ''}">Pending (${pSrc === 'client' ? 'Client' : 'Internal'})</span>`
-      : '';
+    // Dependency cell: only show on amber (pending) teams, with custom text
+    const depCell = (t.health === 'a' && t.depTag)
+      ? `<span class="dep-tag">${t.depTag}</span>`
+      : '<span class="dep-empty">—</span>';
 
     row.innerHTML = `
       <div class="ref">${t.ref}</div>
       <div class="team">
         <span class="tip" data-tip="${HEALTH_DESC[t.health]}"><span class="health ${t.health}"></span></span>
         <span>${t.name}</span>
-        ${pendingBadge}
       </div>
       <div class="stages">${segs}</div>
-      <div class="stage-label">${STAGES[t.stageIdx]}</div>
+      <div class="dep-cell">${depCell}</div>
       <div class="assignee">
         <span class="av">${t.leadInit}</span>
         <span>${t.lead.split(' ').slice(-1)[0]}</span>
@@ -2202,12 +2472,6 @@
       const stageOk = (stageFilter === null) || r.dataset.stage === String(stageFilter);
       r.classList.toggle('hidden', !(healthOk && stageOk));
     });
-    document.querySelectorAll('.pacing-svg .stage-row').forEach(g => {
-      g.classList.toggle('active', stageFilter !== null && Number(g.dataset.stage) === stageFilter);
-    });
-    document.querySelectorAll('#stage-backlog .bullet-row').forEach(r => {
-      r.classList.toggle('active', stageFilter !== null && Number(r.dataset.stage) === stageFilter);
-    });
     const banner = document.getElementById('stageBanner');
     const bannerName = document.getElementById('stageBannerName');
     if (stageFilter !== null) {
@@ -2228,17 +2492,6 @@
     };
   });
 
-  function setStageFilter(idx) {
-    stageFilter = (stageFilter === idx) ? null : idx;
-    applyFilters();
-  }
-
-  document.querySelectorAll('.pacing-svg .stage-row').forEach(g => {
-    g.addEventListener('click', () => setStageFilter(Number(g.dataset.stage)));
-  });
-  document.querySelectorAll('#stage-backlog .bullet-row').forEach(r => {
-    r.addEventListener('click', () => setStageFilter(Number(r.dataset.stage)));
-  });
   document.getElementById('stageBannerClear').addEventListener('click', e => {
     e.stopPropagation();
     stageFilter = null;
@@ -2271,11 +2524,9 @@
     const label = btn.textContent.trim();
     if (label === 'Send reminder') {
       const targetTeam = drawer.classList.contains('open') ? (drawer.querySelector('.team-label')?.textContent || 'team leads') : 'all team leads';
-      showToast('Reminder sent', `Notified ${targetTeam} via Slack and email`);
-    } else if (label === 'Message leads') {
-      showToast('Message draft opened', 'Pre-filled with risk summary');
+      showToast('Reminder sent', `Notified ${targetTeam} via Teams and email`);
     } else if (label.startsWith('Message ')) {
-      showToast(`Message draft opened`, `${label.replace('Message ', '')} · Slack`);
+      showToast(`Message draft opened`, `${label.replace('Message ', '')} · Teams`);
     }
   });
 
@@ -2432,6 +2683,68 @@
       window.scrollTo({ top: 0, behavior: 'smooth' });
     };
   });
+
+  // ========== THEME TOGGLE ==========
+  (function themeToggle() {
+    const btn = document.getElementById('themeToggle');
+    if (!btn) return;
+    btn.addEventListener('click', () => {
+      const next = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', next);
+      try { localStorage.setItem('apollo-theme', next); } catch (e) {}
+    });
+  })();
+
+  // ========== DAYS REMAINING (today → projected go-live) ==========
+  (function setDaysRemaining() {
+    const goLive = new Date(2026, 4, 13); // May 13, 2026
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const diffMs = goLive.getTime() - today.getTime();
+    const days = Math.max(0, Math.round(diffMs / 86400000));
+    const valEl = document.getElementById('daysRemainingValue');
+    const deltaEl = document.getElementById('daysRemainingDelta');
+    if (valEl) valEl.textContent = String(days);
+    if (deltaEl) {
+      deltaEl.textContent = days === 0
+        ? 'Past due · 0d'
+        : 'Until projected go-live · May 13';
+    }
+  })();
+
+  // ========== CLIENT FILTER DROPDOWN ==========
+  (function clientDropdown() {
+    const btn = document.getElementById('clientSelectBtn');
+    const menu = document.getElementById('clientMenu');
+    const label = document.getElementById('clientSelectLabel');
+    if (!btn || !menu || !label) return;
+
+    function open() {
+      menu.hidden = false;
+      btn.setAttribute('aria-expanded', 'true');
+    }
+    function close() {
+      menu.hidden = true;
+      btn.setAttribute('aria-expanded', 'false');
+    }
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      menu.hidden ? open() : close();
+    });
+    menu.addEventListener('click', e => {
+      const item = e.target.closest('.client-menu-item');
+      if (!item) return;
+      menu.querySelectorAll('.client-menu-item').forEach(i => i.classList.toggle('active', i === item));
+      label.textContent = item.textContent.trim();
+      close();
+    });
+    document.addEventListener('click', e => {
+      if (!btn.contains(e.target) && !menu.contains(e.target)) close();
+    });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') close();
+    });
+  })();
 </script>
 
 </body>
