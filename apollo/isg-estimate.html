@@ -610,7 +610,39 @@
     display: block; color: var(--ink-0);
     font-size: 11px; font-weight: 600;
     text-transform: uppercase; letter-spacing: 0.08em;
-    margin-bottom: 4px;
+    margin-bottom: 6px;
+  }
+  .callout-body p { margin-bottom: 10px; }
+  .callout-body p:last-child { margin-bottom: 0; }
+  .callout-list {
+    list-style: none; padding: 0;
+    display: flex; flex-direction: column; gap: 10px;
+    margin: 8px 0 12px;
+  }
+  .callout-list li {
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 12px 14px;
+    font-size: 13px;
+    line-height: 1.55;
+    color: var(--ink-1);
+  }
+  .cl-tag {
+    display: inline-block;
+    font-size: 10.5px; font-weight: 600;
+    letter-spacing: 0.04em;
+    color: var(--gold-ink);
+    background: var(--gold-dim);
+    border: 1px solid var(--gold-line);
+    padding: 2px 8px; border-radius: 3px;
+    margin-right: 8px;
+    vertical-align: 2px;
+  }
+  .callout-followup {
+    color: var(--ink-2); font-size: 12.5px;
+    padding-top: 10px;
+    border-top: 1px dashed var(--border-2);
   }
 
   /* Notes */
@@ -758,13 +790,13 @@
     <div class="kpi-row">
       <div class="kpi">
         <div class="label">Spend to date</div>
-        <div class="value num">$47,474</div>
-        <div class="delta">720.77 hrs · after 10% disc.</div>
+        <div class="value num">$49,639</div>
+        <div class="delta">720.77 hrs · after 5% disc.</div>
       </div>
       <div class="kpi">
         <div class="label">Go-forward est.</div>
-        <div class="value num">$106,318</div>
-        <div class="delta">1,037 hrs · after 10% disc.</div>
+        <div class="value num">$111,316</div>
+        <div class="delta">1,037 hrs · after 5% disc.</div>
       </div>
       <div class="kpi">
         <div class="label">Team</div>
@@ -778,8 +810,8 @@
       </div>
       <div class="kpi featured">
         <div class="label">Total engagement</div>
-        <div class="value num gold">$153,791</div>
-        <div class="delta">After 10% disc., $14,328 saved</div>
+        <div class="value num gold">$160,955</div>
+        <div class="delta">After 5% disc., $7,164 saved</div>
       </div>
     </div>
 
@@ -1079,12 +1111,12 @@
                 <td class="num">$51,804.15</td>
               </tr>
               <tr class="row-discount">
-                <td colspan="5">10% discount on all roles except Kirsty (Manager)</td>
-                <td class="num"><span class="disc-amt">−$4,330.64</span></td>
+                <td colspan="5">5% discount on all roles except Kirsty (Manager)</td>
+                <td class="num"><span class="disc-amt">−$2,165.32</span></td>
               </tr>
               <tr class="row-total">
                 <td colspan="5">Total · spend to date</td>
-                <td class="num"><span class="total-amt">$47,473.51</span></td>
+                <td class="num"><span class="total-amt">$49,638.83</span></td>
               </tr>
             </tfoot>
           </table>
@@ -1122,12 +1154,12 @@
                 <td class="num">$116,315.00</td>
               </tr>
               <tr class="row-discount">
-                <td colspan="5">10% discount on all roles except Kirsty (Manager)</td>
-                <td class="num"><span class="disc-amt">−$9,997.50</span></td>
+                <td colspan="5">5% discount on all roles except Kirsty (Manager)</td>
+                <td class="num"><span class="disc-amt">−$4,998.75</span></td>
               </tr>
               <tr class="row-total">
                 <td colspan="5">Total · go-forward</td>
-                <td class="num"><span class="total-amt">$106,317.50</span></td>
+                <td class="num"><span class="total-amt">$111,316.25</span></td>
               </tr>
             </tfoot>
           </table>
@@ -1138,30 +1170,49 @@
           <div class="tb-meta">
             <div class="tb-eyebrow">Total engagement · after discount</div>
             <div class="tb-title">Spend to date plus go-forward</div>
-            <div class="tb-sub">All figures in USD. Reflects 10% discount on all roles except Kirsty (Manager).</div>
+            <div class="tb-sub">All figures in USD. Reflects 5% discount on all roles except Kirsty (Manager).</div>
           </div>
           <div class="tb-block">
             <div class="tb-cap">To date</div>
-            <div class="tb-num num">$47,474</div>
+            <div class="tb-num num">$49,639</div>
           </div>
           <div class="tb-divider"></div>
           <div class="tb-block">
             <div class="tb-cap">Go-forward</div>
-            <div class="tb-num num">$106,318</div>
+            <div class="tb-num num">$111,316</div>
           </div>
           <div class="tb-divider"></div>
           <div class="tb-block">
             <div class="tb-cap">Combined</div>
-            <div class="tb-num num gold">$153,791</div>
+            <div class="tb-num num gold">$160,955</div>
           </div>
         </div>
 
-        <!-- Callout -->
+        <!-- Reconciliation note -->
         <div class="callout">
           <div class="callout-icon">i</div>
           <div class="callout-body">
-            <strong>Next update</strong>
-            This estimate will be expanded to include an estimate of the full build and a reconciliation against the prior invoices.
+            <strong>Reconciliation note</strong>
+            <p>
+              Two Q1 nuances Jackie flagged are reflected in the spend-to-date but warrant context:
+            </p>
+            <ul class="callout-list">
+              <li>
+                <span class="cl-tag">Michelle · Q1 adjustment</span>
+                42 hours missed in Q1 at $75/hr = $3,150 gross, $2,992.50 net at 5%. Adding the
+                full net would push the Q1 invoice $438.40 above the $125.6K SOW cap, so $438.40
+                is being treated as a write-off and $2,554.10 will be invoiced.
+              </li>
+              <li>
+                <span class="cl-tag">Gino · missed billing</span>
+                40.35 hours from March onboarding were not in the main Q1 invoice because the SOW
+                was unsigned at the time. $65/hr × 40.35 = $2,622.75 gross, $2,491.61 net at 5%.
+                Not yet included in the spend-to-date above.
+              </li>
+            </ul>
+            <p class="callout-followup">
+              This estimate will be updated to include an estimate of the full build and reconcile all prior invoices.
+            </p>
           </div>
         </div>
 
