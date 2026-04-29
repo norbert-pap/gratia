@@ -554,6 +554,64 @@
     font-size: 11px; color: var(--ink-2);
   }
   tfoot td .gold { color: var(--gold-ink); }
+  tfoot tr.row-discount td {
+    background: var(--bg-1);
+    color: var(--ink-2);
+    font-style: italic;
+    font-weight: 500;
+    border-top: 1px dashed var(--border-2);
+    border-bottom: 1px dashed var(--border-2);
+  }
+  tfoot tr.row-discount td:first-child {
+    color: var(--ink-2); font-style: italic;
+    text-transform: none; letter-spacing: 0; font-size: 12px;
+    font-weight: 500;
+  }
+  tfoot tr.row-discount td .disc-amt { color: var(--gold-ink); font-style: normal; }
+  tfoot tr.row-total td {
+    background: var(--bg-3);
+    color: var(--ink-0);
+    font-size: 14px;
+  }
+  tfoot tr.row-total td:first-child {
+    color: var(--gold-ink); font-size: 11px;
+  }
+  tfoot tr.row-total td .total-amt { color: var(--gold-ink); }
+
+  .rate-note {
+    font-size: 11px; color: var(--ink-3);
+    font-weight: 400; font-style: italic;
+    margin-left: 6px;
+    text-decoration: line-through;
+    text-decoration-color: var(--ink-4);
+  }
+
+  .callout {
+    margin-top: 22px; padding: 18px 22px;
+    background: var(--bg-1);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--gold);
+    border-radius: 8px;
+    font-size: 13.5px; color: var(--ink-1);
+    line-height: 1.6;
+    display: flex; gap: 14px; align-items: flex-start;
+  }
+  .callout .callout-icon {
+    flex-shrink: 0;
+    width: 26px; height: 26px;
+    border-radius: 50%;
+    background: var(--gold-dim);
+    border: 1px solid var(--gold-line);
+    color: var(--gold-ink);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 13px; font-weight: 600;
+  }
+  .callout-body strong {
+    display: block; color: var(--ink-0);
+    font-size: 11px; font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.08em;
+    margin-bottom: 4px;
+  }
 
   /* Notes */
   .tbl-notes {
@@ -700,13 +758,13 @@
     <div class="kpi-row">
       <div class="kpi">
         <div class="label">Spend to date</div>
-        <div class="value num">$51,804<span class="unit">.15</span></div>
-        <div class="delta">720.77 hrs · 5 roles</div>
+        <div class="value num">$47,474</div>
+        <div class="delta">720.77 hrs · after 10% disc.</div>
       </div>
       <div class="kpi">
         <div class="label">Go-forward est.</div>
-        <div class="value num">$116,315</div>
-        <div class="delta">1,037.20 hrs · 8.6 wks</div>
+        <div class="value num">$106,318</div>
+        <div class="delta">1,037 hrs · after 10% disc.</div>
       </div>
       <div class="kpi">
         <div class="label">Team</div>
@@ -720,8 +778,8 @@
       </div>
       <div class="kpi featured">
         <div class="label">Total engagement</div>
-        <div class="value num gold">$168,119</div>
-        <div class="delta">To-date plus go-forward</div>
+        <div class="value num gold">$153,791</div>
+        <div class="delta">After 10% disc., $14,328 saved</div>
       </div>
     </div>
 
@@ -745,7 +803,7 @@
           <p>
             The Sprint 7–9 plan brings all remaining team workflows forward and locks the final
             production version. Engineering QA and UAT close in week of <em>May 11</em>, scope freezes the
-            following week, and a full simulation runs into the production go/no-go on <em>May 28</em>.
+            following week, and a full simulation runs into the production go/no-go on <em>May 21</em>.
           </p>
           <p>
             Hypercare begins on <em>June 1</em>, with leadership review at the end of the first week. Open
@@ -841,7 +899,7 @@
             </ul>
           </div>
           <div class="team-foot">
-            <span class="rate num">$95<span style="color:var(--ink-3);font-weight:400;">/hr</span></span>
+            <span class="rate num">$95<span style="color:var(--ink-3);font-weight:400;">/hr <span class="rate-note">$140</span></span></span>
             <span class="cadence">20 hrs / week</span>
           </div>
         </div>
@@ -977,7 +1035,7 @@
                   <div class="role-cell">L1 <span class="who">Kirsty</span></div>
                 </td>
                 <td><span class="lvl-pill jmgc">JMGC</span></td>
-                <td class="num">$95.00</td>
+                <td class="num">$95.00 <span class="rate-note">$140</span></td>
                 <td class="num">89.45</td>
                 <td class="num num-muted">—</td>
                 <td class="num">$8,497.75</td>
@@ -989,7 +1047,7 @@
                 <td><span class="lvl-pill jmgc">JMGC</span></td>
                 <td class="num">$95.00</td>
                 <td class="num">194.16</td>
-                <td class="num num-muted">45</td>
+                <td class="num num-muted">—</td>
                 <td class="num">$12,620.40</td>
               </tr>
               <tr>
@@ -999,7 +1057,7 @@
                 <td><span class="lvl-pill a3">A3</span></td>
                 <td class="num">$75.00</td>
                 <td class="num">185.06</td>
-                <td class="num num-muted">49</td>
+                <td class="num num-muted">—</td>
                 <td class="num">$13,879.50</td>
               </tr>
               <tr>
@@ -1015,10 +1073,18 @@
             </tbody>
             <tfoot>
               <tr>
-                <td colspan="3">Subtotal · spend to date</td>
+                <td colspan="3">Subtotal</td>
                 <td class="num">720.77</td>
                 <td></td>
                 <td class="num">$51,804.15</td>
+              </tr>
+              <tr class="row-discount">
+                <td colspan="5">10% discount on all roles except Kirsty (Manager)</td>
+                <td class="num"><span class="disc-amt">−$4,330.64</span></td>
+              </tr>
+              <tr class="row-total">
+                <td colspan="5">Total · spend to date</td>
+                <td class="num"><span class="total-amt">$47,473.51</span></td>
               </tr>
             </tfoot>
           </table>
@@ -1043,7 +1109,7 @@
             </thead>
             <tbody>
               <tr><td>Roberto Romano</td><td class="num">$95</td><td class="num">20</td><td class="num num-muted">8.6</td><td class="num">172</td><td class="num">$16,340.00</td></tr>
-              <tr><td>Kirsty Fouche</td><td class="num">$95</td><td class="num">20</td><td class="num num-muted">8.6</td><td class="num">172</td><td class="num">$16,340.00</td></tr>
+              <tr><td>Kirsty Fouche</td><td class="num">$95 <span class="rate-note">$140</span></td><td class="num">20</td><td class="num num-muted">8.6</td><td class="num">172</td><td class="num">$16,340.00</td></tr>
               <tr><td>Gino Manalastas</td><td class="num">$65</td><td class="num">45</td><td class="num num-muted">8.6</td><td class="num">387</td><td class="num">$25,155.00</td></tr>
               <tr><td>Momina Kaleem</td><td class="num">$95</td><td class="num">40</td><td class="num num-muted">8.6</td><td class="num">344</td><td class="num">$32,680.00</td></tr>
               <tr><td>Alan Armstrong</td><td class="num">$75</td><td class="num">10</td><td class="num num-muted">8.6</td><td class="num">86</td><td class="num">$6,450.00</td></tr>
@@ -1051,9 +1117,17 @@
             </tbody>
             <tfoot>
               <tr>
-                <td colspan="4">Subtotal · go-forward</td>
+                <td colspan="4">Subtotal</td>
                 <td class="num">1,037.20</td>
                 <td class="num">$116,315.00</td>
+              </tr>
+              <tr class="row-discount">
+                <td colspan="5">10% discount on all roles except Kirsty (Manager)</td>
+                <td class="num"><span class="disc-amt">−$9,997.50</span></td>
+              </tr>
+              <tr class="row-total">
+                <td colspan="5">Total · go-forward</td>
+                <td class="num"><span class="total-amt">$106,317.50</span></td>
               </tr>
             </tfoot>
           </table>
@@ -1062,23 +1136,32 @@
         <!-- Total bar -->
         <div class="total-bar">
           <div class="tb-meta">
-            <div class="tb-eyebrow">Total engagement</div>
+            <div class="tb-eyebrow">Total engagement · after discount</div>
             <div class="tb-title">Spend to date plus go-forward</div>
-            <div class="tb-sub">All figures in USD. Excludes any out-of-scope work or rate adjustment.</div>
+            <div class="tb-sub">All figures in USD. Reflects 10% discount on all roles except Kirsty (Manager).</div>
           </div>
           <div class="tb-block">
             <div class="tb-cap">To date</div>
-            <div class="tb-num num">$51,804</div>
+            <div class="tb-num num">$47,474</div>
           </div>
           <div class="tb-divider"></div>
           <div class="tb-block">
             <div class="tb-cap">Go-forward</div>
-            <div class="tb-num num">$116,315</div>
+            <div class="tb-num num">$106,318</div>
           </div>
           <div class="tb-divider"></div>
           <div class="tb-block">
             <div class="tb-cap">Combined</div>
-            <div class="tb-num num gold">$168,119</div>
+            <div class="tb-num num gold">$153,791</div>
+          </div>
+        </div>
+
+        <!-- Callout -->
+        <div class="callout">
+          <div class="callout-icon">i</div>
+          <div class="callout-body">
+            <strong>Next update</strong>
+            This estimate will be expanded to include an estimate of the full build and a reconciliation against the prior invoices.
           </div>
         </div>
 
