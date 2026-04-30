@@ -270,6 +270,17 @@
     font-size: 12px; font-weight: 500; color: #999;
     letter-spacing: 0.2px;
   }
+  .case-screenshot.has-image {
+    padding: 0;
+    border: 1px solid var(--line);
+    background: var(--white);
+    overflow: hidden;
+  }
+  .case-screenshot.has-image img {
+    width: 100%; height: 100%;
+    object-fit: cover; object-position: top center;
+    display: block;
+  }
 
   /* Analyst card (matches the standard Gratia bench card) */
   .analyst-card {
@@ -664,9 +675,8 @@
           </div>
           <div class="case-logo blinded">Blinded</div>
         </div>
-        <div class="case-screenshot">
-          <div class="ss-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m21 15-5-5L5 21"/></svg></div>
-          <div class="ss-label">Screenshot</div>
+        <div class="case-screenshot has-image">
+          <img src="AI_impact_on_search.png" alt="Generative AI's impact on search and customer acquisition">
         </div>
         <div class="case-footer">
           <div class="cf-stat"><span class="cf-label">Total spend</span><span class="cf-value">$32,000</span></div>
