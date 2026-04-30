@@ -204,60 +204,34 @@
   }
   .cap-service .check svg { width: 10px; height: 10px; }
 
+  /* Cap body: 3-column grid — thumbnail (left, big), case info (middle),
+     analyst card (right, narrow). The case-card wrapper uses display:contents
+     so its children participate in this parent grid directly. */
   .cap-body {
     flex: 1; display: grid;
-    grid-template-columns: 1fr 320px;
-    gap: 22px;
+    grid-template-columns: minmax(0, 1.55fr) minmax(0, 1fr) 200px;
+    grid-template-rows: minmax(0, 1fr) auto;
+    grid-template-areas:
+      "thumb info analyst"
+      "stats info analyst";
+    gap: 14px 22px;
     margin-top: 4px;
     min-height: 0;
   }
 
-  /* Case study card (sample of work) */
-  .case-card {
-    background: var(--white); border: 1px solid var(--line);
-    border-radius: 14px; padding: 22px 26px;
-    display: flex; flex-direction: column; gap: 14px;
-    overflow: hidden;
-  }
-  .case-top {
-    display: flex; align-items: flex-start; justify-content: space-between;
-    gap: 16px;
-  }
-  .case-top .case-text { flex: 1; }
-  .case-eyebrow {
-    font-size: 11px; color: var(--ink-4); font-weight: 500;
-    margin-bottom: 4px;
-  }
-  .case-title {
-    font-size: 17px; font-weight: 700; color: var(--ink);
-    line-height: 1.25; margin-bottom: 6px;
-  }
-  .case-desc {
-    font-size: 12px; font-weight: 400; color: var(--ink-3);
-    line-height: 1.55; max-width: 540px;
-  }
-  .case-logo {
-    flex-shrink: 0; min-width: 110px; height: 50px;
-    background: var(--white); border: 1px solid var(--line);
-    border-radius: 6px;
-    display: flex; align-items: center; justify-content: center;
-    padding: 8px 14px;
-    font-size: 13px; font-weight: 700; color: var(--ink);
-    letter-spacing: 0.5px;
-  }
-  .case-logo.blinded {
-    border-style: dashed; color: var(--ink-4); font-weight: 600;
-    font-size: 10px; letter-spacing: 1.2px;
-  }
+  .case-card { display: contents; }
 
+  /* Thumbnail (sample of work screenshot) */
   .case-screenshot {
-    flex: 1 1 auto; min-height: 180px;
+    grid-area: thumb;
+    width: 100%; height: 100%; min-height: 0;
     background: var(--soft);
     border: 1.5px dashed #cfcfca;
-    border-radius: 10px;
+    border-radius: 14px;
     display: flex; flex-direction: column; align-items: center; justify-content: center;
     gap: 10px;
     color: #b0b0ac;
+    overflow: hidden;
   }
   .case-screenshot .ss-icon {
     width: 38px; height: 38px;
@@ -271,35 +245,76 @@
     letter-spacing: 0.2px;
   }
   .case-screenshot.has-image {
-    padding: 0;
     border: 1px solid var(--line);
     background: var(--white);
-    overflow: hidden;
+    padding: 6px;
   }
   .case-screenshot.has-image img {
     width: 100%; height: 100%;
     object-fit: contain; object-position: center;
     display: block;
-    background: var(--white);
+    border-radius: 8px;
   }
 
-  /* Analyst card — the bench-card image already contains photo + name +
-     title + country + tags, so we use it 1:1 and skip the duplicate text. */
+  /* Middle column: case info panel */
+  .case-top {
+    grid-area: info;
+    background: var(--white); border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 20px 22px;
+    display: flex; flex-direction: column; gap: 14px;
+    overflow: hidden;
+    min-height: 0;
+  }
+  .case-top .case-logo { order: -1; align-self: flex-start; }
+  .case-top .case-text { display: flex; flex-direction: column; gap: 8px; }
+  .case-eyebrow {
+    font-size: 10.5px; color: var(--ink-4); font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.8px;
+  }
+  .case-title {
+    font-size: 19px; font-weight: 700; color: var(--ink);
+    line-height: 1.25;
+  }
+  .case-desc {
+    font-size: 12.5px; font-weight: 400; color: var(--ink-3);
+    line-height: 1.6;
+  }
+  .case-logo {
+    min-width: 100px; height: 44px;
+    background: var(--white); border: 1px solid var(--line);
+    border-radius: 6px;
+    display: inline-flex; align-items: center; justify-content: center;
+    padding: 6px 14px;
+    font-size: 13px; font-weight: 700; color: var(--ink);
+    letter-spacing: 0.5px;
+  }
+  .case-logo.blinded {
+    border-style: dashed; color: var(--ink-4); font-weight: 600;
+    font-size: 10px; letter-spacing: 1.2px;
+  }
+
+  /* Right column: analyst card — the bench card image is already a fully
+     designed card. We size it at native aspect (clipping the bottom whitespace
+     of the source PNG) so nothing gets cut off. */
   .analyst-card {
+    grid-area: analyst;
+    align-self: start;
+    width: 100%;
     background: transparent; border: none; padding: 0;
     display: flex; flex-direction: column;
-    align-self: stretch;
   }
   .analyst-photo-wrap {
     position: relative;
-    width: 100%; flex: 1 1 0; min-height: 0;
+    width: 100%;
+    aspect-ratio: 640 / 1232;
+    max-height: 100%;
     border-radius: 14px; overflow: hidden;
     background: var(--soft);
     border: 1px solid var(--line);
   }
   .analyst-photo-wrap img {
-    width: 100%; height: 100%;
-    object-fit: cover; object-position: top center;
+    width: 100%; height: auto;
     display: block;
   }
   .analyst-photo-wrap .photo-arrow {
@@ -343,11 +358,13 @@
     padding: 4px 10px; border-radius: 999px;
   }
 
-  /* Case-card footer (Total spend + Time it took, integrated with sample) */
+  /* Footer panel (Total spend + Time it took) sits beneath the thumbnail */
   .case-footer {
-    display: flex; gap: 36px;
-    padding-top: 14px;
-    border-top: 1px solid var(--line-2);
+    grid-area: stats;
+    background: var(--white); border: 1px solid var(--line);
+    border-radius: 14px;
+    padding: 12px 22px;
+    display: flex; gap: 36px; align-items: center;
     flex-shrink: 0;
   }
   .cf-stat { display: flex; flex-direction: column; }
