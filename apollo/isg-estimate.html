@@ -664,8 +664,8 @@
 
   /* ========== TOTAL ========== */
   .total-bar {
-    display: grid; grid-template-columns: 1fr auto auto auto auto auto;
-    gap: 28px; align-items: center;
+    display: grid; grid-template-columns: 1fr auto auto auto auto auto auto auto;
+    gap: 22px; align-items: center;
     padding: 22px 28px;
     background: var(--bg-1);
     border: 1px solid var(--border);
@@ -789,14 +789,14 @@
     <!-- KPI row -->
     <div class="kpi-row">
       <div class="kpi">
-        <div class="label">Spend to date</div>
-        <div class="value num">$49,639</div>
-        <div class="delta">720.77 hrs · after 5% disc.</div>
+        <div class="label">Through April</div>
+        <div class="value num">$55,150</div>
+        <div class="delta">Q1 adj. + April actuals</div>
       </div>
       <div class="kpi">
-        <div class="label">Go-forward est.</div>
-        <div class="value num">$111,316</div>
-        <div class="delta">1,037 hrs · after 5% disc.</div>
+        <div class="label">May / Jun estimate</div>
+        <div class="value num">$100,513</div>
+        <div class="delta">1,333 hrs · after 10% disc.</div>
       </div>
       <div class="kpi">
         <div class="label">Team</div>
@@ -810,8 +810,8 @@
       </div>
       <div class="kpi featured">
         <div class="label">Total engagement</div>
-        <div class="value num gold">$160,955</div>
-        <div class="delta">After 5% disc., $7,164 saved</div>
+        <div class="value num gold">$155,662</div>
+        <div class="delta">$14,239 in disc. + $438 write-off</div>
       </div>
     </div>
 
@@ -838,9 +838,9 @@
             following week, and a full simulation runs into the production go/no-go on <em>May 21</em>.
           </p>
           <p>
-            Hypercare begins on <em>June 1</em>, with leadership review at the end of the first week. Open
-            items: confirm Gino's go-forward weekly load, lock Kirsty's L1 cadence, and align on the
-            spend-to-date cut-off.
+            Hypercare begins on <em>June 1</em>, with leadership review at the end of the first week. The
+            view below covers Q1 billing adjustments, April actuals through month-end, and the May / June
+            estimate through end of Q2.
           </p>
         </div>
         <div class="card brief-meta">
@@ -995,7 +995,7 @@
           </div>
           <div class="team-foot">
             <span class="rate num">$75<span style="color:var(--ink-3);font-weight:400;">/hr</span></span>
-            <span class="cadence">30 hrs / week</span>
+            <span class="cadence">20 hrs / week</span>
           </div>
         </div>
 
@@ -1028,115 +1028,127 @@
       <div class="section-head">
         <div class="title-group">
           <h2>03 · Pricing</h2>
-          <span class="count">Spend to date · go-forward · combined</span>
+          <span class="count">Q1 adjustments · April actuals · May / June estimate</span>
         </div>
       </div>
 
       <div class="price-grid">
 
-        <!-- Spend to date -->
+        <!-- Q1 billing adjustments -->
         <div class="tbl-card">
           <div class="tbl-head">
-            <h3>Spend to date <span class="chip-count">Project ISG · 5 roles</span></h3>
-            <span class="meta">720.77 hrs · $51,804.15</span>
+            <h3>Q1 billing adjustments <span class="chip-count">2 line items · 5% discount</span></h3>
+            <span class="meta">82.35 hrs · $5,045.71 net</span>
           </div>
           <table>
             <thead>
               <tr>
-                <th>Role &amp; user</th>
+                <th>Resource</th>
                 <th>Group</th>
                 <th>Rate</th>
                 <th>Hours</th>
-                <th>Hrs / week</th>
-                <th>Total</th>
+                <th>Gross</th>
               </tr>
             </thead>
             <tbody>
               <tr>
                 <td>
-                  <div class="role-cell">A3s adjustment <span class="who">Michelle B</span></div>
+                  <div class="role-cell">Michelle Borley <span class="who">missed Q1 billing</span></div>
                 </td>
                 <td><span class="lvl-pill a3">A3</span></td>
                 <td class="num">$75.00</td>
                 <td class="num">42.00</td>
-                <td class="num num-muted">43</td>
                 <td class="num">$3,150.00</td>
               </tr>
               <tr>
                 <td>
-                  <div class="role-cell">L1 <span class="who">Kirsty</span></div>
-                </td>
-                <td><span class="lvl-pill jmgc">JMGC</span></td>
-                <td class="num">$95.00 <span class="rate-note">$140</span></td>
-                <td class="num">89.45</td>
-                <td class="num num-muted">—</td>
-                <td class="num">$8,497.75</td>
-              </tr>
-              <tr>
-                <td>
-                  <div class="role-cell">A4s <span class="who">Roberto R, Momina K</span></div>
-                </td>
-                <td><span class="lvl-pill jmgc">JMGC</span></td>
-                <td class="num">$95.00</td>
-                <td class="num">194.16</td>
-                <td class="num num-muted">—</td>
-                <td class="num">$12,620.40</td>
-              </tr>
-              <tr>
-                <td>
-                  <div class="role-cell">A3s <span class="who">Michelle B, Alan A</span></div>
-                </td>
-                <td><span class="lvl-pill a3">A3</span></td>
-                <td class="num">$75.00</td>
-                <td class="num">185.06</td>
-                <td class="num num-muted">—</td>
-                <td class="num">$13,879.50</td>
-              </tr>
-              <tr>
-                <td>
-                  <div class="role-cell">Developer <span class="who">Gino M</span></div>
+                  <div class="role-cell">Gino Manalastas <span class="who">March onboarding, SOW unsigned</span></div>
                 </td>
                 <td><span class="lvl-pill e1">E1</span></td>
                 <td class="num">$65.00</td>
-                <td class="num">210.10</td>
-                <td class="num"><span class="num-flag">0</span></td>
-                <td class="num">$13,656.50</td>
+                <td class="num">40.35</td>
+                <td class="num">$2,622.75</td>
               </tr>
             </tbody>
             <tfoot>
               <tr>
-                <td colspan="3">Subtotal</td>
-                <td class="num">720.77</td>
-                <td></td>
-                <td class="num">$51,804.15</td>
+                <td colspan="3">Subtotal · gross</td>
+                <td class="num">82.35</td>
+                <td class="num">$5,772.75</td>
               </tr>
               <tr class="row-discount">
-                <td colspan="5">5% discount on all roles except Kirsty (Manager)</td>
-                <td class="num"><span class="disc-amt">−$2,165.32</span></td>
+                <td colspan="4">5% discount applied to both items</td>
+                <td class="num"><span class="disc-amt">−$288.64</span></td>
+              </tr>
+              <tr class="row-discount">
+                <td colspan="4">Michelle write-off to stay under $125.6K Q1 SOW cap</td>
+                <td class="num"><span class="disc-amt">−$438.40</span></td>
               </tr>
               <tr class="row-total">
-                <td colspan="5">Total · spend to date</td>
-                <td class="num"><span class="total-amt">$49,638.83</span></td>
+                <td colspan="4">Total · Q1 adjustments</td>
+                <td class="num"><span class="total-amt">$5,045.71</span></td>
               </tr>
             </tfoot>
           </table>
         </div>
 
-        <!-- Go-forward -->
+        <!-- April actuals -->
         <div class="tbl-card">
           <div class="tbl-head">
-            <h3>Go-forward estimate <span class="chip-count">8.6 weeks · 6 users</span></h3>
-            <span class="meta">1,037.20 hrs · $116,315.00</span>
+            <h3>April actuals <span class="chip-count">6 resources · 10% discount</span></h3>
+            <span class="meta">681.12 hrs · $50,104.08 net</span>
           </div>
           <table>
             <thead>
               <tr>
-                <th>User</th>
+                <th>Resource</th>
+                <th>Group</th>
+                <th>Rate</th>
+                <th>Hours</th>
+                <th>Gross</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr><td>Roberto Romano</td><td><span class="lvl-pill a4">A4</span></td><td class="num">$95.00</td><td class="num">156.16</td><td class="num">$14,835.20</td></tr>
+              <tr><td>Kirsty Fouche</td><td><span class="lvl-pill jmgc">JMGC</span></td><td class="num">$95.00 <span class="rate-note">$140</span></td><td class="num">91.80</td><td class="num">$8,721.00</td></tr>
+              <tr><td>Gino Manalastas</td><td><span class="lvl-pill e1">E1</span></td><td class="num">$65.00</td><td class="num">210.10</td><td class="num">$13,656.50</td></tr>
+              <tr><td>Momina Kaleem</td><td><span class="lvl-pill a4">A4</span></td><td class="num">$95.00</td><td class="num">38.00</td><td class="num">$3,610.00</td></tr>
+              <tr><td>Alan Armstrong</td><td><span class="lvl-pill a3">A3</span></td><td class="num">$75.00</td><td class="num">50.06</td><td class="num">$3,754.50</td></tr>
+              <tr><td>Michelle Borley</td><td><span class="lvl-pill a3">A3</span></td><td class="num">$75.00</td><td class="num">135.00</td><td class="num">$10,125.00</td></tr>
+            </tbody>
+            <tfoot>
+              <tr>
+                <td colspan="3">Subtotal · gross</td>
+                <td class="num">681.12</td>
+                <td class="num">$54,702.20</td>
+              </tr>
+              <tr class="row-discount">
+                <td colspan="4">10% discount on all roles except Kirsty (Manager)</td>
+                <td class="num"><span class="disc-amt">−$4,598.12</span></td>
+              </tr>
+              <tr class="row-total">
+                <td colspan="4">Total · April actuals</td>
+                <td class="num"><span class="total-amt">$50,104.08</span></td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+
+        <!-- May/June estimates -->
+        <div class="tbl-card">
+          <div class="tbl-head">
+            <h3>May / June estimate <span class="chip-count">8.6 weeks · 6 resources · 10% discount</span></h3>
+            <span class="meta">1,333 hrs · $100,512.50 net</span>
+          </div>
+          <table>
+            <thead>
+              <tr>
+                <th>Resource</th>
                 <th>Rate</th>
                 <th>Hrs / week</th>
                 <th>Weeks</th>
                 <th>Est. hours</th>
-                <th>Est. cost</th>
+                <th>Est. gross</th>
               </tr>
             </thead>
             <tbody>
@@ -1145,21 +1157,21 @@
               <tr><td>Gino Manalastas</td><td class="num">$65</td><td class="num">45</td><td class="num num-muted">8.6</td><td class="num">387</td><td class="num">$25,155.00</td></tr>
               <tr><td>Momina Kaleem</td><td class="num">$95</td><td class="num">40</td><td class="num num-muted">8.6</td><td class="num">344</td><td class="num">$32,680.00</td></tr>
               <tr><td>Alan Armstrong</td><td class="num">$75</td><td class="num">10</td><td class="num num-muted">8.6</td><td class="num">86</td><td class="num">$6,450.00</td></tr>
-              <tr><td>Michelle Borley</td><td class="num">$75</td><td class="num">30</td><td class="num num-muted">8.6</td><td class="num">258</td><td class="num">$19,350.00</td></tr>
+              <tr><td>Michelle Borley</td><td class="num">$75</td><td class="num">20</td><td class="num num-muted">8.6</td><td class="num">172</td><td class="num">$12,900.00</td></tr>
             </tbody>
             <tfoot>
               <tr>
-                <td colspan="4">Subtotal</td>
-                <td class="num">1,037.20</td>
-                <td class="num">$116,315.00</td>
+                <td colspan="4">Subtotal · gross</td>
+                <td class="num">1,333</td>
+                <td class="num">$109,865.00</td>
               </tr>
               <tr class="row-discount">
-                <td colspan="5">5% discount on all roles except Kirsty (Manager)</td>
-                <td class="num"><span class="disc-amt">−$4,998.75</span></td>
+                <td colspan="5">10% discount on all roles except Kirsty (Manager)</td>
+                <td class="num"><span class="disc-amt">−$9,352.50</span></td>
               </tr>
               <tr class="row-total">
-                <td colspan="5">Total · go-forward</td>
-                <td class="num"><span class="total-amt">$111,316.25</span></td>
+                <td colspan="5">Total · May / June estimate</td>
+                <td class="num"><span class="total-amt">$100,512.50</span></td>
               </tr>
             </tfoot>
           </table>
@@ -1169,50 +1181,36 @@
         <div class="total-bar">
           <div class="tb-meta">
             <div class="tb-eyebrow">Total engagement · after discount</div>
-            <div class="tb-title">Spend to date plus go-forward</div>
-            <div class="tb-sub">All figures in USD. Reflects 5% discount on all roles except Kirsty (Manager).</div>
+            <div class="tb-title">Q1 adjustments + April + May / June</div>
+            <div class="tb-sub">All figures USD net. 5% on Q1; 10% on April and go-forward (excl. Kirsty, Manager).</div>
           </div>
           <div class="tb-block">
-            <div class="tb-cap">To date</div>
-            <div class="tb-num num">$49,639</div>
+            <div class="tb-cap">Q1 adj.</div>
+            <div class="tb-num num">$5,046</div>
           </div>
           <div class="tb-divider"></div>
           <div class="tb-block">
-            <div class="tb-cap">Go-forward</div>
-            <div class="tb-num num">$111,316</div>
+            <div class="tb-cap">April actuals</div>
+            <div class="tb-num num">$50,104</div>
+          </div>
+          <div class="tb-divider"></div>
+          <div class="tb-block">
+            <div class="tb-cap">May / Jun</div>
+            <div class="tb-num num">$100,513</div>
           </div>
           <div class="tb-divider"></div>
           <div class="tb-block">
             <div class="tb-cap">Combined</div>
-            <div class="tb-num num gold">$160,955</div>
+            <div class="tb-num num gold">$155,662</div>
           </div>
         </div>
 
-        <!-- Reconciliation note -->
+        <!-- Next-update note -->
         <div class="callout">
           <div class="callout-icon">i</div>
           <div class="callout-body">
-            <strong>Reconciliation note</strong>
-            <p>
-              Two Q1 nuances Jackie flagged are reflected in the spend-to-date but warrant context:
-            </p>
-            <ul class="callout-list">
-              <li>
-                <span class="cl-tag">Michelle · Q1 adjustment</span>
-                42 hours missed in Q1 at $75/hr = $3,150 gross, $2,992.50 net at 5%. Adding the
-                full net would push the Q1 invoice $438.40 above the $125.6K SOW cap, so $438.40
-                is being treated as a write-off and $2,554.10 will be invoiced.
-              </li>
-              <li>
-                <span class="cl-tag">Gino · missed billing</span>
-                40.35 hours from March onboarding were not in the main Q1 invoice because the SOW
-                was unsigned at the time. $65/hr × 40.35 = $2,622.75 gross, $2,491.61 net at 5%.
-                Not yet included in the spend-to-date above.
-              </li>
-            </ul>
-            <p class="callout-followup">
-              This estimate will be updated to include an estimate of the full build and reconcile all prior invoices.
-            </p>
+            <strong>Next update</strong>
+            This estimate will be updated to include an estimate of the full build and reconcile across all prior invoices.
           </div>
         </div>
 
