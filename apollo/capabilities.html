@@ -317,14 +317,7 @@
     width: 100%; height: auto;
     display: block;
   }
-  .analyst-photo-wrap .photo-arrow {
-    position: absolute; top: 10px; right: 10px;
-    width: 28px; height: 28px;
-    background: var(--bg-dark); border-radius: 7px;
-    display: flex; align-items: center; justify-content: center;
-    color: var(--mint);
-  }
-  .analyst-photo-wrap .photo-arrow svg { width: 14px; height: 14px; }
+  .analyst-photo-wrap .photo-arrow { display: none; }
   .analyst-photo-wrap .ai-pill {
     position: absolute; top: 10px; left: 10px;
     background: var(--mint); color: var(--bg-dark);
@@ -358,24 +351,25 @@
     padding: 4px 10px; border-radius: 999px;
   }
 
-  /* Footer panel (Total spend + Time it took) sits beneath the thumbnail */
+  /* Outcome panel — three short outcome-style stats per case */
   .case-footer {
     grid-area: stats;
     background: var(--white); border: 1px solid var(--line);
     border-radius: 14px;
-    padding: 12px 22px;
-    display: flex; gap: 36px; align-items: center;
+    padding: 12px 18px;
+    display: flex; gap: 22px; align-items: center;
     flex-shrink: 0;
+    min-width: 0;
   }
-  .cf-stat { display: flex; flex-direction: column; }
+  .cf-stat { display: flex; flex-direction: column; min-width: 0; flex: 1; }
   .cf-label {
-    font-size: 10px; font-weight: 600; color: var(--ink-4);
-    text-transform: uppercase; letter-spacing: 0.6px;
+    font-size: 9.5px; font-weight: 600; color: var(--ink-4);
+    text-transform: uppercase; letter-spacing: 0.7px;
     margin-bottom: 4px;
   }
   .cf-value {
-    font-size: 18px; font-weight: 700; color: var(--bg-dark);
-    line-height: 1.1; letter-spacing: -0.3px;
+    font-size: 13px; font-weight: 700; color: var(--bg-dark);
+    line-height: 1.25; letter-spacing: -0.1px;
   }
 
   /* Slide chrome */
@@ -599,8 +593,9 @@
           <div class="ss-label">Screenshot</div>
         </div>
         <div class="case-footer">
-          <div class="cf-stat"><span class="cf-label">Total spend</span><span class="cf-value">$14,800</span></div>
-          <div class="cf-stat"><span class="cf-label">Time it took</span><span class="cf-value">4 weeks</span></div>
+          <div class="cf-stat"><span class="cf-label">Scope</span><span class="cf-value">M&amp;A + growth narrative</span></div>
+          <div class="cf-stat"><span class="cf-label">Format</span><span class="cf-value">Investor-ready decks</span></div>
+          <div class="cf-stat"><span class="cf-label">Delivered in</span><span class="cf-value">4 weeks</span></div>
         </div>
       </div>
       <div class="analyst-card">
@@ -649,8 +644,9 @@
           <div class="ss-label">Screenshot</div>
         </div>
         <div class="case-footer">
-          <div class="cf-stat"><span class="cf-label">Total spend</span><span class="cf-value">$24,500</span></div>
-          <div class="cf-stat"><span class="cf-label">Time it took</span><span class="cf-value">5 weeks</span></div>
+          <div class="cf-stat"><span class="cf-label">Model</span><span class="cf-value">3-statement + scenarios</span></div>
+          <div class="cf-stat"><span class="cf-label">Output</span><span class="cf-value">IC-ready, pre-LOI</span></div>
+          <div class="cf-stat"><span class="cf-label">Delivered in</span><span class="cf-value">5 weeks</span></div>
         </div>
       </div>
       <div class="analyst-card">
@@ -699,8 +695,9 @@
           <img src="AI_impact_on_search.png" alt="Generative AI's impact on search and customer acquisition">
         </div>
         <div class="case-footer">
-          <div class="cf-stat"><span class="cf-label">Total spend</span><span class="cf-value">$32,000</span></div>
-          <div class="cf-stat"><span class="cf-label">Time it took</span><span class="cf-value">7 weeks</span></div>
+          <div class="cf-stat"><span class="cf-label">Engagement</span><span class="cf-value">Cross-portfolio</span></div>
+          <div class="cf-stat"><span class="cf-label">Output</span><span class="cf-value">Forward thesis + sources</span></div>
+          <div class="cf-stat"><span class="cf-label">Delivered in</span><span class="cf-value">7 weeks</span></div>
         </div>
       </div>
       <div class="analyst-card">
@@ -749,8 +746,9 @@
           <div class="ss-label">Screenshot</div>
         </div>
         <div class="case-footer">
-          <div class="cf-stat"><span class="cf-label">Total spend</span><span class="cf-value">$18,200</span></div>
-          <div class="cf-stat"><span class="cf-label">Time it took</span><span class="cf-value">4 weeks</span></div>
+          <div class="cf-stat"><span class="cf-label">Build</span><span class="cf-value">Live operating dashboard</span></div>
+          <div class="cf-stat"><span class="cf-label">Coverage</span><span class="cf-value">Apollo book of work</span></div>
+          <div class="cf-stat"><span class="cf-label">Delivered in</span><span class="cf-value">4 weeks</span></div>
         </div>
       </div>
       <div class="analyst-card">
@@ -799,8 +797,9 @@
           <div class="ss-label">Screenshot</div>
         </div>
         <div class="case-footer">
-          <div class="cf-stat"><span class="cf-label">Total spend</span><span class="cf-value">$26,400</span></div>
-          <div class="cf-stat"><span class="cf-label">Time it took</span><span class="cf-value">6 weeks</span></div>
+          <div class="cf-stat"><span class="cf-label">Build</span><span class="cf-value">AI-assisted automation</span></div>
+          <div class="cf-stat"><span class="cf-label">Owner</span><span class="cf-value">Apollo portfolio team</span></div>
+          <div class="cf-stat"><span class="cf-label">Delivered in</span><span class="cf-value">6 weeks</span></div>
         </div>
       </div>
       <div class="analyst-card">
@@ -850,8 +849,9 @@
           <div class="ss-label">Screenshot</div>
         </div>
         <div class="case-footer">
-          <div class="cf-stat"><span class="cf-label">Total spend</span><span class="cf-value">$42,000</span></div>
-          <div class="cf-stat"><span class="cf-label">Time it took</span><span class="cf-value">12 weeks</span></div>
+          <div class="cf-stat"><span class="cf-label">Role</span><span class="cf-value">PMO leadership</span></div>
+          <div class="cf-stat"><span class="cf-label">Program</span><span class="cf-value">Q2C lifecycle</span></div>
+          <div class="cf-stat"><span class="cf-label">Delivered over</span><span class="cf-value">12 weeks</span></div>
         </div>
       </div>
       <div class="analyst-card">
@@ -900,8 +900,9 @@
           <div class="ss-label">Screenshot</div>
         </div>
         <div class="case-footer">
-          <div class="cf-stat"><span class="cf-label">Total spend</span><span class="cf-value">$28,500</span></div>
-          <div class="cf-stat"><span class="cf-label">Time it took</span><span class="cf-value">8 weeks</span></div>
+          <div class="cf-stat"><span class="cf-label">Workstream</span><span class="cf-value">Add-on pipeline</span></div>
+          <div class="cf-stat"><span class="cf-label">Vertical</span><span class="cf-value">Media + talent holding</span></div>
+          <div class="cf-stat"><span class="cf-label">Delivered in</span><span class="cf-value">8 weeks</span></div>
         </div>
       </div>
       <div class="analyst-card">
@@ -950,8 +951,9 @@
           <div class="ss-label">Screenshot</div>
         </div>
         <div class="case-footer">
-          <div class="cf-stat"><span class="cf-label">Total spend</span><span class="cf-value">$19,800</span></div>
-          <div class="cf-stat"><span class="cf-label">Time it took</span><span class="cf-value">6 weeks</span></div>
+          <div class="cf-stat"><span class="cf-label">Build</span><span class="cf-value">RevOps + CRM blueprint</span></div>
+          <div class="cf-stat"><span class="cf-label">Stage</span><span class="cf-value">High-growth SaaS</span></div>
+          <div class="cf-stat"><span class="cf-label">Delivered in</span><span class="cf-value">6 weeks</span></div>
         </div>
       </div>
       <div class="analyst-card">
@@ -1000,8 +1002,9 @@
           <div class="ss-label">Screenshot</div>
         </div>
         <div class="case-footer">
-          <div class="cf-stat"><span class="cf-label">Total spend</span><span class="cf-value">$36,000</span></div>
-          <div class="cf-stat"><span class="cf-label">Time it took</span><span class="cf-value">8 weeks</span></div>
+          <div class="cf-stat"><span class="cf-label">Diligence</span><span class="cf-value">Pre-LOI commercial</span></div>
+          <div class="cf-stat"><span class="cf-label">Team</span><span class="cf-value">Apollo deal team</span></div>
+          <div class="cf-stat"><span class="cf-label">Delivered in</span><span class="cf-value">8 weeks</span></div>
         </div>
       </div>
       <div class="analyst-card">
