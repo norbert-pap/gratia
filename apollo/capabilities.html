@@ -251,7 +251,7 @@
   }
 
   .case-screenshot {
-    flex: 1; min-height: 240px;
+    flex: 1 1 auto; min-height: 180px;
     background: var(--soft);
     border: 1.5px dashed #cfcfca;
     border-radius: 10px;
@@ -278,25 +278,28 @@
   }
   .case-screenshot.has-image img {
     width: 100%; height: 100%;
-    object-fit: cover; object-position: top center;
+    object-fit: contain; object-position: center;
     display: block;
+    background: var(--white);
   }
 
-  /* Analyst card (matches the standard Gratia bench card) */
+  /* Analyst card — the bench-card image already contains photo + name +
+     title + country + tags, so we use it 1:1 and skip the duplicate text. */
   .analyst-card {
-    background: var(--white); border: 1px solid var(--line);
-    border-radius: 14px; padding: 14px;
-    display: flex; flex-direction: column; gap: 10px;
-    overflow: hidden;
+    background: transparent; border: none; padding: 0;
+    display: flex; flex-direction: column;
+    align-self: stretch;
   }
   .analyst-photo-wrap {
     position: relative;
-    width: 100%; flex: 1; min-height: 140px;
-    border-radius: 10px; overflow: hidden;
+    width: 100%; flex: 1 1 0; min-height: 0;
+    border-radius: 14px; overflow: hidden;
     background: var(--soft);
+    border: 1px solid var(--line);
   }
   .analyst-photo-wrap img {
-    width: 100%; height: 100%; object-fit: cover; object-position: center 25%;
+    width: 100%; height: 100%;
+    object-fit: cover; object-position: top center;
     display: block;
   }
   .analyst-photo-wrap .photo-arrow {
@@ -316,7 +319,7 @@
   }
   .analyst-photo-wrap .ai-pill::before { content: '★'; font-size: 9px; }
 
-  .analyst-info { padding: 4px 6px 8px; }
+  .analyst-info { display: none; }
   .analyst-name {
     font-size: 17px; font-weight: 700; color: var(--ink);
     line-height: 1.2; margin-bottom: 4px;
@@ -379,7 +382,7 @@
   .footer-tag .ft-sep { width: 1px; height: 12px; background: #ccc; }
 
   .nav-arrows {
-    position: absolute; bottom: 22px; right: 32px;
+    position: absolute; bottom: 22px; left: 50%; transform: translateX(-50%);
     display: flex; gap: 6px; z-index: 60;
   }
   .nav-btn {
