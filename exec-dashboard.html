@@ -2,8 +2,9 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8" />
-<title>Apollo · Carina Capital 3/30</title>
+<title>Gratia — Helix × Apex Integration · Day 14 of 30</title>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
+<script src="auth.js"></script>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -1725,19 +1726,19 @@
 </head>
 <body>
 
+<div id="deck-content">
+
 <div class="glow"></div>
 
 <div class="app">
 
   <!-- ========== MAIN NAV ========== -->
   <header class="mainnav">
-    <div class="nav-brand" title="Apollo">
-      <img src="https://logo.clearbit.com/apollo.com" alt="Apollo"
-           onerror="this.replaceWith(Object.assign(document.createElement('span'),{className:'nav-brand-fallback',textContent:'A'}))" />
+    <div class="nav-brand" title="Helix Industrial">
+      <span class="nav-brand-fallback">H</span>
     </div>
     <nav class="tabs">
-      <button class="tab-btn active" data-tab="dashboard">Dashboard</button>
-      <button class="tab-btn" data-tab="personas">Personas <span class="ct">6</span></button>
+      <button class="tab-btn active" data-tab="dashboard">Integration</button>
     </nav>
     <div class="nav-right">
       <button class="icon-btn theme-toggle" id="themeToggle" title="Toggle theme" aria-label="Toggle theme">
@@ -1759,79 +1760,35 @@
 
       <div id="tab-dashboard" class="tab-panel active">
 
-      <!-- ===== KISSFLOW EMBED FRAME ===== -->
-      <div class="kf-frame">
-
-      <!-- ===== KISSFLOW SHELL (context band) ===== -->
-      <section class="kf-shell" aria-label="Kissflow context">
-        <div class="kf-title-row">
-          <div class="kf-title">
-            <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><rect x="3" y="3" width="7" height="7" rx="1.5"/><rect x="14" y="3" width="7" height="7" rx="1.5"/><rect x="3" y="14" width="7" height="7" rx="1.5"/><rect x="14" y="14" width="7" height="7" rx="1.5"/></svg>
-            <span>ISG SMA Onboarding</span>
-            <button class="kf-edit" title="Rename"><svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 20h9M16.5 3.5a2.121 2.121 0 113 3L7 19l-4 1 1-4L16.5 3.5z" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-          </div>
-          <div class="kf-title-actions">
-            <button class="kf-pill"><span class="kf-pill-k">Viewing as</span><span class="kf-pill-v">Allocations</span><svg width="10" height="10" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-            <button class="kf-btn">Manage</button>
-            <button class="kf-btn primary">Deploy</button>
-            <button class="kf-icon"><svg width="13" height="13" fill="currentColor" viewBox="0 0 24 24"><circle cx="6" cy="12" r="1.6"/><circle cx="12" cy="12" r="1.6"/><circle cx="18" cy="12" r="1.6"/></svg></button>
-          </div>
-        </div>
-        <nav class="kf-tabs">
-          <button class="kf-tab">Lead Dashboard</button>
-          <button class="kf-tab">All Requests</button>
-          <button class="kf-tab">Team Lead Tasks</button>
-          <button class="kf-tab">Team Tasks</button>
-          <button class="kf-tab">Request Tasks</button>
-          <button class="kf-tab active">Dashboards</button>
-          <button class="kf-tab">Instructions</button>
-        </nav>
-        <nav class="kf-subtabs" aria-label="Team filter">
-          <button class="kf-subtab active">All Teams</button>
-          <button class="kf-subtab">Portfolio Admin</button>
-          <button class="kf-subtab">ISG Portfolio Control</button>
-          <button class="kf-subtab">Client Engineering</button>
-          <button class="kf-subtab">Client Solutions</button>
-          <button class="kf-subtab">Client Service</button>
-          <button class="kf-subtab">Reference Data</button>
-          <button class="kf-subtab">ISG Legal</button>
-          <button class="kf-subtab">Reconciliation</button>
-          <button class="kf-subtab">Billing</button>
-          <button class="kf-subtab">Internal Controls</button>
-          <button class="kf-subtab">Performance</button>
-          <button class="kf-subtab kf-more"><svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
-        </nav>
-      </section>
-
       <div class="kf-body">
 
       <!-- ===== PAGE HEAD ===== -->
       <section class="page-head">
         <div>
           <div class="eyebrow-row">
-            <span class="eyebrow">ISG SMA · Day 14 of 30</span>
+            <span class="eyebrow">Helix × Apex Integration · Day 14 of 30</span>
             <div class="client-filter">
-              <button class="client-select" id="clientSelectBtn" title="Filter by client" aria-haspopup="listbox" aria-expanded="false">
-                <span id="clientSelectLabel">Carina Capital</span>
+              <button class="client-select" id="clientSelectBtn" title="Filter by acquired entity" aria-haspopup="listbox" aria-expanded="false">
+                <span id="clientSelectLabel">Apex Ventures</span>
                 <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
               </button>
               <ul class="client-menu" id="clientMenu" role="listbox" hidden>
-                <li class="client-menu-label">Client name</li>
-                <li class="client-menu-item active" role="option" data-client="all">All Clients</li>
-                <li class="client-menu-item" role="option" data-client="carina">Carina Capital</li>
-                <li class="client-menu-item" role="option" data-client="nyl">New York Life</li>
-                <li class="client-menu-item" role="option" data-client="athene">Athene Holding</li>
-                <li class="client-menu-item" role="option" data-client="abc">ABC Company</li>
-                <li class="client-menu-item" role="option" data-client="def">DEF Organization</li>
-                <li class="client-menu-item" role="option" data-client="ghi">GHI LLC</li>
-                <li class="client-menu-item" role="option" data-client="jkl">JKL Partners</li>
-                <li class="client-menu-item" role="option" data-client="mno">MNO Capital</li>
+                <li class="client-menu-label">Acquired entity</li>
+                <li class="client-menu-item active" role="option" data-client="all">All entities</li>
+                <li class="client-menu-item" role="option" data-client="carina">Apex Ventures</li>
+                <li class="client-menu-item" role="option" data-client="nyl">Apex Logistics</li>
+                <li class="client-menu-item" role="option" data-client="athene">Apex Mfg</li>
+                <li class="client-menu-item" role="option" data-client="abc">Apex Asia</li>
+                <li class="client-menu-item" role="option" data-client="def">Apex EU</li>
+                <li class="client-menu-item" role="option" data-client="ghi">Apex Foods</li>
+                <li class="client-menu-item" role="option" data-client="jkl">Apex Beverage</li>
+                <li class="client-menu-item" role="option" data-client="mno">Apex Retail</li>
               </ul>
             </div>
             <span class="status-chip" id="statusChip" data-status="amber"><span class="dot-pulse"></span><span id="statusChipLabel">Slightly behind</span></span>
           </div>
-          <h1 class="lede" id="dashLede">5 teams off-track. <em>4 teams already complete</em>. On pace for May 13 go-live.</h1>
-          <p class="sublede" id="dashSublede">Settlements and Reconciliation are the remaining bottlenecks. ISG Legal contract review cleared this week, Settlements restarting now.</p>
+          <h1 class="lede" id="dashLede">5 workstreams off-track. <em>4 workstreams cleared sign-off</em>. On pace for May 13 cutover.</h1>
+          <p class="sublede" id="dashSublede">IT Cutover and Customer Migration remain the bottlenecks. Legal contract harmonization cleared this week, IT Cutover dry-run restarting now.</p>
         </div>
         <div class="head-actions">
           <button class="btn primary">
@@ -1852,7 +1809,7 @@
           </div>
         </div>
         <div class="kpi">
-          <div class="label">Off-track teams</div>
+          <div class="label">Off-track workstreams</div>
           <div class="value num" id="kpiOffTrackValueWrap"><span id="kpiOffTrackValue">5</span><span class="unit">/23</span></div>
           <div class="delta" id="kpiOffTrackDelta">+1 since last week</div>
         </div>
@@ -1862,7 +1819,7 @@
           <div class="delta" id="daysRemainingDelta">Until projected go-live · May 13</div>
         </div>
         <div class="kpi">
-          <div class="label"><span class="tip tip-wide tip-below" data-tip="A team is in breach if it has spent >24h in Impact Assessment, >24h in Tasks Selection, or is past the due date without reaching Ready for Trading.">SLA breaches</span></div>
+          <div class="label"><span class="tip tip-wide tip-below" data-tip="A workstream is in breach if it has spent >24h in Discovery, >24h in Plan &amp; Assign, or is past the due date without reaching UAT &amp; Sign-off.">Stage-time breaches</span></div>
           <div class="value num" id="kpiSlaValueWrap"><span id="kpiSlaValue">3</span></div>
           <div class="delta" id="kpiSlaDelta">Across 2 teams</div>
         </div>
@@ -2020,13 +1977,13 @@
       <section class="matrix-section">
         <div class="matrix-head">
           <div class="title-group">
-            <h2><span id="matrixTeamCount">23</span> teams</h2>
+            <h2><span id="matrixTeamCount">23</span> workstreams</h2>
             <span class="count">Sorted by risk · most urgent first</span>
           </div>
           <div class="filter-bar" id="filters">
             <button class="chip active" data-filter="all">All<span class="ct" id="chipCountAll">23</span></button>
-            <button class="chip" data-filter="r" title="Team is off track and not meeting SLAs"><span class="dot r"></span>Off track<span class="ct" id="chipCountR">5</span></button>
-            <button class="chip" data-filter="a" title="Team is pending information from other internal teams or client"><span class="dot a"></span>Pending<span class="ct" id="chipCountA">5</span></button>
+            <button class="chip" data-filter="r" title="Workstream is off track and not meeting stage-time SLAs"><span class="dot r"></span>Off track<span class="ct" id="chipCountR">5</span></button>
+            <button class="chip" data-filter="a" title="Workstream is pending input from another team or the acquired entity"><span class="dot a"></span>Pending<span class="ct" id="chipCountA">5</span></button>
             <button class="chip" data-filter="g" title="On track"><span class="dot g"></span>On track<span class="ct" id="chipCountG">13</span></button>
             <span class="stage-filter-banner" id="stageBanner">
               <span>Stage: <strong id="stageBannerName"></strong></span>
@@ -2042,11 +1999,11 @@
             <div>Ref #</div>
             <div>Team</div>
             <div class="stage-labels">
-              <div><span class="tip tip-wide" data-tip="Initial assessment of the team's involvement and what's required for this client. SLA: 24 hours.">Impact<br>Assessment</span></div>
-              <div><span class="tip tip-wide" data-tip="Tasks chosen and assigned to owners on the team. SLA: 24 hours.">Tasks<br>Selection</span></div>
-              <div><span class="tip tip-wide" data-tip="Team is executing the assigned tasks. Duration varies by scope.">In<br>Progress</span></div>
-              <div><span class="tip tip-wide" data-tip="Team can support trading for this client. Teams with post-event closure tasks remain here while completing them.">Ready for<br>Trading</span></div>
-              <div><span class="tip tip-wide" data-tip="All onboarding work closed. Teams without post-event closure tasks move directly from Ready for Trading to Complete.">Onboarding<br>Complete</span></div>
+              <div><span class="tip tip-wide" data-tip="Initial scope assessment of this workstream's role in the integration. SLA: 24 hours.">Discovery</span></div>
+              <div><span class="tip tip-wide" data-tip="Tasks chosen, owners assigned, and integration plan locked. SLA: 24 hours.">Plan &amp;<br>Assign</span></div>
+              <div><span class="tip tip-wide" data-tip="Workstream is executing assigned tasks. Duration varies by scope.">Build</span></div>
+              <div><span class="tip tip-wide" data-tip="Workstream is in user-acceptance testing and gathering stakeholder sign-off.">UAT &amp;<br>Sign-off</span></div>
+              <div><span class="tip tip-wide" data-tip="Workstream is live in the combined operating model. Hypercare runs for 30 days post-cutover.">Live</span></div>
             </div>
             <div>Dependency</div>
             <div>Lead</div>
@@ -2059,7 +2016,6 @@
       </section>
 
       </div> <!-- /.kf-body -->
-      </div> <!-- /.kf-frame -->
 
       </div> <!-- /#tab-dashboard -->
 
@@ -2533,7 +2489,7 @@
 
       <!-- ===== FOOTER ===== -->
       <footer class="foot">
-        <div>apollo · isg-sma · onboarding · v2.4.1</div>
+        <div>helix · apex-integration · cutover · v2.4.1</div>
         <div>updated 2 min ago</div>
       </footer>
 
@@ -2549,49 +2505,49 @@
 
 <script>
   // ========== DATA ==========
-  const STAGES = ['Impact Assessment', 'Tasks Selection & Assignment', 'In Progress', 'Ready for Trading', 'Completed'];
+  const STAGES = ['Discovery', 'Plan & Assign', 'Build', 'UAT & Sign-off', 'Live'];
 
-  // Fixed metadata for each functional team (consistent across every client)
+  // Fixed metadata for each integration workstream (consistent across every entity)
   const TEAM_META = [
-    { name: 'Performance',        ref: 'CK-2401', lead: 'Sarah Chen',     leadInit: 'SC', blocks: ['Allocations', 'Risk Management', 'Fund Accounting'], deps: ['Client'] },
-    { name: 'Risk Management',    ref: 'CK-2402', lead: 'Michael Patel',  leadInit: 'MP', blocks: ['Compliance'], deps: ['Performance'] },
-    { name: 'Client Service',     ref: 'CK-2403', lead: 'John Loh',       leadInit: 'JL', blocks: [], deps: ['Client'] },
-    { name: 'Reconciliation',     ref: 'CK-2404', lead: 'Roberto Romano', leadInit: 'RR', blocks: ['Billing', 'Internal Controls', 'Allocations', 'Trade Support'], deps: ['Reference Data'] },
-    { name: 'Tax Services',       ref: 'CK-2405', lead: 'Michael Patel',  leadInit: 'MP', blocks: ['Fund Accounting'], deps: ['ISG Legal'] },
-    { name: 'Corporate Actions',  ref: 'CK-2406', lead: 'Alexander Black',leadInit: 'AB', blocks: [], deps: ['Reference Data'] },
-    { name: 'Settlements',        ref: 'CK-2407', lead: 'John Loh',       leadInit: 'JL', blocks: ['Custody', 'Transfer Agency', 'Cash Management'], deps: ['ISG Legal'] },
-    { name: 'Allocations',        ref: 'CK-2408', lead: 'Alexander Black',leadInit: 'AB', blocks: ['Reconciliation'], deps: ['Reconciliation'] },
-    { name: 'Client Solutions',   ref: 'CK-2409', lead: 'John Loh',       leadInit: 'JL', blocks: ['Client Service'], deps: ['Client'] },
-    { name: 'Transfer Agency',    ref: 'CK-2410', lead: 'Roberto Romano', leadInit: 'RR', blocks: [], deps: ['Reconciliation'] },
-    { name: 'Cash Management',    ref: 'CK-2411', lead: 'Karthik Dasari', leadInit: 'KD', blocks: [], deps: ['Settlements'] },
-    { name: 'Billing',            ref: 'CK-2412', lead: 'Karthik Dasari', leadInit: 'KD', blocks: [], deps: ['Reconciliation'] },
-    { name: 'Custody',            ref: 'CK-2413', lead: 'Roberto Romano', leadInit: 'RR', blocks: [], deps: ['Settlements'] },
-    { name: 'Treasury',           ref: 'CK-2414', lead: 'Michael Patel',  leadInit: 'MP', blocks: [], deps: ['Client'] },
-    { name: 'Compliance',         ref: 'CK-2415', lead: 'Michael Patel',  leadInit: 'MP', blocks: [], deps: ['Risk Management'] },
-    { name: 'Internal Controls',  ref: 'CK-2416', lead: 'Roberto Romano', leadInit: 'RR', blocks: [], deps: [] },
-    { name: 'Middle Office',      ref: 'CK-2417', lead: 'Alexander Black',leadInit: 'AB', blocks: [], deps: [] },
-    { name: 'Trade Support',      ref: 'CK-2418', lead: 'John Loh',       leadInit: 'JL', blocks: [], deps: [] },
-    { name: 'Fund Accounting',    ref: 'CK-2419', lead: 'Karthik Dasari', leadInit: 'KD', blocks: [], deps: [] },
-    { name: 'Reference Data',     ref: 'CK-2420', lead: 'John Loh',       leadInit: 'JL', blocks: [], deps: [] },
-    { name: 'ISG Legal',          ref: 'CK-2421', lead: 'Roberto Romano', leadInit: 'RR', blocks: [], deps: [] },
-    { name: 'Portfolio Admin',    ref: 'CK-2422', lead: 'John Loh',       leadInit: 'JL', blocks: [], deps: [] },
-    { name: 'Client Engineering', ref: 'CK-2423', lead: 'Alexander Black',leadInit: 'AB', blocks: [], deps: [] },
+    { name: 'Financial Reporting', ref: 'HX-2401', lead: 'Sarah Chen',     leadInit: 'SC', blocks: ['HRIS Migration', 'Risk & Audit', 'Finance Close'], deps: ['CIO Office'] },
+    { name: 'Risk & Audit',        ref: 'HX-2402', lead: 'Michael Patel',  leadInit: 'MP', blocks: ['Compliance'], deps: ['Financial Reporting'] },
+    { name: 'Customer Success',    ref: 'HX-2403', lead: 'John Loh',       leadInit: 'JL', blocks: [], deps: ['CIO Office'] },
+    { name: 'Customer Migration',  ref: 'HX-2404', lead: 'Roberto Romano', leadInit: 'RR', blocks: ['Invoice Migration', 'SOX Controls', 'HRIS Migration', 'Vendor Mgmt'], deps: ['Master Data'] },
+    { name: 'Tax Harmonization',   ref: 'HX-2405', lead: 'Michael Patel',  leadInit: 'MP', blocks: ['Finance Close'], deps: ['Legal'] },
+    { name: 'Corporate Comms',     ref: 'HX-2406', lead: 'Alexander Black',leadInit: 'AB', blocks: [], deps: ['Master Data'] },
+    { name: 'IT Cutover',          ref: 'HX-2407', lead: 'John Loh',       leadInit: 'JL', blocks: ['Asset Mgmt', 'CRM Integration', 'Treasury Ops'], deps: ['Legal'] },
+    { name: 'HRIS Migration',      ref: 'HX-2408', lead: 'Alexander Black',leadInit: 'AB', blocks: ['Customer Migration'], deps: ['Customer Migration'] },
+    { name: 'Sales Enablement',    ref: 'HX-2409', lead: 'John Loh',       leadInit: 'JL', blocks: ['Customer Success'], deps: ['CIO Office'] },
+    { name: 'CRM Integration',     ref: 'HX-2410', lead: 'Roberto Romano', leadInit: 'RR', blocks: [], deps: ['Customer Migration'] },
+    { name: 'Treasury Ops',        ref: 'HX-2411', lead: 'Karthik Dasari', leadInit: 'KD', blocks: [], deps: ['IT Cutover'] },
+    { name: 'Invoice Migration',   ref: 'HX-2412', lead: 'Karthik Dasari', leadInit: 'KD', blocks: [], deps: ['Customer Migration'] },
+    { name: 'Asset Mgmt',          ref: 'HX-2413', lead: 'Roberto Romano', leadInit: 'RR', blocks: [], deps: ['IT Cutover'] },
+    { name: 'Treasury Strategy',   ref: 'HX-2414', lead: 'Michael Patel',  leadInit: 'MP', blocks: [], deps: ['CIO Office'] },
+    { name: 'Compliance',          ref: 'HX-2415', lead: 'Michael Patel',  leadInit: 'MP', blocks: [], deps: ['Risk & Audit'] },
+    { name: 'SOX Controls',        ref: 'HX-2416', lead: 'Roberto Romano', leadInit: 'RR', blocks: [], deps: [] },
+    { name: 'PMO',                 ref: 'HX-2417', lead: 'Alexander Black',leadInit: 'AB', blocks: [], deps: [] },
+    { name: 'Vendor Mgmt',         ref: 'HX-2418', lead: 'John Loh',       leadInit: 'JL', blocks: [], deps: [] },
+    { name: 'Finance Close',       ref: 'HX-2419', lead: 'Karthik Dasari', leadInit: 'KD', blocks: [], deps: [] },
+    { name: 'Master Data',         ref: 'HX-2420', lead: 'John Loh',       leadInit: 'JL', blocks: [], deps: [] },
+    { name: 'Legal',               ref: 'HX-2421', lead: 'Roberto Romano', leadInit: 'RR', blocks: [], deps: [] },
+    { name: 'Portfolio Mgmt',      ref: 'HX-2422', lead: 'John Loh',       leadInit: 'JL', blocks: [], deps: [] },
+    { name: 'Engineering Ops',     ref: 'HX-2423', lead: 'Alexander Black',leadInit: 'AB', blocks: [], deps: [] },
   ];
 
   // 3 archetypes -each parallel-indexed to TEAM_META (23 entries each)
   const ARCHETYPES = {
     behind: [
-      { stageIdx: 1, health: 'r', days: 14, risk: 12, blocker: "Client hasn't returned benchmark specification after 6 reminders.", depTag: 'Pending Client' },
-      { stageIdx: 1, health: 'a', days: 14, risk: 7,  blocker: 'Waiting on Performance benchmark before VaR model can be configured.', depTag: 'Pending Performance' },
-      { stageIdx: 1, health: 'a', days: 14, risk: 6,  blocker: 'Pending client contact authorization list.', depTag: 'Pending Client' },
-      { stageIdx: 1, health: 'r', days: 14, risk: 11, blocker: 'Custodian file format differs from spec, waiting on Reference Data mapping.', depTag: 'Pending Ref Data' },
-      { stageIdx: 1, health: 'r', days: 14, risk: 10, blocker: 'Tax residency documents missing for 2 of 4 entities.', depTag: 'Pending IMA' },
-      { stageIdx: 2, health: 'a', days: 14, risk: 6,  blocker: 'Event feed source pending finalisation.', depTag: 'Pending Ref Data' },
-      { stageIdx: 2, health: 'r', days: 14, risk: 10, blocker: 'ISG Legal contract review just cleared. Settlement instruction setup restarting.', depTag: 'Pending ISG Legal' },
-      { stageIdx: 2, health: 'r', days: 14, risk: 9,  blocker: 'Test allocation file failing schema validation, fix in progress.', depTag: 'Pending Recon' },
-      { stageIdx: 2, health: 'a', days: 14, risk: 5,  blocker: 'Client IT configuring SSO IdP endpoint.', depTag: 'Pending Client' },
+      { stageIdx: 1, health: 'r', days: 14, risk: 12, blocker: "Acquired CFO hasn't returned chart-of-accounts mapping after 6 reminders.", depTag: 'Pending CFO' },
+      { stageIdx: 1, health: 'a', days: 14, risk: 7,  blocker: 'Waiting on Financial Reporting baseline before audit scope can be locked.', depTag: 'Pending Fin. Reporting' },
+      { stageIdx: 1, health: 'a', days: 14, risk: 6,  blocker: 'Pending acquired-side stakeholder contact list.', depTag: 'Pending CIO Office' },
+      { stageIdx: 1, health: 'r', days: 14, risk: 11, blocker: 'Customer record schema differs from Helix master, waiting on Master Data mapping.', depTag: 'Pending Master Data' },
+      { stageIdx: 1, health: 'r', days: 14, risk: 10, blocker: 'Tax residency documents missing for 2 of 4 sub-entities.', depTag: 'Pending Tax Lead' },
+      { stageIdx: 2, health: 'a', days: 14, risk: 6,  blocker: 'Comms cascade plan pending finalisation.', depTag: 'Pending Master Data' },
+      { stageIdx: 2, health: 'r', days: 14, risk: 10, blocker: 'Legal contract harmonization just cleared. IT cutover dry-run restarting.', depTag: 'Pending Legal' },
+      { stageIdx: 2, health: 'r', days: 14, risk: 9,  blocker: 'Test HRIS load failing schema validation, fix in progress.', depTag: 'Pending Cust. Migration' },
+      { stageIdx: 2, health: 'a', days: 14, risk: 5,  blocker: 'Acquired-side IT configuring SSO IdP endpoint.', depTag: 'Pending CIO Office' },
       { stageIdx: 2, health: 'g', days: 14, risk: 3,  blocker: null },
-      { stageIdx: 2, health: 'a', days: 14, risk: 5,  blocker: 'Awaiting Settlements instruction template before account setup.', depTag: 'Pending Settlements' },
+      { stageIdx: 2, health: 'a', days: 14, risk: 5,  blocker: 'Awaiting IT Cutover bank routing template before treasury accounts open.', depTag: 'Pending IT Cutover' },
       { stageIdx: 2, health: 'g', days: 14, risk: 3,  blocker: null },
       { stageIdx: 3, health: 'g', days: 14, risk: 2,  blocker: null },
       { stageIdx: 3, health: 'g', days: 14, risk: 2,  blocker: null },
@@ -2606,46 +2562,46 @@
       { stageIdx: 4, health: 'g', days: 19, risk: 0,  blocker: null },
     ],
     ontrack: [
-      { stageIdx: 4, health: 'g', days: 18, risk: 0, blocker: null }, // Performance -complete
-      { stageIdx: 3, health: 'g', days: 14, risk: 0, blocker: null }, // Risk Management -ready
-      { stageIdx: 4, health: 'g', days: 16, risk: 0, blocker: null }, // Client Service -complete
-      { stageIdx: 3, health: 'g', days: 14, risk: 0, blocker: null }, // Reconciliation -ready
-      { stageIdx: 3, health: 'g', days: 14, risk: 0, blocker: null }, // Tax Services -ready
-      { stageIdx: 3, health: 'g', days: 14, risk: 0, blocker: null }, // Corporate Actions -ready
-      { stageIdx: 4, health: 'g', days: 16, risk: 0, blocker: null }, // Settlements -complete
-      { stageIdx: 3, health: 'g', days: 14, risk: 0, blocker: null }, // Allocations -ready
-      { stageIdx: 3, health: 'a', days: 14, risk: 2, blocker: 'Final SSO IdP cutover scheduled for Friday.', depTag: 'Pending Client' }, // Client Solutions
-      { stageIdx: 4, health: 'g', days: 16, risk: 0, blocker: null }, // Transfer Agency -complete
-      { stageIdx: 4, health: 'g', days: 14, risk: 0, blocker: null }, // Cash Management -complete
-      { stageIdx: 3, health: 'g', days: 14, risk: 0, blocker: null }, // Billing -ready
-      { stageIdx: 4, health: 'g', days: 14, risk: 0, blocker: null }, // Custody -complete
-      { stageIdx: 3, health: 'a', days: 14, risk: 2, blocker: 'Final banking authorisation pending, last signature.', depTag: 'Pending Client' }, // Treasury
-      { stageIdx: 4, health: 'g', days: 14, risk: 0, blocker: null }, // Compliance -complete
-      { stageIdx: 4, health: 'g', days: 14, risk: 0, blocker: null }, // Internal Controls -complete
-      { stageIdx: 4, health: 'g', days: 13, risk: 0, blocker: null }, // Middle Office -complete
-      { stageIdx: 3, health: 'g', days: 12, risk: 0, blocker: null }, // Trade Support -ready
-      { stageIdx: 3, health: 'g', days: 11, risk: 0, blocker: null }, // Fund Accounting -ready
-      { stageIdx: 4, health: 'g', days: 16, risk: 0, blocker: null }, // Reference Data -complete
-      { stageIdx: 4, health: 'g', days: 15, risk: 0, blocker: null }, // ISG Legal -complete
-      { stageIdx: 4, health: 'g', days: 18, risk: 0, blocker: null }, // Portfolio Admin -complete
-      { stageIdx: 4, health: 'g', days: 19, risk: 0, blocker: null }, // Client Engineering -complete
+      { stageIdx: 4, health: 'g', days: 18, risk: 0, blocker: null }, // Financial Reporting -live
+      { stageIdx: 3, health: 'g', days: 14, risk: 0, blocker: null }, // Risk & Audit -UAT
+      { stageIdx: 4, health: 'g', days: 16, risk: 0, blocker: null }, // Customer Success -live
+      { stageIdx: 3, health: 'g', days: 14, risk: 0, blocker: null }, // Customer Migration -UAT
+      { stageIdx: 3, health: 'g', days: 14, risk: 0, blocker: null }, // Tax Harmonization -UAT
+      { stageIdx: 3, health: 'g', days: 14, risk: 0, blocker: null }, // Corporate Comms -UAT
+      { stageIdx: 4, health: 'g', days: 16, risk: 0, blocker: null }, // IT Cutover -live
+      { stageIdx: 3, health: 'g', days: 14, risk: 0, blocker: null }, // HRIS Migration -UAT
+      { stageIdx: 3, health: 'a', days: 14, risk: 2, blocker: 'Final SSO IdP cutover scheduled for Friday.', depTag: 'Pending CIO Office' }, // Sales Enablement
+      { stageIdx: 4, health: 'g', days: 16, risk: 0, blocker: null }, // CRM Integration -live
+      { stageIdx: 4, health: 'g', days: 14, risk: 0, blocker: null }, // Treasury Ops -live
+      { stageIdx: 3, health: 'g', days: 14, risk: 0, blocker: null }, // Invoice Migration -UAT
+      { stageIdx: 4, health: 'g', days: 14, risk: 0, blocker: null }, // Asset Mgmt -live
+      { stageIdx: 3, health: 'a', days: 14, risk: 2, blocker: 'Final banking authorisation pending, last signature.', depTag: 'Pending CFO' }, // Treasury Strategy
+      { stageIdx: 4, health: 'g', days: 14, risk: 0, blocker: null }, // Compliance -live
+      { stageIdx: 4, health: 'g', days: 14, risk: 0, blocker: null }, // SOX Controls -live
+      { stageIdx: 4, health: 'g', days: 13, risk: 0, blocker: null }, // PMO -live
+      { stageIdx: 3, health: 'g', days: 12, risk: 0, blocker: null }, // Vendor Mgmt -UAT
+      { stageIdx: 3, health: 'g', days: 11, risk: 0, blocker: null }, // Finance Close -UAT
+      { stageIdx: 4, health: 'g', days: 16, risk: 0, blocker: null }, // Master Data -live
+      { stageIdx: 4, health: 'g', days: 15, risk: 0, blocker: null }, // Legal -live
+      { stageIdx: 4, health: 'g', days: 18, risk: 0, blocker: null }, // Portfolio Mgmt -live
+      { stageIdx: 4, health: 'g', days: 19, risk: 0, blocker: null }, // Engineering Ops -live
     ],
     offtrack: [
-      { stageIdx: 0, health: 'r', days: 14, risk: 14, blocker: 'Client unresponsive on benchmark spec, 11 reminders sent.', depTag: 'Pending Client' },
-      { stageIdx: 0, health: 'r', days: 14, risk: 13, blocker: 'Cannot start without Performance benchmark.', depTag: 'Pending Performance' },
-      { stageIdx: 0, health: 'r', days: 14, risk: 13, blocker: 'Client contact authorization list still missing.', depTag: 'Pending Client' },
-      { stageIdx: 0, health: 'r', days: 14, risk: 13, blocker: 'Custodian file format conflict unresolved.', depTag: 'Pending Ref Data' },
-      { stageIdx: 1, health: 'r', days: 14, risk: 12, blocker: 'Tax residency documents missing for all 4 entities.', depTag: 'Pending IMA' },
-      { stageIdx: 0, health: 'r', days: 14, risk: 12, blocker: 'Event feed source not selected.', depTag: 'Pending Ref Data' },
-      { stageIdx: 0, health: 'r', days: 14, risk: 14, blocker: 'ISG Legal contract review at 18 days outstanding.', depTag: 'Pending ISG Legal' },
-      { stageIdx: 1, health: 'r', days: 14, risk: 11, blocker: 'Schema validation failing, 7 SLA breaches.', depTag: 'Pending Recon' },
-      { stageIdx: 0, health: 'r', days: 14, risk: 11, blocker: 'Client IT not yet engaged on SSO setup.', depTag: 'Pending Client' },
-      { stageIdx: 1, health: 'r', days: 14, risk: 10, blocker: 'Unit-holder file mismatch with Reconciliation, pending fix.', depTag: 'Pending Recon' },
-      { stageIdx: 0, health: 'r', days: 14, risk: 9,  blocker: 'Awaiting Settlements instruction template.', depTag: 'Pending Settlements' },
-      { stageIdx: 1, health: 'r', days: 14, risk: 8,  blocker: 'Awaiting reconciled position file.', depTag: 'Pending Recon' },
-      { stageIdx: 1, health: 'r', days: 14, risk: 8,  blocker: 'Awaiting Settlements instruction set.', depTag: 'Pending Settlements' },
-      { stageIdx: 0, health: 'a', days: 14, risk: 6,  blocker: 'Awaiting client banking authorisations.', depTag: 'Pending Client' },
-      { stageIdx: 0, health: 'a', days: 14, risk: 6,  blocker: 'Waiting on Risk Management VaR sign-off.', depTag: 'Pending Risk Mgmt' },
+      { stageIdx: 0, health: 'r', days: 14, risk: 14, blocker: 'Acquired CFO unresponsive on chart-of-accounts mapping, 11 reminders sent.', depTag: 'Pending CFO' },
+      { stageIdx: 0, health: 'r', days: 14, risk: 13, blocker: 'Cannot start audit scoping without Financial Reporting baseline.', depTag: 'Pending Fin. Reporting' },
+      { stageIdx: 0, health: 'r', days: 14, risk: 13, blocker: 'Acquired-side stakeholder list still missing.', depTag: 'Pending CIO Office' },
+      { stageIdx: 0, health: 'r', days: 14, risk: 13, blocker: 'Customer record schema conflict unresolved.', depTag: 'Pending Master Data' },
+      { stageIdx: 1, health: 'r', days: 14, risk: 12, blocker: 'Tax residency documents missing for all 4 sub-entities.', depTag: 'Pending Tax Lead' },
+      { stageIdx: 0, health: 'r', days: 14, risk: 12, blocker: 'Comms cascade plan not yet selected.', depTag: 'Pending Master Data' },
+      { stageIdx: 0, health: 'r', days: 14, risk: 14, blocker: 'Legal contract harmonization at 18 days outstanding.', depTag: 'Pending Legal' },
+      { stageIdx: 1, health: 'r', days: 14, risk: 11, blocker: 'HRIS schema validation failing, 7 stage-time breaches.', depTag: 'Pending Cust. Migration' },
+      { stageIdx: 0, health: 'r', days: 14, risk: 11, blocker: 'Acquired-side IT not yet engaged on SSO setup.', depTag: 'Pending CIO Office' },
+      { stageIdx: 1, health: 'r', days: 14, risk: 10, blocker: 'Customer file mismatch with Customer Migration, pending fix.', depTag: 'Pending Cust. Migration' },
+      { stageIdx: 0, health: 'r', days: 14, risk: 9,  blocker: 'Awaiting IT Cutover bank routing template.', depTag: 'Pending IT Cutover' },
+      { stageIdx: 1, health: 'r', days: 14, risk: 8,  blocker: 'Awaiting reconciled customer-balance file.', depTag: 'Pending Cust. Migration' },
+      { stageIdx: 1, health: 'r', days: 14, risk: 8,  blocker: 'Awaiting IT Cutover network plan.', depTag: 'Pending IT Cutover' },
+      { stageIdx: 0, health: 'a', days: 14, risk: 6,  blocker: 'Awaiting acquired-side banking authorisations.', depTag: 'Pending CFO' },
+      { stageIdx: 0, health: 'a', days: 14, risk: 6,  blocker: 'Waiting on Risk &amp; Audit sign-off.', depTag: 'Pending Risk' },
       { stageIdx: 1, health: 'a', days: 14, risk: 5,  blocker: null },
       { stageIdx: 1, health: 'a', days: 13, risk: 5,  blocker: null },
       { stageIdx: 1, health: 'a', days: 12, risk: 5,  blocker: null },
@@ -2668,41 +2624,41 @@
   const PACING_TODAY = 14;
   let currentPacingArchetype = 'behind';
 
-  // 9 clients (incl. All) -each points to an archetype + per-client metadata
+  // 9 entities (incl. All) -each points to an archetype + per-entity metadata
   const CLIENTS = {
-    all:    { name: 'All Clients',      archetype: 'behind',   goLive: 'May 13', daysSlip: 8,   statusKey: 'amber', statusLabel: 'Slightly behind',
-              lede: '<em>8 clients in flight.</em> 3 on track, 3 slightly behind, 2 off-track.',
-              sublede: 'Aggregate view across the SMA portfolio. Filter by client to drill in.' },
-    carina: { name: 'Carina Capital',   archetype: 'behind',   goLive: 'May 13', daysSlip: 8,   statusKey: 'amber', statusLabel: 'Slightly behind',
-              lede: '5 teams off-track. <em>4 teams already complete</em>. On pace for May 13 go-live.',
-              sublede: 'Settlements and Reconciliation are the remaining bottlenecks. ISG Legal contract review cleared this week, Settlements restarting now.' },
-    nyl:    { name: 'New York Life',    archetype: 'ontrack',  goLive: 'May 5',  daysSlip: -2,  statusKey: 'green', statusLabel: 'On track',
-              lede: '<em>13 teams already complete</em>; 8 in final review. Ahead of plan.',
-              sublede: 'No active blockers. On pace for early go-live on May 5.' },
-    athene: { name: 'Athene Holding',   archetype: 'offtrack', goLive: 'Jun 18', daysSlip: 35,  statusKey: 'red',   statusLabel: 'Off track',
-              lede: '<em>13 teams off-track.</em> Portfolio at risk. Projected go-live slipping to Jun 18.',
-              sublede: 'ISG Legal contract review at 18 days outstanding. Client unresponsive on benchmark spec, SSO config, and contact list.' },
-    abc:    { name: 'ABC Company',      archetype: 'behind',   goLive: 'May 16', daysSlip: 11,  statusKey: 'amber', statusLabel: 'Slightly behind',
-              lede: '5 teams off-track. <em>4 teams complete</em>. Projected May 16 go-live.',
-              sublede: 'Performance benchmark received this week. Settlements still working through ISG Legal contract markup.' },
-    def:    { name: 'DEF Organization', archetype: 'offtrack', goLive: 'Jun 11', daysSlip: 28,  statusKey: 'red',   statusLabel: 'Off track',
-              lede: '<em>13 teams off-track.</em> Onboarding stalled. Go-live now Jun 11.',
-              sublede: 'Tax residency documentation still missing across entities. Client engagement intermittent since week 1.' },
-    ghi:    { name: 'GHI LLC',          archetype: 'ontrack',  goLive: 'May 7',  daysSlip: 0,   statusKey: 'green', statusLabel: 'On track',
-              lede: '<em>13 teams complete</em>; 8 in final review. Tracking exactly to plan.',
-              sublede: 'Two pending items in last-stage review. Client target date held at May 7.' },
-    jkl:    { name: 'JKL Partners',     archetype: 'behind',   goLive: 'May 18', daysSlip: 13,  statusKey: 'amber', statusLabel: 'Slightly behind',
-              lede: '5 teams off-track. <em>4 teams complete</em>. Projected May 18 go-live.',
-              sublede: 'Custodian file mapping in progress. Settlement instruction templates due back from ISG Legal next week.' },
-    mno:    { name: 'MNO Capital',      archetype: 'ontrack',  goLive: 'May 9',  daysSlip: 2,   statusKey: 'green', statusLabel: 'On track',
-              lede: '<em>13 teams complete</em>; 8 in final review. Two-day buffer over plan.',
-              sublede: 'No blockers. Final IT cutover scheduled for next week.' },
+    all:    { name: 'All entities',     archetype: 'behind',   goLive: 'May 13', daysSlip: 8,   statusKey: 'amber', statusLabel: 'Slightly behind',
+              lede: '<em>8 entities in flight.</em> 3 on track, 3 slightly behind, 2 off-track.',
+              sublede: 'Aggregate view across the Apex acquisition portfolio. Filter by entity to drill in.' },
+    carina: { name: 'Apex Ventures',    archetype: 'behind',   goLive: 'May 13', daysSlip: 8,   statusKey: 'amber', statusLabel: 'Slightly behind',
+              lede: '5 workstreams off-track. <em>4 workstreams cleared sign-off</em>. On pace for May 13 cutover.',
+              sublede: 'IT Cutover and Customer Migration remain the bottlenecks. Legal contract harmonization cleared this week, IT Cutover dry-run restarting now.' },
+    nyl:    { name: 'Apex Logistics',   archetype: 'ontrack',  goLive: 'May 5',  daysSlip: -2,  statusKey: 'green', statusLabel: 'On track',
+              lede: '<em>13 workstreams already live</em>; 8 in final UAT. Ahead of plan.',
+              sublede: 'No active blockers. On pace for early cutover on May 5.' },
+    athene: { name: 'Apex Mfg',         archetype: 'offtrack', goLive: 'Jun 18', daysSlip: 35,  statusKey: 'red',   statusLabel: 'Off track',
+              lede: '<em>13 workstreams off-track.</em> Integration at risk. Projected cutover slipping to Jun 18.',
+              sublede: 'Legal contract harmonization at 18 days outstanding. Acquired-side leadership unresponsive on chart-of-accounts, SSO config, and stakeholder list.' },
+    abc:    { name: 'Apex Asia',        archetype: 'behind',   goLive: 'May 16', daysSlip: 11,  statusKey: 'amber', statusLabel: 'Slightly behind',
+              lede: '5 workstreams off-track. <em>4 workstreams cleared sign-off</em>. Projected May 16 cutover.',
+              sublede: 'Financial Reporting baseline received this week. IT Cutover still working through Legal contract markup.' },
+    def:    { name: 'Apex EU',          archetype: 'offtrack', goLive: 'Jun 11', daysSlip: 28,  statusKey: 'red',   statusLabel: 'Off track',
+              lede: '<em>13 workstreams off-track.</em> Integration stalled. Cutover slipped to Jun 11.',
+              sublede: 'Tax residency documentation still missing across sub-entities. Acquired-side engagement intermittent since week 1.' },
+    ghi:    { name: 'Apex Foods',       archetype: 'ontrack',  goLive: 'May 7',  daysSlip: 0,   statusKey: 'green', statusLabel: 'On track',
+              lede: '<em>13 workstreams live</em>; 8 in final UAT. Tracking exactly to plan.',
+              sublede: 'Two pending items in last-stage UAT. Cutover date held at May 7.' },
+    jkl:    { name: 'Apex Beverage',    archetype: 'behind',   goLive: 'May 18', daysSlip: 13,  statusKey: 'amber', statusLabel: 'Slightly behind',
+              lede: '5 workstreams off-track. <em>4 workstreams cleared sign-off</em>. Projected May 18 cutover.',
+              sublede: 'Customer record mapping in progress. IT Cutover bank routing template due back from Legal next week.' },
+    mno:    { name: 'Apex Retail',      archetype: 'ontrack',  goLive: 'May 9',  daysSlip: 2,   statusKey: 'green', statusLabel: 'On track',
+              lede: '<em>13 workstreams live</em>; 8 in final UAT. Two-day buffer over plan.',
+              sublede: 'No blockers. Final IT cutover dry-run scheduled for next week.' },
   };
 
   const HEALTH_LABEL = { r: 'Off track', a: 'Pending info', g: 'On track' };
   const HEALTH_DESC = {
-    r: 'Team is off track and not meeting SLAs',
-    a: 'Team is pending information from other internal teams or client',
+    r: 'Workstream is off track and not meeting stage-time SLAs',
+    a: 'Workstream is pending input from another team or the acquired entity',
     g: 'On track',
   };
   const HEALTH_VAR = { g: 'var(--green)', a: 'var(--amber)', r: 'var(--red)' };
@@ -3122,7 +3078,7 @@
             <h4>Current blocker</h4>
             <div class="blocker-card">
               <div class="who">Blocker · ${t.days}d</div>
-              ${t.blocker.replace(/ISG Legal/g, '<em>ISG Legal</em>').replace(/Reference Data/g, '<em>Reference Data</em>').replace(/Performance/g, '<em>Performance</em>').replace(/Reconciliation/g, '<em>Reconciliation</em>')}
+              ${t.blocker.replace(/Legal/g, '<em>Legal</em>').replace(/Master Data/g, '<em>Master Data</em>').replace(/Financial Reporting/g, '<em>Financial Reporting</em>').replace(/IT Cutover/g, '<em>IT Cutover</em>').replace(/Customer Migration/g, '<em>Customer Migration</em>')}
             </div>
           </div>
         ` : ''}
@@ -3184,11 +3140,11 @@
       items.push({ when: '3d ago', detail: `<strong>Information requested</strong>`, sub: 'Awaiting response from upstream', kind: '' });
       items.push({ when: 'Yesterday', detail: `<strong>Follow-up sent</strong>`, sub: '', kind: '' });
     } else {
-      items.push({ when: `${Math.max(1, t.days - 10)}d ago`, detail: `<strong>Impact assessment complete</strong>`, sub: '', kind: 'key' });
+      items.push({ when: `${Math.max(1, t.days - 10)}d ago`, detail: `<strong>Discovery complete</strong>`, sub: '', kind: 'key' });
       items.push({ when: `${Math.max(1, t.days - 6)}d ago`, detail: `<strong>Scope signed off</strong>`, sub: '', kind: '' });
       items.push({ when: `${Math.max(1, t.days - 3)}d ago`, detail: `<strong>Reached ${STAGES[t.stageIdx]}</strong>`, sub: '', kind: '' });
       if (t.stageIdx === 4) {
-        items.push({ when: 'Today', detail: `<strong>Onboarding complete</strong>`, sub: 'Ready for Carina go-live', kind: 'key' });
+        items.push({ when: 'Today', detail: `<strong>Workstream live</strong>`, sub: 'Ready for Apex Ventures cutover', kind: 'key' });
       }
     }
 
@@ -3409,5 +3365,6 @@
   renderClient('all');
 </script>
 
+</div><!-- /#deck-content -->
 </body>
 </html>
