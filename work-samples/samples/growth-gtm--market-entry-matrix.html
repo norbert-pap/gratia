@@ -103,20 +103,23 @@
   </main>
 </div>
 
+<div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
+<aside class="drawer" id="drawer" role="dialog" aria-hidden="true"><div id="drawerContent"></div></aside>
+
 <script>
 const COUNTRIES = [
-  { flag: '🇧🇷', name: 'Brazil',     mkt: 5, reg: 4, bank: 5, tal: 5, pay: 5, fx: 4, inc: 4, total: 32 },
-  { flag: '🇲🇽', name: 'Mexico',     mkt: 5, reg: 5, bank: 4, tal: 4, pay: 4, fx: 4, inc: 3, total: 29 },
-  { flag: '🇨🇴', name: 'Colombia',   mkt: 3, reg: 4, bank: 4, tal: 3, pay: 4, fx: 4, inc: 4, total: 26 },
-  { flag: '🇨🇱', name: 'Chile',      mkt: 2, reg: 5, bank: 5, tal: 4, pay: 4, fx: 5, inc: 3, total: 28 },
-  { flag: '🇵🇪', name: 'Peru',       mkt: 3, reg: 3, bank: 3, tal: 3, pay: 3, fx: 4, inc: 3, total: 22 },
-  { flag: '🇦🇷', name: 'Argentina',  mkt: 4, reg: 3, bank: 3, tal: 4, pay: 3, fx: 1, inc: 3, total: 21 },
+  { flag: '🇧🇷', name: 'Brazil',     mkt: 5, reg: 4, bank: 5, tal: 5, pay: 5, fx: 4, inc: 4, total: 32, tier: 'Tier 1', tam: '$3.4B', verdict: 'Year 1 full entry', notes: 'Pix is the unlock — real-time payments make our embedded model viable without prohibitive interchange. BCB sandbox provides regulatory clarity. 4 hub cities with deep fintech talent at competitive rates.' },
+  { flag: '🇲🇽', name: 'Mexico',     mkt: 5, reg: 5, bank: 4, tal: 4, pay: 4, fx: 4, inc: 3, total: 29, tier: 'Tier 1', tam: '$2.6B', verdict: 'Year 1 pilot · Year 2 scale', notes: 'CNBV sandbox program clears regulatory path. Pilot mode in Year 1 (2-person remote + 1 partnership) to validate before committing local entity. Talent strong in Mexico City; weaker outside.' },
+  { flag: '🇨🇴', name: 'Colombia',   mkt: 3, reg: 4, bank: 4, tal: 3, pay: 4, fx: 4, inc: 4, total: 26, tier: 'Tier 2', tam: '$0.8B', verdict: 'Year 2 partner-led', notes: 'Smaller market but stable regulatory + good banking infrastructure. Recommend partner-led entry: regional bank for distribution, no local entity. 1 BD lead.' },
+  { flag: '🇨🇱', name: 'Chile',      mkt: 2, reg: 5, bank: 5, tal: 4, pay: 4, fx: 5, inc: 3, total: 28, tier: 'Tier 3', tam: '$0.4B', verdict: 'Year 3+ revisit', notes: 'High-quality market — best regulatory + banking infra in the region. But $0.4B TAM doesn\'t justify the entry cost vs Mexico. Better as a Year 3 add-on to LatAm portfolio.' },
+  { flag: '🇵🇪', name: 'Peru',       mkt: 3, reg: 3, bank: 3, tal: 3, pay: 3, fx: 4, inc: 3, total: 22, tier: 'Tier 4', tam: '$0.5B', verdict: 'Year 3+ regulatory wait', notes: 'Fintech licensing framework still evolving. Watch for SBS regulatory updates expected FY27. Limited fintech talent — would need expat hires.' },
+  { flag: '🇦🇷', name: 'Argentina',  mkt: 4, reg: 3, bank: 3, tal: 4, pay: 3, fx: 1, inc: 3, total: 21, tier: 'Tier 4', tam: '$1.2B', verdict: 'Defer — FX risk', notes: 'Capital controls + parallel rates make USD-revenue collection unsafe. Re-evaluate when official rate stabilizes. Strong fintech talent pool wasted by macro instability. Watch for monetary policy reset.' },
 ];
 function cls(s) { return 's' + s; }
 function renderTable() {
   let html = `<thead><tr><th>Country</th><th class="cn">Mkt size</th><th class="cn">Reg</th><th class="cn">Banking</th><th class="cn">Talent</th><th class="cn">Pay rails</th><th class="cn">FX</th><th class="cn">Incumb</th><th class="cn">Total</th></tr></thead><tbody>`;
   COUNTRIES.forEach(c => {
-    html += `<tr><td><span class="country-name"><span class="country-flag">${c.flag}</span>${c.name}</span></td>`;
+    html += `<tr style="cursor:pointer; transition: background 0.14s;" data-country="${c.name}" onmouseover="this.style.background='var(--row-hover)'" onmouseout="this.style.background=''"><td><span class="country-name"><span class="country-flag">${c.flag}</span>${c.name}</span></td>`;
     ['mkt','reg','bank','tal','pay','fx','inc'].forEach(k => {
       html += `<td style="text-align:center"><span class="score-cell ${cls(c[k])}">${c[k]}</span></td>`;
     });
@@ -124,7 +127,40 @@ function renderTable() {
   });
   html += '</tbody>';
   document.getElementById('matrixTable').innerHTML = html;
+  document.querySelectorAll('#matrixTable tr[data-country]').forEach(r => {
+    r.addEventListener('click', () => openCountryDrawer(r.dataset.country));
+  });
 }
+const CRIT = { mkt: 'Market size', reg: 'Regulatory', bank: 'Banking infra', tal: 'Talent', pay: 'Payment rails', fx: 'FX risk', inc: 'Incumbents' };
+function openCountryDrawer(name) {
+  const c = COUNTRIES.find(x => x.name === name);
+  if (!c) return;
+  document.getElementById('drawerContent').innerHTML = `
+    <div class="drawer-head">
+      <div><div class="eyebrow">${c.tier} · ${c.tam} TAM</div><h2 style="margin-top:4px"><span style="font-size:24px;margin-right:8px;">${c.flag}</span>${c.name}</h2></div>
+      <button class="icon-btn" onclick="closeDrawer()" aria-label="Close"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" stroke-linecap="round"/></svg></button>
+    </div>
+    <div class="drawer-body">
+      <div class="drawer-section">
+        <h4>Verdict</h4>
+        <div class="callout"><strong>${c.verdict}</strong></div>
+      </div>
+      <div class="drawer-section">
+        <h4>Score breakdown</h4>
+        ${['mkt','reg','bank','tal','pay','fx','inc'].map(k => `<div class="drawer-stat"><span class="lbl">${CRIT[k]}</span><span class="val">${c[k]} / 5</span></div>`).join('')}
+        <div class="drawer-stat"><span class="lbl"><strong>Total</strong></span><span class="val" style="color:var(--gold-ink); font-size: 15px;">${c.total} / 35</span></div>
+      </div>
+      <div class="drawer-section">
+        <h4>Country notes</h4>
+        <div style="font-size: 12.5px; color: var(--ink-1); line-height: 1.6;">${c.notes}</div>
+      </div>
+    </div>
+  `;
+  document.getElementById('drawer').classList.add('open');
+  document.getElementById('drawerOverlay').classList.add('open');
+}
+function closeDrawer() { document.getElementById('drawer').classList.remove('open'); document.getElementById('drawerOverlay').classList.remove('open'); }
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDrawer(); });
 document.getElementById('themeToggle').addEventListener('click', () => {
   const cur = document.documentElement.getAttribute('data-theme') || 'dark';
   const next = cur === 'dark' ? 'light' : 'dark';
