@@ -9,7 +9,9 @@
 <script>(function(){try{const s=localStorage.getItem('apollo-theme');if(s==='light'||s==='dark')document.documentElement.setAttribute('data-theme',s);}catch(e){}})();</script>
 <style>
   .funnel-h { display: flex; flex-direction: column; gap: 4px; }
-  .fh-row { display: grid; grid-template-columns: 130px 1fr 90px 60px; align-items: center; gap: 12px; padding: 8px 0; font-size: 12px; }
+  .fh-row { display: grid; grid-template-columns: 130px 1fr 90px 60px; align-items: center; gap: 12px; padding: 8px 8px; margin: 0 -8px; border-radius: 4px; font-size: 12px; cursor: pointer; transition: background 0.14s; }
+  .fh-row:hover { background: var(--row-hover); }
+  .fh-row.active { background: var(--gold-dim); }
   .fh-row .fh-name { color: var(--ink-1); font-weight: 500; }
   .fh-row .fh-bar { height: 22px; background: var(--bg-2); border-radius: 4px; overflow: hidden; }
   .fh-row .fh-fill { height: 100%; background: linear-gradient(90deg, var(--gold), var(--gold-bright)); transition: width 0.35s; }
@@ -17,7 +19,9 @@
   .fh-row .fh-conv { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: var(--ink-3); text-align: right; }
 
   .src-grid { display: flex; flex-direction: column; gap: 12px; }
-  .src-row { display: grid; grid-template-rows: auto auto; gap: 4px; }
+  .src-row { display: grid; grid-template-rows: auto auto; gap: 4px; padding: 6px 8px; margin: 0 -8px; border-radius: 4px; cursor: pointer; transition: background 0.14s; }
+  .src-row:hover { background: var(--row-hover); }
+  .src-row.active { background: var(--gold-dim); }
   .src-row .src-head { display: flex; justify-content: space-between; align-items: baseline; font-size: 12px; }
   .src-row .src-name { color: var(--ink-1); display: flex; align-items: center; gap: 7px; }
   .src-row .src-dot { width: 8px; height: 8px; border-radius: 2px; }
@@ -168,6 +172,9 @@
   </main>
 </div>
 
+<div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
+<aside class="drawer" id="drawer" role="dialog" aria-hidden="true"><div id="drawerContent"></div></aside>
+
 <script>
 const FUNNEL = [
   { stage: 'Visitors',     count: 184200, conv: '2.4%' },
@@ -203,21 +210,34 @@ const COHORT = {
     [100, null, null, null, null, null],
   ],
 };
+// Per-stage drawer notes
+const STAGE_NOTES = {
+  'Visitors':      { dropOff: '97.6% don\'t convert to a lead', key: 'Conversion rate', val: '2.4%', context: 'Industry benchmark 2.0%. We\'re above median; primary channels are organic content + product-led signup.' },
+  'Leads (MQL)':   { dropOff: '62% of MQLs don\'t become SQLs', key: 'MQL → SQL', val: '38%', context: 'Strong vs benchmark 28%. Driven by tightened MQL definition Q3 + better SDR routing.' },
+  'SQLs':          { dropOff: '48% of SQLs don\'t become opps', key: 'SQL → Opp', val: '52%', context: 'In line with benchmark 50%. Common drop-offs: not a fit (ICP miss) or wrong timing.' },
+  'Opportunities': { dropOff: '64% of opps don\'t close-won', key: 'Opp → Win', val: '36%', context: 'Above benchmark 33%. Pricing competitiveness + reference customer credibility holding strong.' },
+  'Closed-won':    { dropOff: '—', key: 'Final outcome', val: '0.17%', context: 'Visit-to-customer rate 0.17% vs benchmark 0.10%. End-to-end funnel efficient.' },
+};
+
 function renderFunnel() {
   const max = FUNNEL[0].count;
   document.getElementById('funnel').innerHTML = FUNNEL.map((s, i) => `
-    <div class="fh-row">
+    <div class="fh-row" data-stage="${s.stage}">
       <div class="fh-name">${s.stage}</div>
       <div class="fh-bar"><div class="fh-fill" style="width: ${(s.count / max) * 100}%"></div></div>
       <div class="fh-num">${s.count.toLocaleString()}</div>
       <div class="fh-conv">${s.conv}</div>
     </div>
   `).join('');
+  document.querySelectorAll('.fh-row').forEach(r => {
+    r.addEventListener('click', () => openStageDrawer(r.dataset.stage));
+  });
 }
+
 function renderSources() {
   const max = Math.max(...SOURCES.map(s => s.value));
   document.getElementById('srcList').innerHTML = SOURCES.map(s => `
-    <div class="src-row">
+    <div class="src-row" data-source="${s.name}">
       <div class="src-head">
         <span class="src-name"><span class="src-dot" style="background:${s.color}"></span>${s.name}</span>
         <span class="src-amt">$${s.value.toFixed(1)}M</span>
@@ -226,7 +246,77 @@ function renderSources() {
       <div class="src-meta"><span>Deals <b>${s.deals}</b></span><span>Avg cycle <b>${s.cycle}</b></span></div>
     </div>
   `).join('');
+  document.querySelectorAll('.src-row').forEach(r => {
+    r.addEventListener('click', () => openSourceDrawer(r.dataset.source));
+  });
 }
+
+// Drawer helpers
+function openStageDrawer(stage) {
+  const s = FUNNEL.find(x => x.stage === stage);
+  const idx = FUNNEL.indexOf(s);
+  const prev = idx > 0 ? FUNNEL[idx - 1] : null;
+  const note = STAGE_NOTES[stage] || {};
+  const dropToNext = idx < FUNNEL.length - 1 ? FUNNEL[idx + 1].count : null;
+  document.getElementById('drawerContent').innerHTML = `
+    <div class="drawer-head">
+      <div><div class="eyebrow">Funnel stage</div><h2 style="margin-top:4px">${stage}</h2></div>
+      <button class="icon-btn" onclick="closeDrawer()" aria-label="Close"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" stroke-linecap="round"/></svg></button>
+    </div>
+    <div class="drawer-body">
+      <div class="drawer-section">
+        <h4>Stage volume · last 90 days</h4>
+        <div class="drawer-stat"><span class="lbl">Volume</span><span class="val">${s.count.toLocaleString()}</span></div>
+        ${prev ? `<div class="drawer-stat"><span class="lbl">From prior stage</span><span class="val">${((s.count / prev.count) * 100).toFixed(1)}%</span></div>` : ''}
+        ${dropToNext != null ? `<div class="drawer-stat"><span class="lbl">To next stage</span><span class="val">${((dropToNext / s.count) * 100).toFixed(1)}%</span></div>` : ''}
+        <div class="drawer-stat"><span class="lbl">${note.key || 'Conversion'}</span><span class="val">${note.val || s.conv}</span></div>
+      </div>
+      <div class="drawer-section">
+        <h4>Drop-off context</h4>
+        <div style="font-size: 12.5px; color: var(--ink-1); line-height: 1.55;"><strong>${note.dropOff || ''}</strong></div>
+        <div style="font-size: 12px; color: var(--ink-2); line-height: 1.55; margin-top: 8px;">${note.context || ''}</div>
+      </div>
+    </div>
+  `;
+  document.getElementById('drawer').classList.add('open');
+  document.getElementById('drawerOverlay').classList.add('open');
+}
+
+const SOURCE_NOTES = {
+  'Inbound (organic)': 'Highest ROI channel. Organic search + product-led signup. CAC $2,800 (lowest in mix). Doubling content investment in FY26.',
+  'Partnerships':      'Strategic alliances with HRIS implementation partners. CAC $5,400. Renewal rates 8 pp higher than other channels.',
+  'Outbound SDR':      'Pipeline-volume engine but conversion soft. CAC $11,200. New SDR cohort ramping; expect efficiency lift Q2.',
+  'Customer expansion':'Existing-account driven. Account managers compensated on expansion + cross-sell. Highest-ROAS by far.',
+  'Events / field':    'High-touch, slow cycle. Disproportionately enterprise. Only worth it for top-30 named accounts.',
+};
+
+function openSourceDrawer(name) {
+  const s = SOURCES.find(x => x.name === name);
+  if (!s) return;
+  document.getElementById('drawerContent').innerHTML = `
+    <div class="drawer-head">
+      <div><div class="eyebrow" style="color:${s.color}">Source</div><h2 style="margin-top:4px">${s.name}</h2></div>
+      <button class="icon-btn" onclick="closeDrawer()" aria-label="Close"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" stroke-linecap="round"/></svg></button>
+    </div>
+    <div class="drawer-body">
+      <div class="drawer-section">
+        <h4>This source</h4>
+        <div class="drawer-stat"><span class="lbl">Pipeline value</span><span class="val">$${s.value.toFixed(1)}M</span></div>
+        <div class="drawer-stat"><span class="lbl">Deals (TTM)</span><span class="val">${s.deals}</span></div>
+        <div class="drawer-stat"><span class="lbl">Avg cycle</span><span class="val">${s.cycle}</span></div>
+      </div>
+      <div class="drawer-section">
+        <h4>Notes</h4>
+        <div style="font-size: 12.5px; color: var(--ink-1); line-height: 1.55;">${SOURCE_NOTES[name] || ''}</div>
+      </div>
+    </div>
+  `;
+  document.getElementById('drawer').classList.add('open');
+  document.getElementById('drawerOverlay').classList.add('open');
+}
+
+function closeDrawer() { document.getElementById('drawer').classList.remove('open'); document.getElementById('drawerOverlay').classList.remove('open'); }
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDrawer(); });
 function renderLadder() {
   document.getElementById('ladder').innerHTML = LADDER.map(l => {
     const max = Math.max(l.actual, l.bench) * 1.2;
