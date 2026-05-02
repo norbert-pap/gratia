@@ -1,0 +1,1614 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grace KB · Overview & Gap List</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+*, *::before, *::after { box-sizing: border-box; }
+html, body, h1, h2, h3, h4, h5, p, ul, ol, li, figure, div, section, nav, aside, header, main, button, blockquote, table, td, th { margin: 0; padding: 0; }
+button { background: none; border: none; color: inherit; cursor: pointer; font: inherit; }
+ul, ol { list-style: none; }
+a { color: inherit; text-decoration: none; }
+
+:root, [data-theme="dark"] {
+  --bg: #0b0c0e; --bg-1: #111214; --bg-2: #17181b; --bg-3: #1e1f22; --bg-4: #27282c;
+  --border: #232428; --border-2: #33353b;
+  --ink-0: #edeef1; --ink-1: #d4d6db; --ink-2: #8f9198; --ink-3: #5c5e65; --ink-4: #36383d;
+  --gold: #16a38a; --gold-bright: #2cc2a5; --gold-ink: #5ad9bc;
+  --gold-dim: rgba(22, 163, 138, 0.13); --gold-line: rgba(22, 163, 138, 0.30);
+  --green: #16a38a; --green-ink: #5ad9bc;
+  --green-dim: rgba(22, 163, 138, 0.14); --green-line: rgba(22, 163, 138, 0.32);
+  --amber: #e6b259; --amber-ink: #f2ca85;
+  --amber-dim: rgba(230, 178, 89, 0.14); --amber-line: rgba(230, 178, 89, 0.32);
+  --red: #e06f64; --red-ink: #f0928a;
+  --red-dim: rgba(224, 111, 100, 0.14); --red-line: rgba(224, 111, 100, 0.32);
+  --blue: #87b3ec; --blue-ink: #87b3ec;
+  --blue-dim: rgba(74, 141, 224, 0.18); --blue-line: rgba(74, 141, 224, 0.4);
+  --violet: #b494e8; --violet-dim: rgba(180, 148, 232, 0.14); --violet-line: rgba(180, 148, 232, 0.32);
+  --shadow: 0 1px 1px rgba(0,0,0,0.3), 0 10px 32px rgba(0,0,0,0.4);
+  --nav-bg: rgba(11, 12, 14, 0.85);
+  --glow: radial-gradient(ellipse at top right, rgba(22, 163, 138, 0.08), transparent 65%);
+  --row-hover: rgba(255, 255, 255, 0.013);
+}
+
+[data-theme="light"] {
+  --bg: #fafaf8; --bg-1: #ffffff; --bg-2: #f4f4f1; --bg-3: #ebebe7; --bg-4: #d8d8d3;
+  --border: #e6e6e1; --border-2: #d2d2cc;
+  --ink-0: #1a1a1c; --ink-1: #3a3b3e; --ink-2: #65676c; --ink-3: #93959a; --ink-4: #c2c3c7;
+  --gold: #0e8a73; --gold-bright: #16a38a; --gold-ink: #0e8a73;
+  --gold-dim: rgba(22, 163, 138, 0.10); --gold-line: rgba(22, 163, 138, 0.32);
+  --green: #0e8a73; --green-ink: #0e8a73;
+  --green-dim: rgba(22, 163, 138, 0.10); --green-line: rgba(22, 163, 138, 0.32);
+  --amber: #c98a2b; --amber-ink: #a8721d;
+  --amber-dim: rgba(230, 178, 89, 0.16); --amber-line: rgba(201, 138, 43, 0.32);
+  --red: #d04a3d; --red-ink: #b53a2e;
+  --red-dim: rgba(208, 74, 61, 0.10); --red-line: rgba(208, 74, 61, 0.32);
+  --blue: #1f6cd9; --blue-ink: #1f6cd9; --blue-dim: rgba(31, 108, 217, 0.10); --blue-line: rgba(31, 108, 217, 0.35);
+  --violet: #6d4abc; --violet-dim: rgba(109, 74, 188, 0.08); --violet-line: rgba(109, 74, 188, 0.30);
+  --shadow: 0 1px 2px rgba(20, 22, 30, 0.04), 0 8px 24px rgba(20, 22, 30, 0.06);
+  --nav-bg: rgba(255, 255, 255, 0.88);
+  --glow: radial-gradient(ellipse at top right, rgba(22, 163, 138, 0.06), transparent 65%);
+  --row-hover: rgba(0, 0, 0, 0.025);
+}
+
+body {
+  background: var(--bg); color: var(--ink-0);
+  font-family: 'Inter', system-ui, sans-serif;
+  font-size: 14px; line-height: 1.5;
+  -webkit-font-smoothing: antialiased; -moz-osx-font-smoothing: grayscale;
+  letter-spacing: -0.005em;
+  font-feature-settings: 'cv11', 'ss01', 'ss03';
+  overflow-x: hidden;
+}
+.glow { position: fixed; inset: 0; pointer-events: none; background: var(--glow); z-index: 0; }
+.mono { font-family: 'JetBrains Mono', monospace; font-feature-settings: 'ss02'; }
+.num { font-variant-numeric: tabular-nums; }
+.eyebrow { font-size: 10.5px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-3); }
+
+/* ==== NAV ==== */
+.mainnav {
+  display: flex; align-items: center; padding: 12px 24px;
+  border-bottom: 1px solid var(--border); background: var(--nav-bg);
+  backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px);
+  position: sticky; top: 0; z-index: 30;
+}
+.nav-brand { display: flex; align-items: center; padding-right: 16px; margin-right: 14px; border-right: 1px solid var(--border); }
+.nav-brand-fallback {
+  font-family: 'Inter', sans-serif;
+  font-size: 17px; font-weight: 700; color: var(--gold-ink); letter-spacing: -0.02em;
+  width: 28px; height: 28px;
+  display: flex; align-items: center; justify-content: center;
+  background: var(--gold-dim); border: 1px solid var(--gold-line); border-radius: 4px;
+}
+.nav-context { display: flex; flex-direction: column; gap: 1px; }
+.nav-context .nctx-1 { font-size: 13px; font-weight: 600; color: var(--ink-0); letter-spacing: -0.012em; }
+.nav-context .nctx-2 { font-size: 11px; color: var(--ink-3); }
+.nav-right { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+
+.icon-btn {
+  width: 32px; height: 32px; display: inline-flex; align-items: center; justify-content: center;
+  border-radius: 6px; color: var(--ink-2); transition: all 0.14s; cursor: pointer;
+}
+.icon-btn:hover { color: var(--ink-0); background: var(--bg-2); }
+.icon-btn svg { width: 16px; height: 16px; }
+.theme-toggle .ti-sun { display: none; }
+[data-theme="light"] .theme-toggle .ti-moon { display: none; }
+[data-theme="light"] .theme-toggle .ti-sun { display: block; }
+
+.btn {
+  height: 32px; padding: 0 12px; display: inline-flex; align-items: center; gap: 6px;
+  font-size: 12.5px; font-weight: 500;
+  border: 1px solid var(--border); border-radius: 6px;
+  color: var(--ink-1); background: var(--bg-1); transition: all 0.14s; cursor: pointer;
+}
+.btn:hover { color: var(--ink-0); border-color: var(--border-2); background: var(--bg-2); }
+.btn.primary { color: var(--gold-ink); background: var(--gold-dim); border-color: var(--gold-line); }
+.btn.amber { color: var(--amber-ink); background: var(--amber-dim); border-color: var(--amber-line); }
+.btn svg { width: 13px; height: 13px; }
+.btn .ct { color: var(--ink-3); font-variant-numeric: tabular-nums; }
+.btn.amber .ct { color: var(--amber-ink); opacity: 0.8; }
+
+/* ==== LAYOUT ==== */
+.layout {
+  display: grid;
+  grid-template-columns: 240px 1fr;
+  max-width: 1340px;
+  margin: 0 auto;
+  position: relative; z-index: 1;
+  gap: 32px;
+  padding: 0 24px;
+}
+.toc-pane {
+  position: sticky;
+  top: 70px;
+  align-self: start;
+  height: calc(100vh - 90px);
+  overflow-y: auto;
+  padding: 26px 0 24px;
+}
+.toc-pane::-webkit-scrollbar { width: 6px; }
+.toc-pane::-webkit-scrollbar-thumb { background: var(--border-2); border-radius: 3px; }
+
+.toc-card { padding: 14px 16px; background: var(--bg-1); border: 1px solid var(--border); border-radius: 8px; margin-bottom: 12px; }
+.toc-card .eyebrow { margin-bottom: 10px; display: block; }
+.toc-link { display: flex; align-items: center; gap: 8px; padding: 6px 8px; margin: 1px -8px; border-radius: 4px; font-size: 12.5px; color: var(--ink-2); transition: all 0.14s; cursor: pointer; line-height: 1.35; }
+.toc-link:hover { color: var(--ink-0); background: var(--bg-2); }
+.toc-link.active { color: var(--gold-ink); background: var(--gold-dim); }
+.toc-link .toc-num { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: var(--ink-3); width: 16px; flex-shrink: 0; }
+.toc-link.active .toc-num { color: var(--gold-ink); }
+.toc-card.amber-card { background: var(--amber-dim); border-color: var(--amber-line); }
+.toc-card.amber-card .eyebrow { color: var(--amber-ink); }
+.toc-card.amber-card .toc-link { color: var(--ink-1); }
+.toc-card.amber-card .toc-link:hover { color: var(--amber-ink); background: rgba(230, 178, 89, 0.10); }
+
+.main-pane { padding: 26px 0 80px; min-width: 0; }
+
+/* ==== PAGE HEAD ==== */
+.page-head { padding-bottom: 26px; margin-bottom: 24px; border-bottom: 1px solid var(--border); }
+.eyebrow-row { display: flex; align-items: center; gap: 10px; margin-bottom: 12px; flex-wrap: wrap; }
+.lede { font-family: 'Inter', sans-serif; font-size: 22px; font-weight: 600; line-height: 1.34; letter-spacing: -0.018em; color: var(--ink-0); max-width: 780px; }
+.lede em { color: var(--gold-ink); font-style: normal; font-weight: 600; }
+.sublede { font-size: 13.5px; color: var(--ink-2); margin-top: 8px; line-height: 1.55; max-width: 780px; }
+
+/* ==== STATUS CHIPS ==== */
+.status-chip { display: inline-flex; align-items: center; gap: 6px; height: 22px; padding: 0 10px; border-radius: 999px; font-size: 11px; font-weight: 500; font-variant-numeric: tabular-nums; }
+.status-chip[data-status="green"] { color: var(--green-ink); background: var(--green-dim); border: 1px solid var(--green-line); }
+.status-chip[data-status="amber"] { color: var(--amber-ink); background: var(--amber-dim); border: 1px solid var(--amber-line); }
+.status-chip[data-status="red"]   { color: var(--red-ink);   background: var(--red-dim);   border: 1px solid var(--red-line); }
+.status-chip[data-status="blue"]  { color: var(--blue);      background: var(--blue-dim);  border: 1px solid var(--blue-line); }
+.status-chip[data-status="violet"]  { color: var(--violet);  background: var(--violet-dim);  border: 1px solid var(--violet-line); }
+.status-chip .dot-pulse { width: 5px; height: 5px; border-radius: 50%; background: currentColor; box-shadow: 0 0 0 2px color-mix(in srgb, currentColor 18%, transparent); animation: pulse 1.6s infinite; }
+@keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.45; } }
+
+/* ==== KPI ==== */
+.kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 8px; margin-bottom: 28px; overflow: hidden; }
+.kpi { background: var(--bg-1); padding: 14px 18px; display: flex; flex-direction: column; gap: 4px; }
+.kpi .label { font-size: 10.5px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-3); }
+.kpi .value { font-family: 'Inter', sans-serif; font-size: 28px; font-weight: 600; letter-spacing: -0.022em; color: var(--ink-0); line-height: 1.05; display: flex; align-items: baseline; gap: 6px; margin-top: 4px; }
+.kpi .unit { font-size: 13px; color: var(--ink-3); font-weight: 500; letter-spacing: 0; }
+.kpi .delta { margin-top: 2px; font-size: 11.5px; color: var(--ink-2); }
+.kpi.amber .value { color: var(--amber-ink); }
+.kpi.gold .value { color: var(--gold-ink); }
+
+/* ==== SECTION HEAD ==== */
+.section-head { display: flex; align-items: baseline; justify-content: space-between; gap: 14px; margin: 0 0 16px; flex-wrap: wrap; }
+.section-num { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--gold-ink); letter-spacing: 0.08em; }
+.section-title { font-family: 'Inter', sans-serif; font-size: 20px; font-weight: 600; letter-spacing: -0.014em; color: var(--ink-0); line-height: 1.25; }
+.section-sub { font-size: 13.5px; color: var(--ink-2); margin-top: 4px; line-height: 1.55; max-width: 760px; }
+.doc-section { margin-bottom: 48px; scroll-margin-top: 80px; }
+
+/* ==== CARDS ==== */
+.card { background: var(--bg-1); border: 1px solid var(--border); border-radius: 8px; }
+.card-head { display: flex; align-items: center; justify-content: space-between; padding: 14px 18px 12px; border-bottom: 1px solid var(--border); gap: 10px; }
+.card-head h3 { font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 600; letter-spacing: -0.014em; color: var(--ink-0); }
+.card-head .meta { font-size: 11px; color: var(--ink-3); }
+.card-body { padding: 18px; }
+
+.grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.grid-3 { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; }
+.grid-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+
+/* ==== CALLOUT ==== */
+.callout { padding: 14px 16px; background: var(--gold-dim); border: 1px solid var(--gold-line); border-radius: 6px; font-size: 13px; line-height: 1.6; color: var(--ink-1); }
+.callout strong { color: var(--gold-ink); font-weight: 600; }
+.callout.amber { background: var(--amber-dim); border-color: var(--amber-line); }
+.callout.amber strong { color: var(--amber-ink); }
+.callout.red { background: var(--red-dim); border-color: var(--red-line); }
+.callout.red strong { color: var(--red-ink); }
+.callout.blue { background: var(--blue-dim); border-color: var(--blue-line); }
+.callout.blue strong { color: var(--blue); }
+.callout ul { margin-top: 8px; }
+.callout ul li { padding-left: 16px; position: relative; margin-bottom: 5px; line-height: 1.55; font-size: 12.5px; }
+.callout ul li::before { content: ''; position: absolute; left: 4px; top: 8px; width: 4px; height: 4px; border-radius: 50%; background: currentColor; opacity: 0.8; }
+.callout.amber ul li::before { background: var(--amber-ink); }
+
+.gap-card { margin-top: 14px; }
+
+/* ==== UNIVERSAL DIMENSION GRID ==== */
+.dim-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+.dim-cell { background: var(--bg-1); padding: 14px 16px; }
+.dim-cell .dim-num { font-family: 'JetBrains Mono', monospace; font-size: 10px; color: var(--gold-ink); letter-spacing: 0.06em; }
+.dim-cell h4 { font-size: 13px; font-weight: 600; color: var(--ink-0); margin: 4px 0 4px; letter-spacing: -0.01em; }
+.dim-cell p { font-size: 12px; color: var(--ink-2); line-height: 1.5; }
+
+/* ==== SPEC ACCORDION ==== */
+.spec-controls { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; flex-wrap: wrap; }
+.spec-list { display: flex; flex-direction: column; gap: 8px; }
+.spec-item { background: var(--bg-1); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; transition: border-color 0.14s; }
+.spec-item:hover { border-color: var(--border-2); }
+.spec-item[open] { border-color: var(--gold-line); }
+.spec-summary {
+  list-style: none;
+  padding: 14px 18px;
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  cursor: pointer;
+  transition: background 0.12s;
+}
+.spec-summary::-webkit-details-marker { display: none; }
+.spec-summary:hover { background: var(--row-hover); }
+.spec-num { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--gold-ink); width: 32px; flex-shrink: 0; letter-spacing: 0.04em; }
+.spec-icon { width: 28px; height: 28px; border-radius: 6px; background: var(--gold-dim); border: 1px solid var(--gold-line); display: inline-flex; align-items: center; justify-content: center; color: var(--gold-ink); flex-shrink: 0; }
+.spec-icon svg { width: 14px; height: 14px; }
+.spec-name { font-size: 14px; font-weight: 600; color: var(--ink-0); letter-spacing: -0.01em; flex: 1; }
+.spec-meta { font-size: 11.5px; color: var(--ink-3); display: flex; align-items: center; gap: 10px; }
+.spec-chev { color: var(--ink-3); transition: transform 0.18s; }
+.spec-item[open] .spec-chev { transform: rotate(90deg); color: var(--gold-ink); }
+.spec-body { padding: 0 18px 18px; border-top: 1px solid var(--border); padding-top: 18px; display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+.spec-body .tier-list { background: var(--bg-2); border: 1px solid var(--border); border-radius: 6px; padding: 12px 14px; }
+.spec-body .tier-list h5 { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 6px; display: flex; align-items: center; gap: 6px; }
+.spec-body .tier-list h5 .tier-dot { width: 6px; height: 6px; border-radius: 50%; background: var(--ink-4); }
+.spec-body .tier-list[data-tier="familiar"] h5 .tier-dot { background: var(--blue); }
+.spec-body .tier-list[data-tier="proficient"] h5 .tier-dot { background: var(--gold); }
+.spec-body .tier-list[data-tier="expert"] h5 .tier-dot { background: var(--gold-bright); }
+.spec-body .tier-list p { font-size: 12.5px; color: var(--ink-1); line-height: 1.55; }
+.spec-rubric { grid-column: 1 / -1; }
+.spec-rubric h5 { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 8px; }
+.rubric-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
+.rubric-grid .dim-cell { padding: 12px 14px; }
+.rubric-grid .dim-cell .dim-num { color: var(--gold-bright); }
+.rubric-grid .dim-cell h6 { font-size: 12px; font-weight: 600; color: var(--ink-0); margin: 3px 0; letter-spacing: -0.01em; }
+.rubric-grid .dim-cell p { font-size: 11.5px; color: var(--ink-2); line-height: 1.5; }
+
+/* ==== TABLE ==== */
+.gtable { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 12.5px; background: var(--bg-1); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+.gtable thead th { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-3); padding: 11px 14px; border-bottom: 1px solid var(--border); text-align: left; background: var(--bg-2); }
+.gtable tbody td { padding: 12px 14px; border-bottom: 1px solid var(--border); color: var(--ink-1); vertical-align: top; line-height: 1.5; }
+.gtable tbody tr:last-child td { border-bottom: none; }
+.gtable tbody tr:hover td { background: var(--row-hover); }
+.gtable td.num, .gtable td .num { font-family: 'Inter', sans-serif; font-variant-numeric: tabular-nums; color: var(--ink-0); font-weight: 600; }
+.gtable td.label-cell { font-weight: 600; color: var(--ink-0); }
+
+/* ==== OUTCOME PILLS ==== */
+.rag-pill { display: inline-flex; align-items: center; gap: 5px; height: 22px; padding: 0 8px; border-radius: 4px; font-size: 11px; font-weight: 500; }
+.rag-pill.g { color: var(--green-ink); background: var(--green-dim); border: 1px solid var(--green-line); }
+.rag-pill.gold { color: var(--gold-ink); background: var(--gold-dim); border: 1px solid var(--gold-line); }
+.rag-pill.a { color: var(--amber-ink); background: var(--amber-dim); border: 1px solid var(--amber-line); }
+.rag-pill.r { color: var(--red-ink); background: var(--red-dim); border: 1px solid var(--red-line); }
+.rag-pill.b { color: var(--blue);     background: var(--blue-dim);  border: 1px solid var(--blue-line); }
+.rag-pill.v { color: var(--violet);   background: var(--violet-dim); border: 1px solid var(--violet-line); }
+
+/* ==== PRICING ==== */
+.pricing-controls { display: flex; align-items: center; gap: 8px; margin-bottom: 14px; flex-wrap: wrap; }
+.tier-chip { height: 28px; padding: 0 12px; display: inline-flex; align-items: center; gap: 7px; font-size: 12px; font-weight: 500; border-radius: 999px; color: var(--ink-2); background: var(--bg-2); border: 1px solid var(--border); transition: all 0.14s; cursor: pointer; }
+.tier-chip:hover { color: var(--ink-0); border-color: var(--border-2); }
+.tier-chip.active { color: var(--ink-0); background: var(--bg-3); border-color: var(--ink-4); }
+.tier-chip .tdot { width: 7px; height: 7px; border-radius: 50%; }
+.tier-chip[data-tier="basic"] .tdot { background: var(--blue); }
+.tier-chip[data-tier="standard"] .tdot { background: var(--gold); }
+.tier-chip[data-tier="complex"] .tdot { background: var(--gold-bright); }
+.tier-chip.active[data-tier="basic"] { color: var(--blue); background: var(--blue-dim); border-color: var(--blue-line); }
+.tier-chip.active[data-tier="standard"] { color: var(--gold-ink); background: var(--gold-dim); border-color: var(--gold-line); }
+.tier-chip.active[data-tier="complex"] { color: var(--gold-bright); background: var(--gold-dim); border-color: var(--gold-line); }
+
+.pricing-table { background: var(--bg-1); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+.pricing-row { display: grid; grid-template-columns: 1.7fr repeat(3, 1fr); border-bottom: 1px solid var(--border); transition: background 0.12s; }
+.pricing-row:last-child { border-bottom: none; }
+.pricing-row.head { background: var(--bg-2); }
+.pricing-row.head .pcell { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-3); padding: 11px 16px; }
+.pricing-row.head .pcell.tier-head { display: flex; align-items: center; gap: 6px; }
+.pricing-row.head .pcell.tier-head .tdot { width: 7px; height: 7px; border-radius: 50%; }
+.pricing-row.head .pcell.tier-head[data-tier="basic"] .tdot { background: var(--blue); }
+.pricing-row.head .pcell.tier-head[data-tier="standard"] .tdot { background: var(--gold); }
+.pricing-row.head .pcell.tier-head[data-tier="complex"] .tdot { background: var(--gold-bright); }
+.pricing-row .pcell { padding: 14px 16px; border-right: 1px solid var(--border); font-size: 12.5px; color: var(--ink-1); }
+.pricing-row .pcell:last-child { border-right: none; }
+.pricing-row .spec-cell { display: flex; flex-direction: column; gap: 3px; }
+.pricing-row .spec-cell .name { font-size: 13px; font-weight: 600; color: var(--ink-0); letter-spacing: -0.01em; }
+.pricing-row .spec-cell .ex { font-size: 11.5px; color: var(--ink-3); line-height: 1.5; }
+.pricing-row .price-cell { display: flex; flex-direction: column; gap: 3px; transition: opacity 0.18s, filter 0.18s; }
+.pricing-row .price-cell .price { font-family: 'Inter', sans-serif; font-size: 13.5px; font-weight: 600; font-variant-numeric: tabular-nums; color: var(--ink-0); letter-spacing: -0.01em; }
+.pricing-row .price-cell .timeline { font-size: 11.5px; color: var(--ink-2); }
+.pricing-row .price-cell .meta { font-size: 11px; color: var(--ink-3); display: flex; gap: 8px; margin-top: 2px; }
+.pricing-row .price-cell .meta span:not(:last-child)::after { content: '·'; margin-left: 8px; color: var(--ink-4); }
+.pricing-row.dim-other [data-tier-cell]:not(.active-tier) { opacity: 0.34; filter: saturate(0.5); }
+.pricing-row [data-tier-cell].active-tier { background: var(--gold-dim); }
+
+.method-row { padding: 0; background: var(--bg-2); }
+.method-row .method-content { padding: 14px 18px; font-size: 12px; color: var(--ink-2); line-height: 1.6; border-top: 1px dashed var(--border); }
+.method-row .method-content strong { color: var(--ink-1); font-weight: 600; }
+
+/* ==== LEVEL CARDS ==== */
+.level-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 12px; }
+.level-card { background: var(--bg-1); border: 1px solid var(--border); border-radius: 8px; padding: 16px 18px; display: flex; flex-direction: column; gap: 10px; transition: all 0.14s; }
+.level-card:hover { border-color: var(--border-2); transform: translateY(-1px); box-shadow: var(--shadow); }
+.level-card .level-head { display: flex; align-items: center; justify-content: space-between; }
+.level-card .level-code { font-family: 'JetBrains Mono', monospace; font-size: 13px; font-weight: 700; letter-spacing: 0.04em; padding: 3px 8px; border-radius: 4px; background: var(--gold-dim); color: var(--gold-ink); border: 1px solid var(--gold-line); }
+.level-card[data-track="engineer"] .level-code { background: var(--violet-dim); color: var(--violet); border-color: var(--violet-line); }
+.level-card .level-aqs { font-size: 11px; color: var(--ink-3); font-variant-numeric: tabular-nums; }
+.level-card .level-aqs strong { color: var(--ink-1); font-weight: 600; }
+.level-card .level-name { font-size: 14px; font-weight: 600; color: var(--ink-0); letter-spacing: -0.01em; }
+.level-card .level-summary { font-size: 12px; color: var(--ink-2); line-height: 1.55; }
+.level-card .level-spec { font-size: 11px; color: var(--ink-3); padding-top: 8px; border-top: 1px dashed var(--border); }
+.level-card .level-spec strong { color: var(--ink-1); }
+
+/* ==== PROMOTION ==== */
+.promo-flow { display: grid; grid-template-columns: repeat(5, 1fr); gap: 12px; position: relative; }
+.promo-step { background: var(--bg-1); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; position: relative; }
+.promo-step .from-to { display: flex; align-items: center; gap: 6px; margin-bottom: 10px; }
+.promo-step .from-to .lvl { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; padding: 2px 7px; border-radius: 3px; background: var(--bg-3); color: var(--ink-2); }
+.promo-step .from-to .lvl.to { background: var(--gold-dim); color: var(--gold-ink); border: 1px solid var(--gold-line); }
+.promo-step .from-to .arr { color: var(--ink-3); }
+.promo-step ul li { font-size: 11.5px; color: var(--ink-2); padding-left: 14px; position: relative; margin-bottom: 4px; line-height: 1.5; }
+.promo-step ul li::before { content: ''; position: absolute; left: 4px; top: 7px; width: 4px; height: 4px; border-radius: 50%; background: var(--gold); }
+
+/* ==== AQS CALCULATOR ==== */
+.aqs-calc { background: var(--bg-1); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+.aqs-calc-head { padding: 14px 18px 12px; border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; gap: 14px; flex-wrap: wrap; }
+.aqs-calc-head h3 { font-size: 14px; font-weight: 600; color: var(--ink-0); letter-spacing: -0.014em; }
+.aqs-calc-body { display: grid; grid-template-columns: 1.4fr 1fr; gap: 0; }
+.aqs-inputs { padding: 18px; border-right: 1px solid var(--border); display: flex; flex-direction: column; gap: 18px; }
+.aqs-input-group label { display: flex; justify-content: space-between; font-size: 12.5px; color: var(--ink-1); margin-bottom: 8px; }
+.aqs-input-group label .lname { font-weight: 500; }
+.aqs-input-group label .lname .pct { color: var(--ink-3); font-size: 11px; margin-left: 6px; }
+.aqs-input-group label .lval { font-family: 'Inter', sans-serif; font-variant-numeric: tabular-nums; font-weight: 600; color: var(--gold-ink); }
+.slider {
+  -webkit-appearance: none; appearance: none;
+  width: 100%; height: 4px; background: var(--bg-3); border-radius: 2px; outline: none;
+  border: 1px solid var(--border);
+}
+.slider::-webkit-slider-thumb {
+  -webkit-appearance: none; appearance: none; width: 16px; height: 16px;
+  border-radius: 50%; background: var(--gold-bright); border: 2px solid var(--bg);
+  box-shadow: 0 0 0 1px var(--gold-line); cursor: pointer;
+}
+.slider::-moz-range-thumb {
+  width: 16px; height: 16px; border-radius: 50%; background: var(--gold-bright);
+  border: 2px solid var(--bg); box-shadow: 0 0 0 1px var(--gold-line); cursor: pointer; border: 0;
+}
+.aqs-output { padding: 18px; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 12px; background: var(--bg-2); }
+.aqs-score { font-family: 'Inter', sans-serif; font-size: 64px; font-weight: 600; letter-spacing: -0.04em; color: var(--gold-ink); line-height: 1; font-variant-numeric: tabular-nums; }
+.aqs-out-label { font-size: 10.5px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-3); }
+.aqs-tier { display: flex; align-items: center; gap: 8px; padding: 6px 12px; border-radius: 999px; background: var(--gold-dim); border: 1px solid var(--gold-line); }
+.aqs-tier .lvl { font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 12px; color: var(--gold-ink); }
+.aqs-tier .desc { font-size: 11px; color: var(--ink-2); }
+.aqs-formula { font-size: 11px; color: var(--ink-3); margin-top: 8px; padding-top: 12px; border-top: 1px dashed var(--border); width: 100%; text-align: center; line-height: 1.6; }
+.aqs-formula .mono { color: var(--ink-1); }
+
+/* ==== EVIDENCE ==== */
+.ev-grid { display: grid; grid-template-columns: repeat(5, 1fr); gap: 8px; }
+.ev-card { background: var(--bg-1); border: 1px solid var(--border); border-radius: 8px; padding: 14px; }
+.ev-card .ev-letter { font-family: 'JetBrains Mono', monospace; font-size: 16px; font-weight: 700; padding: 4px 10px; border-radius: 4px; background: var(--gold-dim); color: var(--gold-ink); border: 1px solid var(--gold-line); display: inline-block; margin-bottom: 8px; }
+.ev-card[data-level="K"] .ev-letter { background: var(--bg-3); color: var(--ink-2); border-color: var(--border-2); }
+.ev-card[data-level="P"] .ev-letter { background: var(--blue-dim); color: var(--blue); border-color: var(--blue-line); }
+.ev-card[data-level="F"] .ev-letter { background: var(--violet-dim); color: var(--violet); border-color: var(--violet-line); }
+.ev-card[data-level="S"] .ev-letter { background: var(--amber-dim); color: var(--amber-ink); border-color: var(--amber-line); }
+.ev-card[data-level="V"] .ev-letter { background: var(--gold-dim); color: var(--gold-bright); border-color: var(--gold-line); }
+.ev-card .ev-name { font-size: 13px; font-weight: 600; color: var(--ink-0); margin-bottom: 4px; }
+.ev-card .ev-desc { font-size: 11.5px; color: var(--ink-2); line-height: 1.5; margin-bottom: 8px; }
+.ev-card .ev-cap { font-size: 11px; color: var(--ink-3); padding-top: 8px; border-top: 1px dashed var(--border); display: flex; justify-content: space-between; }
+.ev-card .ev-cap .cap-val { font-family: 'JetBrains Mono', monospace; font-weight: 600; color: var(--ink-1); }
+
+/* ==== TIER TABLE ==== */
+.score-tier-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.score-tier-card { background: var(--bg-1); border: 1px solid var(--border); border-radius: 8px; padding: 14px; position: relative; overflow: hidden; }
+.score-tier-card .stier-name { font-size: 13px; font-weight: 600; color: var(--ink-0); margin-bottom: 4px; }
+.score-tier-card .stier-range { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--gold-ink); margin-bottom: 8px; letter-spacing: 0.04em; }
+.score-tier-card .stier-desc { font-size: 11.5px; color: var(--ink-2); line-height: 1.5; }
+.score-tier-card .bar { position: absolute; left: 0; right: 0; bottom: 0; height: 3px; background: var(--bg-3); }
+.score-tier-card .bar .fill { height: 100%; background: var(--gold-bright); }
+.score-tier-card[data-tier="learning"] .bar .fill { width: 29%; background: var(--ink-4); }
+.score-tier-card[data-tier="familiar"] .bar .fill { width: 54%; background: var(--blue); }
+.score-tier-card[data-tier="proficient"] .bar .fill { width: 89%; background: var(--gold); }
+.score-tier-card[data-tier="expert"] .bar .fill { width: 100%; background: var(--gold-bright); }
+
+/* ==== AQS COMPONENT BREAKDOWN ==== */
+.aqs-comp-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+.aqs-comp { background: var(--bg-1); padding: 14px 16px; }
+.aqs-comp .pct-row { display: flex; align-items: baseline; gap: 6px; margin-bottom: 4px; }
+.aqs-comp .pct-row .pct { font-family: 'Inter', sans-serif; font-size: 22px; font-weight: 600; color: var(--gold-ink); letter-spacing: -0.022em; }
+.aqs-comp .pct-row .src { font-size: 10.5px; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.06em; font-weight: 500; }
+.aqs-comp h4 { font-size: 13px; font-weight: 600; color: var(--ink-0); margin-bottom: 6px; }
+.aqs-comp ul li { font-size: 11.5px; color: var(--ink-2); padding-left: 12px; position: relative; margin-bottom: 4px; line-height: 1.5; }
+.aqs-comp ul li::before { content: ''; position: absolute; left: 4px; top: 7px; width: 3px; height: 3px; border-radius: 50%; background: var(--ink-4); }
+
+/* ==== SERVICE TYPE ==== */
+.service-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.service-card { background: var(--bg-1); border: 1px solid var(--border); border-radius: 8px; padding: 18px; display: flex; flex-direction: column; gap: 10px; }
+.service-card .svc-num { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--gold-ink); }
+.service-card h3 { font-size: 15px; font-weight: 600; color: var(--ink-0); letter-spacing: -0.014em; }
+.service-card p { font-size: 12.5px; color: var(--ink-2); line-height: 1.55; }
+.service-card .pricing-line { padding-top: 8px; margin-top: auto; border-top: 1px dashed var(--border); font-size: 11.5px; color: var(--ink-3); }
+.service-card .pricing-line strong { color: var(--ink-1); font-weight: 600; }
+
+/* ==== VETTING ==== */
+.vetting-flow { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; background: var(--bg-1); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+.vetting-step { padding: 16px 18px; border-right: 1px solid var(--border); position: relative; }
+.vetting-step:last-child { border-right: none; }
+.vetting-step .v-num { width: 26px; height: 26px; border-radius: 50%; background: var(--gold-dim); border: 1px solid var(--gold-line); color: var(--gold-ink); font-family: 'JetBrains Mono', monospace; font-weight: 700; font-size: 12px; display: inline-flex; align-items: center; justify-content: center; margin-bottom: 10px; }
+.vetting-step h4 { font-size: 13.5px; font-weight: 600; color: var(--ink-0); margin-bottom: 4px; }
+.vetting-step p { font-size: 12px; color: var(--ink-2); line-height: 1.5; }
+.vetting-step::after { content: '→'; position: absolute; right: -7px; top: 22px; color: var(--ink-4); background: var(--bg); width: 14px; text-align: center; font-size: 13px; }
+.vetting-step:last-child::after { display: none; }
+
+/* ==== BRIEF SECTION ==== */
+.brief-status-flow { display: grid; grid-template-columns: 1fr auto 1fr auto 1fr; gap: 14px; align-items: center; background: var(--bg-1); border: 1px solid var(--border); border-radius: 8px; padding: 18px; margin-bottom: 14px; }
+.brief-status { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 14px; border-radius: 6px; background: var(--bg-2); border: 1px solid var(--border); }
+.brief-status .pill { font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600; padding: 3px 10px; border-radius: 999px; background: var(--bg-3); color: var(--ink-1); border: 1px solid var(--border); }
+.brief-status[data-state="draft"] .pill { background: var(--bg-3); color: var(--ink-1); }
+.brief-status[data-state="waiting"] .pill { background: var(--amber-dim); color: var(--amber-ink); border-color: var(--amber-line); }
+.brief-status[data-state="ready"] .pill { background: var(--gold-dim); color: var(--gold-ink); border-color: var(--gold-line); }
+.brief-status .desc { font-size: 11.5px; color: var(--ink-2); text-align: center; line-height: 1.5; }
+.brief-arrow { color: var(--ink-3); font-size: 16px; }
+
+.field-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.field-card { background: var(--bg-1); border: 1px solid var(--border); border-radius: 8px; }
+.field-card .fc-head { padding: 12px 16px; border-bottom: 1px solid var(--border); display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+.field-card .fc-head h4 { font-size: 13px; font-weight: 600; color: var(--ink-0); }
+.field-card.client .fc-head h4::before { content: '◇'; color: var(--blue); margin-right: 6px; }
+.field-card.internal .fc-head h4::before { content: '◆'; color: var(--gold-ink); margin-right: 6px; }
+.field-card ul { padding: 12px 16px; }
+.field-card ul li { padding: 8px 0; font-size: 12.5px; color: var(--ink-1); line-height: 1.5; border-bottom: 1px dashed var(--border); display: flex; gap: 10px; align-items: baseline; }
+.field-card ul li:last-child { border-bottom: none; }
+.field-card ul li .fname { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--gold-ink); white-space: nowrap; min-width: 100px; }
+.field-card.internal ul li .fname { color: var(--violet); }
+.field-card ul li .fdesc { color: var(--ink-2); font-size: 12px; flex: 1; }
+
+.source-flow { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+.source-card { background: var(--bg-1); border: 1px solid var(--border); border-radius: 8px; padding: 14px 16px; display: flex; flex-direction: column; gap: 8px; }
+.source-card .src-num { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--gold-ink); }
+.source-card h4 { font-size: 13px; font-weight: 600; color: var(--ink-0); }
+.source-card p { font-size: 12px; color: var(--ink-2); line-height: 1.5; }
+.source-card.disabled { opacity: 0.6; }
+.source-card.disabled h4::after { content: 'NOT WIRED'; font-family: 'JetBrains Mono', monospace; font-size: 9px; color: var(--amber-ink); background: var(--amber-dim); border: 1px solid var(--amber-line); padding: 1px 6px; border-radius: 3px; margin-left: 8px; vertical-align: middle; letter-spacing: 0.06em; }
+
+.gap-detect { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.followup-flow { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.fu-card { background: var(--bg-1); border: 1px solid var(--border); border-radius: 8px; padding: 16px 18px; }
+.fu-card h4 { font-size: 13.5px; font-weight: 600; color: var(--ink-0); margin-bottom: 8px; display: flex; align-items: center; gap: 8px; }
+.fu-card h4 .arrow-icon { width: 22px; height: 22px; border-radius: 4px; display: inline-flex; align-items: center; justify-content: center; }
+.fu-card.outbound h4 .arrow-icon { background: var(--gold-dim); color: var(--gold-ink); border: 1px solid var(--gold-line); }
+.fu-card.inbound h4 .arrow-icon { background: var(--blue-dim); color: var(--blue); border: 1px solid var(--blue-line); }
+.fu-card ol { padding-left: 0; counter-reset: step; }
+.fu-card ol li { padding: 6px 0 6px 28px; position: relative; font-size: 12px; color: var(--ink-2); line-height: 1.55; counter-increment: step; }
+.fu-card ol li::before { content: counter(step); position: absolute; left: 0; top: 7px; width: 18px; height: 18px; border-radius: 50%; background: var(--bg-3); color: var(--ink-2); font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 600; display: inline-flex; align-items: center; justify-content: center; }
+.fu-card.outbound ol li::before { background: var(--gold-dim); color: var(--gold-ink); }
+.fu-card.inbound ol li::before { background: var(--blue-dim); color: var(--blue); }
+.fu-card code { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--gold-ink); background: var(--bg-2); padding: 1px 5px; border-radius: 3px; }
+
+/* ==== FOOTER ==== */
+.footer { margin-top: 40px; padding: 16px 0; border-top: 1px solid var(--border); display: flex; justify-content: space-between; gap: 14px; font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: var(--ink-3); letter-spacing: 0.04em; flex-wrap: wrap; }
+
+/* ==== RESPONSIVE ==== */
+@media (max-width: 1100px) {
+  .layout { grid-template-columns: 220px 1fr; gap: 24px; }
+  .level-grid, .promo-flow { grid-template-columns: repeat(3, 1fr); }
+  .level-grid > *:nth-child(7) { grid-column: 1 / -1; }
+  .ev-grid { grid-template-columns: repeat(3, 1fr); }
+  .vetting-flow, .source-flow { grid-template-columns: repeat(2, 1fr); }
+  .vetting-step::after { display: none; }
+}
+@media (max-width: 880px) {
+  .layout { grid-template-columns: 1fr; gap: 0; }
+  .toc-pane { position: static; height: auto; padding: 14px 0; }
+  .toc-card { display: none; }
+  .toc-card.show-mobile { display: block; }
+  .kpi-row { grid-template-columns: repeat(2, 1fr); }
+  .dim-grid, .rubric-grid, .aqs-comp-grid { grid-template-columns: repeat(2, 1fr); }
+  .level-grid, .promo-flow { grid-template-columns: repeat(2, 1fr); }
+  .level-grid > *:nth-child(7) { grid-column: auto; }
+  .pricing-row { grid-template-columns: 1fr; }
+  .pricing-row .pcell { border-right: none; border-bottom: 1px dashed var(--border); }
+  .aqs-calc-body { grid-template-columns: 1fr; }
+  .aqs-inputs { border-right: none; border-bottom: 1px solid var(--border); }
+  .ev-grid { grid-template-columns: repeat(2, 1fr); }
+  .service-grid, .source-flow, .field-grid, .gap-detect, .followup-flow { grid-template-columns: 1fr; }
+  .vetting-flow { grid-template-columns: 1fr; }
+  .vetting-step { border-right: none; border-bottom: 1px solid var(--border); }
+  .vetting-step:last-child { border-bottom: none; }
+  .spec-body { grid-template-columns: 1fr; }
+  .brief-status-flow { grid-template-columns: 1fr; }
+  .score-tier-grid { grid-template-columns: repeat(2, 1fr); }
+}
+
+/* ==== PRINT ==== */
+@media print {
+  body { background: white; color: black; }
+  .glow, .mainnav, .toc-pane, .footer, .spec-controls, .pricing-controls { display: none !important; }
+  .layout { grid-template-columns: 1fr; padding: 0; max-width: none; }
+  .main-pane { padding: 0; }
+  .spec-item, details { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
+  .spec-body { display: grid !important; }
+  details { open: true; }
+  details > summary { list-style: none; }
+}
+</style>
+</head>
+<body>
+<div class="glow"></div>
+
+<nav class="mainnav">
+  <a class="nav-brand" href="#top">
+    <div class="nav-brand-fallback">G</div>
+  </a>
+  <div class="nav-context">
+    <div class="nctx-1">Grace knowledge base</div>
+    <div class="nctx-2">Overview & gap list · working doc for the co-founder</div>
+  </div>
+  <div class="nav-right">
+    <button class="btn amber" id="gapJump"><span>14 gaps</span><span class="ct">to fill</span></button>
+    <button class="icon-btn theme-toggle" id="themeToggle" aria-label="Toggle theme">
+      <svg class="ti-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      <svg class="ti-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+    </button>
+  </div>
+</nav>
+
+<div class="layout" id="top">
+  <aside class="toc-pane">
+    <div class="toc-card">
+      <span class="eyebrow">Sections</span>
+      <a class="toc-link" href="#specs"><span class="toc-num">1</span><span>Nine specializations</span></a>
+      <a class="toc-link" href="#pricing"><span class="toc-num">2</span><span>Fixed pricing</span></a>
+      <a class="toc-link" href="#levels"><span class="toc-num">3</span><span>Analyst levels</span></a>
+      <a class="toc-link" href="#promotion"><span class="toc-num">4</span><span>Promotion criteria</span></a>
+      <a class="toc-link" href="#scoring"><span class="toc-num">5</span><span>Scoring system</span></a>
+      <a class="toc-link" href="#evidence"><span class="toc-num">6</span><span>Evidence sources</span></a>
+      <a class="toc-link" href="#services"><span class="toc-num">7</span><span>Service types</span></a>
+      <a class="toc-link" href="#vetting"><span class="toc-num">8</span><span>Vetting process</span></a>
+      <a class="toc-link" href="#briefs"><span class="toc-num">9</span><span>Project briefs</span></a>
+    </div>
+    <div class="toc-card amber-card">
+      <span class="eyebrow">Gaps to fill</span>
+      <a class="toc-link" href="#gap-specs">Per-spec golden refs &amp; failure modes</a>
+      <a class="toc-link" href="#gap-discovery">Discovery refund policy</a>
+      <a class="toc-link" href="#gap-pricing">Margin, discounts, premium uplift</a>
+      <a class="toc-link" href="#gap-briefs">Brief intake automation</a>
+    </div>
+  </aside>
+
+  <main class="main-pane">
+    <header class="page-head">
+      <div class="eyebrow-row">
+        <span class="eyebrow">Working document</span>
+        <span class="status-chip" data-status="amber"><span class="dot-pulse"></span>Draft · please comment</span>
+        <span class="status-chip" data-status="violet">v1 · 2026-05-02</span>
+      </div>
+      <div class="lede">A working doc for the co-founder. Each section shows what's currently in the system, with <em>gaps called out</em> where they exist.</div>
+      <p class="sublede">Please add comments or fill the gap sections directly. Click any specialization or pricing tier to drill in. The AQS calculator at the bottom of section 5 lets you sanity-check the threshold logic.</p>
+    </header>
+
+    <div class="kpi-row">
+      <div class="kpi"><span class="label">Specializations</span><span class="value">9</span><span class="delta">3-tier deliverables &middot; 8 rubric dims each</span></div>
+      <div class="kpi"><span class="label">Analyst levels</span><span class="value">7</span><span class="delta">A1 → M1 + E1 engineering track</span></div>
+      <div class="kpi"><span class="label">Engagement models</span><span class="value">3</span><span class="delta">Managed · project · staff aug</span></div>
+      <div class="kpi amber"><span class="label">Open gaps</span><span class="value">14</span><span class="delta">Across pricing, specs, briefs</span></div>
+    </div>
+
+    <!-- ============ SECTION 1: SPECIALIZATIONS ============ -->
+    <section id="specs" class="doc-section">
+      <div class="section-head">
+        <div>
+          <div class="section-num">SECTION 01</div>
+          <div class="section-title">The nine specializations and what good looks like</div>
+          <div class="section-sub">Gratia delivers across nine specialization clusters. Each has tiered deliverables (familiar = A1/A2 work, proficient = A2/A3, expert = A3/A4) and a quality rubric used during AI QA review. Every deliverable is scored on four <strong>universal dimensions</strong> plus four specialization-specific dimensions, on a 1 to 5 scale.</div>
+        </div>
+      </div>
+
+      <h3 style="font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-3); margin: 18px 0 10px;">Universal dimensions · apply to everything</h3>
+      <div class="dim-grid" style="margin-bottom: 20px;">
+        <div class="dim-cell"><div class="dim-num">01</div><h4>Completeness</h4><p>All brief requirements addressed.</p></div>
+        <div class="dim-cell"><div class="dim-num">02</div><h4>Accuracy</h4><p>Data, facts, and calculations verified.</p></div>
+        <div class="dim-cell"><div class="dim-num">03</div><h4>Presentation</h4><p>Professional, clear, audience-appropriate.</p></div>
+        <div class="dim-cell"><div class="dim-num">04</div><h4>Timeliness</h4><p>Delivered on schedule with proper communication.</p></div>
+      </div>
+
+      <div class="spec-controls">
+        <h3 style="font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-3); margin-right: auto;">The 9 clusters</h3>
+        <button class="btn" id="expandAllSpecs">Expand all</button>
+        <button class="btn" id="collapseAllSpecs">Collapse</button>
+      </div>
+
+      <div class="spec-list" id="specList">
+        <details class="spec-item">
+          <summary class="spec-summary">
+            <span class="spec-num">1.1</span>
+            <span class="spec-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="1" x2="12" y2="23"/><path d="M17 5H9.5a3.5 3.5 0 0 0 0 7h5a3.5 3.5 0 0 1 0 7H6"/></svg></span>
+            <span class="spec-name">Financial models and consulting</span>
+            <span class="spec-meta"><span>Models · forecasts · M&amp;A</span><svg class="spec-chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
+          </summary>
+          <div class="spec-body">
+            <div class="tier-list" data-tier="familiar"><h5><span class="tier-dot"></span>Familiar (A1/A2)</h5><p>Budget templates, simple forecasts, revenue projections, cost analysis.</p></div>
+            <div class="tier-list" data-tier="proficient"><h5><span class="tier-dot"></span>Proficient (A2/A3)</h5><p>3-statement models, scenario analysis, cash flow modeling, variance analysis.</p></div>
+            <div class="tier-list" data-tier="expert" style="grid-column: 1 / -1;"><h5><span class="tier-dot"></span>Expert (A3/A4)</h5><p>DCF valuations, LBO models, M&amp;A analysis, Monte Carlo simulations.</p></div>
+            <div class="spec-rubric">
+              <h5>Specialization rubric (in addition to the universal four)</h5>
+              <div class="rubric-grid">
+                <div class="dim-cell"><div class="dim-num">05</div><h6>Formula integrity</h6><p>Formulas correct, auditable, no circular references.</p></div>
+                <div class="dim-cell"><div class="dim-num">06</div><h6>Model structure</h6><p>Logical layout, clear assumptions section, easy to navigate.</p></div>
+                <div class="dim-cell"><div class="dim-num">07</div><h6>Scenario coverage</h6><p>Appropriate sensitivity analysis and scenario cases.</p></div>
+                <div class="dim-cell"><div class="dim-num">08</div><h6>Assumption documentation</h6><p>All assumptions clearly stated and sourced.</p></div>
+              </div>
+            </div>
+          </div>
+        </details>
+
+        <details class="spec-item">
+          <summary class="spec-summary">
+            <span class="spec-num">1.2</span>
+            <span class="spec-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg></span>
+            <span class="spec-name">Market research and analysis</span>
+            <span class="spec-meta"><span>Sizing · competitive intel · DD</span><svg class="spec-chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
+          </summary>
+          <div class="spec-body">
+            <div class="tier-list" data-tier="familiar"><h5><span class="tier-dot"></span>Familiar (A1/A2)</h5><p>Competitor profiles, industry overviews, basic market sizing, news synthesis.</p></div>
+            <div class="tier-list" data-tier="proficient"><h5><span class="tier-dot"></span>Proficient (A2/A3)</h5><p>TAM/SAM/SOM analysis, customer segmentation, pricing research, survey design.</p></div>
+            <div class="tier-list" data-tier="expert" style="grid-column: 1 / -1;"><h5><span class="tier-dot"></span>Expert (A3/A4)</h5><p>Market entry strategy, competitive intelligence programs, M&amp;A due diligence, industry white papers.</p></div>
+            <div class="spec-rubric">
+              <h5>Specialization rubric</h5>
+              <div class="rubric-grid">
+                <div class="dim-cell"><div class="dim-num">05</div><h6>Source quality</h6><p>Credible, recent, properly cited sources.</p></div>
+                <div class="dim-cell"><div class="dim-num">06</div><h6>Methodology rigor</h6><p>Appropriate research methods for the question.</p></div>
+                <div class="dim-cell"><div class="dim-num">07</div><h6>Sample validity</h6><p>Representative data, adequate sample size.</p></div>
+                <div class="dim-cell"><div class="dim-num">08</div><h6>Insight depth</h6><p>Beyond obvious conclusions, actionable findings.</p></div>
+              </div>
+            </div>
+          </div>
+        </details>
+
+        <details class="spec-item">
+          <summary class="spec-summary">
+            <span class="spec-num">1.3</span>
+            <span class="spec-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"/><polyline points="2 17 12 22 22 17"/><polyline points="2 12 12 17 22 12"/></svg></span>
+            <span class="spec-name">Business strategy consulting</span>
+            <span class="spec-meta"><span>Frameworks · growth · turnaround</span><svg class="spec-chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
+          </summary>
+          <div class="spec-body">
+            <div class="tier-list" data-tier="familiar"><h5><span class="tier-dot"></span>Familiar</h5><p>SWOT analysis, competitive overviews, strategic summaries, research synthesis.</p></div>
+            <div class="tier-list" data-tier="proficient"><h5><span class="tier-dot"></span>Proficient</h5><p>Strategic frameworks applied to client situations, business model analysis, growth planning, risk assessment.</p></div>
+            <div class="tier-list" data-tier="expert" style="grid-column: 1 / -1;"><h5><span class="tier-dot"></span>Expert</h5><p>Corporate strategy (multi-year), M&amp;A strategy and target identification, board advisory presentations, turnaround planning.</p></div>
+            <div class="spec-rubric"><h5>Specialization rubric</h5>
+              <div class="rubric-grid">
+                <div class="dim-cell"><div class="dim-num">05</div><h6>Framework application</h6><p>Strategic tools used appropriately, not forced.</p></div>
+                <div class="dim-cell"><div class="dim-num">06</div><h6>Evidence base</h6><p>Conclusions supported by data and analysis.</p></div>
+                <div class="dim-cell"><div class="dim-num">07</div><h6>Strategic coherence</h6><p>Recommendations align and reinforce each other.</p></div>
+                <div class="dim-cell"><div class="dim-num">08</div><h6>Implementation path</h6><p>Clear next steps, not just theory.</p></div>
+              </div>
+            </div>
+          </div>
+        </details>
+
+        <details class="spec-item">
+          <summary class="spec-summary">
+            <span class="spec-num">1.4</span>
+            <span class="spec-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07 19.5 19.5 0 0 1-6-6 19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 4.11 2h3a2 2 0 0 1 2 1.72c.13.96.37 1.9.72 2.81a2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45c.91.35 1.85.59 2.81.72A2 2 0 0 1 22 16.92z"/></svg></span>
+            <span class="spec-name">RevOps and GTM enablement</span>
+            <span class="spec-meta"><span>CRM · pipeline · GTM strategy</span><svg class="spec-chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
+          </summary>
+          <div class="spec-body">
+            <div class="tier-list" data-tier="familiar"><h5><span class="tier-dot"></span>Familiar</h5><p>CRM data cleanup, pipeline reports, lead lists, sales collateral.</p></div>
+            <div class="tier-list" data-tier="proficient"><h5><span class="tier-dot"></span>Proficient</h5><p>Sales process design, CRM configuration, pipeline optimization, territory planning.</p></div>
+            <div class="tier-list" data-tier="expert" style="grid-column: 1 / -1;"><h5><span class="tier-dot"></span>Expert</h5><p>GTM strategy (full go-to-market plans), revenue modeling, sales transformation programs, channel strategy.</p></div>
+            <div class="spec-rubric"><h5>Specialization rubric</h5>
+              <div class="rubric-grid">
+                <div class="dim-cell"><div class="dim-num">05</div><h6>Process alignment</h6><p>Sales stages match buyer journey.</p></div>
+                <div class="dim-cell"><div class="dim-num">06</div><h6>Data quality</h6><p>CRM data clean, consistent, complete.</p></div>
+                <div class="dim-cell"><div class="dim-num">07</div><h6>Automation logic</h6><p>Workflows trigger correctly, no gaps.</p></div>
+                <div class="dim-cell"><div class="dim-num">08</div><h6>Metric validity</h6><p>KPIs measure what matters, no vanity metrics.</p></div>
+              </div>
+            </div>
+          </div>
+        </details>
+
+        <details class="spec-item">
+          <summary class="spec-summary">
+            <span class="spec-num">1.5</span>
+            <span class="spec-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="3" width="20" height="14" rx="2" ry="2"/><line x1="8" y1="21" x2="16" y2="21"/><line x1="12" y1="17" x2="12" y2="21"/></svg></span>
+            <span class="spec-name">Pitch and consulting decks</span>
+            <span class="spec-meta"><span>Investor · board · IPO roadshow</span><svg class="spec-chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
+          </summary>
+          <div class="spec-body">
+            <div class="tier-list" data-tier="familiar"><h5><span class="tier-dot"></span>Familiar</h5><p>Company overviews, product decks, team presentations, progress updates.</p></div>
+            <div class="tier-list" data-tier="proficient"><h5><span class="tier-dot"></span>Proficient</h5><p>Investor pitch decks, board updates, competitive positioning, market narratives.</p></div>
+            <div class="tier-list" data-tier="expert" style="grid-column: 1 / -1;"><h5><span class="tier-dot"></span>Expert</h5><p>Series B+ fundraising decks, M&amp;A presentations, IPO roadshows, strategic repositioning decks.</p></div>
+            <div class="spec-rubric"><h5>Specialization rubric</h5>
+              <div class="rubric-grid">
+                <div class="dim-cell"><div class="dim-num">05</div><h6>Narrative flow</h6><p>Logical story arc, compelling progression from problem to solution.</p></div>
+                <div class="dim-cell"><div class="dim-num">06</div><h6>Visual design</h6><p>Professional aesthetics, consistent branding, visual hierarchy.</p></div>
+                <div class="dim-cell"><div class="dim-num">07</div><h6>Key message clarity</h6><p>Core points unmistakable and memorable on each slide.</p></div>
+                <div class="dim-cell"><div class="dim-num">08</div><h6>Data visualization</h6><p>Charts support the narrative, easy to understand at a glance.</p></div>
+              </div>
+            </div>
+          </div>
+        </details>
+
+        <details class="spec-item">
+          <summary class="spec-summary">
+            <span class="spec-num">1.6</span>
+            <span class="spec-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg></span>
+            <span class="spec-name">Proposals and business cases</span>
+            <span class="spec-meta"><span>RFPs · ROI · investment memos</span><svg class="spec-chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
+          </summary>
+          <div class="spec-body">
+            <div class="tier-list" data-tier="familiar"><h5><span class="tier-dot"></span>Familiar</h5><p>Proposal templates, cost estimates, scope documents, vendor comparisons.</p></div>
+            <div class="tier-list" data-tier="proficient"><h5><span class="tier-dot"></span>Proficient</h5><p>RFP responses, business cases, ROI analysis, investment memos.</p></div>
+            <div class="tier-list" data-tier="expert" style="grid-column: 1 / -1;"><h5><span class="tier-dot"></span>Expert</h5><p>Enterprise RFPs (multi-million dollar), strategic business cases for board approval, board-level recommendations, M&amp;A proposals.</p></div>
+            <div class="spec-rubric"><h5>Specialization rubric</h5>
+              <div class="rubric-grid">
+                <div class="dim-cell"><div class="dim-num">05</div><h6>Problem framing</h6><p>Issue clearly articulated, stakes established.</p></div>
+                <div class="dim-cell"><div class="dim-num">06</div><h6>Solution logic</h6><p>Recommendation follows from analysis.</p></div>
+                <div class="dim-cell"><div class="dim-num">07</div><h6>ROI substantiation</h6><p>Benefits quantified with credible assumptions.</p></div>
+                <div class="dim-cell"><div class="dim-num">08</div><h6>Objection handling</h6><p>Potential concerns preemptively addressed.</p></div>
+              </div>
+            </div>
+          </div>
+        </details>
+
+        <details class="spec-item">
+          <summary class="spec-summary">
+            <span class="spec-num">1.7</span>
+            <span class="spec-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="18" rx="2" ry="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg></span>
+            <span class="spec-name">Project management</span>
+            <span class="spec-meta"><span>Plans · PMO · transformation</span><svg class="spec-chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
+          </summary>
+          <div class="spec-body">
+            <div class="tier-list" data-tier="familiar"><h5><span class="tier-dot"></span>Familiar</h5><p>Task lists and trackers, meeting coordination and minutes, status update reports, timeline tracking spreadsheets.</p></div>
+            <div class="tier-list" data-tier="proficient"><h5><span class="tier-dot"></span>Proficient</h5><p>Full project plans, risk registers, resource allocation models, stakeholder management plans.</p></div>
+            <div class="tier-list" data-tier="expert" style="grid-column: 1 / -1;"><h5><span class="tier-dot"></span>Expert</h5><p>Program management across multiple workstreams, PMO setup and governance design, portfolio optimization, transformation program delivery.</p></div>
+            <div class="spec-rubric"><h5>Specialization rubric</h5>
+              <div class="rubric-grid">
+                <div class="dim-cell"><div class="dim-num">05</div><h6>Scope definition</h6><p>Clear boundaries, deliverables well-defined.</p></div>
+                <div class="dim-cell"><div class="dim-num">06</div><h6>Timeline realism</h6><p>Achievable milestones, dependencies mapped.</p></div>
+                <div class="dim-cell"><div class="dim-num">07</div><h6>Risk identification</h6><p>Potential issues anticipated with mitigations.</p></div>
+                <div class="dim-cell"><div class="dim-num">08</div><h6>Stakeholder alignment</h6><p>Right people informed, RACI clear.</p></div>
+              </div>
+            </div>
+          </div>
+        </details>
+
+        <details class="spec-item">
+          <summary class="spec-summary">
+            <span class="spec-num">1.8</span>
+            <span class="spec-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span>
+            <span class="spec-name">Business process optimization</span>
+            <span class="spec-meta"><span>SOPs · Lean · digital transformation</span><svg class="spec-chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
+          </summary>
+          <div class="spec-body">
+            <div class="tier-list" data-tier="familiar"><h5><span class="tier-dot"></span>Familiar</h5><p>Process documentation, workflow diagrams, SOP creation, checklist design.</p></div>
+            <div class="tier-list" data-tier="proficient"><h5><span class="tier-dot"></span>Proficient</h5><p>Process mapping (as-is/to-be), bottleneck analysis, Zapier/Make automation workflows, efficiency metrics and reporting.</p></div>
+            <div class="tier-list" data-tier="expert" style="grid-column: 1 / -1;"><h5><span class="tier-dot"></span>Expert</h5><p>Digital transformation roadmaps, Six Sigma projects, enterprise automation programs, change management plans.</p></div>
+            <div class="spec-rubric"><h5>Specialization rubric</h5>
+              <div class="rubric-grid">
+                <div class="dim-cell"><div class="dim-num">05</div><h6>Current state accuracy</h6><p>Existing process correctly documented.</p></div>
+                <div class="dim-cell"><div class="dim-num">06</div><h6>Gap identification</h6><p>Bottlenecks and inefficiencies clearly identified.</p></div>
+                <div class="dim-cell"><div class="dim-num">07</div><h6>Solution feasibility</h6><p>Recommendations practical and implementable.</p></div>
+                <div class="dim-cell"><div class="dim-num">08</div><h6>Change impact</h6><p>Risks and dependencies properly considered.</p></div>
+              </div>
+            </div>
+          </div>
+        </details>
+
+        <details class="spec-item">
+          <summary class="spec-summary">
+            <span class="spec-num">1.9</span>
+            <span class="spec-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 3v18h18"/><polyline points="7 16 11 11 15 14 21 8"/></svg></span>
+            <span class="spec-name">Data dashboards and reporting</span>
+            <span class="spec-meta"><span>Excel · Tableau · ML insights</span><svg class="spec-chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
+          </summary>
+          <div class="spec-body">
+            <div class="tier-list" data-tier="familiar"><h5><span class="tier-dot"></span>Familiar</h5><p>Excel dashboards, basic charts, status reports, KPI tracking sheets.</p></div>
+            <div class="tier-list" data-tier="proficient"><h5><span class="tier-dot"></span>Proficient</h5><p>Tableau/Power BI dashboards, automated reporting, data blending from multiple sources, drill-down analysis.</p></div>
+            <div class="tier-list" data-tier="expert" style="grid-column: 1 / -1;"><h5><span class="tier-dot"></span>Expert</h5><p>Predictive analytics dashboards, real-time dashboards, data warehouse design, ML-powered insights.</p></div>
+            <div class="spec-rubric"><h5>Specialization rubric</h5>
+              <div class="rubric-grid">
+                <div class="dim-cell"><div class="dim-num">05</div><h6>Data integrity</h6><p>Accurate data connections, proper refresh logic.</p></div>
+                <div class="dim-cell"><div class="dim-num">06</div><h6>Visualization clarity</h6><p>Right chart types, clear labels, no clutter.</p></div>
+                <div class="dim-cell"><div class="dim-num">07</div><h6>Interactivity</h6><p>Useful filters, drill-downs work correctly.</p></div>
+                <div class="dim-cell"><div class="dim-num">08</div><h6>Performance</h6><p>Loads quickly, handles data volume well.</p></div>
+              </div>
+            </div>
+          </div>
+        </details>
+      </div>
+
+      <h3 style="font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-3); margin: 24px 0 10px;">Review outcomes · applies to every deliverable</h3>
+      <table class="gtable">
+        <thead><tr><th>Outcome</th><th>Avg score</th><th>Meaning</th></tr></thead>
+        <tbody>
+          <tr><td><span class="rag-pill gold">Exceeded</span></td><td class="num">≥ 4.5</td><td>Outstanding, contributes positively to AQS.</td></tr>
+          <tr><td><span class="rag-pill g">Passed</span></td><td class="num">≥ 3.5</td><td>Client-ready.</td></tr>
+          <tr><td><span class="rag-pill a">Revise</span></td><td class="num">≥ 2.5</td><td>Needs substantive revision before client delivery.</td></tr>
+          <tr><td><span class="rag-pill r">Restart</span></td><td class="num">&lt; 2.5</td><td>Fundamental issues, deliverable needs to be redone.</td></tr>
+        </tbody>
+      </table>
+
+      <div class="callout amber gap-card" id="gap-specs">
+        <strong>Gaps to fill in &middot; per specialization</strong> For each of the nine specializations, please add (Grace will use these as worked examples):
+        <ul>
+          <li>A <strong>"golden reference" deliverable</strong>. A real (sanitized) past piece of work that an analyst can study to see what excellent looks like in this domain.</li>
+          <li><strong>Three common failure modes.</strong> The most frequent ways juniors get this wrong.</li>
+          <li><strong>The single sharpest discovery question</strong> when scoping work in this cluster (we use it in discovery).</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ============ SECTION 2: PRICING ============ -->
+    <section id="pricing" class="doc-section">
+      <div class="section-head">
+        <div>
+          <div class="section-num">SECTION 02</div>
+          <div class="section-title">Fixed pricing model</div>
+          <div class="section-sub">Pricing is <strong>fixed price = estimated hours × blended rate + complexity buffer</strong>. The client sees a price range, a timeline, and a deliverable outline. Bottom of range assumes clean inputs and clear scope; top assumes ambiguity and revision cycles. Internal-only: estimated hours, recommended analyst level, and the framework / methodology to apply.</div>
+        </div>
+      </div>
+
+      <!-- Discovery card -->
+      <div class="card" style="margin-bottom: 18px;">
+        <div class="card-head">
+          <h3>Discovery project &middot; universal fallback</h3>
+          <span class="status-chip" data-status="blue"><span>Used when brief spans 3+ specs or is too ambiguous</span></span>
+        </div>
+        <div class="card-body">
+          <div class="grid-4" style="gap: 1px; background: var(--border); border-radius: 6px; overflow: hidden;">
+            <div style="background: var(--bg-1); padding: 12px 14px;"><div class="eyebrow">Deliverable</div><div style="font-size: 12.5px; color: var(--ink-1); margin-top: 4px; line-height: 1.5;">Scoping document: problem definition, recommended approach, deliverable breakdown, timeline, budget for the full engagement.</div></div>
+            <div style="background: var(--bg-1); padding: 12px 14px;"><div class="eyebrow">Timeline</div><div style="font-family: Inter; font-size: 17px; font-weight: 600; color: var(--ink-0); margin-top: 4px; font-variant-numeric: tabular-nums;">1–2 weeks</div></div>
+            <div style="background: var(--bg-1); padding: 12px 14px;"><div class="eyebrow">Price &middot; Hours</div><div style="font-family: Inter; font-size: 17px; font-weight: 600; color: var(--ink-0); margin-top: 4px; font-variant-numeric: tabular-nums;">$2k–$4k</div><div style="font-size: 11.5px; color: var(--ink-3); margin-top: 2px;">20–40 hours</div></div>
+            <div style="background: var(--bg-1); padding: 12px 14px;"><div class="eyebrow">Analyst</div><div style="font-family: Inter; font-size: 17px; font-weight: 600; color: var(--ink-0); margin-top: 4px;">A3 minimum</div><div style="font-size: 11.5px; color: var(--ink-3); margin-top: 2px;">needs to structure ambiguity</div></div>
+          </div>
+          <div style="font-size: 12.5px; color: var(--ink-2); line-height: 1.6; margin-top: 14px; padding-top: 14px; border-top: 1px dashed var(--border);">
+            <strong style="color: var(--ink-1);">Framework:</strong> Problem structuring → 2 to 3 stakeholder interviews → approach options → recommendation with effort estimates.
+          </div>
+          <div class="callout amber gap-card" id="gap-discovery" style="margin-top: 14px;">
+            <strong>Gap to confirm:</strong> If client decides not to proceed after discovery, we refund 50% of the discovery fee. Is 50% the right number, and is the refund automatic or only on request?
+          </div>
+        </div>
+      </div>
+
+      <div class="pricing-controls">
+        <span class="eyebrow">Filter by tier</span>
+        <button class="tier-chip active" data-tier="all">All tiers</button>
+        <button class="tier-chip" data-tier="basic"><span class="tdot"></span>Basic</button>
+        <button class="tier-chip" data-tier="standard"><span class="tdot"></span>Standard</button>
+        <button class="tier-chip" data-tier="complex"><span class="tdot"></span>Complex</button>
+      </div>
+
+      <div class="pricing-table" id="pricingTable">
+        <div class="pricing-row head">
+          <div class="pcell">Specialization</div>
+          <div class="pcell tier-head" data-tier="basic"><span class="tdot"></span>Basic</div>
+          <div class="pcell tier-head" data-tier="standard"><span class="tdot"></span>Standard</div>
+          <div class="pcell tier-head" data-tier="complex"><span class="tdot"></span>Complex</div>
+        </div>
+        <!-- 9 rows -->
+        <div class="pricing-row">
+          <div class="pcell spec-cell"><span class="name">Financial models</span><span class="ex">3-stmt · DCF · LBO · M&amp;A</span></div>
+          <div class="pcell price-cell" data-tier-cell="basic"><span class="price">$2,500–$4,000</span><span class="timeline">1–2 weeks · 30–50h</span><span class="meta"><span>A2–A3</span></span></div>
+          <div class="pcell price-cell" data-tier-cell="standard"><span class="price">$5,500–$9,000</span><span class="timeline">2–4 weeks · 50–90h</span><span class="meta"><span>A3</span></span></div>
+          <div class="pcell price-cell" data-tier-cell="complex"><span class="price">$10,000–$18,000</span><span class="timeline">4–6 weeks · 90–160h</span><span class="meta"><span>A3–A4</span></span></div>
+        </div>
+        <div class="pricing-row method-row"><div class="method-content" style="grid-column: 1 / -1;"><strong>Methodology cues:</strong> output-back design (start from what decisions the model will inform), 3-statement linkage, scenario manager (base/bull/bear), sensitivity tables, error checks on every sheet. Complex tier adds modular architecture, version control, audit trail, integrated dashboard tab, Monte Carlo if warranted.</div></div>
+
+        <div class="pricing-row">
+          <div class="pcell spec-cell"><span class="name">Pitch &amp; consulting decks</span><span class="ex">Investor · board · IPO roadshow</span></div>
+          <div class="pcell price-cell" data-tier-cell="basic"><span class="price">$1,500–$3,000</span><span class="timeline">1 week · 20–35h</span><span class="meta"><span>A2–A3</span></span></div>
+          <div class="pcell price-cell" data-tier-cell="standard"><span class="price">$4,000–$7,000</span><span class="timeline">2–3 weeks · 40–65h</span><span class="meta"><span>A3</span></span></div>
+          <div class="pcell price-cell" data-tier-cell="complex"><span class="price">$8,000–$14,000</span><span class="timeline">3–5 weeks · 70–120h</span><span class="meta"><span>A3–A4</span></span></div>
+        </div>
+        <div class="pricing-row method-row"><div class="method-content" style="grid-column: 1 / -1;"><strong>Methodology cues:</strong> SCR / Minto pyramid, ghost deck (titles only) for approval before full build, assertion-evidence, one message per slide, consistent visual system. Complex tier adds modular appendix and rehearsal-tested flow.</div></div>
+
+        <div class="pricing-row">
+          <div class="pcell spec-cell"><span class="name">Market research</span><span class="ex">TAM/SAM/SOM · DD · landscape</span></div>
+          <div class="pcell price-cell" data-tier-cell="basic"><span class="price">$2,000–$3,500</span><span class="timeline">1–2 weeks · 25–40h</span><span class="meta"><span>A2–A3</span></span></div>
+          <div class="pcell price-cell" data-tier-cell="standard"><span class="price">$5,000–$8,500</span><span class="timeline">2–4 weeks · 50–80h</span><span class="meta"><span>A3</span></span></div>
+          <div class="pcell price-cell" data-tier-cell="complex"><span class="price">$12,000–$22,000</span><span class="timeline">4–8 weeks · 100–180h</span><span class="meta"><span>A3–A4</span></span></div>
+        </div>
+        <div class="pricing-row method-row"><div class="method-content" style="grid-column: 1 / -1;"><strong>Methodology cues:</strong> secondary research, Porter's Five Forces, top-down and bottom-up sizing, competitive positioning maps, PESTEL, triangulated estimates. Complex tier adds expert interview synthesis, scenario modeling, decision frameworks (weighted scoring).</div></div>
+
+        <div class="pricing-row">
+          <div class="pcell spec-cell"><span class="name">Dashboards &amp; KPI reporting</span><span class="ex">Tableau · Power BI · data warehouse</span></div>
+          <div class="pcell price-cell" data-tier-cell="basic"><span class="price">$2,000–$4,000</span><span class="timeline">1–2 weeks · 25–45h</span><span class="meta"><span>A2–A3</span></span></div>
+          <div class="pcell price-cell" data-tier-cell="standard"><span class="price">$5,000–$9,000</span><span class="timeline">2–4 weeks · 50–85h</span><span class="meta"><span>A3</span></span></div>
+          <div class="pcell price-cell" data-tier-cell="complex"><span class="price">$12,000–$20,000</span><span class="timeline">4–8 weeks · 100–170h</span><span class="meta"><span>A3–A4</span></span></div>
+        </div>
+        <div class="pricing-row method-row"><div class="method-content" style="grid-column: 1 / -1;"><strong>Methodology cues:</strong> start from "what decisions will this dashboard drive?", 5–8 metrics max, drill-down structure, alert thresholds, automated refresh cadence, role-based views. Complex tier adds dimensional modeling and a semantic layer for consistent metrics.</div></div>
+
+        <div class="pricing-row">
+          <div class="pcell spec-cell"><span class="name">Process optimization</span><span class="ex">Lean · Six Sigma · automation</span></div>
+          <div class="pcell price-cell" data-tier-cell="basic"><span class="price">$2,000–$3,500</span><span class="timeline">1–2 weeks · 25–40h</span><span class="meta"><span>A2–A3</span></span></div>
+          <div class="pcell price-cell" data-tier-cell="standard"><span class="price">$6,000–$10,000</span><span class="timeline">3–5 weeks · 55–90h</span><span class="meta"><span>A3</span></span></div>
+          <div class="pcell price-cell" data-tier-cell="complex"><span class="price">$15,000–$28,000</span><span class="timeline">6–10 weeks · 130–220h</span><span class="meta"><span>A4 / A3+L1</span></span></div>
+        </div>
+        <div class="pricing-row method-row"><div class="method-content" style="grid-column: 1 / -1;"><strong>Methodology cues:</strong> SIPOC or swim lane mapping, RACI for ownership, value stream mapping, waste identification (Lean), automation opportunity scoring, phased implementation with quick wins first. Complex tier adds Lean Six Sigma, capability maturity assessment, technology stack evaluation.</div></div>
+
+        <div class="pricing-row">
+          <div class="pcell spec-cell"><span class="name">Project management</span><span class="ex">Plans · PMO · transformation</span></div>
+          <div class="pcell price-cell" data-tier-cell="basic"><span class="price">$1,500–$3,000</span><span class="timeline">1 week · 20–35h</span><span class="meta"><span>A2–A3</span></span></div>
+          <div class="pcell price-cell" data-tier-cell="standard"><span class="price">$4,000–$7,000<span style="font-size:11px;color:var(--ink-3);font-weight:500;">/mo</span></span><span class="timeline">monthly · 40–70h/mo</span><span class="meta"><span>A3</span></span></div>
+          <div class="pcell price-cell" data-tier-cell="complex"><span class="price">$8,000–$14,000<span style="font-size:11px;color:var(--ink-3);font-weight:500;">/mo</span></span><span class="timeline">monthly · 80–130h/mo</span><span class="meta"><span>A4 / L1</span></span></div>
+        </div>
+        <div class="pricing-row method-row"><div class="method-content" style="grid-column: 1 / -1;"><strong>Methodology cues:</strong> WBS decomposition, critical path, RAID log, decision log, agile or waterfall depending on project type, earned value tracking. Complex tier adds portfolio management principles, benefits realization framework, capacity planning.</div></div>
+
+        <div class="pricing-row">
+          <div class="pcell spec-cell"><span class="name">Proposals &amp; RFP responses</span><span class="ex">Federal · enterprise · grants</span></div>
+          <div class="pcell price-cell" data-tier-cell="basic"><span class="price">$1,500–$3,000</span><span class="timeline">1 week · 20–35h</span><span class="meta"><span>A2–A3</span></span></div>
+          <div class="pcell price-cell" data-tier-cell="standard"><span class="price">$5,000–$9,000</span><span class="timeline">2–4 weeks · 50–85h</span><span class="meta"><span>A3</span></span></div>
+          <div class="pcell price-cell" data-tier-cell="complex"><span class="price">$12,000–$22,000</span><span class="timeline">4–8 weeks · 100–180h</span><span class="meta"><span>A3–A4</span></span></div>
+        </div>
+        <div class="pricing-row method-row"><div class="method-content" style="grid-column: 1 / -1;"><strong>Methodology cues:</strong> Shipley method, color team reviews (pink/red/gold), compliance-first then persuasion, win theme identification, executive summary first. Complex tier adds full Shipley capture-to-proposal lifecycle and independent red team.</div></div>
+
+        <div class="pricing-row">
+          <div class="pcell spec-cell"><span class="name">RevOps &amp; GTM</span><span class="ex">CRM · pipeline · go-to-market</span></div>
+          <div class="pcell price-cell" data-tier-cell="basic"><span class="price">$2,000–$4,000</span><span class="timeline">1–2 weeks · 25–45h</span><span class="meta"><span>A2–A3</span></span></div>
+          <div class="pcell price-cell" data-tier-cell="standard"><span class="price">$6,000–$10,000</span><span class="timeline">3–5 weeks · 55–95h</span><span class="meta"><span>A3</span></span></div>
+          <div class="pcell price-cell" data-tier-cell="complex"><span class="price">$12,000–$20,000</span><span class="timeline">5–8 weeks · 100–170h</span><span class="meta"><span>A3–A4</span></span></div>
+        </div>
+        <div class="pricing-row method-row"><div class="method-content" style="grid-column: 1 / -1;"><strong>Methodology cues:</strong> data quality assessment, bow-tie funnel analysis, lead scoring matrix (fit × engagement), SLA between sales and marketing. Complex tier adds jobs-to-be-done for ICP, channel-market fit analysis, revenue attribution modeling.</div></div>
+
+        <div class="pricing-row">
+          <div class="pcell spec-cell"><span class="name">Business strategy</span><span class="ex">Corporate · M&amp;A · transformation</span></div>
+          <div class="pcell price-cell" data-tier-cell="basic"><span class="price">$2,500–$4,500</span><span class="timeline">1–2 weeks · 30–50h</span><span class="meta"><span>A3</span></span></div>
+          <div class="pcell price-cell" data-tier-cell="standard"><span class="price">$7,000–$12,000</span><span class="timeline">3–5 weeks · 60–100h</span><span class="meta"><span>A3–A4</span></span></div>
+          <div class="pcell price-cell" data-tier-cell="complex"><span class="price">$18,000–$35,000</span><span class="timeline">6–10 weeks · 150–260h</span><span class="meta"><span>A4 / A3+L1</span></span></div>
+        </div>
+        <div class="pricing-row method-row"><div class="method-content" style="grid-column: 1 / -1;"><strong>Methodology cues:</strong> issue trees, MECE structuring, weighted decision matrices, Porter's Five Forces, Blue Ocean canvas, McKinsey 7S, scenario planning, strategy-on-a-page. Complex tier adds hypothesis-driven problem solving, value driver trees, GE-McKinsey / BCG portfolio frameworks, benefits realization planning.</div></div>
+      </div>
+
+      <div class="grid-2" style="margin-top: 18px;">
+        <div class="card">
+          <div class="card-head"><h3>Multi-specialization engagements</h3></div>
+          <div class="card-body" style="font-size: 12.5px; color: var(--ink-1); line-height: 1.6;">
+            When a brief spans more than one cluster, each component is priced separately and presented as a bundled range.
+            <div style="margin-top: 10px; padding: 10px 12px; background: var(--bg-2); border: 1px solid var(--border); border-radius: 6px; font-size: 12px;">
+              <strong style="color: var(--gold-ink);">Example:</strong> Series B fundraise = financial model (Standard) + pitch deck (Standard) → <span class="num" style="color: var(--ink-0); font-weight: 600;">$9,500–$16,000</span>, 4–6 weeks.
+            </div>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head"><h3>Recurring engagement model</h3><span class="meta">separate from fixed-price</span></div>
+          <div class="card-body" style="font-size: 12.5px; color: var(--ink-1); line-height: 1.6;">
+            <ul style="display: flex; flex-direction: column; gap: 6px;">
+              <li style="display: flex; justify-content: space-between; gap: 12px;"><span>Solo analyst engagement</span><span class="num" style="color: var(--ink-0); font-weight: 600;">$3k–$33k / mo</span></li>
+              <li style="display: flex; justify-content: space-between; gap: 12px;"><span>Analyst pod / team</span><span class="num" style="color: var(--ink-0); font-weight: 600;">$10k–$24k / mo</span></li>
+              <li style="display: flex; justify-content: space-between; gap: 12px;"><span>Fixed-fee project</span><span style="color: var(--ink-3);">custom · per tables above</span></li>
+              <li style="display: flex; justify-content: space-between; gap: 12px;"><span>Time to start</span><span class="num" style="color: var(--ink-0); font-weight: 600;">3–5 days</span></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+
+      <div class="callout amber gap-card" id="gap-pricing">
+        <strong>Gaps to fill in &middot; pricing</strong>
+        <ul>
+          <li>The internal <strong>margin / blended rate</strong> that produces the price ranges above. Grace knows the hours and the price, but not the multiplier. Please confirm.</li>
+          <li><strong>Discounting policy.</strong> Are there longer-engagement or multi-project discounts?</li>
+          <li><strong>Premium uplift.</strong> Do we charge more for rush turnarounds, exec audiences, or niche domains?</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- ============ SECTION 3: LEVELS ============ -->
+    <section id="levels" class="doc-section">
+      <div class="section-head">
+        <div>
+          <div class="section-num">SECTION 03</div>
+          <div class="section-title">Analyst levels and what we expect</div>
+          <div class="section-sub">Seven levels: A1, A2, A3, A4, L1, M1, plus a separate engineer track (E1).</div>
+        </div>
+      </div>
+
+      <div class="level-grid">
+        <div class="level-card">
+          <div class="level-head"><span class="level-code">A1</span><span class="level-aqs">AQS <strong>70+</strong></span></div>
+          <div class="level-name">Apprentice analyst</div>
+          <div class="level-summary">Execute well-defined tasks with supervision. Learn Gratia quality standards and workflows.</div>
+          <div class="level-spec"><strong>Spec:</strong> no minimum &middot; <strong>Supervision:</strong> required on all client deliverables.<br/><span style="color:var(--ink-3);">Typical work: budget templates, competitor profiles, basic charts, process docs, task lists.</span></div>
+        </div>
+        <div class="level-card">
+          <div class="level-head"><span class="level-code">A2</span><span class="level-aqs">AQS <strong>80+</strong></span></div>
+          <div class="level-name">Associate business analyst</div>
+          <div class="level-summary">Work independently on standard deliverables. Deliver quality work consistently.</div>
+          <div class="level-spec"><strong>Spec:</strong> 1+ at Familiar (SS 50+) &middot; <strong>Supervision:</strong> light touch, spot checks.<br/><span style="color:var(--ink-3);">Typical work: 3-statement models, investor pitch decks, TAM/SAM, Tableau dashboards, RFP responses.</span></div>
+        </div>
+        <div class="level-card">
+          <div class="level-head"><span class="level-code">A3</span><span class="level-aqs">AQS <strong>90+</strong></span></div>
+          <div class="level-name">Business analyst</div>
+          <div class="level-summary">Handle complex work with direct client interface. Lead workstreams and deliver reference-quality work.</div>
+          <div class="level-spec"><strong>Spec:</strong> 1+ Expert (85+), 2+ Proficient (70+) &middot; <strong>Supervision:</strong> none required.<br/><span style="color:var(--ink-3);">Typical work: DCF valuations, Series B+ pitch decks, market entry strategy, M&amp;A analysis, board presentations.</span></div>
+        </div>
+        <div class="level-card">
+          <div class="level-head"><span class="level-code">A4</span><span class="level-aqs">AQS <strong>95+</strong></span></div>
+          <div class="level-name">Senior business analyst</div>
+          <div class="level-summary">Recognized domain expert. Handle the most challenging problems. Create standards for the team.</div>
+          <div class="level-spec"><strong>Spec:</strong> 2+ Expert, 3+ Proficient &middot; <strong>Supervision:</strong> provides oversight to others.<br/><span style="color:var(--ink-3);">Typical work: corporate strategy, M&amp;A DD, IPO roadshows, enterprise transformation, turnaround.</span></div>
+        </div>
+        <div class="level-card">
+          <div class="level-head"><span class="level-code">L1</span><span class="level-aqs">AQS <strong>95+</strong> sustained</span></div>
+          <div class="level-name">Lead business analyst</div>
+          <div class="level-summary">Lead multi-analyst engagements. Accountable for project-level delivery while still contributing hands-on.</div>
+          <div class="level-spec"><strong>Spec:</strong> 3+ Expert, 4+ Proficient &middot; <strong>Supervision:</strong> reviews team deliverables.<br/><span style="color:var(--ink-3);">Typical work: workstream planning, QA review, client status meetings, analyst coaching.</span></div>
+        </div>
+        <div class="level-card">
+          <div class="level-head"><span class="level-code">M1</span><span class="level-aqs">AQS <strong>95+</strong> on team</span></div>
+          <div class="level-name">Business analyst manager</div>
+          <div class="level-summary">Manage analyst teams at scale. Own talent development, quality standards, and operational excellence.</div>
+          <div class="level-spec"><strong>Spec:</strong> Expert in 3+, deep in all 9 &middot; <strong>Supervision:</strong> sets and enforces standards.<br/><span style="color:var(--ink-3);">Typical work: capacity planning, performance reviews, QA program oversight, client relationships.</span></div>
+        </div>
+        <div class="level-card" data-track="engineer">
+          <div class="level-head"><span class="level-code">E1</span><span class="level-aqs">N/A &middot; engineer track</span></div>
+          <div class="level-name">AI / automation engineer</div>
+          <div class="level-summary">Build and maintain client automations using no-code / low-code platforms, lightweight scripting, and AI tooling.</div>
+          <div class="level-spec"><strong>Track:</strong> separate from A1–A4 &middot; <strong>Supervision:</strong> self-directed on engagements.<br/><span style="color:var(--ink-3);">Typical work: Zapier / Make / n8n, Kissflow, Airtable, AI assistants, document processing.</span></div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ SECTION 4: PROMOTION ============ -->
+    <section id="promotion" class="doc-section">
+      <div class="section-head">
+        <div>
+          <div class="section-num">SECTION 04</div>
+          <div class="section-title">Promotion criteria</div>
+          <div class="section-sub">Promotion is a function of three things: AQS, specialization tier scores, and review outcomes on real deliverables.</div>
+        </div>
+      </div>
+
+      <div class="promo-flow">
+        <div class="promo-step">
+          <div class="from-to"><span class="lvl">A1</span><span class="arr">→</span><span class="lvl to">A2</span></div>
+          <ul>
+            <li>AQS consistently 80+</li>
+            <li>1+ specialization at Familiar (SS 50+)</li>
+            <li>3+ deliverables Passed/Exceeded</li>
+            <li>Less supervision needed</li>
+          </ul>
+        </div>
+        <div class="promo-step">
+          <div class="from-to"><span class="lvl">A2</span><span class="arr">→</span><span class="lvl to">A3</span></div>
+          <ul>
+            <li>AQS consistently 90+</li>
+            <li>1+ Expert (SS 85+)</li>
+            <li>2+ Proficient or above</li>
+            <li>5+ deliverables Exceeded</li>
+            <li>4.5+ avg client rating</li>
+          </ul>
+        </div>
+        <div class="promo-step">
+          <div class="from-to"><span class="lvl">A3</span><span class="arr">→</span><span class="lvl to">A4</span></div>
+          <ul>
+            <li>AQS consistently 95+</li>
+            <li>2+ Expert (SS 85+)</li>
+            <li>3+ Proficient or above</li>
+            <li>Reference-quality work</li>
+            <li>Contributes to team standards</li>
+          </ul>
+        </div>
+        <div class="promo-step">
+          <div class="from-to"><span class="lvl">A4</span><span class="arr">→</span><span class="lvl to">L1</span></div>
+          <ul>
+            <li>AQS 95+ sustained</li>
+            <li>3+ Expert (SS 85+)</li>
+            <li>4+ Proficient (SS 70+)</li>
+            <li>Demonstrated mentoring impact</li>
+          </ul>
+        </div>
+        <div class="promo-step">
+          <div class="from-to"><span class="lvl">L1</span><span class="arr">→</span><span class="lvl to">M1</span></div>
+          <ul>
+            <li>Manages 5+ analysts</li>
+            <li>Track record developing analysts (A1→A2, A2→A3)</li>
+            <li>VP+ client relationships</li>
+            <li>Operational maturity</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="callout blue" style="margin-top: 18px;">
+        <strong>Soft restriction on decline.</strong> If an analyst's AQS drops below their level threshold for a sustained period, they are <strong style="color:var(--ink-1)">not</strong> demoted immediately. Instead they keep their title, are flagged internally (not visible to clients), and are not matched to work at their level until AQS recovers. This gives time to recover without the demoralizing impact of a formal demotion.
+      </div>
+    </section>
+
+    <!-- ============ SECTION 5: SCORING ============ -->
+    <section id="scoring" class="doc-section">
+      <div class="section-head">
+        <div>
+          <div class="section-num">SECTION 05</div>
+          <div class="section-title">Scoring system</div>
+          <div class="section-sub">Three scores work together. Two measure capability (specialization score and core skill score). One measures performance (AQS).</div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom: 18px;">
+        <div class="card-head"><h3>5.1 SPECI score &middot; specialization tier</h3><span class="meta">0–100 per specialization</span></div>
+        <div class="card-body">
+          <div class="score-tier-grid">
+            <div class="score-tier-card" data-tier="learning"><div class="stier-name">Learning</div><div class="stier-range">0–29</div><div class="stier-desc">Building experience.</div><div class="bar"><div class="fill"></div></div></div>
+            <div class="score-tier-card" data-tier="familiar"><div class="stier-name">Familiar</div><div class="stier-range">30–54</div><div class="stier-desc">Can support basic work with oversight.</div><div class="bar"><div class="fill"></div></div></div>
+            <div class="score-tier-card" data-tier="proficient"><div class="stier-name">Proficient</div><div class="stier-range">55–89</div><div class="stier-desc">Works independently on intermediate deliverables.</div><div class="bar"><div class="fill"></div></div></div>
+            <div class="score-tier-card" data-tier="expert"><div class="stier-name">Expert</div><div class="stier-range">90–100</div><div class="stier-desc">Leads complex projects.</div><div class="bar"><div class="fill"></div></div></div>
+          </div>
+
+          <p style="font-size: 12.5px; color: var(--ink-2); line-height: 1.6; margin: 18px 0 10px;">Score is computed from confirmed evidence within the last 90 days. Five evidence levels with caps:</p>
+
+          <div class="ev-grid">
+            <div class="ev-card" data-level="V"><span class="ev-letter">V</span><div class="ev-name">Project verified</div><div class="ev-desc">AI-emitted attribution from real client project work.</div><div class="ev-cap"><span>Cap</span><span class="cap-val">uncapped &middot; ±25/proj</span></div></div>
+            <div class="ev-card" data-level="S"><span class="ev-letter">S</span><div class="ev-name">Simulation completed</div><div class="ev-desc">Practice case completion (graded ≥ 60).</div><div class="ev-cap"><span>Cap</span><span class="cap-val">≤ 30</span></div></div>
+            <div class="ev-card" data-level="F"><span class="ev-letter">F</span><div class="ev-name">Portfolio graded</div><div class="ev-desc">Portfolio review by Gratia delivery team.</div><div class="ev-cap"><span>Cap</span><span class="cap-val">≤ 70</span></div></div>
+            <div class="ev-card" data-level="P"><span class="ev-letter">P</span><div class="ev-name">Provisional</div><div class="ev-desc">Interview / starting evidence.</div><div class="ev-cap"><span>Cap</span><span class="cap-val">≤ 20</span></div></div>
+            <div class="ev-card" data-level="K"><span class="ev-letter">K</span><div class="ev-name">Knowledge verified</div><div class="ev-desc">KB quiz / upskill self-assessment.</div><div class="ev-cap"><span>Cap</span><span class="cap-val">0 &middot; doesn't count</span></div></div>
+          </div>
+
+          <div class="callout" style="margin-top: 14px; font-size: 12px;">
+            Caps are additive. Confirmed attributions fall out of the 90-day window cleanly (a cliff, not a ramp). Once an analyst hits V on a target the V-tier label stays, even if points decay out of the window. <strong>Reasoning:</strong> an analyst can hit V then get no work on that target for 6 months and that is not their fault.
+          </div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom: 18px;">
+        <div class="card-head"><h3>5.2 Core skill score</h3><span class="meta">same mechanic, applied to 5 core competencies</span></div>
+        <div class="card-body">
+          <div class="grid-3" style="grid-template-columns: repeat(5, 1fr); gap: 8px;">
+            <div style="padding: 12px 14px; background: var(--bg-2); border: 1px solid var(--border); border-radius: 6px;"><div class="eyebrow" style="margin-bottom: 4px;">01</div><div style="font-size: 12.5px; font-weight: 600; color: var(--ink-0);">Decision excellence</div></div>
+            <div style="padding: 12px 14px; background: var(--bg-2); border: 1px solid var(--border); border-radius: 6px;"><div class="eyebrow" style="margin-bottom: 4px;">02</div><div style="font-size: 12.5px; font-weight: 600; color: var(--ink-0);">Business acumen</div></div>
+            <div style="padding: 12px 14px; background: var(--bg-2); border: 1px solid var(--border); border-radius: 6px;"><div class="eyebrow" style="margin-bottom: 4px;">03</div><div style="font-size: 12.5px; font-weight: 600; color: var(--ink-0);">Execution mastery</div></div>
+            <div style="padding: 12px 14px; background: var(--bg-2); border: 1px solid var(--border); border-radius: 6px;"><div class="eyebrow" style="margin-bottom: 4px;">04</div><div style="font-size: 12.5px; font-weight: 600; color: var(--ink-0);">Stakeholder impact</div></div>
+            <div style="padding: 12px 14px; background: var(--bg-2); border: 1px solid var(--border); border-radius: 6px;"><div class="eyebrow" style="margin-bottom: 4px;">05</div><div style="font-size: 12.5px; font-weight: 600; color: var(--ink-0);">Flexibility &amp; agility</div></div>
+          </div>
+          <p style="font-size: 12px; color: var(--ink-2); margin-top: 12px; line-height: 1.55;">Same 0–100 scale, same Learning / Familiar / Proficient / Expert tiers, same verification-level caps as SPECI.</p>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom: 18px;">
+        <div class="card-head"><h3>5.3 AQS &middot; analyst quality score</h3><span class="meta">rolling 90-day, 0–100</span></div>
+        <div class="card-body">
+          <p style="font-size: 12.5px; color: var(--ink-1); line-height: 1.6; margin-bottom: 14px;">Combines AI-assessed and human-input data. Determines analyst level eligibility and project matching.</p>
+          <div class="aqs-comp-grid">
+            <div class="aqs-comp"><div class="pct-row"><span class="pct">35%</span><span class="src">AI-assessed</span></div><h4>Work Quality</h4><ul>
+              <li><strong style="color:var(--ink-1)">First-submission score.</strong> AI scores the deliverable <em>before</em> any feedback — this is the score that counts.</li>
+              <li><strong style="color:var(--ink-1)">Substantive revision rate.</strong> Only revisions for real issues count; minor polish does NOT.</li>
+              <li>AI classifies its own feedback to prevent AQS deflation from perfectionism.</li>
+            </ul></div>
+            <div class="aqs-comp"><div class="pct-row"><span class="pct">20%</span><span class="src">PM input</span></div><h4>Delivery</h4><ul>
+              <li><strong style="color:var(--ink-1)">On-time rate.</strong> % of deliverables submitted by deadline, reported by the PM.</li>
+            </ul></div>
+            <div class="aqs-comp"><div class="pct-row"><span class="pct">25%</span><span class="src">human input</span></div><h4>Satisfaction</h4><ul>
+              <li>Client rating (1–5)</li>
+              <li>PM rating (1–5)</li>
+              <li>Peer rating (1–5, optional)</li>
+            </ul></div>
+            <div class="aqs-comp"><div class="pct-row"><span class="pct">20%</span><span class="src">system data</span></div><h4>Gratia Standards</h4><ul>
+              <li>Time logging compliance</li>
+              <li>Daily / EOD / EOW updates sent</li>
+              <li>Process adherence</li>
+            </ul></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- AQS Calculator -->
+      <div class="aqs-calc">
+        <div class="aqs-calc-head">
+          <h3><span style="color: var(--gold-ink); margin-right: 6px;">⌬</span> AQS calculator</h3>
+          <span class="meta" style="font-size: 11.5px; color: var(--ink-3);">Drag the sliders to model an analyst's AQS &middot; see what level it qualifies for</span>
+        </div>
+        <div class="aqs-calc-body">
+          <div class="aqs-inputs">
+            <div class="aqs-input-group">
+              <label><span class="lname">Work quality<span class="pct">· 35%</span></span><span class="lval"><span id="vWQ">85</span></span></label>
+              <input type="range" min="0" max="100" value="85" class="slider" id="sWQ">
+            </div>
+            <div class="aqs-input-group">
+              <label><span class="lname">Delivery<span class="pct">· 20%</span></span><span class="lval"><span id="vDL">90</span></span></label>
+              <input type="range" min="0" max="100" value="90" class="slider" id="sDL">
+            </div>
+            <div class="aqs-input-group">
+              <label><span class="lname">Satisfaction<span class="pct">· 25%</span></span><span class="lval"><span id="vST">88</span></span></label>
+              <input type="range" min="0" max="100" value="88" class="slider" id="sST">
+            </div>
+            <div class="aqs-input-group">
+              <label><span class="lname">Gratia standards<span class="pct">· 20%</span></span><span class="lval"><span id="vGS">95</span></span></label>
+              <input type="range" min="0" max="100" value="95" class="slider" id="sGS">
+            </div>
+          </div>
+          <div class="aqs-output">
+            <div class="aqs-out-label">AQS</div>
+            <div class="aqs-score" id="aqsScore">88.9</div>
+            <div class="aqs-tier" id="aqsTier"><span class="lvl">A2</span><span class="desc">Associate analyst threshold</span></div>
+            <div class="aqs-formula"><span class="mono">AQS = WQ·0.35 + DL·0.20 + ST·0.25 + GS·0.20</span></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ SECTION 6: EVIDENCE ============ -->
+    <section id="evidence" class="doc-section">
+      <div class="section-head">
+        <div>
+          <div class="section-num">SECTION 06</div>
+          <div class="section-title">Evidence sources</div>
+          <div class="section-sub">How we move scores. Five sources route into either the tier score, the engagement signal, or both.</div>
+        </div>
+      </div>
+
+      <div class="card" style="margin-bottom: 14px;">
+        <div class="card-head"><h3>6.1 Practice cases &middot; S-level</h3><span class="meta">5 seeded cases · capped at 30 per spec</span></div>
+        <div class="card-body" style="padding: 0;">
+          <table class="gtable" style="border: none; border-radius: 0;">
+            <thead><tr><th>Slug</th><th>Difficulty</th><th>Hours</th><th>Specializations</th><th>Core competencies</th><th>Pts pass / excellent</th></tr></thead>
+            <tbody>
+              <tr><td class="label-cell">market-entry-foundational<br/><span style="color:var(--ink-3); font-weight:400; font-size:11px;">Fern Labs · COO Sasha Kovač</span></td><td><span class="rag-pill b">Foundational</span></td><td class="num">8</td><td>market-research</td><td>business-acumen</td><td><span class="num">2 / 4</span></td></tr>
+              <tr><td class="label-cell">growth-strategy-intermediate<br/><span style="color:var(--ink-3); font-weight:400; font-size:11px;">Cova · founder Priya Iyer</span></td><td><span class="rag-pill a">Intermediate</span></td><td class="num">16</td><td>business-strategy, revops-gtm</td><td>business-acumen, decision-excellence</td><td><span class="num">6 / 12</span></td></tr>
+              <tr><td class="label-cell">due-diligence-intermediate<br/><span style="color:var(--ink-3); font-weight:400; font-size:11px;">Marlow Capital · ID Wei Tan</span></td><td><span class="rag-pill a">Intermediate</span></td><td class="num">18</td><td>market-research, business-strategy</td><td>decision-excellence, business-acumen</td><td><span class="num">6 / 12</span></td></tr>
+              <tr><td class="label-cell">financial-modeling-advanced<br/><span style="color:var(--ink-3); font-weight:400; font-size:11px;">Lumen Robotics · CFO Henrik Lindqvist</span></td><td><span class="rag-pill r">Advanced</span></td><td class="num">28</td><td>financial-models, pitch-decks</td><td>execution-mastery, business-acumen</td><td><span class="num">8 / 16</span></td></tr>
+              <tr><td class="label-cell">operational-diagnostic-intermediate<br/><span style="color:var(--ink-3); font-weight:400; font-size:11px;">NovaSaúde · COO Camila Rocha</span></td><td><span class="rag-pill a">Intermediate</span></td><td class="num">18</td><td>process-optimization, business-strategy</td><td>execution-mastery, stakeholder-impact</td><td><span class="num">6 / 12</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="callout" style="margin-bottom: 18px; font-size: 12.5px;">
+        Each case runs in stages with an AI-played client persona, and includes a <strong>mid-case "twist"</strong> (budget cut, board acquisition curveball, top-customer concentration shock, COGS hike, board politics) to test how the analyst handles change. Each stage's deliverable is QA-reviewed against the matching specialization rubric. <strong>"Excellent"</strong> = overall score ≥ 85.
+      </div>
+
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-head"><h3>6.2 AI quality review &middot; the V-flow</h3><span class="meta">first-submission score feeds AQS</span></div>
+          <div class="card-body">
+            <ol style="padding-left: 0; counter-reset: step; display: flex; flex-direction: column; gap: 8px;">
+              <li style="padding-left: 32px; position: relative; counter-increment: step; font-size: 12.5px; color: var(--ink-1); line-height: 1.55;"><span style="position: absolute; left: 0; top: 0; width: 22px; height: 22px; border-radius: 50%; background: var(--gold-dim); color: var(--gold-ink); font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; justify-content: center; border: 1px solid var(--gold-line);">1</span>Analyst submits first draft.</li>
+              <li style="padding-left: 32px; position: relative; counter-increment: step; font-size: 12.5px; color: var(--ink-1); line-height: 1.55;"><span style="position: absolute; left: 0; top: 0; width: 22px; height: 22px; border-radius: 50%; background: var(--gold-dim); color: var(--gold-ink); font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; justify-content: center; border: 1px solid var(--gold-line);">2</span>AI scores on the 4 universal + 4 spec dimensions. <strong style="color:var(--gold-ink)">First-submission score is what feeds AQS.</strong></li>
+              <li style="padding-left: 32px; position: relative; counter-increment: step; font-size: 12.5px; color: var(--ink-1); line-height: 1.55;"><span style="position: absolute; left: 0; top: 0; width: 22px; height: 22px; border-radius: 50%; background: var(--gold-dim); color: var(--gold-ink); font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; justify-content: center; border: 1px solid var(--gold-line);">3</span>AI gives feedback, classifying each point as <strong>substantive</strong> (must fix) or <strong>polish</strong> (optional).</li>
+              <li style="padding-left: 32px; position: relative; counter-increment: step; font-size: 12.5px; color: var(--ink-1); line-height: 1.55;"><span style="position: absolute; left: 0; top: 0; width: 22px; height: 22px; border-radius: 50%; background: var(--gold-dim); color: var(--gold-ink); font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; justify-content: center; border: 1px solid var(--gold-line);">4</span>Analyst revises if needed. Only substantive issues require revision.</li>
+              <li style="padding-left: 32px; position: relative; counter-increment: step; font-size: 12.5px; color: var(--ink-1); line-height: 1.55;"><span style="position: absolute; left: 0; top: 0; width: 22px; height: 22px; border-radius: 50%; background: var(--gold-dim); color: var(--gold-ink); font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 600; display: inline-flex; align-items: center; justify-content: center; border: 1px solid var(--gold-line);">5</span>Client-ready when avg dimension score ≥ <strong>3.5</strong>.</li>
+            </ol>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head"><h3>6.3–6.5 Other sources</h3></div>
+          <div class="card-body" style="display: flex; flex-direction: column; gap: 12px;">
+            <div style="font-size: 12.5px; color: var(--ink-1); line-height: 1.6; padding: 10px 12px; background: var(--bg-2); border: 1px solid var(--border); border-radius: 6px;">
+              <strong style="color: var(--ink-0)">KB quizzes &amp; upskill modules &middot; K-level.</strong> Pass mark 80%. <strong style="color:var(--amber-ink)">K-level evidence does NOT raise the tier score</strong> — knowing material isn't the same as applying it. Counts toward engagement signal &amp; AQS Standards.
+            </div>
+            <div style="font-size: 12.5px; color: var(--ink-1); line-height: 1.6; padding: 10px 12px; background: var(--bg-2); border: 1px solid var(--border); border-radius: 6px;">
+              <strong style="color: var(--ink-0)">Portfolio reviews &middot; F-level.</strong> Prior work submitted by the analyst is reviewed by the Gratia delivery team and converted into specialization or competency points, up to a 70 cap.
+            </div>
+            <div style="font-size: 12.5px; color: var(--ink-1); line-height: 1.6; padding: 10px 12px; background: var(--bg-2); border: 1px solid var(--border); border-radius: 6px;">
+              <strong style="color: var(--ink-0)">Interview / provisional &middot; P-level.</strong> Interview signal at hiring time; gives a low-confidence starting score that gets overwritten as stronger evidence arrives.
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <h3 style="font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-3); margin: 22px 0 10px;">Source-to-score routing summary</h3>
+      <table class="gtable">
+        <thead><tr><th>Source</th><th>Tier score?</th><th>Engagement event?</th></tr></thead>
+        <tbody>
+          <tr><td class="label-cell">Project work (AI-emitted)</td><td><span class="rag-pill g">yes &middot; uncapped, ±25/proj</span></td><td><span class="rag-pill r">no</span></td></tr>
+          <tr><td class="label-cell">Practice case</td><td><span class="rag-pill g">yes &middot; S-level, ≤ 30</span></td><td><span class="rag-pill g">yes</span></td></tr>
+          <tr><td class="label-cell">Portfolio review</td><td><span class="rag-pill g">yes &middot; F-level, ≤ 70</span></td><td><span class="rag-pill r">no</span></td></tr>
+          <tr><td class="label-cell">Interview / provisional</td><td><span class="rag-pill g">yes &middot; P-level, ≤ 20</span></td><td><span class="rag-pill r">no</span></td></tr>
+          <tr><td class="label-cell">KB quiz</td><td><span class="rag-pill r">no</span></td><td><span class="rag-pill g">yes</span></td></tr>
+          <tr><td class="label-cell">Upskill module</td><td><span class="rag-pill r">no</span></td><td><span class="rag-pill g">yes</span></td></tr>
+          <tr><td class="label-cell">Admin override</td><td><span class="rag-pill g">yes &middot; V-level, uncapped</span></td><td><span class="rag-pill r">no</span></td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <!-- ============ SECTION 7: SERVICES ============ -->
+    <section id="services" class="doc-section">
+      <div class="section-head">
+        <div>
+          <div class="section-num">SECTION 07</div>
+          <div class="section-title">Service types &middot; engagement models</div>
+          <div class="section-sub">Three engagement models. Section 2 covers project-based work and standing offerings inside managed service. Staff augmentation is priced on the recurring engagement model.</div>
+        </div>
+      </div>
+
+      <div class="service-grid">
+        <div class="service-card">
+          <div class="svc-num">01</div>
+          <h3>Managed service</h3>
+          <p>We own outcomes on a recurring basis. Includes ongoing projects priced via the section 2 tables.</p>
+          <div class="pricing-line"><strong>Pricing:</strong> per project tables &middot; recurring engagement</div>
+        </div>
+        <div class="service-card">
+          <div class="svc-num">02</div>
+          <h3>Project-based</h3>
+          <p>Fixed scope, fixed deliverable. Priced via section 2.</p>
+          <div class="pricing-line"><strong>Pricing:</strong> per fixed-price tables</div>
+        </div>
+        <div class="service-card">
+          <div class="svc-num">03</div>
+          <h3>Staff augmentation</h3>
+          <p>Analyst plugged into a client team.</p>
+          <div class="pricing-line"><strong>Pricing:</strong> solo $3k–$33k/mo &middot; pod $10k–$24k/mo</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ SECTION 8: VETTING ============ -->
+    <section id="vetting" class="doc-section">
+      <div class="section-head">
+        <div>
+          <div class="section-num">SECTION 08</div>
+          <div class="section-title">Vetting process</div>
+          <div class="section-sub">Four-step process for new analysts.</div>
+        </div>
+      </div>
+
+      <div class="vetting-flow">
+        <div class="vetting-step"><span class="v-num">1</span><h4>Screening</h4><p>CV, basic checks, interview.</p></div>
+        <div class="vetting-step"><span class="v-num">2</span><h4>Skill assessments</h4><p>Knowledge tests by domain.</p></div>
+        <div class="vetting-step"><span class="v-num">3</span><h4>Project simulation</h4><p>One of the practice cases above, graded.</p></div>
+        <div class="vetting-step"><span class="v-num">4</span><h4>Ongoing quality oversight</h4><p>Every project deliverable feeds AQS and tier scores.</p></div>
+      </div>
+    </section>
+
+    <!-- ============ SECTION 9: BRIEFS ============ -->
+    <section id="briefs" class="doc-section">
+      <div class="section-head">
+        <div>
+          <div class="section-num">SECTION 09</div>
+          <div class="section-title">How project briefs work today</div>
+          <div class="section-sub">A brief is the central intake document for a client request. It moves through three statuses and accumulates the data Grace needs to scope, gap-detect, and pitch analysts.</div>
+        </div>
+      </div>
+
+      <h3 style="font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-3); margin: 8px 0 10px;">9.1 Brief lifecycle &middot; three statuses</h3>
+      <div class="brief-status-flow">
+        <div class="brief-status" data-state="draft">
+          <span class="pill">draft</span>
+          <span class="desc">Initial parse from rawInput.<br/>Empty fields detected, follow-up questions generated.</span>
+        </div>
+        <div class="brief-arrow">→</div>
+        <div class="brief-status" data-state="waiting">
+          <span class="pill">waiting_for_client</span>
+          <span class="desc">Email/Slack sent.<br/>Awaiting answers to fill gaps.</span>
+        </div>
+        <div class="brief-arrow">→</div>
+        <div class="brief-status" data-state="ready">
+          <span class="pill">ready</span>
+          <span class="desc">All critical fields populated.<br/>Feeds shortlists, pitches &amp; proposals.</span>
+        </div>
+      </div>
+
+      <h3 style="font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-3); margin: 22px 0 10px;">What a brief looks like &middot; fields</h3>
+      <div class="field-grid">
+        <div class="field-card client">
+          <div class="fc-head"><h4>Client-facing fields</h4><span class="status-chip" data-status="blue">visible to client</span></div>
+          <ul>
+            <li><span class="fname">route</span><span class="fdesc">fixed-scope project, ongoing staffing, or unclear</span></li>
+            <li><span class="fname">serviceAreas</span><span class="fdesc">which of the 9 specializations are needed</span></li>
+            <li><span class="fname">description</span><span class="fdesc">what the client wants done</span></li>
+            <li><span class="fname">seniority</span><span class="fdesc">A1 to L1</span></li>
+            <li><span class="fname">timeline</span><span class="fdesc">start window and engagement length</span></li>
+            <li><span class="fname">hoursPerWeek</span><span class="fdesc">for staffing engagements</span></li>
+            <li><span class="fname">tools</span><span class="fdesc">tech stack, timezone overlap, hard requirements</span></li>
+            <li><span class="fname">materials</span><span class="fdesc">existing starting assets</span></li>
+            <li><span class="fname">contact</span><span class="fdesc">organization, client name and email</span></li>
+          </ul>
+        </div>
+        <div class="field-card internal">
+          <div class="fc-head"><h4>Internal-only · Grace tracks</h4><span class="status-chip" data-status="violet">audit + ops</span></div>
+          <ul>
+            <li><span class="fname">gaps</span><span class="fdesc">array of missing fields, each with AI-generated follow-up question + suggested default</span></li>
+            <li><span class="fname">aiReasoning</span><span class="fdesc">why Grace picked each value during parsing — audit trail</span></li>
+            <li><span class="fname">analysis</span><span class="fdesc">task decomposition, recommended team structure, analyst search strategy (built on demand)</span></li>
+            <li><span class="fname">pitches</span><span class="fdesc">record of analyst outreach sent from this brief</span></li>
+            <li><span class="fname">rawInput</span><span class="fdesc">original client message + accumulated Q&amp;A thread</span></li>
+          </ul>
+        </div>
+      </div>
+
+      <h3 style="font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-3); margin: 22px 0 10px;">9.2 Where Grace sources the data</h3>
+      <div class="source-flow">
+        <div class="source-card">
+          <div class="src-num">SOURCE 01</div>
+          <h4>Original client input</h4>
+          <p>Email, intake form, sales call notes — pasted into <code style="font-family: monospace; font-size: 11px; color: var(--gold-ink);">rawInput</code>. Grace parses with an LLM that maps loose phrasing to the structured service taxonomy <em style="color: var(--ink-3); font-style: normal;">("we need help modeling our Series B" → financial-models + pitch-decks)</em>.</p>
+        </div>
+        <div class="source-card">
+          <div class="src-num">SOURCE 02</div>
+          <h4>Organization context</h4>
+          <p>If the client org already exists, Grace enriches parsing with past projects and admin notes to infer likely services and constraints.</p>
+        </div>
+        <div class="source-card">
+          <div class="src-num">SOURCE 03</div>
+          <h4>Iterative re-parse</h4>
+          <p>When the client answers follow-up questions, Grace appends the answers to <code style="font-family: monospace; font-size: 11px; color: var(--gold-ink);">rawInput</code> and re-parses the whole thing, filling empty fields. <strong style="color: var(--ink-1);">Explicit answers always win over inferred values.</strong></p>
+        </div>
+      </div>
+
+      <h4 style="font-size: 11px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--amber-ink); margin: 14px 0 8px;">Not yet wired up &middot; aspirational</h4>
+      <div class="source-flow">
+        <div class="source-card disabled"><h4>Document upload pipeline</h4><p>Parsing decks, briefs, contracts attached by client.</p></div>
+        <div class="source-card disabled"><h4>Mining of prior similar projects</h4><p>Pull lessons / scope from past Gratia engagements.</p></div>
+        <div class="source-card disabled"><h4>Summary-from-chat synthesis</h4><p>Auto-generate brief from a sales call transcript.</p></div>
+      </div>
+
+      <h3 style="font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-3); margin: 22px 0 10px;">9.3 How we find gaps</h3>
+      <div class="gap-detect">
+        <div class="card">
+          <div class="card-head"><h3>The detectGaps step</h3><span class="meta">examines 12 critical fields</span></div>
+          <div class="card-body">
+            <p style="font-size: 12.5px; color: var(--ink-1); line-height: 1.6; margin-bottom: 10px;">Fields examined: <code style="font-family: monospace; font-size: 11.5px; color: var(--gold-ink); background: var(--bg-2); padding: 1px 5px; border-radius: 3px; line-height: 1.8;">route, areas, description, seniority, hours, duration, timeline, timezone overlap, tools, collaboration model, constraints</code></p>
+            <ul style="display: flex; flex-direction: column; gap: 6px; margin-top: 8px;">
+              <li style="font-size: 12.5px; color: var(--ink-1); line-height: 1.55; padding-left: 16px; position: relative;"><span style="position: absolute; left: 4px; top: 8px; width: 4px; height: 4px; border-radius: 50%; background: var(--gold);"></span>Empty fields and <code style="font-family: monospace; font-size: 11px; color: var(--gold-ink);">"unclear"</code> route flag are candidates.</li>
+              <li style="font-size: 12.5px; color: var(--ink-1); line-height: 1.55; padding-left: 16px; position: relative;"><span style="position: absolute; left: 4px; top: 8px; width: 4px; height: 4px; border-radius: 50%; background: var(--gold);"></span>Grace generates 2–5 conversational follow-up questions.</li>
+              <li style="font-size: 12.5px; color: var(--ink-1); line-height: 1.55; padding-left: 16px; position: relative;"><span style="position: absolute; left: 4px; top: 8px; width: 4px; height: 4px; border-radius: 50%; background: var(--gold);"></span>Each question includes a smart-default suggestion for client convenience.</li>
+              <li style="font-size: 12.5px; color: var(--ink-1); line-height: 1.55; padding-left: 16px; position: relative;"><span style="position: absolute; left: 4px; top: 8px; width: 4px; height: 4px; border-radius: 50%; background: var(--gold);"></span><strong style="color: var(--ink-0)">Priority rule:</strong> if route is unclear, that's question #1 and staffing-specific questions wait.</li>
+            </ul>
+          </div>
+        </div>
+        <div class="callout amber" style="align-self: stretch; display: flex; flex-direction: column; justify-content: center;" id="gap-briefs">
+          <strong>What's missing</strong>
+          <p style="font-size: 12.5px; color: var(--ink-1); line-height: 1.65; margin-top: 8px;">There's <strong>no confidence score</strong>, <strong>no required-vs-optional logic</strong>, and <strong>no mandatory-field enforcement</strong> yet. Gaps are heuristic, not rule-based.</p>
+        </div>
+      </div>
+
+      <h3 style="font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-3); margin: 22px 0 10px;">9.4 How follow-ups are created</h3>
+      <div class="followup-flow">
+        <div class="fu-card outbound">
+          <h4><span class="arrow-icon">↗</span>Outbound &middot; question to client</h4>
+          <ol>
+            <li><code>detectGaps</code> returns the list of questions.</li>
+            <li><code>generateFollowUpEmail</code> wraps them in a warm, concise email that weaves the questions in conversationally (rather than a bulleted form).</li>
+            <li>Admin reviews and sends; the channel (email or Slack) is tracked.</li>
+          </ol>
+        </div>
+        <div class="fu-card inbound">
+          <h4><span class="arrow-icon">↙</span>Inbound &middot; client response</h4>
+          <ol>
+            <li>Client responds; admin pastes the response into <code>answerGaps</code>.</li>
+            <li>Grace re-parses original + Q&amp;A → fills in empty fields.</li>
+            <li>Resolved gaps are removed; brief progresses toward <code>ready</code>.</li>
+          </ol>
+        </div>
+      </div>
+
+      <h3 style="font-size: 12px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-3); margin: 22px 0 10px;">9.5 Once the brief is ready</h3>
+      <div class="grid-2">
+        <div class="card">
+          <div class="card-head"><h3>Analyst pitching</h3><span class="meta"><code style="font-family: monospace; font-size: 11px; color: var(--gold-ink);">generateAnalystPitch</code></span></div>
+          <div class="card-body" style="font-size: 12.5px; color: var(--ink-1); line-height: 1.6;">
+            Sends a Slack/email pitch to a candidate analyst that combines:
+            <ul style="display: flex; flex-direction: column; gap: 4px; margin-top: 8px;">
+              <li style="font-size: 12px; color: var(--ink-2); padding-left: 14px; position: relative;"><span style="position: absolute; left: 4px; top: 7px; width: 4px; height: 4px; border-radius: 50%; background: var(--gold);"></span>Brief context (scope, tools, seniority, hours)</li>
+              <li style="font-size: 12px; color: var(--ink-2); padding-left: 14px; position: relative;"><span style="position: absolute; left: 4px; top: 7px; width: 4px; height: 4px; border-radius: 50%; background: var(--gold);"></span>Analyst's CV / experience</li>
+              <li style="font-size: 12px; color: var(--ink-2); padding-left: 14px; position: relative;"><span style="position: absolute; left: 4px; top: 7px; width: 4px; height: 4px; border-radius: 50%; background: var(--gold);"></span><strong style="color: var(--ink-1);">Honest call-out of any stretches</strong> — timezone gap, new tool, heavier workload than usual.</li>
+            </ul>
+            <p style="margin-top: 10px; padding-top: 10px; border-top: 1px dashed var(--border); font-size: 11.5px; color: var(--ink-3);">Delivery channel and success/failure are tracked.</p>
+          </div>
+        </div>
+        <div class="card">
+          <div class="card-head"><h3>Proposal generation</h3><span class="meta">brief → shortlist → proposal</span></div>
+          <div class="card-body" style="font-size: 12.5px; color: var(--ink-1); line-height: 1.6;">
+            Briefs feed shortlists, which feed proposals.
+            <p style="margin-top: 8px;">Description, areas, tools, and seniority populate the proposal copy targeting the chosen analysts.</p>
+            <div style="margin-top: 12px; padding: 10px 12px; background: var(--bg-2); border: 1px solid var(--border); border-radius: 6px; font-size: 11.5px; color: var(--ink-2); display: flex; align-items: center; gap: 10px;">
+              <code style="font-family: monospace; font-size: 11px; color: var(--gold-ink); background: transparent; padding: 0;">brief</code>
+              <span style="color: var(--ink-4);">→</span>
+              <code style="font-family: monospace; font-size: 11px; color: var(--gold-ink); background: transparent; padding: 0;">shortlist</code>
+              <span style="color: var(--ink-4);">→</span>
+              <code style="font-family: monospace; font-size: 11px; color: var(--gold-ink); background: transparent; padding: 0;">proposal</code>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <div class="footer">
+      <span>GRACE-KB · OVERVIEW · v1 · 2026-05-02</span>
+      <span>Open gaps: 14 · please add comments inline</span>
+    </div>
+  </main>
+</div>
+
+<script>
+  // ===== Theme toggle =====
+  const themeBtn = document.getElementById('themeToggle');
+  const root = document.documentElement;
+  const stored = localStorage.getItem('grace-kb-theme');
+  if (stored) root.setAttribute('data-theme', stored);
+  themeBtn.addEventListener('click', () => {
+    const cur = root.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+    root.setAttribute('data-theme', cur);
+    localStorage.setItem('grace-kb-theme', cur);
+  });
+
+  // ===== TOC active state on scroll =====
+  const tocLinks = document.querySelectorAll('.toc-card .toc-link[href^="#"]');
+  const sections = Array.from(tocLinks)
+    .map(l => document.getElementById(l.getAttribute('href').slice(1)))
+    .filter(Boolean);
+  function setActiveTOC() {
+    const scrollY = window.scrollY + 130;
+    let active = sections[0];
+    for (const s of sections) {
+      if (s && s.offsetTop <= scrollY) active = s;
+    }
+    tocLinks.forEach(l => {
+      l.classList.toggle('active', active && l.getAttribute('href') === '#' + active.id);
+    });
+  }
+  window.addEventListener('scroll', setActiveTOC, { passive: true });
+  setActiveTOC();
+
+  // ===== Smooth scroll for TOC =====
+  document.querySelectorAll('a[href^="#"]').forEach(a => {
+    a.addEventListener('click', e => {
+      const id = a.getAttribute('href').slice(1);
+      const el = document.getElementById(id);
+      if (el) {
+        e.preventDefault();
+        window.scrollTo({ top: el.offsetTop - 80, behavior: 'smooth' });
+      }
+    });
+  });
+
+  // ===== Spec accordion expand/collapse all =====
+  document.getElementById('expandAllSpecs').addEventListener('click', () => {
+    document.querySelectorAll('#specList details').forEach(d => d.open = true);
+  });
+  document.getElementById('collapseAllSpecs').addEventListener('click', () => {
+    document.querySelectorAll('#specList details').forEach(d => d.open = false);
+  });
+
+  // ===== Pricing tier filter =====
+  const tierChips = document.querySelectorAll('.tier-chip');
+  const pricingTable = document.getElementById('pricingTable');
+  tierChips.forEach(chip => {
+    chip.addEventListener('click', () => {
+      tierChips.forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      const tier = chip.dataset.tier;
+      pricingTable.querySelectorAll('.pricing-row').forEach(row => {
+        if (row.classList.contains('head') || row.classList.contains('method-row')) return;
+        if (tier === 'all') {
+          row.classList.remove('dim-other');
+          row.querySelectorAll('[data-tier-cell]').forEach(c => c.classList.remove('active-tier'));
+        } else {
+          row.classList.add('dim-other');
+          row.querySelectorAll('[data-tier-cell]').forEach(c => {
+            c.classList.toggle('active-tier', c.dataset.tierCell === tier);
+          });
+        }
+      });
+    });
+  });
+
+  // ===== AQS Calculator =====
+  const sliders = {
+    WQ: { slider: document.getElementById('sWQ'), val: document.getElementById('vWQ'), weight: 0.35 },
+    DL: { slider: document.getElementById('sDL'), val: document.getElementById('vDL'), weight: 0.20 },
+    ST: { slider: document.getElementById('sST'), val: document.getElementById('vST'), weight: 0.25 },
+    GS: { slider: document.getElementById('sGS'), val: document.getElementById('vGS'), weight: 0.20 },
+  };
+  const aqsScoreEl = document.getElementById('aqsScore');
+  const aqsTierEl = document.getElementById('aqsTier');
+
+  function tierFor(score) {
+    if (score >= 95) return { code: 'A4 / L1 / M1', desc: 'Senior / Lead / Manager' };
+    if (score >= 90) return { code: 'A3', desc: 'Business analyst' };
+    if (score >= 80) return { code: 'A2', desc: 'Associate analyst' };
+    if (score >= 70) return { code: 'A1', desc: 'Apprentice analyst' };
+    return { code: '—', desc: 'Below A1 threshold' };
+  }
+
+  function recalc() {
+    let total = 0;
+    Object.values(sliders).forEach(s => {
+      const v = +s.slider.value;
+      s.val.textContent = v;
+      total += v * s.weight;
+    });
+    const score = Math.round(total * 10) / 10;
+    aqsScoreEl.textContent = score.toFixed(1);
+    const t = tierFor(score);
+    aqsTierEl.innerHTML = '<span class="lvl">' + t.code + '</span><span class="desc">' + t.desc + '</span>';
+  }
+  Object.values(sliders).forEach(s => s.slider.addEventListener('input', recalc));
+  recalc();
+
+  // ===== Gap jump button =====
+  document.getElementById('gapJump').addEventListener('click', () => {
+    const target = document.getElementById('gap-specs');
+    if (target) window.scrollTo({ top: target.offsetTop - 80, behavior: 'smooth' });
+  });
+</script>
+
+</body>
+</html>
