@@ -20,6 +20,10 @@
   .torn-row .tn-fill-l { background: var(--red); right: 50%; }
   .torn-row .tn-fill-h { background: var(--gold-bright); left: 50%; }
   .torn-row .tn-spread { font-family: 'Inter', sans-serif; font-weight: 600; color: var(--ink-0); font-variant-numeric: tabular-nums; text-align: right; }
+  .torn-row { cursor: pointer; padding: 6px 8px; margin: 0 -8px; border-radius: 4px; transition: background 0.14s; }
+  .torn-row:hover { background: var(--row-hover); }
+  .sens-cell { cursor: pointer; }
+  .sens-cell:hover { transform: scale(1.04); transition: transform 0.14s; }
 
   .sens-grid { width: 100%; border-collapse: separate; border-spacing: 4px; font-size: 12px; }
   .sens-grid th { font-size: 9.5px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); padding: 6px; text-align: center; }
@@ -155,6 +159,9 @@
   </main>
 </div>
 
+<div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
+<aside class="drawer" id="drawer" role="dialog" aria-hidden="true"><div id="drawerContent"></div></aside>
+
 <script>
 const TORNADO = [
   { name: 'Revenue growth',   low: 86,  high: 230, base: 158 },
@@ -191,6 +198,17 @@ function colorBucket(v, min, max) {
   return 'hi2';
 }
 
+const TORNADO_NOTES = {
+  'Revenue growth':   'The single largest driver. ±10% growth perturbation moves FY30 ARR by $72M. Why: compounding over 5 years magnifies any growth-rate change. Capital plan must flex with growth, not vice versa.',
+  'Net retention':    'Compounds with revenue growth. NRR moves the second-most because the entire installed base scales with it. 5 pp NRR change = ~$37M FY30 ARR.',
+  'Gross margin':     'Operating leverage lever. Most impact post-FY28 when scale advantages kick in. Less time-sensitive than growth — can be tuned later.',
+  'New logo ACV':     'Driven by mix shift to enterprise. Each $10K bump in average ACV = ~$22M FY30 ARR.',
+  'CAC payback':      'Affects cash burn and how aggressively we can spend. 16-mo target; 14-mo improvement = $20M EBITDA upside in FY30.',
+  'S&M efficiency':   'Magic-number-adjacent. Strong if we land partnership channel; weak if dependent on outbound SDR ramp.',
+  'Opex growth lag':  'The "operating leverage" knob — how much opex growth lags revenue growth. Each 1pp lag improvement = ~$10M FY30 EBITDA.',
+  'Round size FY27':  'Smallest impact in the swing. The plan is sized so a $25M round vs $75M round only moves trough cash; doesn\'t change FY30 outcome much.',
+};
+
 function renderTornado() {
   const max = Math.max(...TORNADO.map(t => Math.max(t.high - t.base, t.base - t.low)));
   document.getElementById('tornado').innerHTML = TORNADO.map(t => {
@@ -198,7 +216,7 @@ function renderTornado() {
     const highFill = ((t.high - t.base) / max) * 50;
     const spread = t.high - t.low;
     return `
-      <div class="torn-row">
+      <div class="torn-row" data-name="${t.name}">
         <div class="tn-name">${t.name}</div>
         <div class="tn-low">$${t.low}M</div>
         <div class="tn-bar">
@@ -211,7 +229,41 @@ function renderTornado() {
       </div>
     `;
   }).join('');
+  document.querySelectorAll('.torn-row').forEach(r => {
+    r.addEventListener('click', () => openTornadoDrawer(r.dataset.name));
+  });
 }
+
+function openTornadoDrawer(name) {
+  const t = TORNADO.find(x => x.name === name);
+  if (!t) return;
+  const note = TORNADO_NOTES[name] || '';
+  const swing = ((t.high - t.low) / 2);
+  document.getElementById('drawerContent').innerHTML = `
+    <div class="drawer-head">
+      <div><div class="eyebrow">Sensitivity driver</div><h2 style="margin-top:4px">${name}</h2></div>
+      <button class="icon-btn" onclick="closeDrawer()" aria-label="Close"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" stroke-linecap="round"/></svg></button>
+    </div>
+    <div class="drawer-body">
+      <div class="drawer-section">
+        <h4>Impact on FY30 ARR</h4>
+        <div class="drawer-stat"><span class="lbl">Low case</span><span class="val">$${t.low}M</span></div>
+        <div class="drawer-stat"><span class="lbl">Base case</span><span class="val">$${t.base}M</span></div>
+        <div class="drawer-stat"><span class="lbl">High case</span><span class="val">$${t.high}M</span></div>
+        <div class="drawer-stat"><span class="lbl">Half-spread (±)</span><span class="val">$${swing.toFixed(0)}M</span></div>
+      </div>
+      <div class="drawer-section">
+        <h4>Why it matters</h4>
+        <div style="font-size: 12.5px; color: var(--ink-1); line-height: 1.6;">${note}</div>
+      </div>
+    </div>
+  `;
+  document.getElementById('drawer').classList.add('open');
+  document.getElementById('drawerOverlay').classList.add('open');
+}
+
+function closeDrawer() { document.getElementById('drawer').classList.remove('open'); document.getElementById('drawerOverlay').classList.remove('open'); }
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDrawer(); });
 
 function renderSensTable(elId, rows, cols, fn, baseRow, baseCol, fmt) {
   // generate matrix
