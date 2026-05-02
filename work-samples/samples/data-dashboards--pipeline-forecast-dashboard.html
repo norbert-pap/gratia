@@ -63,6 +63,44 @@
   .rep-pace.behind { background: var(--red-dim); color: var(--red-ink); border: 1px solid var(--red-line); }
   .rep-bar { height: 6px; background: var(--bg-2); border-radius: 3px; overflow: hidden; }
   .rep-bar .rb-fill { height: 100%; background: var(--gold); }
+
+  /* Make funnel stages and rep rows clickable */
+  .funnel-stage { cursor: pointer; transition: background 0.14s; padding: 8px 8px; margin: 0 -8px; border-radius: 4px; }
+  .funnel-stage:hover { background: var(--row-hover); }
+  .funnel-stage.active { background: var(--gold-dim); }
+  .funnel-stage.active .fs-name { color: var(--gold-ink); font-weight: 600; }
+  .rep-row { cursor: pointer; transition: background 0.14s; }
+  .rep-row:hover { background: var(--row-hover); }
+  .rep-row.active { background: var(--gold-dim); }
+  .rep-row.active .rep-name { color: var(--gold-ink); }
+
+  /* Filter pills above deal table */
+  .deal-filters { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+  .deal-filters .chip-mini { display: inline-flex; align-items: center; gap: 5px; padding: 3px 9px; font-size: 11px; background: var(--bg-2); border: 1px solid var(--border); border-radius: 4px; cursor: pointer; transition: all 0.14s; color: var(--ink-2); font-weight: 500; }
+  .deal-filters .chip-mini:hover { color: var(--ink-0); border-color: var(--border-2); }
+  .deal-filters .chip-mini.active { color: var(--ink-0); background: var(--bg-3); border-color: var(--ink-4); }
+  .deal-filters .chip-mini .dot { width: 6px; height: 6px; border-radius: 50%; }
+  .deal-filters .chip-mini .dot.r { background: var(--red); }
+  .deal-filters .chip-mini .dot.a { background: var(--amber); }
+  .deal-filters .chip-mini .dot.g { background: var(--green); }
+  .deal-filters .filter-tag { display: inline-flex; align-items: center; gap: 5px; padding: 3px 8px; font-size: 11px; background: var(--gold-dim); border: 1px solid var(--gold-line); border-radius: 4px; color: var(--gold-ink); font-weight: 500; }
+  .deal-filters .filter-tag .x { cursor: pointer; opacity: 0.7; transition: opacity 0.14s; padding: 0 2px; }
+  .deal-filters .filter-tag .x:hover { opacity: 1; }
+  .deal-empty { padding: 28px 18px; text-align: center; color: var(--ink-3); font-size: 12.5px; }
+
+  /* Forecast scenario model */
+  .forecast-model { margin-top: 18px; padding-top: 16px; border-top: 1px solid var(--border); }
+  .fm-head { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 10px; }
+  .fm-row { display: grid; grid-template-columns: 130px 1fr 60px; align-items: center; gap: 10px; padding: 6px 0; font-size: 12px; }
+  .fm-row .fm-label { color: var(--ink-1); font-weight: 500; }
+  .fm-row input[type=range] { -webkit-appearance: none; appearance: none; height: 4px; background: var(--bg-3); border-radius: 2px; outline: none; }
+  .fm-row input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 14px; height: 14px; border-radius: 50%; background: var(--gold-bright); border: 2px solid var(--bg-1); cursor: pointer; box-shadow: 0 0 0 1px var(--gold-line); }
+  .fm-row .fm-val { font-family: 'Inter', sans-serif; font-weight: 600; color: var(--ink-0); font-variant-numeric: tabular-nums; text-align: right; }
+  .fm-output { display: flex; gap: 18px; margin-top: 12px; padding: 12px 14px; background: var(--bg-2); border: 1px solid var(--border); border-radius: 6px; }
+  .fm-out-row { display: flex; flex-direction: column; gap: 2px; flex: 1; }
+  .fm-out-row .l { font-size: 10px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); }
+  .fm-out-row .v { font-family: 'Inter', sans-serif; font-weight: 600; color: var(--gold-ink); font-variant-numeric: tabular-nums; font-size: 17px; line-height: 1.2; }
+  .fm-out-row .v.miss { color: var(--red-ink); }
 </style>
 </head>
 <body>
@@ -166,7 +204,25 @@
             </div>
           </div>
           <div class="callout amber" style="margin-top: 18px;">
-            <strong>Watch:</strong> Coverage on enterprise segment is 2.4× — below the 3.0× rule of thumb. To hit Q1 quota we'd need 60% close rate on commits + 25% on best-case. Historical Q1 best-case close is 22%.
+            <strong>Watch:</strong> Coverage on enterprise segment is 2.4× — below the 3.0× rule of thumb. Historical Q1 best-case close is 22%. Drag the sliders below to model.
+          </div>
+          <div class="forecast-model">
+            <div class="fm-head">Close-rate scenario model</div>
+            <div class="fm-row">
+              <span class="fm-label">Commit close rate</span>
+              <input type="range" id="commitClose" min="40" max="100" value="100" step="1">
+              <span class="fm-val" id="commitCloseVal">100%</span>
+            </div>
+            <div class="fm-row">
+              <span class="fm-label">Best-case close rate</span>
+              <input type="range" id="bestClose" min="0" max="60" value="22" step="1">
+              <span class="fm-val" id="bestCloseVal">22%</span>
+            </div>
+            <div class="fm-output">
+              <div class="fm-out-row"><span class="l">Modeled close</span><span class="v" id="modeledClose">$5.0M</span></div>
+              <div class="fm-out-row"><span class="l">vs $5.0M quota</span><span class="v" id="modeledPct">100%</span></div>
+              <div class="fm-out-row"><span class="l">Headroom</span><span class="v" id="modeledHead">+$0.0M</span></div>
+            </div>
           </div>
         </div>
       </div>
@@ -175,8 +231,14 @@
     <section class="grid-2">
       <div class="card">
         <div class="card-head">
-          <h3>Top 10 deals · sorted by risk</h3>
-          <div class="meta">Click to drill in</div>
+          <h3>Top deals · <span id="dealVisibleCount">10</span> visible</h3>
+          <div class="deal-filters" id="dealFilters">
+            <button class="chip-mini active" data-risk="all">All</button>
+            <button class="chip-mini" data-risk="high"><span class="dot r"></span>High risk</button>
+            <button class="chip-mini" data-risk="med"><span class="dot a"></span>Med</button>
+            <button class="chip-mini" data-risk="low"><span class="dot g"></span>Low</button>
+            <span id="extraFilters"></span>
+          </div>
         </div>
         <div class="deal-table">
           <div class="deal-grid head">
@@ -239,19 +301,47 @@ const REPS = [
   { name: 'Daniel Park',   init: 'DP', closed: 1.06, quota: 1.25, pace: 'on'    },
 ];
 
+// Filter state
+let filters = { risk: 'all', stage: null, rep: null };
+
+function applyFilters() {
+  return DEALS.filter(d => {
+    if (filters.risk !== 'all' && d.risk !== filters.risk) return false;
+    if (filters.stage && d.stage !== filters.stage) return false;
+    if (filters.rep && d.rep !== filters.rep) return false;
+    return true;
+  });
+}
+
 function renderFunnel() {
   const max = Math.max(...STAGES.map(s => s.value));
   document.getElementById('funnel').innerHTML = STAGES.map((s, i) => `
-    <div class="funnel-stage">
+    <div class="funnel-stage ${filters.stage === s.name ? 'active' : ''}" data-stage="${s.name}">
       <div class="fs-name">${s.name} <span style="color:var(--ink-3); font-weight: 400;">· ${s.count}</span></div>
       <div class="fs-bar"><div class="fs-fill" style="width: ${(s.value / max) * 100}%"></div></div>
       <div class="fs-amount">$${s.value.toFixed(1)}M</div>
       <div class="fs-conv">${i < STAGES.length - 1 ? '→ ' + s.conv : 'won'}</div>
     </div>
   `).join('');
+  document.querySelectorAll('.funnel-stage').forEach(st => {
+    st.addEventListener('click', () => {
+      const stage = st.dataset.stage;
+      filters.stage = filters.stage === stage ? null : stage;
+      renderFunnel();
+      renderDeals();
+      renderExtraFilters();
+    });
+  });
 }
+
 function renderDeals() {
-  document.getElementById('dealRows').innerHTML = DEALS.map(d => {
+  const visible = applyFilters();
+  document.getElementById('dealVisibleCount').textContent = visible.length;
+  if (visible.length === 0) {
+    document.getElementById('dealRows').innerHTML = '<div class="deal-empty">No deals match the active filters.</div>';
+    return;
+  }
+  document.getElementById('dealRows').innerHTML = visible.map(d => {
     const probKind = d.prob >= 70 ? 'hi' : d.prob >= 50 ? 'md' : 'lo';
     return `
       <div class="deal-grid" data-name="${d.name}">
@@ -266,16 +356,70 @@ function renderDeals() {
   }).join('');
   document.querySelectorAll('#dealRows .deal-grid').forEach(row => { row.addEventListener('click', () => openDrawer(row.dataset.name)); });
 }
+
 function renderReps() {
   document.getElementById('repBoard').innerHTML = REPS.map(r => `
-    <div class="rep-row">
+    <div class="rep-row ${filters.rep === r.name ? 'active' : ''}" data-rep="${r.name}">
       <div class="rep-name"><span class="rep-avatar">${r.init}</span>${r.name}</div>
       <div class="rep-quota" style="text-align:right">$${r.closed.toFixed(2)}M</div>
       <div><span class="rep-pace ${r.pace}">${r.pace === 'ahead' ? 'Ahead' : r.pace === 'on' ? 'On pace' : 'Behind'}</span></div>
       <div class="rep-bar"><div class="rb-fill" style="width: ${Math.min(100, (r.closed / r.quota) * 100)}%; background: ${r.pace === 'ahead' ? 'var(--green)' : r.pace === 'on' ? 'var(--gold)' : 'var(--red)'};"></div></div>
     </div>
   `).join('');
+  document.querySelectorAll('.rep-row').forEach(rr => {
+    rr.addEventListener('click', () => {
+      const rep = rr.dataset.rep;
+      filters.rep = filters.rep === rep ? null : rep;
+      renderReps();
+      renderDeals();
+      renderExtraFilters();
+    });
+  });
 }
+
+function renderExtraFilters() {
+  const slots = [];
+  if (filters.stage) slots.push(`<span class="filter-tag">Stage: ${filters.stage}<span class="x" data-clear="stage">✕</span></span>`);
+  if (filters.rep)   slots.push(`<span class="filter-tag">Rep: ${filters.rep}<span class="x" data-clear="rep">✕</span></span>`);
+  document.getElementById('extraFilters').innerHTML = slots.join('');
+  document.querySelectorAll('#extraFilters .x').forEach(x => {
+    x.addEventListener('click', () => {
+      filters[x.dataset.clear] = null;
+      renderFunnel(); renderReps(); renderDeals(); renderExtraFilters();
+    });
+  });
+}
+
+// Risk chips
+document.querySelectorAll('.deal-filters .chip-mini[data-risk]').forEach(c => {
+  c.addEventListener('click', () => {
+    document.querySelectorAll('.deal-filters .chip-mini[data-risk]').forEach(x => x.classList.toggle('active', x === c));
+    filters.risk = c.dataset.risk;
+    renderDeals();
+  });
+});
+
+// Forecast scenario sliders
+const COMMITTED_TOTAL = 4.2; // $M
+const BESTCASE_TOTAL = 7.5; // $M (additional, on top of committed pipeline)
+const QUOTA = 5.0;
+
+function updateForecastModel() {
+  const commitPct = parseInt(document.getElementById('commitClose').value, 10);
+  const bestPct = parseInt(document.getElementById('bestClose').value, 10);
+  document.getElementById('commitCloseVal').textContent = commitPct + '%';
+  document.getElementById('bestCloseVal').textContent = bestPct + '%';
+  const closeAmount = (COMMITTED_TOTAL * commitPct / 100) + (BESTCASE_TOTAL * bestPct / 100);
+  const pct = (closeAmount / QUOTA) * 100;
+  const head = closeAmount - QUOTA;
+  document.getElementById('modeledClose').textContent = '$' + closeAmount.toFixed(1) + 'M';
+  document.getElementById('modeledPct').textContent = pct.toFixed(0) + '%';
+  document.getElementById('modeledPct').classList.toggle('miss', pct < 100);
+  document.getElementById('modeledHead').textContent = (head >= 0 ? '+$' : '−$') + Math.abs(head).toFixed(1) + 'M';
+  document.getElementById('modeledHead').classList.toggle('miss', head < 0);
+}
+document.getElementById('commitClose').addEventListener('input', updateForecastModel);
+document.getElementById('bestClose').addEventListener('input', updateForecastModel);
 function openDrawer(name) {
   const d = DEALS.find(x => x.name === name);
   if (!d) return;
@@ -311,7 +455,7 @@ document.getElementById('themeToggle').addEventListener('click', () => {
   document.documentElement.setAttribute('data-theme', next);
   try { localStorage.setItem('apollo-theme', next); } catch (e) {}
 });
-renderFunnel(); renderDeals(); renderReps();
+renderFunnel(); renderReps(); renderDeals(); updateForecastModel();
 </script>
 
 </div>
