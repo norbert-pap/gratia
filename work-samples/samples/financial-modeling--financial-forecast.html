@@ -1,825 +1,330 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>3–5 Year Financial Forecast: NorthBridge Payments</title>
-    <style>
-        :root {
-            --font-family-display: Arial, sans-serif;
-            --font-weight-display: 600;
-            --font-family-content: Arial, sans-serif;
-            --font-weight-content: 400;
-            --font-size-content: 16px;
-            --line-height-content: 1.4;
-            --slide-w: 1280px;
-            --slide-h: 720px;
-            --radius: 16px;
-            --shadow: 0 10px 24px rgba(0,0,0,.45);
-        }
+<meta charset="UTF-8" />
+<title>Gratia — Multi-Year Financial Forecast · NorthBridge Payments (Sample)</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<script src="../../auth.js"></script>
+<link rel="stylesheet" href="../_design.css">
+<script>(function(){try{const s=localStorage.getItem('apollo-theme');if(s==='light'||s==='dark')document.documentElement.setAttribute('data-theme',s);}catch(e){}})();</script>
+<style>
+  .ctrl-card { background: var(--bg-1); border: 1px solid var(--border); border-radius: 8px; padding: 18px 20px; }
+  .ctrl-section { margin-bottom: 18px; }
+  .ctrl-section:last-child { margin-bottom: 0; }
+  .ctrl-section .ctrl-label { font-size: 10.5px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 10px; }
+  .ctrl-row { display: grid; grid-template-columns: 1fr auto; gap: 8px; align-items: baseline; padding: 6px 0; font-size: 12px; }
+  .ctrl-row label { color: var(--ink-1); }
+  .ctrl-row .v { font-family: 'Inter', sans-serif; font-weight: 600; color: var(--ink-0); font-variant-numeric: tabular-nums; min-width: 60px; text-align: right; }
+  .ctrl-row input[type=range] { -webkit-appearance: none; appearance: none; grid-column: 1 / span 2; height: 4px; border-radius: 2px; background: var(--bg-3); outline: none; margin-top: 2px; }
+  .ctrl-row input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; width: 14px; height: 14px; border-radius: 50%; background: var(--gold-bright); border: 2px solid var(--bg-1); cursor: pointer; box-shadow: 0 0 0 1px var(--gold-line); }
 
-        body.theme-dark {
-            --color-bg-base: #0f172a;
-            --color-bg-elevated: #020617;
-            --color-bg-surface: #1e293b;
-            --color-bg-muted: #334155;
-            --color-text-primary: #f1f5f9;
-            --color-text-secondary: #cbd5e1;
-            --color-text-muted: #94a3b8;
-            --color-text-accent: #38bdf8;
-            --color-primary: #38bdf8;
-            --color-primary-foreground: #0f172a;
-        }
+  .scen-chips { display: flex; gap: 6px; margin-bottom: 14px; }
+  .scen-chip { padding: 5px 11px; font-size: 11.5px; font-weight: 500; color: var(--ink-2); background: var(--bg-2); border: 1px solid var(--border); border-radius: 4px; cursor: pointer; transition: all 0.14s; }
+  .scen-chip:hover { color: var(--ink-0); border-color: var(--border-2); }
+  .scen-chip.active { color: var(--gold-ink); background: var(--gold-dim); border-color: var(--gold-line); }
 
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+  .pl-table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 12.5px; }
+  .pl-table th { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-3); padding: 9px 12px; text-align: right; border-bottom: 1px solid var(--border); }
+  .pl-table th:first-child { text-align: left; }
+  .pl-table td { padding: 10px 12px; text-align: right; font-family: 'Inter', sans-serif; font-variant-numeric: tabular-nums; color: var(--ink-1); border-bottom: 1px solid var(--border); }
+  .pl-table td:first-child { text-align: left; font-family: 'Inter', sans-serif; color: var(--ink-1); font-weight: 500; }
+  .pl-table tbody tr:last-child td { border-bottom: none; }
+  .pl-table tr.line-rev td { color: var(--ink-0); font-weight: 600; }
+  .pl-table tr.line-tot td { background: var(--bg-2); color: var(--ink-0); font-weight: 600; }
+  .pl-table tr.line-margin td:first-child { color: var(--ink-2); font-weight: 400; padding-left: 24px; }
+  .pl-table tr.line-margin td { color: var(--ink-3); font-size: 11px; font-style: italic; }
+  .pl-table .neg { color: var(--red-ink); }
+  .pl-table tr:hover td { background: var(--row-hover); }
 
-        html, body {
-            width: 100%;
-            height: 100%;
-        }
-
-        body {
-            font-family: var(--font-family-content);
-            font-weight: var(--font-weight-content);
-            font-size: var(--font-size-content);
-            line-height: var(--line-height-content);
-            background: var(--color-bg-base);
-            color: var(--color-text-primary);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            overflow: hidden;
-        }
-
-        body.theme-dark {
-            background: #0f172a;
-            color: #f1f5f9;
-        }
-
-        .deck {
-            position: relative;
-            width: var(--slide-w);
-            height: var(--slide-h);
-            background: var(--color-bg-base);
-            overflow: hidden;
-        }
-
-        .slide {
-            position: absolute;
-            width: var(--slide-w);
-            height: var(--slide-h);
-            display: flex;
-            flex-direction: column;
-            padding: 40px;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease-in-out;
-            background: linear-gradient(135deg, #0f172a 0%, #1a1f3a 100%);
-        }
-
-        .slide.active {
-            opacity: 1;
-            pointer-events: auto;
-        }
-
-        .slide::after {
-            content: "Sanitized excerpt · Prepared by Gratia · Jan 2026";
-            position: absolute;
-            bottom: 20px;
-            left: 40px;
-            right: 40px;
-            font-size: 12px;
-            color: var(--color-text-muted);
-            text-align: left;
-        }
-
-        .slide-title {
-            font-size: 48px;
-            font-weight: var(--font-weight-display);
-            color: var(--color-text-primary);
-            margin-bottom: 12px;
-            font-family: var(--font-family-display);
-        }
-
-        .slide-subtitle {
-            font-size: 20px;
-            color: var(--color-text-secondary);
-            margin-bottom: 40px;
-        }
-
-        .content {
-            flex: 1;
-            display: flex;
-            gap: 40px;
-        }
-
-        .content-left {
-            flex: 1;
-            display: flex;
-            flex-direction: column;
-            gap: 24px;
-        }
-
-        .content-right {
-            flex: 1;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        .metric-card {
-            background: rgba(56, 189, 248, 0.1);
-            border: 1px solid rgba(56, 189, 248, 0.3);
-            border-radius: var(--radius);
-            padding: 20px;
-            flex: 1;
-        }
-
-        .metric-value {
-            font-size: 32px;
-            font-weight: var(--font-weight-display);
-            color: var(--color-text-accent);
-            margin-bottom: 8px;
-        }
-
-        .metric-label {
-            font-size: 14px;
-            color: var(--color-text-muted);
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .findings {
-            background: rgba(30, 41, 59, 0.8);
-            border: 1px solid rgba(56, 189, 248, 0.2);
-            border-radius: var(--radius);
-            padding: 24px;
-            flex: 1;
-        }
-
-        .findings h4 {
-            font-size: 13px;
-            text-transform: uppercase;
-            color: var(--color-text-accent);
-            margin-bottom: 16px;
-            font-weight: var(--font-weight-display);
-            letter-spacing: 0.5px;
-        }
-
-        .finding-item {
-            display: flex;
-            gap: 12px;
-            margin-bottom: 12px;
-            font-size: 15px;
-        }
-
-        .finding-item:last-child {
-            margin-bottom: 0;
-        }
-
-        .finding-dot {
-            color: var(--color-text-accent);
-            flex-shrink: 0;
-            margin-top: 2px;
-        }
-
-        .finding-text {
-            color: var(--color-text-secondary);
-            line-height: 1.5;
-        }
-
-        .full-width {
-            width: 100%;
-            display: flex;
-            flex-direction: column;
-            justify-content: flex-start;
-            gap: 24px;
-        }
-
-        .chart-container {
-            background: rgba(30, 41, 59, 0.8);
-            border: 1px solid rgba(56, 189, 248, 0.2);
-            border-radius: var(--radius);
-            padding: 30px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            flex: 1;
-        }
-
-        .financials-table {
-            width: 100%;
-            border-collapse: collapse;
-            background: rgba(30, 41, 59, 0.8);
-            border: 1px solid rgba(56, 189, 248, 0.2);
-            border-radius: var(--radius);
-            overflow: hidden;
-            font-size: 14px;
-        }
-
-        .financials-table th, .financials-table td {
-            padding: 12px 16px;
-            text-align: right;
-            border: 1px solid rgba(56, 189, 248, 0.15);
-        }
-
-        .financials-table th {
-            background: rgba(56, 189, 248, 0.15);
-            color: var(--color-text-accent);
-            font-weight: var(--font-weight-display);
-        }
-
-        .financials-table td:first-child, .financials-table th:first-child {
-            text-align: left;
-        }
-
-        .financials-table tr:nth-child(even) {
-            background: rgba(56, 189, 248, 0.05);
-        }
-
-        .assumption-callout {
-            background: rgba(56, 189, 248, 0.08);
-            border-left: 3px solid var(--color-text-accent);
-            padding: 12px 16px;
-            margin-top: 16px;
-            font-size: 13px;
-            color: var(--color-text-secondary);
-        }
-
-        .fcf-waterfall {
-            display: flex;
-            gap: 16px;
-            align-items: flex-end;
-            justify-content: center;
-            margin-bottom: 32px;
-        }
-
-        .waterfall-step {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            flex: 1;
-        }
-
-        .waterfall-bar {
-            width: 60px;
-            background: rgba(56, 189, 248, 0.3);
-            border: 1px solid rgba(56, 189, 248, 0.5);
-            border-radius: 4px;
-            display: flex;
-            align-items: flex-end;
-            justify-content: center;
-            color: var(--color-text-accent);
-            font-weight: var(--font-weight-display);
-            font-size: 13px;
-        }
-
-        .waterfall-label {
-            font-size: 12px;
-            color: var(--color-text-secondary);
-            margin-top: 12px;
-            text-align: center;
-        }
-
-        .scenario-cards {
-            display: flex;
-            gap: 20px;
-        }
-
-        .scenario-card {
-            flex: 1;
-            background: rgba(30, 41, 59, 0.8);
-            border: 1px solid rgba(56, 189, 248, 0.2);
-            border-radius: var(--radius);
-            padding: 24px;
-        }
-
-        .scenario-card h3 {
-            font-size: 18px;
-            color: var(--color-text-accent);
-            margin-bottom: 20px;
-            font-weight: var(--font-weight-display);
-        }
-
-        .scenario-row {
-            display: flex;
-            justify-content: space-between;
-            margin-bottom: 16px;
-            padding-bottom: 12px;
-            border-bottom: 1px solid rgba(56, 189, 248, 0.1);
-            font-size: 14px;
-        }
-
-        .scenario-row:last-child {
-            border-bottom: none;
-            margin-bottom: 0;
-            padding-bottom: 0;
-        }
-
-        .scenario-label {
-            color: var(--color-text-secondary);
-        }
-
-        .scenario-value {
-            color: var(--color-text-accent);
-            font-weight: var(--font-weight-display);
-        }
-
-        .stat-card {
-            flex: 1;
-            background: rgba(56, 189, 248, 0.1);
-            border: 1px solid rgba(56, 189, 248, 0.3);
-            border-radius: var(--radius);
-            padding: 24px;
-            text-align: center;
-        }
-
-        .stat-value {
-            font-size: 36px;
-            font-weight: var(--font-weight-display);
-            color: var(--color-text-accent);
-            margin-bottom: 8px;
-        }
-
-        .stat-label {
-            font-size: 13px;
-            text-transform: uppercase;
-            color: var(--color-text-muted);
-            letter-spacing: 0.5px;
-        }
-
-        .controls {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            display: flex;
-            gap: 12px;
-            z-index: 1000;
-        }
-
-        .control-btn {
-            background: rgba(56, 189, 248, 0.2);
-            border: 1px solid rgba(56, 189, 248, 0.4);
-            color: var(--color-text-accent);
-            padding: 8px 16px;
-            border-radius: 6px;
-            cursor: pointer;
-            font-size: 12px;
-            transition: all 0.2s;
-        }
-
-        .control-btn:hover {
-            background: rgba(56, 189, 248, 0.3);
-            border-color: rgba(56, 189, 248, 0.6);
-        }
-
-        .slide-counter {
-            position: fixed;
-            bottom: 20px;
-            left: 20px;
-            font-size: 13px;
-            color: var(--color-text-muted);
-        }
-    </style>
+  .yoy-chart { width: 100%; height: 240px; }
+  .yoy-legend { display: flex; gap: 14px; margin-top: 10px; font-size: 10.5px; color: var(--ink-3); }
+  .yoy-legend .lk { display: flex; align-items: center; gap: 5px; }
+  .yoy-legend .lk-sw { width: 14px; height: 6px; border-radius: 1.5px; }
+</style>
 </head>
-<body class="theme-dark">
-    <div class="deck">
-        <!-- Slide 1: Executive Overview -->
-        <div class="slide active">
-            <h1 class="slide-title">Financial Forecast</h1>
-            <h2 class="slide-subtitle">3–5 Year projection | NorthBridge Payments | $42M ARR</h2>
-            <div class="content">
-                <div class="content-left">
-                    <div style="display: flex; gap: 16px;">
-                        <div class="metric-card">
-                            <div class="metric-value">$142M</div>
-                            <div class="metric-label">2030 Revenue</div>
-                        </div>
-                        <div class="metric-card">
-                            <div class="metric-value">28%</div>
-                            <div class="metric-label">EBITDA Margin</div>
-                        </div>
-                        <div class="metric-card">
-                            <div class="metric-value">Q3 2027</div>
-                            <div class="metric-label">FCF Positive</div>
-                        </div>
-                    </div>
-                    <div class="findings">
-                        <h4>Key Drivers</h4>
-                        <div class="finding-item">
-                            <span class="finding-dot">•</span>
-                            <span class="finding-text">Payment volume drives 68% of revenue growth</span>
-                        </div>
-                        <div class="finding-item">
-                            <span class="finding-dot">•</span>
-                            <span class="finding-text">Enterprise segment growing 45% YoY vs 22% SMB</span>
-                        </div>
-                        <div class="finding-item">
-                            <span class="finding-dot">•</span>
-                            <span class="finding-text">Gross margin expansion 62% → 71% on mix shift</span>
-                        </div>
-                    </div>
-                </div>
-                <div class="content-right">
-                    <svg width="400" height="350" viewBox="0 0 400 350" style="background: rgba(30, 41, 59, 0.6); border-radius: 16px; border: 1px solid rgba(56, 189, 248, 0.2);">
-                        <!-- Stacked bar chart: Revenue by segment -->
-                        <defs>
-                            <linearGradient id="smbGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                                <stop offset="0%" style="stop-color:#0ea5e9;stop-opacity:0.8" />
-                                <stop offset="100%" style="stop-color:#06b6d4;stop-opacity:0.8" />
-                            </linearGradient>
-                            <linearGradient id="enterpriseGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                                <stop offset="0%" style="stop-color:#38bdf8;stop-opacity:0.8" />
-                                <stop offset="100%" style="stop-color:#22d3ee;stop-opacity:0.8" />
-                            </linearGradient>
-                            <linearGradient id="platformGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                                <stop offset="0%" style="stop-color:#06b6d4;stop-opacity:0.8" />
-                                <stop offset="100%" style="stop-color:#0891b2;stop-opacity:0.8" />
-                            </linearGradient>
-                        </defs>
-                        <!-- X-axis -->
-                        <line x1="40" y1="280" x2="380" y2="280" stroke="#475569" stroke-width="1" />
-                        <!-- X-axis labels -->
-                        <text x="50" y="300" font-size="11" fill="#94a3b8">2026</text>
-                        <text x="115" y="300" font-size="11" fill="#94a3b8">2027</text>
-                        <text x="175" y="300" font-size="11" fill="#94a3b8">2028</text>
-                        <text x="235" y="300" font-size="11" fill="#94a3b8">2029</text>
-                        <text x="295" y="300" font-size="11" fill="#94a3b8">2030</text>
-                        <!-- Year 1 (2026) - $42M -->
-                        <rect x="45" y="210" width="30" height="70" fill="url(#platformGrad)" />
-                        <rect x="45" y="135" width="30" height="75" fill="url(#enterpriseGrad)" />
-                        <rect x="45" y="40" width="30" height="95" fill="url(#smbGrad)" />
-                        <!-- Year 2 (2027) - $65M -->
-                        <rect x="105" y="190" width="30" height="90" fill="url(#platformGrad)" />
-                        <rect x="105" y="100" width="30" height="90" fill="url(#enterpriseGrad)" />
-                        <rect x="105" y="20" width="30" height="80" fill="url(#smbGrad)" />
-                        <!-- Year 3 (2028) - $95M -->
-                        <rect x="165" y="160" width="30" height="120" fill="url(#platformGrad)" />
-                        <rect x="165" y="65" width="30" height="95" fill="url(#enterpriseGrad)" />
-                        <rect x="165" y="20" width="30" height="45" fill="url(#smbGrad)" />
-                        <!-- Year 4 (2029) - $118M -->
-                        <rect x="225" y="140" width="30" height="140" fill="url(#platformGrad)" />
-                        <rect x="225" y="45" width="30" height="95" fill="url(#enterpriseGrad)" />
-                        <rect x="225" y="20" width="30" height="25" fill="url(#smbGrad)" />
-                        <!-- Year 5 (2030) - $142M -->
-                        <rect x="285" y="115" width="30" height="165" fill="url(#platformGrad)" />
-                        <rect x="285" y="30" width="30" height="85" fill="url(#enterpriseGrad)" />
-                        <rect x="285" y="15" width="30" height="15" fill="url(#smbGrad)" />
-                        <!-- Legend -->
-                        <rect x="50" y="320" width="12" height="12" fill="url(#smbGrad)" />
-                        <text x="68" y="328" font-size="10" fill="#cbd5e1">SMB</text>
-                        <rect x="140" y="320" width="12" height="12" fill="url(#enterpriseGrad)" />
-                        <text x="158" y="328" font-size="10" fill="#cbd5e1">Enterprise</text>
-                        <rect x="280" y="320" width="12" height="12" fill="url(#platformGrad)" />
-                        <text x="298" y="328" font-size="10" fill="#cbd5e1">Platform</text>
-                    </svg>
-                </div>
-            </div>
-        </div>
+<body>
+<div id="deck-content">
+<div class="glow"></div>
 
-        <!-- Slide 2: Full Revenue Forecast Chart -->
-        <div class="slide">
-            <h1 class="slide-title">Revenue Forecast by Segment</h1>
-            <h2 class="slide-subtitle">5-year projection with YoY growth rates</h2>
-            <div class="full-width" style="flex: 1;">
-                <div class="chart-container">
-                    <svg width="900" height="320" viewBox="0 0 900 320">
-                        <defs>
-                            <linearGradient id="smbGrad2" x1="0%" y1="0%" x2="0%" y2="100%">
-                                <stop offset="0%" style="stop-color:#0ea5e9;stop-opacity:0.8" />
-                                <stop offset="100%" style="stop-color:#06b6d4;stop-opacity:0.8" />
-                            </linearGradient>
-                            <linearGradient id="enterpriseGrad2" x1="0%" y1="0%" x2="0%" y2="100%">
-                                <stop offset="0%" style="stop-color:#38bdf8;stop-opacity:0.8" />
-                                <stop offset="100%" style="stop-color:#22d3ee;stop-opacity:0.8" />
-                            </linearGradient>
-                            <linearGradient id="platformGrad2" x1="0%" y1="0%" x2="0%" y2="100%">
-                                <stop offset="0%" style="stop-color:#06b6d4;stop-opacity:0.8" />
-                                <stop offset="100%" style="stop-color:#0891b2;stop-opacity:0.8" />
-                            </linearGradient>
-                        </defs>
-                        <!-- Y-axis -->
-                        <line x1="80" y1="20" x2="80" y2="270" stroke="#475569" stroke-width="1" />
-                        <text x="20" y="275" font-size="11" fill="#94a3b8">$0M</text>
-                        <text x="10" y="200" font-size="11" fill="#94a3b8">$75M</text>
-                        <text x="10" y="130" font-size="11" fill="#94a3b8">$150M</text>
-                        <!-- X-axis -->
-                        <line x1="80" y1="270" x2="850" y2="270" stroke="#475569" stroke-width="1" />
-                        <!-- Year labels -->
-                        <text x="130" y="295" font-size="11" fill="#94a3b8">2026</text>
-                        <text x="255" y="295" font-size="11" fill="#94a3b8">2027</text>
-                        <text x="380" y="295" font-size="11" fill="#94a3b8">2028</text>
-                        <text x="505" y="295" font-size="11" fill="#94a3b8">2029</text>
-                        <text x="630" y="295" font-size="11" fill="#94a3b8">2030</text>
-                        <!-- 2026: $42M (16M SMB, 18M Enterprise, 8M Platform) -->
-                        <rect x="110" y="210" width="40" height="60" fill="url(#platformGrad2)" />
-                        <rect x="110" y="130" width="40" height="80" fill="url(#enterpriseGrad2)" />
-                        <rect x="110" y="35" width="40" height="95" fill="url(#smbGrad2)" />
-                        <text x="125" y="285" font-size="11" fill="#38bdf8" font-weight="bold">$42M</text>
-                        <text x="120" y="315" font-size="10" fill="#94a3b8">+55%</text>
-                        <!-- 2027: $65M (14M SMB, 28M Enterprise, 23M Platform) -->
-                        <rect x="235" y="175" width="40" height="95" fill="url(#platformGrad2)" />
-                        <rect x="235" y="75" width="40" height="100" fill="url(#enterpriseGrad2)" />
-                        <rect x="235" y="20" width="40" height="55" fill="url(#smbGrad2)" />
-                        <text x="250" y="285" font-size="11" fill="#38bdf8" font-weight="bold">$65M</text>
-                        <text x="240" y="315" font-size="10" fill="#94a3b8">+47%</text>
-                        <!-- 2028: $95M (8M SMB, 38M Enterprise, 49M Platform) -->
-                        <rect x="360" y="110" width="40" height="160" fill="url(#platformGrad2)" />
-                        <rect x="360" y="45" width="40" height="65" fill="url(#enterpriseGrad2)" />
-                        <rect x="360" y="20" width="40" height="25" fill="url(#smbGrad2)" />
-                        <text x="375" y="285" font-size="11" fill="#38bdf8" font-weight="bold">$95M</text>
-                        <text x="365" y="315" font-size="10" fill="#94a3b8">+46%</text>
-                        <!-- 2029: $118M (5M SMB, 48M Enterprise, 65M Platform) -->
-                        <rect x="485" y="35" width="40" height="235" fill="url(#platformGrad2)" />
-                        <rect x="485" y="20" width="40" height="15" fill="url(#enterpriseGrad2)" />
-                        <rect x="485" y="20" width="40" height="0" fill="url(#smbGrad2)" />
-                        <text x="500" y="285" font-size="11" fill="#38bdf8" font-weight="bold">$118M</text>
-                        <text x="495" y="315" font-size="10" fill="#94a3b8">+24%</text>
-                        <!-- 2030: $142M (3M SMB, 56M Enterprise, 83M Platform) -->
-                        <rect x="610" y="25" width="40" height="245" fill="url(#platformGrad2)" />
-                        <rect x="610" y="20" width="40" height="5" fill="url(#enterpriseGrad2)" />
-                        <rect x="610" y="20" width="40" height="0" fill="url(#smbGrad2)" />
-                        <text x="625" y="285" font-size="11" fill="#38bdf8" font-weight="bold">$142M</text>
-                        <text x="620" y="315" font-size="10" fill="#94a3b8">+20%</text>
-                    </svg>
-                </div>
-                <div class="assumption-callout">
-                    <strong style="color: var(--color-text-accent);">Growth Drivers:</strong> Revenue CAGR of 35% through 2030. SMB declines due to competitive pressures; Enterprise (45% YoY) and Platform fees (58% YoY) drive growth mix shift toward higher-margin products.
-                </div>
-            </div>
-        </div>
+<div class="app">
+  <header class="mainnav">
+    <a class="nav-brand" href="../"><span class="nav-brand-fallback">N</span></a>
+    <div class="nav-context">
+      <div class="nctx-1">NorthBridge Payments</div>
+      <div class="nctx-2">5-year P&amp;L Forecast Model</div>
+    </div>
+    <div class="nav-right">
+      <button class="icon-btn theme-toggle" id="themeToggle" aria-label="Toggle theme">
+        <svg class="ti-moon" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <svg class="ti-sun" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" stroke-linecap="round"/></svg>
+      </button>
+      <button class="avatar-btn" title="Lina Wu, FP&A"><span class="avatar">LW</span></button>
+    </div>
+  </header>
 
-        <!-- Slide 3: P&L Summary -->
-        <div class="slide">
-            <h1 class="slide-title">Projected P&L Summary</h1>
-            <h2 class="slide-subtitle">5-year income statement with key margin metrics</h2>
-            <div class="full-width" style="flex: 1;">
-                <table class="financials-table">
-                    <thead>
-                        <tr>
-                            <th>$ Millions</th>
-                            <th>2026A</th>
-                            <th>2027E</th>
-                            <th>2028E</th>
-                            <th>2029E</th>
-                            <th>2030E</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td><strong>Revenue</strong></td>
-                            <td>$42.0</td>
-                            <td>$65.1</td>
-                            <td>$95.2</td>
-                            <td>$118.1</td>
-                            <td>$141.7</td>
-                        </tr>
-                        <tr>
-                            <td>Cost of Revenue</td>
-                            <td>$16.0</td>
-                            <td>$23.8</td>
-                            <td>$32.4</td>
-                            <td>$39.1</td>
-                            <td>$41.3</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Gross Profit</strong></td>
-                            <td>$26.0</td>
-                            <td>$41.3</td>
-                            <td>$62.8</td>
-                            <td>$79.0</td>
-                            <td>$100.4</td>
-                        </tr>
-                        <tr>
-                            <td style="color: var(--color-text-muted); font-size: 13px;">Gross Margin %</td>
-                            <td style="color: var(--color-text-muted); font-size: 13px;">62%</td>
-                            <td style="color: var(--color-text-muted); font-size: 13px;">63%</td>
-                            <td style="color: var(--color-text-muted); font-size: 13px;">66%</td>
-                            <td style="color: var(--color-text-muted); font-size: 13px;">67%</td>
-                            <td style="color: var(--color-text-muted); font-size: 13px;">71%</td>
-                        </tr>
-                        <tr>
-                            <td>Operating Expenses</td>
-                            <td>$18.5</td>
-                            <td>$24.7</td>
-                            <td>$31.4</td>
-                            <td>$37.8</td>
-                            <td>$43.6</td>
-                        </tr>
-                        <tr>
-                            <td><strong>EBITDA</strong></td>
-                            <td>$7.5</td>
-                            <td>$16.6</td>
-                            <td>$31.4</td>
-                            <td>$41.2</td>
-                            <td>$56.8</td>
-                        </tr>
-                        <tr>
-                            <td style="color: var(--color-text-muted); font-size: 13px;">EBITDA Margin %</td>
-                            <td style="color: var(--color-text-muted); font-size: 13px;">18%</td>
-                            <td style="color: var(--color-text-muted); font-size: 13px;">26%</td>
-                            <td style="color: var(--color-text-muted); font-size: 13px;">33%</td>
-                            <td style="color: var(--color-text-muted); font-size: 13px;">35%</td>
-                            <td style="color: var(--color-text-muted); font-size: 13px;">40%</td>
-                        </tr>
-                        <tr>
-                            <td>Depreciation & Amort.</td>
-                            <td>$2.1</td>
-                            <td>$2.5</td>
-                            <td>$3.0</td>
-                            <td>$3.5</td>
-                            <td>$4.0</td>
-                        </tr>
-                        <tr>
-                            <td><strong>EBIT</strong></td>
-                            <td>$5.4</td>
-                            <td>$14.1</td>
-                            <td>$28.4</td>
-                            <td>$37.7</td>
-                            <td>$52.8</td>
-                        </tr>
-                        <tr>
-                            <td>Taxes (25%)</td>
-                            <td>$1.4</td>
-                            <td>$3.5</td>
-                            <td>$7.1</td>
-                            <td>$9.4</td>
-                            <td>$13.2</td>
-                        </tr>
-                        <tr>
-                            <td><strong>Net Income</strong></td>
-                            <td>$4.0</td>
-                            <td>$10.6</td>
-                            <td>$21.3</td>
-                            <td>$28.3</td>
-                            <td>$39.6</td>
-                        </tr>
-                    </tbody>
-                </table>
-                <div class="assumption-callout">
-                    <strong style="color: var(--color-text-accent);">Key Metrics:</strong> Gross margin expands 62%→71% on platform mix. EBITDA margins improve from 18% to 40%. OpEx leverage of ~37% of incremental revenue provides operating leverage.
-                </div>
-            </div>
+  <main class="content">
+    <section class="page-head">
+      <div>
+        <div class="eyebrow-row">
+          <span class="eyebrow">FY26–FY30 · Operating model</span>
+          <span class="status-chip" data-status="green"><span class="dot-pulse"></span>Base case selected</span>
         </div>
+        <h1 class="lede">Adjust assumptions to explore the <em>$42M → $158M ARR path</em>. Scenario chips lock to base, conservative, or aggressive presets.</h1>
+        <p class="sublede">Base case: 32% YoY revenue growth, gross margin holding 78%, opex growth lagging revenue by 8 pp. Reaches profitability in FY28 at $94M ARR. Cash trough -$22M in FY27.</p>
+      </div>
+      <div class="head-actions">
+        <button class="btn"><svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14" stroke-linecap="round" stroke-linejoin="round"/></svg>Export to xlsx</button>
+      </div>
+    </section>
 
-        <!-- Slide 4: Cash Flow & Scenarios -->
-        <div class="slide">
-            <h1 class="slide-title">Free Cash Flow & Scenarios</h1>
-            <h2 class="slide-subtitle">Base/Bull/Bear case analysis</h2>
-            <div class="full-width" style="flex: 1;">
-                <div class="fcf-waterfall">
-                    <div class="waterfall-step">
-                        <div class="waterfall-bar" style="height: 120px; background: rgba(56, 189, 248, 0.4);">$48M</div>
-                        <div class="waterfall-label">Operating<br/>Cash Flow</div>
-                    </div>
-                    <div style="display: flex; align-items: center; color: var(--color-text-muted); font-size: 20px;">→</div>
-                    <div class="waterfall-step">
-                        <div class="waterfall-bar" style="height: 50px; background: rgba(255, 100, 100, 0.3);">−$12M</div>
-                        <div class="waterfall-label">CapEx</div>
-                    </div>
-                    <div style="display: flex; align-items: center; color: var(--color-text-muted); font-size: 20px;">→</div>
-                    <div class="waterfall-step">
-                        <div class="waterfall-bar" style="height: 30px; background: rgba(255, 100, 100, 0.3);">−$8M</div>
-                        <div class="waterfall-label">WC Change</div>
-                    </div>
-                    <div style="display: flex; align-items: center; color: var(--color-text-muted); font-size: 20px;">→</div>
-                    <div class="waterfall-step">
-                        <div class="waterfall-bar" style="height: 80px; background: rgba(56, 189, 248, 0.6);">$28M</div>
-                        <div class="waterfall-label">Free<br/>Cash Flow</div>
-                    </div>
-                </div>
-                <div class="scenario-cards">
-                    <div class="scenario-card">
-                        <h3>Bear Case</h3>
-                        <div class="scenario-row">
-                            <span class="scenario-label">Revenue Growth</span>
-                            <span class="scenario-value">28% CAGR</span>
-                        </div>
-                        <div class="scenario-row">
-                            <span class="scenario-label">Churn Rate</span>
-                            <span class="scenario-value">8%</span>
-                        </div>
-                        <div class="scenario-row">
-                            <span class="scenario-label">Gross Margin</span>
-                            <span class="scenario-value">65%</span>
-                        </div>
-                        <div class="scenario-row">
-                            <span class="scenario-label">2030 Revenue</span>
-                            <span class="scenario-value">$110M</span>
-                        </div>
-                        <div class="scenario-row" style="border-bottom: 2px solid rgba(56, 189, 248, 0.3); margin-bottom: 16px; padding-bottom: 16px;">
-                            <span class="scenario-label">FCF (5yr cum)</span>
-                            <span class="scenario-value">$8M</span>
-                        </div>
-                    </div>
-                    <div class="scenario-card">
-                        <h3>Base Case</h3>
-                        <div class="scenario-row">
-                            <span class="scenario-label">Revenue Growth</span>
-                            <span class="scenario-value">35% CAGR</span>
-                        </div>
-                        <div class="scenario-row">
-                            <span class="scenario-label">Churn Rate</span>
-                            <span class="scenario-value">5%</span>
-                        </div>
-                        <div class="scenario-row">
-                            <span class="scenario-label">Gross Margin</span>
-                            <span class="scenario-value">71%</span>
-                        </div>
-                        <div class="scenario-row">
-                            <span class="scenario-label">2030 Revenue</span>
-                            <span class="scenario-value">$142M</span>
-                        </div>
-                        <div class="scenario-row" style="border-bottom: 2px solid rgba(56, 189, 248, 0.3); margin-bottom: 16px; padding-bottom: 16px;">
-                            <span class="scenario-label">FCF (5yr cum)</span>
-                            <span class="scenario-value">$18M</span>
-                        </div>
-                    </div>
-                    <div class="scenario-card">
-                        <h3>Bull Case</h3>
-                        <div class="scenario-row">
-                            <span class="scenario-label">Revenue Growth</span>
-                            <span class="scenario-value">42% CAGR</span>
-                        </div>
-                        <div class="scenario-row">
-                            <span class="scenario-label">Churn Rate</span>
-                            <span class="scenario-value">2%</span>
-                        </div>
-                        <div class="scenario-row">
-                            <span class="scenario-label">Gross Margin</span>
-                            <span class="scenario-value">75%</span>
-                        </div>
-                        <div class="scenario-row">
-                            <span class="scenario-label">2030 Revenue</span>
-                            <span class="scenario-value">$180M</span>
-                        </div>
-                        <div class="scenario-row" style="border-bottom: 2px solid rgba(56, 189, 248, 0.3); margin-bottom: 16px; padding-bottom: 16px;">
-                            <span class="scenario-label">FCF (5yr cum)</span>
-                            <span class="scenario-value">$28M</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
+    <div class="scen-chips">
+      <button class="scen-chip active" data-scen="base">Base case</button>
+      <button class="scen-chip" data-scen="cons">Conservative</button>
+      <button class="scen-chip" data-scen="agg">Aggressive</button>
     </div>
 
-    <div class="slide-counter">
-        <span id="current-slide">1</span> / <span id="total-slides">4</span>
-    </div>
+    <section class="grid-2-narrow">
+      <div class="ctrl-card">
+        <div class="ctrl-section">
+          <div class="ctrl-label">Revenue drivers</div>
+          <div class="ctrl-row"><label>YoY revenue growth</label><span class="v" id="vGrowth">32%</span><input type="range" id="iGrowth" min="10" max="60" value="32" step="1"></div>
+          <div class="ctrl-row"><label>Net retention</label><span class="v" id="vNrr">115%</span><input type="range" id="iNrr" min="90" max="130" value="115" step="1"></div>
+          <div class="ctrl-row"><label>New logo ACV ($K)</label><span class="v" id="vAcv">$48K</span><input type="range" id="iAcv" min="20" max="120" value="48" step="2"></div>
+        </div>
+        <div class="ctrl-section">
+          <div class="ctrl-label">Cost structure</div>
+          <div class="ctrl-row"><label>Gross margin</label><span class="v" id="vGm">78%</span><input type="range" id="iGm" min="60" max="90" value="78" step="1"></div>
+          <div class="ctrl-row"><label>Opex growth (vs rev)</label><span class="v" id="vOg">−8pp</span><input type="range" id="iOg" min="-20" max="10" value="-8" step="1"></div>
+          <div class="ctrl-row"><label>S&M as % of rev</label><span class="v" id="vSm">42%</span><input type="range" id="iSm" min="20" max="70" value="42" step="1"></div>
+        </div>
+        <div class="ctrl-section">
+          <div class="ctrl-label">Capital</div>
+          <div class="ctrl-row"><label>Starting cash ($M)</label><span class="v" id="vCash">$36M</span><input type="range" id="iCash" min="10" max="100" value="36" step="2"></div>
+          <div class="ctrl-row"><label>Round in FY27 ($M)</label><span class="v" id="vRnd">$45M</span><input type="range" id="iRnd" min="0" max="100" value="45" step="5"></div>
+        </div>
+      </div>
 
-    <div class="controls">
-        <button class="control-btn" onclick="previousSlide()">← Prev</button>
-        <button class="control-btn" onclick="nextSlide()">Next →</button>
-    </div>
+      <div class="card">
+        <div class="card-head">
+          <h3>Revenue trajectory · FY26–FY30</h3>
+          <div class="meta">Stacked: new logos vs expansion vs base</div>
+        </div>
+        <div class="card-body">
+          <svg class="yoy-chart" viewBox="0 0 540 240" preserveAspectRatio="xMidYMid meet" id="yoyChart"></svg>
+          <div class="yoy-legend">
+            <div class="lk"><span class="lk-sw" style="background:var(--ink-3)"></span>Beginning ARR</div>
+            <div class="lk"><span class="lk-sw" style="background:var(--gold-bright)"></span>New logos</div>
+            <div class="lk"><span class="lk-sw" style="background:var(--gold)"></span>Expansion</div>
+            <div class="lk"><span class="lk-sw" style="background:var(--red);"></span>Churn</div>
+          </div>
+          <div class="callout" style="margin-top: 14px;" id="forecastCallout"></div>
+        </div>
+      </div>
+    </section>
 
-    <script>
-        let currentSlide = 0;
-        const slides = document.querySelectorAll('.slide');
-        const totalSlides = slides.length;
+    <section class="card">
+      <div class="card-head">
+        <h3>P&amp;L summary · FY26–FY30 ($M)</h3>
+        <div class="meta">Updated live</div>
+      </div>
+      <div style="padding: 0 18px 18px;">
+        <table class="pl-table" id="plTable"></table>
+      </div>
+    </section>
 
-        function showSlide(n) {
-            slides[currentSlide].classList.remove('active');
-            currentSlide = (n + totalSlides) % totalSlides;
-            slides[currentSlide].classList.add('active');
-            document.getElementById('current-slide').textContent = currentSlide + 1;
-        }
+    <footer class="foot">
+      <div>northbridge-payments · forecast-v8 · base-case</div>
+      <div>last assumption refresh: today</div>
+    </footer>
+  </main>
+</div>
 
-        function nextSlide() {
-            showSlide(currentSlide + 1);
-        }
+<script>
+const SCENARIOS = {
+  base: { growth: 32, nrr: 115, acv: 48, gm: 78, og: -8, sm: 42, cash: 36, rnd: 45 },
+  cons: { growth: 18, nrr: 105, acv: 38, gm: 74, og: 0,  sm: 48, cash: 36, rnd: 25 },
+  agg:  { growth: 50, nrr: 124, acv: 62, gm: 80, og: -14,sm: 38, cash: 36, rnd: 75 },
+};
 
-        function previousSlide() {
-            showSlide(currentSlide - 1);
-        }
+const STARTING_ARR = 42; // FY25 ending = FY26 starting
 
-        document.addEventListener('keydown', (e) => {
-            if (e.key === 'ArrowRight' || e.key === ' ') {
-                e.preventDefault();
-                nextSlide();
-            } else if (e.key === 'ArrowLeft') {
-                e.preventDefault();
-                previousSlide();
-            } else if (e.key === 'Home') {
-                e.preventDefault();
-                showSlide(0);
-            } else if (e.key === 'End') {
-                e.preventDefault();
-                showSlide(totalSlides - 1);
-            } else if (e.key === 'PageDown') {
-                e.preventDefault();
-                nextSlide();
-            } else if (e.key === 'PageUp') {
-                e.preventDefault();
-                previousSlide();
-            }
-        });
+function getInputs() {
+  return {
+    growth: +document.getElementById('iGrowth').value,
+    nrr: +document.getElementById('iNrr').value,
+    acv: +document.getElementById('iAcv').value,
+    gm: +document.getElementById('iGm').value,
+    og: +document.getElementById('iOg').value,
+    sm: +document.getElementById('iSm').value,
+    cash: +document.getElementById('iCash').value,
+    rnd: +document.getElementById('iRnd').value,
+  };
+}
 
-        document.getElementById('total-slides').textContent = totalSlides;
-    </script>
-<a href="../" style="position:fixed;top:12px;right:16px;z-index:99999;background:#111827;color:#e2e8f0;padding:6px 16px;border-radius:8px;font-size:13px;font-weight:600;text-decoration:none;border:1px solid #475569;font-family:system-ui,sans-serif;transition:background .15s;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#111827'">← Gallery</a>
+function applyInputs(s) {
+  document.getElementById('iGrowth').value = s.growth;
+  document.getElementById('iNrr').value = s.nrr;
+  document.getElementById('iAcv').value = s.acv;
+  document.getElementById('iGm').value = s.gm;
+  document.getElementById('iOg').value = s.og;
+  document.getElementById('iSm').value = s.sm;
+  document.getElementById('iCash').value = s.cash;
+  document.getElementById('iRnd').value = s.rnd;
+  syncLabels();
+}
+
+function syncLabels() {
+  const v = getInputs();
+  document.getElementById('vGrowth').textContent = v.growth + '%';
+  document.getElementById('vNrr').textContent    = v.nrr + '%';
+  document.getElementById('vAcv').textContent    = '$' + v.acv + 'K';
+  document.getElementById('vGm').textContent     = v.gm + '%';
+  document.getElementById('vOg').textContent     = (v.og >= 0 ? '+' : '') + v.og + 'pp';
+  document.getElementById('vSm').textContent     = v.sm + '%';
+  document.getElementById('vCash').textContent   = '$' + v.cash + 'M';
+  document.getElementById('vRnd').textContent    = '$' + v.rnd + 'M';
+}
+
+function projectSeries() {
+  const v = getInputs();
+  const years = ['FY26', 'FY27', 'FY28', 'FY29', 'FY30'];
+  let arr = STARTING_ARR;
+  let cash = v.cash;
+  const series = [];
+  years.forEach((y, i) => {
+    const beginArr = arr;
+    const expansion = beginArr * (v.nrr / 100 - 1);
+    const newBiz = beginArr * (v.growth / 100) - expansion;
+    const churn = -beginArr * 0.05; // 5% gross churn assumption
+    const endArr = beginArr + newBiz + expansion + churn;
+    const revenue = (beginArr + endArr) / 2; // approx
+    const cogs = revenue * (1 - v.gm / 100);
+    const grossProfit = revenue - cogs;
+    const sm = revenue * (v.sm / 100);
+    const rd = revenue * 0.18;
+    const ga = revenue * 0.10;
+    const opex = sm + rd + ga;
+    const ebitda = grossProfit - opex;
+    cash += ebitda;
+    if (i === 1) cash += v.rnd; // round in FY27
+    series.push({ y, beginArr, newBiz, expansion, churn, endArr, revenue, cogs, grossProfit, sm, rd, ga, opex, ebitda, cash });
+    arr = endArr;
+  });
+  return series;
+}
+
+function fmtM(n) { return (n >= 0 ? '$' : '−$') + Math.abs(n).toFixed(1); }
+
+function renderTable() {
+  const series = projectSeries();
+  const rows = [
+    { lbl: 'Beginning ARR', cls: 'line-rev', vals: series.map(s => fmtM(s.beginArr)) },
+    { lbl: '+ New business', vals: series.map(s => fmtM(s.newBiz)) },
+    { lbl: '+ Expansion',    vals: series.map(s => fmtM(s.expansion)) },
+    { lbl: '− Churn',        vals: series.map(s => '−$' + Math.abs(s.churn).toFixed(1)), neg: true },
+    { lbl: 'Ending ARR',     cls: 'line-tot', vals: series.map(s => fmtM(s.endArr)) },
+    { lbl: 'Revenue',        cls: 'line-rev', vals: series.map(s => fmtM(s.revenue)) },
+    { lbl: '− COGS',         vals: series.map(s => '−$' + s.cogs.toFixed(1)), neg: true },
+    { lbl: 'Gross profit',   cls: 'line-tot', vals: series.map(s => fmtM(s.grossProfit)) },
+    { lbl: '  GM%', cls: 'line-margin', vals: series.map(s => (s.grossProfit / s.revenue * 100).toFixed(0) + '%') },
+    { lbl: '− S&M',          vals: series.map(s => '−$' + s.sm.toFixed(1)), neg: true },
+    { lbl: '− R&D',          vals: series.map(s => '−$' + s.rd.toFixed(1)), neg: true },
+    { lbl: '− G&A',          vals: series.map(s => '−$' + s.ga.toFixed(1)), neg: true },
+    { lbl: 'EBITDA',         cls: 'line-tot', vals: series.map(s => (s.ebitda >= 0 ? '$' : '−$') + Math.abs(s.ebitda).toFixed(1)) },
+    { lbl: '  EBITDA margin', cls: 'line-margin', vals: series.map(s => (s.ebitda / s.revenue * 100).toFixed(0) + '%') },
+    { lbl: 'Cash balance',   cls: 'line-rev', vals: series.map(s => (s.cash >= 0 ? '$' : '−$') + Math.abs(s.cash).toFixed(0) + 'M') },
+  ];
+  let html = '<thead><tr><th>$M</th>';
+  series.forEach(s => { html += `<th>${s.y}</th>`; });
+  html += '</tr></thead><tbody>';
+  rows.forEach(r => {
+    html += `<tr class="${r.cls || ''}"><td>${r.lbl}</td>`;
+    r.vals.forEach(v => { html += `<td class="${r.neg ? 'neg' : ''}">${v}</td>`; });
+    html += '</tr>';
+  });
+  html += '</tbody>';
+  document.getElementById('plTable').innerHTML = html;
+
+  // Forecast callout
+  const last = series[series.length - 1];
+  const profitYr = series.find(s => s.ebitda > 0);
+  document.getElementById('forecastCallout').innerHTML = `
+    <strong>FY30 ending:</strong> $${last.endArr.toFixed(0)}M ARR · $${last.revenue.toFixed(0)}M revenue · ${(last.ebitda / last.revenue * 100).toFixed(0)}% EBITDA. ${profitYr ? 'Profitability reached in <strong>' + profitYr.y + '</strong>.' : 'Not profitable in 5-year horizon under this scenario.'}
+  `;
+
+  renderYoyChart(series);
+}
+
+function renderYoyChart(series) {
+  const w = 540, h = 240;
+  const padL = 36, padR = 8, padT = 16, padB = 28;
+  const chartW = w - padL - padR, chartH = h - padT - padB;
+  const max = Math.max(...series.map(s => s.endArr)) * 1.1;
+  const colW = chartW / series.length;
+  const barW = colW * 0.55;
+  let svg = '';
+  // Y axis
+  for (let i = 0; i <= 4; i++) {
+    const v = (max / 4) * i;
+    const y = padT + chartH - (v / max) * chartH;
+    svg += `<line x1="${padL}" y1="${y}" x2="${w - padR}" y2="${y}" stroke="var(--border)" stroke-width="1" opacity="0.4"/>`;
+    svg += `<text x="${padL - 6}" y="${y + 3}" text-anchor="end" font-size="10" fill="var(--ink-3)">$${v.toFixed(0)}M</text>`;
+  }
+  series.forEach((s, i) => {
+    const cx = padL + i * colW + colW / 2;
+    const x = cx - barW / 2;
+    const yScale = chartH / max;
+    const beginH = s.beginArr * yScale;
+    const expH = s.expansion * yScale;
+    const newH = s.newBiz * yScale;
+    const churnH = Math.abs(s.churn) * yScale;
+    const baseY = padT + chartH;
+    let y = baseY;
+    // Beginning ARR
+    y -= beginH;
+    svg += `<rect x="${x}" y="${y}" width="${barW}" height="${beginH}" fill="var(--ink-3)" opacity="0.45"/>`;
+    // Expansion
+    y -= expH;
+    svg += `<rect x="${x}" y="${y}" width="${barW}" height="${expH}" fill="var(--gold)" opacity="0.85"/>`;
+    // New
+    y -= newH;
+    svg += `<rect x="${x}" y="${y}" width="${barW}" height="${newH}" fill="var(--gold-bright)"/>`;
+    // Churn (overlay above)
+    svg += `<rect x="${x}" y="${y - churnH * 0.4}" width="${barW}" height="${churnH * 0.4}" fill="var(--red)" opacity="0.7"/>`;
+    // End ARR label
+    svg += `<text x="${cx}" y="${y - churnH * 0.4 - 6}" text-anchor="middle" font-size="11" font-weight="600" fill="var(--ink-0)" font-family="Inter">$${s.endArr.toFixed(0)}M</text>`;
+    // Year label
+    svg += `<text x="${cx}" y="${baseY + 18}" text-anchor="middle" font-size="10" fill="var(--ink-3)">${s.y}</text>`;
+  });
+  document.getElementById('yoyChart').innerHTML = svg;
+}
+
+document.querySelectorAll('.scen-chip').forEach(c => {
+  c.addEventListener('click', () => {
+    document.querySelectorAll('.scen-chip').forEach(x => x.classList.remove('active'));
+    c.classList.add('active');
+    applyInputs(SCENARIOS[c.dataset.scen]);
+    renderTable();
+  });
+});
+['iGrowth','iNrr','iAcv','iGm','iOg','iSm','iCash','iRnd'].forEach(id => {
+  document.getElementById(id).addEventListener('input', () => {
+    document.querySelectorAll('.scen-chip').forEach(x => x.classList.remove('active'));
+    syncLabels();
+    renderTable();
+  });
+});
+document.getElementById('themeToggle').addEventListener('click', () => {
+  const cur = document.documentElement.getAttribute('data-theme') || 'dark';
+  const next = cur === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  try { localStorage.setItem('apollo-theme', next); } catch (e) {}
+});
+
+syncLabels();
+renderTable();
+</script>
+
+</div>
 </body>
 </html>

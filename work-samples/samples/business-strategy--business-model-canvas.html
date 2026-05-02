@@ -1,350 +1,125 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Business Model Canvas - Kinetic Labs</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
-
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: #0f172a;
-            padding: 20px;
-            color: #e2e8f0;
-        }
-
-        .container {
-            max-width: 1280px;
-            margin: 0 auto;
-            background: #1e293b;
-            border-radius: 8px;
-            box-shadow: 0 4px 12px rgba(0,0,0,0.3);
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-            min-height: 100vh;
-        }
-
-        .header {
-            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-            padding: 24px 32px;
-            border-bottom: 2px solid #38bdf8;
-        }
-
-        .header h1 {
-            font-size: 26px;
-            font-weight: 700;
-            color: #38bdf8;
-            margin-bottom: 6px;
-        }
-
-        .header-meta {
-            font-size: 13px;
-            color: #94a3b8;
-            display: flex;
-            gap: 20px;
-        }
-
-        .canvas-wrapper {
-            flex: 1;
-            padding: 32px;
-            background: #0f172a;
-        }
-
-        .canvas {
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr 1fr 1fr;
-            grid-template-rows: 1.8fr 1.2fr;
-            gap: 12px;
-            height: 100%;
-            min-height: 600px;
-        }
-
-        .block {
-            background: #1e293b;
-            border: 2px solid #334155;
-            border-radius: 6px;
-            padding: 16px;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
-
-        .block:hover {
-            border-color: #38bdf8;
-            background: #1a2a3a;
-        }
-
-        .block-title {
-            font-size: 12px;
-            font-weight: 700;
-            color: #38bdf8;
-            margin-bottom: 10px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            border-bottom: 1px solid #334155;
-            padding-bottom: 6px;
-        }
-
-        .block-content {
-            font-size: 11px;
-            color: #cbd5e1;
-            line-height: 1.4;
-            overflow-y: auto;
-            flex: 1;
-        }
-
-        .block-content ul {
-            list-style: none;
-            padding: 0;
-        }
-
-        .block-content li {
-            margin-bottom: 6px;
-            padding-left: 12px;
-            position: relative;
-        }
-
-        .block-content li:before {
-            content: "•";
-            position: absolute;
-            left: 0;
-            color: #38bdf8;
-        }
-
-        /* Grid positioning */
-        .key-partners { grid-column: 1; grid-row: 1 / 3; }
-        .key-activities { grid-column: 2; grid-row: 1; }
-        .key-resources { grid-column: 2; grid-row: 2; }
-        .value-prop { grid-column: 3; grid-row: 1 / 3; }
-        .customer-relationships { grid-column: 4; grid-row: 1; }
-        .channels { grid-column: 4; grid-row: 2; }
-        .customer-segments { grid-column: 5; grid-row: 1 / 3; }
-        .cost-structure { grid-column: 1 / 3; grid-row: 3; }
-        .revenue-streams { grid-column: 3 / 6; grid-row: 3; }
-
-        /* Value prop gets special treatment */
-        .value-prop {
-            background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%);
-            border: 2px solid #38bdf8;
-        }
-
-        .value-prop .block-title {
-            color: #38bdf8;
-            font-size: 13px;
-        }
-
-        .value-prop .block-content {
-            color: #cbd5e1;
-            font-size: 12px;
-        }
-
-        .metrics-strip {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 16px;
-            padding: 0;
-            background: #1e293b;
-            border-top: 1px solid #334155;
-        }
-
-        .metric-card {
-            padding: 16px;
-            text-align: center;
-            border-right: 1px solid #334155;
-        }
-
-        .metric-card:last-child {
-            border-right: none;
-        }
-
-        .metric-label {
-            font-size: 10px;
-            color: #94a3b8;
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-            margin-bottom: 4px;
-        }
-
-        .metric-value {
-            font-size: 16px;
-            font-weight: 700;
-            color: #38bdf8;
-        }
-
-        .document-footer {
-            background: #0f172a;
-            padding: 12px 32px;
-            border-top: 1px solid #334155;
-            text-align: center;
-            font-size: 11px;
-            color: #64748b;
-        }
-    </style>
+<meta charset="UTF-8" />
+<title>Gratia — Business Model Canvas · Kinetic Labs (Sample)</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<script src="../../auth.js"></script>
+<link rel="stylesheet" href="../_design.css">
+<script>(function(){try{const s=localStorage.getItem('apollo-theme');if(s==='light'||s==='dark')document.documentElement.setAttribute('data-theme',s);}catch(e){}})();</script>
+<style>
+  .canvas { display: grid; grid-template-columns: 1fr 1fr 1fr 1fr 1fr; grid-template-rows: 1fr 1fr 0.6fr; gap: 8px; grid-template-areas: "kp ka vp cr cs" "kp kr vp ch cs" "co co co rs rs"; min-height: 720px; }
+  .bmc-cell.kp { grid-area: kp; }
+  .bmc-cell.ka { grid-area: ka; }
+  .bmc-cell.kr { grid-area: kr; }
+  .bmc-cell.vp { grid-area: vp; background: var(--gold-dim); border-color: var(--gold-line); }
+  .bmc-cell.vp h4 { color: var(--gold-ink); }
+  .bmc-cell.cr { grid-area: cr; }
+  .bmc-cell.ch { grid-area: ch; }
+  .bmc-cell.cs { grid-area: cs; }
+  .bmc-cell.co { grid-area: co; background: var(--bg-2); }
+  .bmc-cell.rs { grid-area: rs; background: rgba(22, 163, 138, 0.07); border-color: var(--green-line); }
+  .bmc-cell.rs h4 { color: var(--green-ink); }
+  .bmc-cell { display: flex; flex-direction: column; }
+  .bmc-cell ul { flex: 1; }
+  .bmc-cell .meta { font-size: 10px; color: var(--ink-3); margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--border); font-family: 'JetBrains Mono', monospace; letter-spacing: 0.04em; }
+</style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>Business Model Canvas: Industrial Equipment Rental Marketplace</h1>
-            <div class="header-meta">
-                <span><strong>Client:</strong> Kinetic Labs</span>
-                <span><strong>Date:</strong> January 8, 2026</span>
-                <span><strong>Version:</strong> 1.2 (Pre-Series A)</span>
-            </div>
-        </div>
+<div id="deck-content">
+<div class="glow"></div>
 
-        <div class="canvas-wrapper">
-            <div class="canvas">
-                <!-- Key Partners -->
-                <div class="block key-partners">
-                    <div class="block-title">Key Partners</div>
-                    <div class="block-content">
-                        <ul>
-                            <li>Equipment OEMs (Caterpillar, John Deere, AGCO)</li>
-                            <li>Insurance underwriters & brokers</li>
-                            <li>Logistics & delivery providers</li>
-                            <li>Equipment financing partners</li>
-                            <li>Contractor associations & networks</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- Key Activities -->
-                <div class="block key-activities">
-                    <div class="block-title">Key Activities</div>
-                    <div class="block-content">
-                        <ul>
-                            <li>Marketplace matching & algorithms</li>
-                            <li>Equipment inspection & certification</li>
-                            <li>Payment processing & settlement</li>
-                            <li>Dispute resolution & arbitration</li>
-                            <li>Data analytics & demand forecasting</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- Key Resources -->
-                <div class="block key-resources">
-                    <div class="block-title">Key Resources</div>
-                    <div class="block-content">
-                        <ul>
-                            <li>Proprietary matching algorithm (ML)</li>
-                            <li>Equipment condition database (500K+ units)</li>
-                            <li>400+ verified owner profiles</li>
-                            <li>$2M equipment insurance pool</li>
-                            <li>Technology infrastructure (cloud)</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- Value Proposition (center, emphasized) -->
-                <div class="block value-prop">
-                    <div class="block-title">Value Proposition</div>
-                    <div class="block-content">
-                        <strong>Rent any industrial equipment in 24hrs</strong> vs 2-week dealer lead time. Full insurance included. No long-term commitment. Transparent pricing. Certified equipment condition.
-                    </div>
-                </div>
-
-                <!-- Customer Relationships -->
-                <div class="block customer-relationships">
-                    <div class="block-title">Customer Relationships</div>
-                    <div class="block-content">
-                        <ul>
-                            <li>Self-serve marketplace</li>
-                            <li>Dedicated account mgrs (>$50K/mo)</li>
-                            <li>24/7 support hotline</li>
-                            <li>In-app chat & knowledge base</li>
-                            <li>Community forum</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- Channels -->
-                <div class="block channels">
-                    <div class="block-title">Channels</div>
-                    <div class="block-content">
-                        <ul>
-                            <li>Direct platform (web/mobile app)</li>
-                            <li>Contractor association partnerships</li>
-                            <li>Equipment dealer referral network</li>
-                            <li>Google/LinkedIn/Facebook ads</li>
-                            <li>Industry events & sponsorships</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- Customer Segments -->
-                <div class="block customer-segments">
-                    <div class="block-title">Customer Segments</div>
-                    <div class="block-content">
-                        <ul>
-                            <li><strong>General contractors:</strong> $5K-50K/mo</li>
-                            <li><strong>Specialty subs:</strong> $2K-15K/mo (HVAC, electrical)</li>
-                            <li><strong>Municipal/Government:</strong> $10K-100K/mo</li>
-                            <li><strong>Project renters:</strong> Seasonal demand spikes</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- Cost Structure -->
-                <div class="block cost-structure">
-                    <div class="block-title">Cost Structure</div>
-                    <div class="block-content">
-                        <ul>
-                            <li>Platform operations & hosting: 35%</li>
-                            <li>Insurance & claims processing: 25%</li>
-                            <li>Sales & marketing: 20%</li>
-                            <li>General & administrative: 12%</li>
-                            <li>Equipment inspection & logistics: 8%</li>
-                        </ul>
-                    </div>
-                </div>
-
-                <!-- Revenue Streams -->
-                <div class="block revenue-streams">
-                    <div class="block-title">Revenue Streams</div>
-                    <div class="block-content">
-                        <ul>
-                            <li><strong>Transaction fee:</strong> 8.5% of rental value</li>
-                            <li><strong>Premium listings:</strong> $299/month (featured placement)</li>
-                            <li><strong>Insurance markup:</strong> 2.5% premium above carrier</li>
-                            <li><strong>Financing referral:</strong> 1% of financed amounts</li>
-                            <li><strong>Data analytics access:</strong> $5K-50K/mo (equipment owners only)</li>
-                        </ul>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="metrics-strip">
-            <div class="metric-card">
-                <div class="metric-label">GMV Run Rate</div>
-                <div class="metric-value">$12M</div>
-            </div>
-            <div class="metric-card">
-                <div class="metric-label">Take Rate</div>
-                <div class="metric-value">8.5%</div>
-            </div>
-            <div class="metric-card">
-                <div class="metric-label">Contribution Margin</div>
-                <div class="metric-value">42%</div>
-            </div>
-            <div class="metric-card">
-                <div class="metric-label">Break-Even GMV</div>
-                <div class="metric-value">$18M</div>
-            </div>
-        </div>
-
-        <div class="document-footer">
-            Sanitized excerpt · Prepared by Gratia · Jan 2026
-        </div>
+<div class="app">
+  <header class="mainnav">
+    <a class="nav-brand" href="../"><span class="nav-brand-fallback">K</span></a>
+    <div class="nav-context"><div class="nctx-1">Kinetic Labs</div><div class="nctx-2">Business Model Canvas · Marketplace v3</div></div>
+    <div class="nav-right">
+      <button class="icon-btn theme-toggle" id="themeToggle" aria-label="Toggle theme"><svg class="ti-moon" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" stroke-linecap="round" stroke-linejoin="round"/></svg><svg class="ti-sun" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" stroke-linecap="round"/></svg></button>
     </div>
-<a href="../" style="position:fixed;top:12px;right:16px;z-index:99999;background:#111827;color:#e2e8f0;padding:6px 16px;border-radius:8px;font-size:13px;font-weight:600;text-decoration:none;border:1px solid #475569;font-family:system-ui,sans-serif;transition:background .15s;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#111827'">← Gallery</a>
+  </header>
+
+  <main class="content wide">
+    <section class="page-head">
+      <div>
+        <div class="eyebrow-row">
+          <span class="eyebrow">Marketplace business model · v3 (post pivot)</span>
+          <span class="status-chip" data-status="green"><span class="dot-pulse"></span>Take rate validated at 12%</span>
+        </div>
+        <h1 class="lede">Two-sided marketplace connecting independent creative studios with mid-market brands. <em>Differentiator: vetted supply + fixed pricing tiers.</em></h1>
+        <p class="sublede">Iterated to v3 after the open-marketplace v1 (race-to-bottom) and the agency-roster v2 (didn't scale). v3 wins by curating supply + bundling pricing — buyers compare on quality not price.</p>
+      </div>
+    </section>
+
+    <div class="canvas">
+      <div class="bmc-cell kp">
+        <h4>Key Partners</h4>
+        <ul><li>Vetted studio network (320 active)</li><li>Brand agencies for white-label spillover</li><li>Stripe (payments)</li><li>Loom (handoff workflow)</li><li>2 staffing partners</li></ul>
+        <div class="meta">340 partners · NPS 68</div>
+      </div>
+      <div class="bmc-cell ka">
+        <h4>Key Activities</h4>
+        <ul><li>Studio vetting + onboarding</li><li>Match-making (brief → studio)</li><li>Project orchestration platform</li><li>QA + dispute handling</li><li>Brand acquisition</li></ul>
+        <div class="meta">Match velocity: 3.2 days median</div>
+      </div>
+      <div class="bmc-cell vp">
+        <h4>Value Proposition</h4>
+        <ul><li><strong>For brands:</strong> A vetted creative studio in 72 hrs, fixed pricing, NPS-tracked work, money-back guarantee</li><li><strong>For studios:</strong> Pre-qualified leads, no business-development overhead, paid in 30 days</li></ul>
+        <div class="meta">Both sides win on time-to-value</div>
+      </div>
+      <div class="bmc-cell cr">
+        <h4>Customer Relationships</h4>
+        <ul><li>Self-serve project setup</li><li>Dedicated CSM for &gt;$50K accounts</li><li>Quarterly creative reviews</li><li>Studio account manager (1:8)</li></ul>
+        <div class="meta">CSM avg book: $1.2M</div>
+      </div>
+      <div class="bmc-cell kr">
+        <h4>Key Resources</h4>
+        <ul><li>Curated studio network + ratings</li><li>Match-making algorithm</li><li>Project management platform</li><li>Brand customer relationships (84)</li><li>Engineering team (12)</li></ul>
+        <div class="meta">Network density = moat</div>
+      </div>
+      <div class="bmc-cell ch">
+        <h4>Channels</h4>
+        <ul><li>Self-serve web (60% of new logos)</li><li>Inbound demo + sales (35%)</li><li>Agency partnerships (5%)</li><li>Studio referrals (closed-loop)</li></ul>
+        <div class="meta">CAC: $4,200 blended</div>
+      </div>
+      <div class="bmc-cell cs">
+        <h4>Customer Segments</h4>
+        <ul><li><strong>Mid-market brands</strong> (50–500 employees) — design needs without in-house team</li><li><strong>Series A–B startups</strong> — quality + speed, no full-time hire yet</li><li><strong>PE portfolio cos.</strong> — playbook-driven brand work across portfolio</li></ul>
+        <div class="meta">84 active · avg ACV $58K</div>
+      </div>
+      <div class="bmc-cell co">
+        <h4>Cost Structure</h4>
+        <ul><li><strong>Studio payouts (88% of GMV)</strong> — pass-through, not margin</li><li>Engineering + product (~$2.4M / yr)</li><li>Sales + marketing (~$1.8M / yr)</li><li>CSMs + account managers (~$1.1M / yr)</li><li>Platform infra (~$280K / yr)</li></ul>
+        <div class="meta">Primarily fixed cost · scale lever = match volume</div>
+      </div>
+      <div class="bmc-cell rs">
+        <h4>Revenue Streams</h4>
+        <ul><li><strong>Take rate</strong> — 12% on every project</li><li><strong>Subscription</strong> — Brand Pro tier: $1,500/mo for unlimited match + dedicated CSM (28% of brands)</li><li><strong>Add-ons</strong> — Rush delivery, brand asset hosting ($240K / yr)</li></ul>
+        <div class="meta">FY26 GMV $48M · revenue $5.8M</div>
+      </div>
+    </div>
+
+    <div style="margin-top: 22px; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px;">
+      <div class="callout"><strong>v3 vs v1 metrics:</strong> Take rate up from 4% → 12% (curation + bundling). NPS up from 11 → 68. Studio churn down from 38% to 9%.</div>
+      <div class="callout amber"><strong>Top risk:</strong> Studio supply concentration — 12 studios are 38% of fulfillment. Diversification target: 60+ studios at &gt;1% of GMV by FY27.</div>
+      <div class="callout blue"><strong>Next experiment:</strong> Subscription Brand Pro tier — pricing test running. Early data: 28% adoption at $1.5K/mo, retention parity with PAYG.</div>
+    </div>
+
+    <footer class="foot">
+      <div>kinetic-labs · bmc · v3.2</div>
+      <div>updated post-Q1 26 board</div>
+    </footer>
+  </main>
+</div>
+
+<script>
+document.getElementById('themeToggle').addEventListener('click', () => {
+  const cur = document.documentElement.getAttribute('data-theme') || 'dark';
+  const next = cur === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  try { localStorage.setItem('apollo-theme', next); } catch (e) {}
+});
+</script>
+
+</div>
 </body>
 </html>

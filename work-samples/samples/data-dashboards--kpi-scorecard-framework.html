@@ -1,620 +1,1203 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>KPI Scorecard Framework — Apex Logistics (Sample)</title>
-  <style>
-    :root{
-      --bg:#f6f7f9;
-      --slide:#ffffff;
-      --ink:#111827;
-      --muted:#6b7280;
-      --line:#e5e7eb;
-      --accent:#18A873;
-      --accent-2:#0ea5e9;
-      --warn:#f59e0b;
-      --danger:#ef4444;
-      --violet:#8b5cf6;
-      --shadow: 0 10px 24px rgba(17,24,39,.10);
-      --radius: 16px;
-      --mono: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
-      --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, "Apple Color Emoji","Segoe UI Emoji";
-    }
-    *{ box-sizing:border-box; margin:0; padding:0; }
-    body{ font-family:var(--sans); background:var(--bg); color:var(--ink); }
+<meta charset="UTF-8" />
+<title>Gratia — KPI Scorecard · Apex Logistics (Sample)</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<script src="../../auth.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>
+  (function () {
+    try {
+      const saved = localStorage.getItem('apollo-theme');
+      if (saved === 'light' || saved === 'dark') {
+        document.documentElement.setAttribute('data-theme', saved);
+      }
+    } catch (e) {}
+  })();
+</script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body, h1, h2, h3, h4, p, ul, li, figure, div, section, nav, header, main, button { margin: 0; padding: 0; }
+  button { background: none; border: none; color: inherit; cursor: pointer; font: inherit; }
+  ul { list-style: none; }
 
-    .deck{ max-width:1280px; margin:22px auto; padding:0 14px 40px; }
-    .topbar{
-      display:flex; align-items:center; justify-content:space-between;
-      margin:6px 2px 14px; color:var(--muted); font-size:13px;
-    }
-    .kbd{
-      font-family:var(--mono); border:1px solid var(--line);
-      padding:2px 8px; border-radius:10px; background:#fff; color:#374151;
-    }
+  :root, [data-theme="dark"] {
+    --bg: #0b0c0e;
+    --bg-1: #111214;
+    --bg-2: #17181b;
+    --bg-3: #1e1f22;
+    --bg-4: #27282c;
+    --border: #232428;
+    --border-2: #33353b;
+    --ink-0: #edeef1;
+    --ink-1: #d4d6db;
+    --ink-2: #8f9198;
+    --ink-3: #5c5e65;
+    --ink-4: #36383d;
 
-    .slide{
-      display:none; background:var(--slide); border:1px solid var(--line);
-      border-radius:var(--radius); box-shadow:var(--shadow);
-      overflow:hidden; min-height:720px; position:relative;
-    }
-    .slide.active{ display:block; }
-    .slide-inner{ padding:26px 32px 58px; }
+    --gold: #16a38a;
+    --gold-bright: #2cc2a5;
+    --gold-ink: #5ad9bc;
+    --gold-dim: rgba(22, 163, 138, 0.13);
+    --gold-line: rgba(22, 163, 138, 0.30);
 
-    .hdr{
-      display:flex; align-items:flex-start; justify-content:space-between;
-      gap:18px; padding:20px 32px 0;
-    }
-    .hdr-left .kicker{
-      font-size:12px; letter-spacing:.08em; text-transform:uppercase;
-      color:var(--accent); font-weight:750; margin-bottom:6px;
-    }
-    .hdr-left h1{ font-size:28px; line-height:1.18; margin:0 0 6px; font-weight:780; }
-    .hdr-left .sub{ margin:0; color:var(--muted); font-size:14px; line-height:1.35; max-width:900px; }
-    .hdr-right{ text-align:right; color:var(--muted); font-size:12px; line-height:1.4; white-space:nowrap; }
-    .pill{
-      display:inline-flex; align-items:center; gap:8px;
-      padding:6px 10px; border:1px solid var(--line); border-radius:999px;
-      background:#fff; margin-top:6px;
-    }
-    .dot{ width:10px; height:10px; border-radius:999px; background:var(--accent); display:inline-block; }
+    --green: #16a38a;
+    --green-ink: #5ad9bc;
+    --green-dim: rgba(22, 163, 138, 0.14);
+    --green-line: rgba(22, 163, 138, 0.32);
 
-    .ftr{
-      position:absolute; left:0; right:0; bottom:0;
-      border-top:1px solid var(--line); padding:10px 18px;
-      display:flex; align-items:center; justify-content:space-between;
-      font-size:12px; color:var(--muted); background:#fff;
-    }
-    .brand{ display:flex; align-items:center; gap:10px; font-weight:780; color:#111827; }
-    .brand .mark{
-      width:18px; height:18px; border-radius:6px;
-      background:linear-gradient(135deg, var(--accent), #0bd3a3); display:inline-block;
-    }
-    .trust{ font-family:var(--mono); font-size:11px; color:#64748b; }
+    --amber: #e6b259;
+    --amber-ink: #f2ca85;
+    --amber-dim: rgba(230, 178, 89, 0.14);
+    --amber-line: rgba(230, 178, 89, 0.32);
 
-    .grid-2{ display:grid; grid-template-columns:1fr 1fr; gap:16px; }
-    .grid-3{ display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; }
-    .grid-4{ display:grid; grid-template-columns:1fr 1fr 1fr 1fr; gap:12px; }
+    --red: #e06f64;
+    --red-ink: #f0928a;
+    --red-dim: rgba(224, 111, 100, 0.14);
+    --red-line: rgba(224, 111, 100, 0.32);
 
-    .card{
-      border:1px solid var(--line); border-radius:14px;
-      padding:14px; background:#fff;
-    }
-    .card h3{ margin:0 0 8px; font-size:13px; color:#111827; letter-spacing:.02em; }
-    .card p{ margin:0; color:var(--muted); font-size:13px; line-height:1.35; }
+    --shadow: 0 1px 1px rgba(0,0,0,0.3), 0 10px 32px rgba(0,0,0,0.4);
+    --shadow-drawer: -12px 0 48px rgba(0,0,0,0.55);
 
-    .metric{
-      display:flex; align-items:baseline; justify-content:space-between; gap:10px;
-      padding:10px 12px; border:1px solid var(--line); border-radius:12px; background:#fbfbfc;
-    }
-    .metric .label{ color:var(--muted); font-size:12px; }
-    .metric .value{ font-weight:780; font-size:16px; }
+    --nav-bg: rgba(11, 12, 14, 0.85);
+    --glow: radial-gradient(ellipse at top right, rgba(22, 163, 138, 0.08), transparent 65%);
+    --row-hover: rgba(255, 255, 255, 0.013);
+    --avatar-grad: linear-gradient(135deg, #0d6b5a, #16a38a);
+  }
 
-    .badge{
-      display:inline-flex; align-items:center; padding:4px 9px;
-      border-radius:999px; font-size:12px; border:1px solid var(--line);
-      color:#374151; background:#fff; white-space:nowrap;
-    }
-    .badge.win{ border-color:rgba(24,168,115,.35); background:rgba(24,168,115,.08); color:#0f5132; }
-    .badge.risk{ border-color:rgba(245,158,11,.35); background:rgba(245,158,11,.10); color:#7a4b00; }
-    .badge.gap{ border-color:rgba(239,68,68,.30); background:rgba(239,68,68,.08); color:#7f1d1d; }
-    .badge.info{ border-color:rgba(14,165,233,.35); background:rgba(14,165,233,.10); color:#0b4a6f; }
+  [data-theme="light"] {
+    --bg: #fafaf8;
+    --bg-1: #ffffff;
+    --bg-2: #f4f4f1;
+    --bg-3: #ebebe7;
+    --bg-4: #d8d8d3;
+    --border: #e6e6e1;
+    --border-2: #d2d2cc;
+    --ink-0: #1a1a1c;
+    --ink-1: #3a3b3e;
+    --ink-2: #65676c;
+    --ink-3: #93959a;
+    --ink-4: #c2c3c7;
 
-    .viz{
-      border:1px solid var(--line); border-radius:14px;
-      background:#fff; padding:12px;
-    }
-    .viz-title{
-      display:flex; align-items:center; justify-content:space-between; margin-bottom:10px;
-    }
-    .viz-title h3{ margin:0; font-size:13px; letter-spacing:.02em; }
-    .viz-title .note{ color:var(--muted); font-size:12px; }
+    --gold: #0e8a73;
+    --gold-bright: #16a38a;
+    --gold-ink: #0e8a73;
+    --gold-dim: rgba(22, 163, 138, 0.10);
+    --gold-line: rgba(22, 163, 138, 0.32);
 
-    .callout{
-      border-left:4px solid var(--accent); padding:12px;
-      background:rgba(24,168,115,.06); border-radius:12px;
-      border:1px solid rgba(24,168,115,.18);
-    }
-    .callout h4{ margin:0 0 6px; font-size:13px; }
-    .callout p{ margin:0; color:#374151; font-size:13px; line-height:1.4; }
+    --green: #0e8a73;
+    --green-ink: #0e8a73;
+    --green-dim: rgba(22, 163, 138, 0.10);
+    --green-line: rgba(22, 163, 138, 0.32);
 
-    /* Quadrant */
-    .quadrant{
-      display:grid; grid-template-columns:1fr 1fr; gap:14px;
-    }
-    .q-box{
-      border:1px solid var(--line); border-radius:14px;
-      padding:16px; background:#fbfbfc;
-    }
-    .q-box h4{
-      font-size:13px; font-weight:750; margin:0 0 10px;
-      display:flex; align-items:center; gap:8px;
-    }
-    .q-box .q-icon{
-      width:28px; height:28px; border-radius:8px; display:inline-flex;
-      align-items:center; justify-content:center; font-size:14px; color:#fff;
-    }
-    .q-metric{
-      display:flex; align-items:baseline; justify-content:space-between;
-      padding:6px 0; border-bottom:1px solid #f3f4f6; font-size:13px;
-    }
-    .q-metric:last-child{ border-bottom:none; }
-    .q-metric .q-name{ color:#374151; }
-    .q-metric .q-vals{ display:flex; gap:12px; align-items:baseline; }
-    .q-metric .q-actual{ font-weight:700; color:#111827; }
-    .q-metric .q-target{ color:var(--muted); font-size:11px; }
+    --amber: #c98a2b;
+    --amber-ink: #a8721d;
+    --amber-dim: rgba(230, 178, 89, 0.16);
+    --amber-line: rgba(201, 138, 43, 0.32);
 
-    /* Flow diagram */
-    .flow-grid{
-      display:grid; grid-template-columns:1fr 60px 1fr; gap:0; align-items:start;
-    }
-    .flow-col{ display:flex; flex-direction:column; gap:10px; }
-    .flow-item{
-      border:1px solid var(--line); border-radius:12px;
-      padding:10px 14px; background:#fbfbfc;
-    }
-    .flow-item .fi-name{ font-size:13px; font-weight:600; color:#111827; }
-    .flow-item .fi-desc{ font-size:11px; color:var(--muted); margin-top:2px; }
-    .flow-arrows{
-      display:flex; flex-direction:column; align-items:center; justify-content:center;
-      gap:10px; padding-top:10px;
-    }
-    .flow-arrows .arrow{
-      font-size:20px; color:var(--accent); font-weight:700;
-    }
+    --red: #d04a3d;
+    --red-ink: #b53a2e;
+    --red-dim: rgba(208, 74, 61, 0.10);
+    --red-line: rgba(208, 74, 61, 0.32);
 
-    /* Threshold table */
-    table{
-      width:100%; border-collapse:separate; border-spacing:0;
-      border:1px solid var(--line); border-radius:14px;
-      overflow:hidden; background:#fff; font-size:12.5px;
-    }
-    thead th{
-      background:#f9fafb; text-align:left; color:#374151;
-      font-weight:780; padding:10px 10px; border-bottom:1px solid var(--line);
-      vertical-align:bottom;
-    }
-    tbody td{
-      padding:10px 10px; border-bottom:1px solid var(--line);
-      vertical-align:top; color:#111827;
-    }
-    tbody tr:last-child td{ border-bottom:none; }
-    .cell-g{ background:rgba(24,168,115,.10); color:#0f5132; font-weight:600; }
-    .cell-a{ background:rgba(245,158,11,.12); color:#7a4b00; font-weight:600; }
-    .cell-r{ background:rgba(239,68,68,.10); color:#7f1d1d; font-weight:600; }
+    --shadow: 0 1px 2px rgba(20, 22, 30, 0.04), 0 8px 24px rgba(20, 22, 30, 0.06);
+    --shadow-drawer: -8px 0 32px rgba(20, 22, 30, 0.12);
+    --nav-bg: rgba(255, 255, 255, 0.88);
+    --glow: radial-gradient(ellipse at top right, rgba(22, 163, 138, 0.06), transparent 65%);
+    --row-hover: rgba(0, 0, 0, 0.025);
+    --avatar-grad: linear-gradient(135deg, #16a38a, #0e8a73);
+  }
 
-    @media print{
-      body{ background:#fff; }
-      .topbar{ display:none; }
-      .deck{ margin:0; max-width:none; padding:0; }
-      .slide{ display:block; box-shadow:none; border:none; border-radius:0; page-break-after:always; min-height:auto; }
-      .slide-inner{ padding-bottom:58px; }
+  body {
+    background: var(--bg);
+    color: var(--ink-0);
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    letter-spacing: -0.005em;
+    font-feature-settings: 'cv11', 'ss01', 'ss03';
+    overflow-x: hidden;
+  }
+
+  .glow {
+    position: fixed; inset: 0; pointer-events: none;
+    background: var(--glow); z-index: 0;
+  }
+
+  .serif { font-family: 'Inter', system-ui, sans-serif; font-weight: 600; letter-spacing: -0.015em; }
+  .mono { font-family: 'JetBrains Mono', monospace; font-feature-settings: 'ss02'; }
+  .num { font-variant-numeric: tabular-nums; }
+  .eyebrow {
+    font-size: 10.5px; font-weight: 600; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--ink-3);
+  }
+
+  /* ========== APP LAYOUT ========== */
+  .app {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    position: relative;
+    z-index: 1;
+  }
+
+  .mainnav {
+    display: flex; align-items: center;
+    padding: 14px 28px;
+    border-bottom: 1px solid var(--border);
+    background: var(--nav-bg);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    position: sticky; top: 0; z-index: 20;
+  }
+  .nav-brand {
+    display: flex; align-items: center;
+    padding-right: 20px; margin-right: 16px;
+    border-right: 1px solid var(--border);
+  }
+  .nav-brand-fallback {
+    font-family: 'Inter', sans-serif;
+    font-size: 17px; font-weight: 700;
+    color: var(--gold-ink);
+    letter-spacing: -0.02em;
+    width: 28px; height: 28px;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--gold-dim);
+    border: 1px solid var(--gold-line);
+    border-radius: 4px;
+  }
+  .nav-context {
+    display: flex; flex-direction: column; gap: 1px;
+  }
+  .nav-context .nctx-1 { font-size: 13px; font-weight: 600; color: var(--ink-0); letter-spacing: -0.012em; }
+  .nav-context .nctx-2 { font-size: 11px; color: var(--ink-3); }
+  .nav-right { margin-left: auto; display: flex; align-items: center; gap: 8px; }
+  .icon-btn {
+    width: 32px; height: 32px;
+    display: inline-flex; align-items: center; justify-content: center;
+    border-radius: 6px;
+    color: var(--ink-2);
+    transition: all 0.14s;
+  }
+  .icon-btn:hover { color: var(--ink-0); background: var(--bg-2); }
+  .icon-btn svg { width: 16px; height: 16px; }
+  .theme-toggle .ti-sun { display: none; }
+  [data-theme="light"] .theme-toggle .ti-moon { display: none; }
+  [data-theme="light"] .theme-toggle .ti-sun { display: block; }
+  .avatar-btn {
+    height: 32px; padding: 0 6px 0 4px;
+    display: inline-flex; align-items: center; gap: 8px;
+    border-radius: 16px;
+    transition: background 0.14s;
+  }
+  .avatar-btn:hover { background: var(--bg-2); }
+  .avatar {
+    width: 24px; height: 24px;
+    background: var(--avatar-grad);
+    color: white;
+    font-size: 10.5px; font-weight: 600;
+    border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center;
+    letter-spacing: 0;
+  }
+
+  /* ========== CONTENT ========== */
+  .content {
+    flex: 1;
+    padding: 26px 32px 60px;
+    max-width: 1280px;
+    margin: 0 auto;
+    width: 100%;
+  }
+
+  /* ========== PAGE HEAD ========== */
+  .page-head {
+    display: flex; align-items: flex-start; justify-content: space-between;
+    gap: 24px;
+    padding-bottom: 18px;
+    margin-bottom: 22px;
+    border-bottom: 1px solid var(--border);
+  }
+  .page-head .eyebrow-row {
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 6px;
+  }
+  .lede {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 22px; font-weight: 600; line-height: 1.34;
+    letter-spacing: -0.018em;
+    color: var(--ink-0);
+    max-width: 760px;
+  }
+  .lede em { color: var(--gold-ink); font-style: normal; font-weight: 600; }
+  .sublede {
+    font-size: 13.5px; color: var(--ink-2);
+    margin-top: 6px;
+    line-height: 1.55;
+    max-width: 760px;
+  }
+  .head-actions {
+    display: flex; align-items: center; gap: 8px;
+    flex-shrink: 0;
+  }
+  .btn {
+    height: 32px; padding: 0 12px;
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 12.5px; font-weight: 500;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    color: var(--ink-1);
+    background: var(--bg-1);
+    transition: all 0.14s;
+  }
+  .btn:hover { color: var(--ink-0); border-color: var(--border-2); background: var(--bg-2); }
+  .btn.primary {
+    color: var(--gold-ink);
+    background: var(--gold-dim);
+    border-color: var(--gold-line);
+  }
+  .btn svg { width: 13px; height: 13px; }
+
+  .status-chip {
+    display: inline-flex; align-items: center; gap: 6px;
+    height: 22px; padding: 0 10px;
+    border-radius: 999px;
+    font-size: 11px; font-weight: 500;
+    font-variant-numeric: tabular-nums;
+  }
+  .status-chip[data-status="green"] {
+    color: var(--green-ink); background: var(--green-dim); border: 1px solid var(--green-line);
+  }
+  .status-chip[data-status="amber"] {
+    color: var(--amber-ink); background: var(--amber-dim); border: 1px solid var(--amber-line);
+  }
+  .status-chip[data-status="red"] {
+    color: var(--red-ink); background: var(--red-dim); border: 1px solid var(--red-line);
+  }
+  .status-chip .dot-pulse {
+    width: 5px; height: 5px; border-radius: 50%;
+    background: currentColor;
+    box-shadow: 0 0 0 2px color-mix(in srgb, currentColor 18%, transparent);
+    animation: pulse 1.6s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.45; }
+  }
+
+  /* ========== PERIOD SELECTOR ========== */
+  .period-bar {
+    display: flex; align-items: center; gap: 6px;
+    margin-bottom: 22px;
+    padding: 10px 12px;
+    background: var(--bg-1);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+  }
+  .period-bar .period-label {
+    font-size: 10px; font-weight: 600; color: var(--ink-3);
+    text-transform: uppercase; letter-spacing: 0.12em;
+    margin-right: 6px;
+  }
+  .period-chip {
+    height: 26px; padding: 0 11px;
+    display: inline-flex; align-items: center;
+    font-size: 12px; font-weight: 500; color: var(--ink-2);
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    transition: all 0.14s;
+  }
+  .period-chip:hover { color: var(--ink-0); border-color: var(--border-2); }
+  .period-chip.active {
+    color: var(--ink-0); background: var(--bg-3); border-color: var(--ink-4);
+  }
+  .period-spacer { flex: 1; }
+  .period-meta { font-size: 11px; color: var(--ink-3); font-variant-numeric: tabular-nums; }
+
+  /* ========== KPI ROW ========== */
+  .kpi-row {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin-bottom: 22px;
+  }
+  .kpi {
+    background: var(--bg-1);
+    padding: 14px 18px;
+    display: flex; flex-direction: column; gap: 4px;
+  }
+  .kpi:first-child { border-radius: 8px 0 0 8px; }
+  .kpi:last-child { border-radius: 0 8px 8px 0; }
+  .kpi .label {
+    font-size: 10.5px; font-weight: 500; letter-spacing: 0.04em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+  .kpi .value {
+    font-family: 'Inter', sans-serif;
+    font-size: 28px; font-weight: 600;
+    letter-spacing: -0.022em;
+    color: var(--ink-0);
+    line-height: 1.05;
+    display: flex; align-items: baseline; gap: 4px;
+    margin-top: 4px;
+  }
+  .kpi .unit { font-size: 14px; color: var(--ink-3); font-weight: 500; letter-spacing: 0; }
+  .kpi .delta {
+    margin-top: 2px;
+    font-size: 11.5px; color: var(--ink-2);
+    display: flex; align-items: center; gap: 4px;
+  }
+  .kpi .delta.up { color: var(--green-ink); }
+  .kpi .delta.down { color: var(--red-ink); }
+  .kpi .delta.flat { color: var(--ink-3); }
+
+  /* ========== HERO GRID ========== */
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 1.4fr 1fr;
+    gap: 16px;
+    margin-bottom: 22px;
+  }
+  .card {
+    background: var(--bg-1);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    display: flex; flex-direction: column;
+  }
+  .card-head {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 14px 18px 12px;
+    border-bottom: 1px solid var(--border);
+  }
+  .card-head h3 {
+    font-family: 'Inter', sans-serif;
+    font-size: 14px; font-weight: 600; letter-spacing: -0.014em;
+    color: var(--ink-0);
+  }
+  .card-head .meta { font-size: 11px; color: var(--ink-3); }
+  .card-body { padding: 14px 18px; }
+
+  /* ========== QUADRANT GRID ========== */
+  .quad-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 12px;
+  }
+  .quadrant {
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    padding: 12px 14px;
+    cursor: pointer;
+    transition: border-color 0.14s, transform 0.14s;
+  }
+  .quadrant:hover { border-color: var(--border-2); }
+  .quadrant.active {
+    border-color: var(--gold-line);
+    background: var(--gold-dim);
+  }
+  .quadrant .q-head {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 10px;
+    padding-bottom: 9px;
+    border-bottom: 1px solid var(--border);
+  }
+  .quadrant .q-name {
+    font-size: 11px; font-weight: 600; letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-1);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .quadrant .q-name .q-dot {
+    width: 8px; height: 8px; border-radius: 2px;
+  }
+  .quadrant .q-rag {
+    display: flex; gap: 4px;
+    font-size: 10.5px; font-weight: 500;
+    color: var(--ink-3);
+    font-variant-numeric: tabular-nums;
+  }
+  .quadrant .q-rag .rag-pip {
+    width: 12px; height: 12px; border-radius: 3px;
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 9px;
+  }
+  .quadrant .q-rag .rag-pip.g { background: var(--green-dim); color: var(--green-ink); border: 1px solid var(--green-line); }
+  .quadrant .q-rag .rag-pip.a { background: var(--amber-dim); color: var(--amber-ink); border: 1px solid var(--amber-line); }
+  .quadrant .q-rag .rag-pip.r { background: var(--red-dim); color: var(--red-ink); border: 1px solid var(--red-line); }
+
+  .q-metric {
+    display: grid;
+    grid-template-columns: 1fr auto auto;
+    align-items: center;
+    gap: 12px;
+    padding: 7px 0;
+    font-size: 12.5px;
+  }
+  .q-metric + .q-metric { border-top: 1px solid var(--border); }
+  .q-metric .qm-name { color: var(--ink-1); }
+  .q-metric .qm-val {
+    font-family: 'Inter', sans-serif;
+    font-weight: 600; color: var(--ink-0);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .q-metric .qm-tgt {
+    font-size: 10.5px; color: var(--ink-3);
+    font-variant-numeric: tabular-nums;
+    margin-left: 6px;
+  }
+  .q-metric .qm-status {
+    width: 7px; height: 7px; border-radius: 50%;
+  }
+  .q-metric .qm-status.g { background: var(--green); }
+  .q-metric .qm-status.a { background: var(--amber); }
+  .q-metric .qm-status.r { background: var(--red); }
+
+  /* ========== CAUSAL FLOW (right card) ========== */
+  .flow {
+    display: grid;
+    grid-template-columns: 1fr;
+    gap: 9px;
+  }
+  .flow-row {
+    display: grid;
+    grid-template-columns: 1fr 22px 1fr;
+    align-items: center;
+    gap: 6px;
+  }
+  .flow-pill {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 10px;
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-left-width: 3px;
+    border-radius: 4px;
+    font-size: 12px;
+    transition: border-color 0.14s, background 0.14s;
+    min-width: 0;
+  }
+  .flow-pill:hover { background: var(--bg-3); }
+  .flow-pill.lead { border-left-color: var(--green); }
+  .flow-pill.lag { border-left-color: var(--gold); }
+  .flow-pill.lead.warn { border-left-color: var(--amber); }
+  .flow-pill.lag.warn { border-left-color: var(--amber); }
+  .flow-pill.lag.danger { border-left-color: var(--red); }
+  .flow-pill .fp-name {
+    color: var(--ink-0);
+    font-weight: 500;
+    font-size: 11.5px;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    flex: 1; min-width: 0;
+  }
+  .flow-pill .fp-val {
+    color: var(--ink-2);
+    font-size: 10.5px;
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+  .flow-pill.warn .fp-val,
+  .flow-pill.danger .fp-val {
+    color: var(--amber-ink);
+  }
+  .flow-arrow {
+    display: flex; align-items: center; justify-content: center;
+    color: var(--ink-3);
+    font-size: 14px;
+  }
+  .flow-cap {
+    display: flex; justify-content: space-between;
+    font-size: 10px; font-weight: 600; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--ink-3);
+    margin-bottom: 6px;
+    padding: 0 4px;
+  }
+  .flow-cap span:first-child { color: var(--green-ink); }
+  .flow-cap span:last-child { color: var(--gold-ink); }
+
+  .flow-callout {
+    margin-top: 14px;
+    padding: 11px 13px;
+    background: var(--amber-dim);
+    border: 1px solid var(--amber-line);
+    border-radius: 6px;
+    font-size: 11.5px; line-height: 1.5;
+    color: var(--ink-1);
+  }
+  .flow-callout strong { color: var(--amber-ink); font-weight: 600; }
+
+  /* ========== KPI MATRIX ========== */
+  .matrix-section { margin-bottom: 22px; }
+  .matrix-head {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 14px;
+  }
+  .matrix-head .title-group {
+    display: flex; align-items: baseline; gap: 14px;
+  }
+  .matrix-head h2 {
+    font-family: 'Inter', sans-serif;
+    font-size: 17px; font-weight: 600; letter-spacing: -0.014em;
+  }
+  .matrix-head .count { color: var(--ink-3); font-size: 12px; }
+
+  .filter-bar { display: flex; align-items: center; gap: 6px; }
+  .chip {
+    height: 28px; padding: 0 11px;
+    display: inline-flex; align-items: center; gap: 7px;
+    font-size: 12px; font-weight: 500;
+    border-radius: 6px;
+    color: var(--ink-2);
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    transition: all 0.14s;
+  }
+  .chip:hover { color: var(--ink-0); border-color: var(--border-2); }
+  .chip.active {
+    color: var(--ink-0); background: var(--bg-3); border-color: var(--ink-4);
+  }
+  .chip .ct { color: var(--ink-3); font-weight: 500; font-variant-numeric: tabular-nums; }
+  .chip.active .ct { color: var(--ink-2); }
+  .chip .dot { width: 6px; height: 6px; border-radius: 50%; }
+  .chip .dot.r { background: var(--red); }
+  .chip .dot.a { background: var(--amber); }
+  .chip .dot.g { background: var(--green); }
+
+  .matrix {
+    background: var(--bg-1);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+  }
+  .matrix-head-row {
+    display: grid;
+    grid-template-columns: 56px 1fr 130px 120px 120px 140px 110px 36px;
+    gap: 14px;
+    padding: 11px 18px;
+    font-size: 10px; font-weight: 600;
+    color: var(--ink-3);
+    letter-spacing: 0.1em; text-transform: uppercase;
+    border-bottom: 1px solid var(--border);
+    align-items: center;
+  }
+  .matrix-row {
+    display: grid;
+    grid-template-columns: 56px 1fr 130px 120px 120px 140px 110px 36px;
+    gap: 14px;
+    padding: 13px 18px;
+    align-items: center;
+    cursor: pointer;
+    border-bottom: 1px solid var(--border);
+    transition: background 0.12s;
+  }
+  .matrix-row:last-child { border-bottom: none; }
+  .matrix-row:hover { background: var(--row-hover); }
+  .matrix-row .mref { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--ink-3); }
+  .matrix-row .mname {
+    display: flex; align-items: center; gap: 9px;
+    font-size: 13px; color: var(--ink-0);
+    font-weight: 500;
+  }
+  .matrix-row .mname .quad-pip {
+    width: 8px; height: 8px; border-radius: 2px; flex-shrink: 0;
+  }
+  .matrix-row .mthresh {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11.5px;
+    color: var(--ink-2);
+    display: flex; align-items: center; gap: 6px;
+  }
+  .matrix-row .mthresh .gline,
+  .matrix-row .mthresh .aline,
+  .matrix-row .mthresh .rline {
+    height: 4px; border-radius: 2px; flex: 1;
+  }
+  .matrix-row .mthresh .gline { background: var(--green-dim); }
+  .matrix-row .mthresh .aline { background: var(--amber-dim); }
+  .matrix-row .mthresh .rline { background: var(--red-dim); }
+  .matrix-row .mowner {
+    font-size: 12px; color: var(--ink-1);
+    display: flex; align-items: center; gap: 7px;
+  }
+  .matrix-row .mowner .mavatar {
+    width: 22px; height: 22px;
+    background: var(--avatar-grad);
+    color: white;
+    font-size: 10px; font-weight: 600;
+    border-radius: 50%;
+    display: inline-flex; align-items: center; justify-content: center;
+    flex-shrink: 0;
+  }
+  .matrix-row .mcad {
+    font-size: 11px; color: var(--ink-2);
+    text-transform: capitalize;
+  }
+  .matrix-row .mtrend {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 11px;
+    font-variant-numeric: tabular-nums;
+  }
+  .matrix-row .mtrend.up { color: var(--green-ink); }
+  .matrix-row .mtrend.down { color: var(--red-ink); }
+  .matrix-row .mtrend.flat { color: var(--ink-3); }
+  .matrix-row .mchev {
+    color: var(--ink-3); display: flex; justify-content: flex-end;
+  }
+  .matrix-row .mcurrent {
+    font-family: 'Inter', sans-serif;
+    font-size: 13px; font-weight: 600;
+    color: var(--ink-0);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .rag-pill {
+    display: inline-flex; align-items: center; gap: 5px;
+    height: 22px; padding: 0 8px;
+    border-radius: 4px;
+    font-size: 11px; font-weight: 500;
+    text-transform: capitalize;
+  }
+  .rag-pill.g { color: var(--green-ink); background: var(--green-dim); border: 1px solid var(--green-line); }
+  .rag-pill.a { color: var(--amber-ink); background: var(--amber-dim); border: 1px solid var(--amber-line); }
+  .rag-pill.r { color: var(--red-ink); background: var(--red-dim); border: 1px solid var(--red-line); }
+  .rag-pill .rdot { width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
+
+  /* ========== DRAWER ========== */
+  .drawer-overlay {
+    position: fixed; inset: 0;
+    background: rgba(0, 0, 0, 0.45);
+    z-index: 50;
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.2s;
+  }
+  .drawer-overlay.open { opacity: 1; pointer-events: auto; }
+  .drawer {
+    position: fixed; top: 0; right: 0; bottom: 0;
+    width: 480px; max-width: 95vw;
+    background: var(--bg-1);
+    border-left: 1px solid var(--border);
+    box-shadow: var(--shadow-drawer);
+    z-index: 51;
+    transform: translateX(100%);
+    transition: transform 0.24s cubic-bezier(0.22, 0.61, 0.36, 1);
+    overflow-y: auto;
+  }
+  .drawer.open { transform: translateX(0); }
+  .drawer-head {
+    position: sticky; top: 0; background: var(--bg-1); z-index: 2;
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 18px 22px;
+    border-bottom: 1px solid var(--border);
+  }
+  .drawer-head h2 {
+    font-size: 16px; font-weight: 600; letter-spacing: -0.014em;
+    color: var(--ink-0);
+  }
+  .drawer-body { padding: 18px 22px 32px; }
+  .drawer-section { margin-bottom: 22px; }
+  .drawer-section h4 {
+    font-size: 10.5px; font-weight: 600; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--ink-3);
+    margin-bottom: 8px;
+  }
+  .drawer-stat {
+    display: flex; justify-content: space-between; align-items: baseline;
+    padding: 7px 0;
+    border-bottom: 1px dashed var(--border);
+    font-size: 12.5px;
+  }
+  .drawer-stat:last-child { border-bottom: none; }
+  .drawer-stat .lbl { color: var(--ink-2); }
+  .drawer-stat .val {
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    color: var(--ink-0);
+    font-variant-numeric: tabular-nums;
+  }
+  .drawer-thresh {
+    display: grid; grid-template-columns: 1fr 1fr 1fr;
+    gap: 6px;
+  }
+  .drawer-thresh-cell {
+    padding: 9px 11px;
+    border-radius: 5px;
+    font-size: 11.5px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .drawer-thresh-cell .tlbl {
+    font-family: 'Inter', sans-serif;
+    font-size: 9.5px; font-weight: 600; letter-spacing: 0.1em;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+  }
+  .drawer-thresh-cell.g { background: var(--green-dim); border: 1px solid var(--green-line); color: var(--green-ink); }
+  .drawer-thresh-cell.a { background: var(--amber-dim); border: 1px solid var(--amber-line); color: var(--amber-ink); }
+  .drawer-thresh-cell.r { background: var(--red-dim); border: 1px solid var(--red-line); color: var(--red-ink); }
+
+  .drawer-spark {
+    margin-top: 8px;
+    height: 64px;
+    background: var(--bg-2);
+    border-radius: 6px;
+    padding: 8px 10px;
+  }
+
+  /* ========== FOOTER ========== */
+  .foot {
+    margin-top: 30px;
+    padding: 14px 0;
+    border-top: 1px solid var(--border);
+    display: flex; justify-content: space-between;
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px;
+    color: var(--ink-3);
+    letter-spacing: 0.04em;
+  }
+
+  @media (max-width: 980px) {
+    .kpi-row { grid-template-columns: repeat(2, 1fr); }
+    .hero-grid { grid-template-columns: 1fr; }
+    .matrix-head-row, .matrix-row {
+      grid-template-columns: 56px 1fr 110px 100px 100px 36px;
     }
-  </style>
+    .matrix-head-row > div:nth-child(4),
+    .matrix-row > div:nth-child(4),
+    .matrix-head-row > div:nth-child(7),
+    .matrix-row > div:nth-child(7) {
+      display: none;
+    }
+  }
+</style>
 </head>
-
 <body>
-  <div class="deck">
-    <div class="topbar">
-      <div>HTML preview deck • Consulting-style sample</div>
+<div id="deck-content">
+
+<div class="glow"></div>
+
+<div class="app">
+
+  <header class="mainnav">
+    <div class="nav-brand">
+      <span class="nav-brand-fallback">A</span>
+    </div>
+    <div class="nav-context">
+      <div class="nctx-1">Apex Logistics</div>
+      <div class="nctx-2">Q1 2026 Operating Scorecard</div>
+    </div>
+    <div class="nav-right">
+      <button class="icon-btn theme-toggle" id="themeToggle" aria-label="Toggle theme">
+        <svg class="ti-moon" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <svg class="ti-sun" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" stroke-linecap="round"/></svg>
+      </button>
+      <button class="icon-btn" title="Export">
+        <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <button class="avatar-btn" title="Mei Tanaka, COO">
+        <span class="avatar">MT</span>
+      </button>
+    </div>
+  </header>
+
+  <main class="content">
+
+    <section class="page-head">
       <div>
-        <span class="kbd">←</span> <span class="kbd">→</span> to navigate • <span class="kbd">Cmd</span> + <span class="kbd">P</span> to export PDF
+        <div class="eyebrow-row">
+          <span class="eyebrow">KPI Scorecard · Q1 2026</span>
+          <span class="status-chip" data-status="amber"><span class="dot-pulse"></span>2 amber, 1 red</span>
+        </div>
+        <h1 class="lede">12 KPIs across growth, efficiency, customers, and finance — <em>9 green</em>, 2 amber, 1 red.</h1>
+        <p class="sublede">Cost per shipment is the only red — fuel and driver overtime drove +$4 vs. plan. Pipeline coverage and logo retention are running close to threshold; both have action plans.</p>
       </div>
+      <div class="head-actions">
+        <button class="btn">
+          <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 6v6l4 2M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Schedule review
+        </button>
+        <button class="btn primary">
+          <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          Sign off
+        </button>
+      </div>
+    </section>
+
+    <div class="period-bar">
+      <span class="period-label">Period</span>
+      <button class="period-chip" data-period="Q2'25">Q2 '25</button>
+      <button class="period-chip" data-period="Q3'25">Q3 '25</button>
+      <button class="period-chip" data-period="Q4'25">Q4 '25</button>
+      <button class="period-chip active" data-period="Q1'26">Q1 '26</button>
+      <span class="period-spacer"></span>
+      <span class="period-meta">Last refresh: Apr 30 · Snowflake + Salesforce + NetSuite</span>
     </div>
 
-    <!-- Slide 1: Cover -->
-    <section class="slide active" data-slide="1">
-      <div class="hdr">
-        <div class="hdr-left">
-          <div class="kicker">Data Dashboards & Analytics — Sample</div>
-          <h1>KPI Scorecard Framework: Operations & Growth Alignment</h1>
-          <p class="sub">A structured framework for selecting, organizing, and monitoring the metrics that connect operational execution to strategic outcomes — designed for leadership alignment and accountability (illustrative / anonymized).</p>
-        </div>
-        <div class="hdr-right">
-          <div>Client: Apex Logistics</div>
-          <div>Revenue: $50M</div>
-          <div class="pill"><span class="dot"></span><span>Framework</span></div>
-        </div>
+    <!-- ===== KPI HEADLINE STRIP ===== -->
+    <section class="kpi-row">
+      <div class="kpi">
+        <div class="label">Revenue (TTM)</div>
+        <div class="value num">$50.2<span class="unit">M</span></div>
+        <div class="delta up">▲ 4.6% vs target</div>
       </div>
-
-      <div class="slide-inner">
-        <!-- Hero: 4-quadrant health status cards -->
-        <div class="grid-4" style="margin-top:12px;">
-          <div style="border:2px solid rgba(24,168,115,.4); border-radius:14px; padding:14px; background:rgba(24,168,115,.04); text-align:center;">
-            <div style="font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:var(--accent); margin-bottom:6px;">Operational Efficiency</div>
-            <svg width="56" height="56" viewBox="0 0 56 56"><circle cx="28" cy="28" r="24" fill="none" stroke="#e5e7eb" stroke-width="5"/><circle cx="28" cy="28" r="24" fill="none" stroke="#18A873" stroke-width="5" stroke-dasharray="150.8" stroke-dashoffset="0" stroke-linecap="round" transform="rotate(-90 28 28)"/><text x="28" y="32" text-anchor="middle" font-size="14" font-weight="800" fill="#18A873" font-family="Arial">3/3</text></svg>
-            <div style="font-size:12px; font-weight:700; color:#0f5132; margin-top:4px;">All Green</div>
-            <div style="font-size:11px; color:var(--muted); margin-top:2px;">OTD 96.2% &bull; 4th month</div>
-          </div>
-          <div style="border:2px solid rgba(245,158,11,.4); border-radius:14px; padding:14px; background:rgba(245,158,11,.04); text-align:center;">
-            <div style="font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:var(--warn); margin-bottom:6px;">Revenue Growth</div>
-            <svg width="56" height="56" viewBox="0 0 56 56"><circle cx="28" cy="28" r="24" fill="none" stroke="#e5e7eb" stroke-width="5"/><circle cx="28" cy="28" r="24" fill="none" stroke="#f59e0b" stroke-width="5" stroke-dasharray="100.5" stroke-dashoffset="0" stroke-linecap="round" transform="rotate(-90 28 28)"/><text x="28" y="32" text-anchor="middle" font-size="14" font-weight="800" fill="#f59e0b" font-family="Arial">2/3</text></svg>
-            <div style="font-size:12px; font-weight:700; color:#7a4b00; margin-top:4px;">1 Amber</div>
-            <div style="font-size:11px; color:var(--muted); margin-top:2px;">Pipeline coverage &lt;3×</div>
-          </div>
-          <div style="border:2px solid rgba(245,158,11,.4); border-radius:14px; padding:14px; background:rgba(245,158,11,.04); text-align:center;">
-            <div style="font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:var(--warn); margin-bottom:6px;">Customer Health</div>
-            <svg width="56" height="56" viewBox="0 0 56 56"><circle cx="28" cy="28" r="24" fill="none" stroke="#e5e7eb" stroke-width="5"/><circle cx="28" cy="28" r="24" fill="none" stroke="#f59e0b" stroke-width="5" stroke-dasharray="100.5" stroke-dashoffset="0" stroke-linecap="round" transform="rotate(-90 28 28)"/><text x="28" y="32" text-anchor="middle" font-size="14" font-weight="800" fill="#f59e0b" font-family="Arial">2/3</text></svg>
-            <div style="font-size:12px; font-weight:700; color:#7a4b00; margin-top:4px;">1 Amber</div>
-            <div style="font-size:11px; color:var(--muted); margin-top:2px;">Mid-market churn signals</div>
-          </div>
-          <div style="border:2px solid rgba(24,168,115,.4); border-radius:14px; padding:14px; background:rgba(24,168,115,.04); text-align:center;">
-            <div style="font-size:10px; font-weight:700; text-transform:uppercase; letter-spacing:.06em; color:var(--accent); margin-bottom:6px;">People &amp; Culture</div>
-            <svg width="56" height="56" viewBox="0 0 56 56"><circle cx="28" cy="28" r="24" fill="none" stroke="#e5e7eb" stroke-width="5"/><circle cx="28" cy="28" r="24" fill="none" stroke="#18A873" stroke-width="5" stroke-dasharray="150.8" stroke-dashoffset="0" stroke-linecap="round" transform="rotate(-90 28 28)"/><text x="28" y="32" text-anchor="middle" font-size="14" font-weight="800" fill="#18A873" font-family="Arial">3/3</text></svg>
-            <div style="font-size:12px; font-weight:700; color:#0f5132; margin-top:4px;">All Green</div>
-            <div style="font-size:11px; color:var(--muted); margin-top:2px;">eNPS 42 &bull; Attrition 8%</div>
-          </div>
-        </div>
-
-        <!-- Key findings -->
-        <div class="callout" style="margin-top:14px;">
-          <h4>Key findings</h4>
-          <ul>
-            <li><strong>Ops efficiency is the strongest quadrant</strong> — on-time delivery at 96.2% (above 94% target) for 4th consecutive month; warehouse utilization at 89%</li>
-            <li><strong>Revenue growth flagged amber:</strong> pipeline coverage at 2.9× (below 3× threshold); new logo acquisition slowed 18% QoQ</li>
-            <li><strong>Leading indicators predicted churn:</strong> support ticket volume in mid-market rose 40% six weeks before logo losses — framework caught it early</li>
-          </ul>
-        </div>
-
-        <!-- Actions + Sources -->
-        <div class="grid-2" style="margin-top:12px;">
-          <div class="card">
-            <h3>Recommended actions</h3>
-            <p><b>1.</b> Increase pipeline gen — outbound activity 25% below target. <b>2.</b> Dedicated support for mid-market accounts with ticket spikes. <b>3.</b> Promote OTD performance in sales narratives to reinforce competitive moat.</p>
-          </div>
-          <div class="card">
-            <h3>Data sources &amp; cadence</h3>
-            <p>Salesforce (revenue), Zendesk (support), WMS (ops), Looker (aggregation). Thresholds calibrated quarterly. Weekly pulse + monthly full review.</p>
-          </div>
-        </div>
+      <div class="kpi">
+        <div class="label">EBITDA margin</div>
+        <div class="value num">12.1<span class="unit">%</span></div>
+        <div class="delta up">▲ 2.1pp vs target</div>
       </div>
-
-      <div class="ftr">
-        <div class="brand"><span class="mark"></span> Gratia (sample)</div>
-        <div class="trust">Sanitized excerpt • Prepared by Gratia • Jan 2026</div>
-        <div>1</div>
+      <div class="kpi">
+        <div class="label">On-time delivery</div>
+        <div class="value num">96.2<span class="unit">%</span></div>
+        <div class="delta up">▲ 1.2pp vs target</div>
+      </div>
+      <div class="kpi">
+        <div class="label">NPS (quarterly)</div>
+        <div class="value num">62</div>
+        <div class="delta up">▲ 7 vs Q4</div>
+      </div>
+      <div class="kpi">
+        <div class="label">Cost / shipment</div>
+        <div class="value num">$154</div>
+        <div class="delta down">▲ $4 over plan</div>
       </div>
     </section>
 
-    <!-- Slide 2: Strategic KPIs (Quadrant View) -->
-    <section class="slide" data-slide="2">
-      <div class="hdr">
-        <div class="hdr-left">
-          <div class="kicker">Strategic KPIs</div>
-          <h1>Four-quadrant view: 12 metrics across growth, efficiency, customers, and finance</h1>
-          <p class="sub">Each quadrant maps to a strategic objective. Metrics show current value vs. target with status indicator.</p>
+    <!-- ===== HERO: QUADRANTS + CAUSAL FLOW ===== -->
+    <section class="hero-grid">
+
+      <div class="card">
+        <div class="card-head">
+          <h3>Quadrant view · 12 strategic KPIs</h3>
+          <div class="meta">Click a quadrant to filter the table</div>
         </div>
-        <div class="hdr-right">
-          <div class="pill"><span class="dot"></span><span>10 green, 2 amber</span></div>
-        </div>
-      </div>
-
-      <div class="slide-inner">
-        <div class="quadrant">
-          <!-- Revenue Growth -->
-          <div class="q-box">
-            <h4><span class="q-icon" style="background:#18A873;">📈</span> Revenue Growth</h4>
-            <div class="q-metric">
-              <span class="q-name">Revenue (TTM)</span>
-              <span class="q-vals"><span class="q-actual">$50.2M</span><span class="q-target">T: $48M</span><span class="badge win" style="font-size:10px;">●</span></span>
-            </div>
-            <div class="q-metric">
-              <span class="q-name">Pipeline coverage</span>
-              <span class="q-vals"><span class="q-actual">2.6×</span><span class="q-target">T: 3.0×</span><span class="badge risk" style="font-size:10px;">●</span></span>
-            </div>
-            <div class="q-metric">
-              <span class="q-name">New logo wins (QTD)</span>
-              <span class="q-vals"><span class="q-actual">14</span><span class="q-target">T: 12</span><span class="badge win" style="font-size:10px;">●</span></span>
-            </div>
-          </div>
-
-          <!-- Operational Efficiency -->
-          <div class="q-box">
-            <h4><span class="q-icon" style="background:#0ea5e9;">⚙️</span> Operational Efficiency</h4>
-            <div class="q-metric">
-              <span class="q-name">On-time delivery %</span>
-              <span class="q-vals"><span class="q-actual">96.2%</span><span class="q-target">T: 95%</span><span class="badge win" style="font-size:10px;">●</span></span>
-            </div>
-            <div class="q-metric">
-              <span class="q-name">Load utilization</span>
-              <span class="q-vals"><span class="q-actual">82%</span><span class="q-target">T: 80%</span><span class="badge win" style="font-size:10px;">●</span></span>
-            </div>
-            <div class="q-metric">
-              <span class="q-name">Cost per shipment</span>
-              <span class="q-vals"><span class="q-actual">$142</span><span class="q-target">T: <$150</span><span class="badge win" style="font-size:10px;">●</span></span>
-            </div>
-          </div>
-
-          <!-- Customer Health -->
-          <div class="q-box">
-            <h4><span class="q-icon" style="background:#8b5cf6;">💜</span> Customer Health</h4>
-            <div class="q-metric">
-              <span class="q-name">NPS (quarterly)</span>
-              <span class="q-vals"><span class="q-actual">62</span><span class="q-target">T: 55+</span><span class="badge win" style="font-size:10px;">●</span></span>
-            </div>
-            <div class="q-metric">
-              <span class="q-name">Logo retention (annual)</span>
-              <span class="q-vals"><span class="q-actual">89%</span><span class="q-target">T: 90%</span><span class="badge risk" style="font-size:10px;">●</span></span>
-            </div>
-            <div class="q-metric">
-              <span class="q-name">Support resolution (avg)</span>
-              <span class="q-vals"><span class="q-actual">4.2 hrs</span><span class="q-target">T: <6 hrs</span><span class="badge win" style="font-size:10px;">●</span></span>
-            </div>
-          </div>
-
-          <!-- Financial Health -->
-          <div class="q-box">
-            <h4><span class="q-icon" style="background:#111827;">💰</span> Financial Health</h4>
-            <div class="q-metric">
-              <span class="q-name">Gross margin</span>
-              <span class="q-vals"><span class="q-actual">34.5%</span><span class="q-target">T: 32%+</span><span class="badge win" style="font-size:10px;">●</span></span>
-            </div>
-            <div class="q-metric">
-              <span class="q-name">EBITDA margin</span>
-              <span class="q-vals"><span class="q-actual">12.1%</span><span class="q-target">T: 10%+</span><span class="badge win" style="font-size:10px;">●</span></span>
-            </div>
-            <div class="q-metric">
-              <span class="q-name">DSO (days sales out)</span>
-              <span class="q-vals"><span class="q-actual">42 days</span><span class="q-target">T: <45</span><span class="badge win" style="font-size:10px;">●</span></span>
-            </div>
-          </div>
-        </div>
-
-        <div class="callout" style="margin-top:12px;">
-          <h4>Reading this scorecard</h4>
-          <p><strong>Green (●)</strong> = at or above target. <strong>Amber (●)</strong> = within 10% of threshold, needs monitoring. <strong>Red (●)</strong> = breached, requires action. Pipeline coverage (2.6× vs. 3.0×) and logo retention (89% vs. 90%) are the two items in amber.</p>
+        <div class="card-body">
+          <div class="quad-grid" id="quadGrid"></div>
         </div>
       </div>
 
-      <div class="ftr">
-        <div class="brand"><span class="mark"></span> Gratia (sample)</div>
-        <div class="trust">Sanitized excerpt • Prepared by Gratia • Jan 2026</div>
-        <div>2</div>
+      <div class="card">
+        <div class="card-head">
+          <h3>Causal map · leading → lagging</h3>
+          <div class="meta">4–8 week lag</div>
+        </div>
+        <div class="card-body">
+          <div class="flow-cap">
+            <span>Leading inputs</span>
+            <span>Lagging outcomes</span>
+          </div>
+          <div class="flow" id="flowGrid"></div>
+          <div class="flow-callout" id="flowCallout">
+            <strong>Signal to watch:</strong> Support tickets up 18% MoM. Historically that predicts a churn uptick 6–8 weeks out — mid-market accounts for 70% of the increase. CSM outreach to top-15 at-risk accounts before end of February.
+          </div>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- ===== KPI MATRIX ===== -->
+    <section class="matrix-section">
+      <div class="matrix-head">
+        <div class="title-group">
+          <h2><span id="matrixCount">12</span> KPIs</h2>
+          <span class="count">Sorted by status · red first</span>
+        </div>
+        <div class="filter-bar" id="filters">
+          <button class="chip active" data-filter="all">All<span class="ct" id="cntAll">12</span></button>
+          <button class="chip" data-filter="r"><span class="dot r"></span>Red<span class="ct" id="cntR">1</span></button>
+          <button class="chip" data-filter="a"><span class="dot a"></span>Amber<span class="ct" id="cntA">2</span></button>
+          <button class="chip" data-filter="g"><span class="dot g"></span>Green<span class="ct" id="cntG">9</span></button>
+        </div>
+      </div>
+
+      <div class="matrix">
+        <div class="matrix-head-row">
+          <div>Ref</div>
+          <div>KPI</div>
+          <div>Current</div>
+          <div>Target</div>
+          <div>Status</div>
+          <div>Owner</div>
+          <div>Cadence</div>
+          <div></div>
+        </div>
+        <div id="matrixRows"></div>
       </div>
     </section>
 
-    <!-- Slide 3: Leading → Lagging Map -->
-    <section class="slide" data-slide="3">
-      <div class="hdr">
-        <div class="hdr-left">
-          <div class="kicker">Causality map</div>
-          <h1>Leading indicators predict lagging outcomes 4–8 weeks ahead</h1>
-          <p class="sub">Mapping the causal chain from inputs you control (left) to outcomes you measure (right) — so teams know which levers to pull and when to expect impact.</p>
-        </div>
-        <div class="hdr-right">
-          <div class="pill"><span class="dot" style="background:var(--accent-2)"></span><span>Predictive</span></div>
-        </div>
-      </div>
+    <footer class="foot">
+      <div>apex-logistics · scorecard · v3.1.2 · q1-2026</div>
+      <div>updated 4 min ago</div>
+    </footer>
 
-      <div class="slide-inner">
-        <div class="flow-grid">
-          <!-- Leading indicators (left) -->
-          <div class="flow-col">
-            <div style="text-align:center; font-size:12px; font-weight:750; color:var(--accent); text-transform:uppercase; letter-spacing:.06em; margin-bottom:6px;">Leading Indicators</div>
-            <div class="flow-item" style="border-left:3px solid var(--accent);">
-              <div class="fi-name">Pipeline created ($)</div>
-              <div class="fi-desc">New qualified pipeline added this month</div>
-              <div style="margin-top:6px;"><span class="badge win">$4.2M — on track</span></div>
-            </div>
-            <div class="flow-item" style="border-left:3px solid var(--accent);">
-              <div class="fi-name">Demos / proposals sent</div>
-              <div class="fi-desc">Activity volume drives conversion input</div>
-              <div style="margin-top:6px;"><span class="badge win">38 — above pace</span></div>
-            </div>
-            <div class="flow-item" style="border-left:3px solid var(--warn);">
-              <div class="fi-name">Support tickets (trailing 30d)</div>
-              <div class="fi-desc">Early signal of satisfaction / churn risk</div>
-              <div style="margin-top:6px;"><span class="badge risk">↑ 18% MoM — watch</span></div>
-            </div>
-            <div class="flow-item" style="border-left:3px solid var(--accent);">
-              <div class="fi-name">Load booking volume</div>
-              <div class="fi-desc">Operational throughput input metric</div>
-              <div style="margin-top:6px;"><span class="badge win">2,340 loads — steady</span></div>
-            </div>
-            <div class="flow-item" style="border-left:3px solid var(--accent);">
-              <div class="fi-name">Employee engagement score</div>
-              <div class="fi-desc">Predicts retention, productivity, service quality</div>
-              <div style="margin-top:6px;"><span class="badge win">78/100 — stable</span></div>
-            </div>
+  </main>
+
+</div>
+
+<!-- ===== DRAWER ===== -->
+<div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
+<aside class="drawer" id="drawer" role="dialog" aria-hidden="true">
+  <div id="drawerContent"></div>
+</aside>
+
+<script>
+// ========== DATA ==========
+
+const QUADRANTS = {
+  growth:    { name: 'Revenue Growth',         color: '#16a38a' },
+  efficiency:{ name: 'Operational Efficiency', color: '#5ad9bc' },
+  customer:  { name: 'Customer Health',        color: '#e6b259' },
+  finance:   { name: 'Financial Health',       color: '#8f9198' }
+};
+
+const KPIS = [
+  // GROWTH
+  { ref: 'AL-001', name: 'Revenue (TTM)',         quadrant: 'growth',     current: '$50.2M',  target: '$48M',     g: '≥ $48M',   a: '$44–48M', r: '< $44M',  status: 'g', trend: '▲ 4.2%',  owner: 'JS', ownerName: 'Jamie Soto, VP Sales',     cadence: 'monthly' },
+  { ref: 'AL-002', name: 'Pipeline coverage',     quadrant: 'growth',     current: '2.6×',    target: '3.0×',     g: '≥ 3.0×',   a: '2.5–3.0×', r: '< 2.5×', status: 'a', trend: '▼ 0.3×',  owner: 'JS', ownerName: 'Jamie Soto, VP Sales',     cadence: 'weekly'  },
+  { ref: 'AL-003', name: 'New logos won (QTD)',   quadrant: 'growth',     current: '14',      target: '12',       g: '≥ 12',     a: '9–11',    r: '< 9',     status: 'g', trend: '▲ 2',     owner: 'AB', ownerName: 'Alex Brewer, Sales Mgr',   cadence: 'weekly'  },
+  // EFFICIENCY
+  { ref: 'AL-004', name: 'On-time delivery',      quadrant: 'efficiency', current: '96.2%',   target: '95%',      g: '≥ 95%',    a: '92–95%',  r: '< 92%',   status: 'g', trend: '▲ 0.4pp', owner: 'MT', ownerName: 'Mei Tanaka, COO',          cadence: 'daily'   },
+  { ref: 'AL-005', name: 'Load utilization',      quadrant: 'efficiency', current: '82%',     target: '80%',      g: '≥ 80%',    a: '75–80%',  r: '< 75%',   status: 'g', trend: '▲ 1.5pp', owner: 'RG', ownerName: 'Raj Gupta, Ops Director',  cadence: 'weekly'  },
+  { ref: 'AL-006', name: 'Cost per shipment',     quadrant: 'efficiency', current: '$154',    target: '$150',     g: '≤ $150',   a: '$150–158',r: '> $158',  status: 'r', trend: '▲ $4',    owner: 'RG', ownerName: 'Raj Gupta, Ops Director',  cadence: 'weekly'  },
+  // CUSTOMER
+  { ref: 'AL-007', name: 'NPS (quarterly)',       quadrant: 'customer',   current: '62',      target: '55',       g: '≥ 55',     a: '45–54',   r: '< 45',    status: 'g', trend: '▲ 7',     owner: 'KP', ownerName: 'Kira Pell, Customer Lead',  cadence: 'quarterly'},
+  { ref: 'AL-008', name: 'Logo retention',        quadrant: 'customer',   current: '89%',     target: '90%',      g: '≥ 90%',    a: '87–90%',  r: '< 87%',   status: 'a', trend: '▼ 1.4pp', owner: 'KP', ownerName: 'Kira Pell, Customer Lead',  cadence: 'monthly' },
+  { ref: 'AL-009', name: 'Support resolution',    quadrant: 'customer',   current: '4.2 hrs', target: '< 6 hrs',  g: '≤ 6 hrs',  a: '6–9 hrs', r: '> 9 hrs', status: 'g', trend: '▼ 0.6 hrs', owner: 'KP', ownerName: 'Kira Pell, Customer Lead', cadence: 'weekly'  },
+  // FINANCE
+  { ref: 'AL-010', name: 'Gross margin',          quadrant: 'finance',    current: '34.5%',   target: '32%',      g: '≥ 32%',    a: '28–32%',  r: '< 28%',   status: 'g', trend: '▲ 0.8pp', owner: 'DC', ownerName: 'Diana Choi, CFO',         cadence: 'monthly' },
+  { ref: 'AL-011', name: 'EBITDA margin',         quadrant: 'finance',    current: '12.1%',   target: '10%',      g: '≥ 10%',    a: '7–10%',   r: '< 7%',    status: 'g', trend: '▲ 1.2pp', owner: 'DC', ownerName: 'Diana Choi, CFO',         cadence: 'monthly' },
+  { ref: 'AL-012', name: 'DSO',                   quadrant: 'finance',    current: '42 days', target: '< 45 days',g: '≤ 45 days',a: '45–55',   r: '> 55',    status: 'g', trend: '▼ 2 days',owner: 'DC', ownerName: 'Diana Choi, CFO',         cadence: 'monthly' },
+];
+
+const FLOW = [
+  { lead: { name: 'Pipeline created ($)',  val: '$4.2M', state: 'lead' },     lag: { name: 'Revenue (monthly)',     val: '$4.18M ▲ 3%',       state: 'lag' } },
+  { lead: { name: 'Demos / proposals',     val: '38',    state: 'lead' },     lag: { name: 'Win rate',              val: '28% stable',         state: 'lag' } },
+  { lead: { name: 'Support tickets (30d)', val: '↑ 18%', state: 'lead warn' },lag: { name: 'Quarterly churn',       val: '2.8% trending up',   state: 'lag warn' } },
+  { lead: { name: 'Load booking volume',   val: '2,340', state: 'lead' },     lag: { name: 'Gross margin',          val: '34.5% on target',    state: 'lag' } },
+  { lead: { name: 'Engagement score',      val: '78/100',state: 'lead' },     lag: { name: 'Voluntary turnover',    val: '12% — healthy',      state: 'lag' } },
+];
+
+let activeQuadrant = 'all';
+let activeFilter = 'all';
+
+// ========== RENDERERS ==========
+
+function ragLabel(s) { return s === 'g' ? 'Green' : s === 'a' ? 'Amber' : 'Red'; }
+
+function renderQuadrants() {
+  const el = document.getElementById('quadGrid');
+  el.innerHTML = Object.keys(QUADRANTS).map(qk => {
+    const meta = QUADRANTS[qk];
+    const items = KPIS.filter(k => k.quadrant === qk);
+    const cnt = { g: 0, a: 0, r: 0 };
+    items.forEach(i => cnt[i.status]++);
+    const isActive = activeQuadrant === qk;
+    return `
+      <div class="quadrant ${isActive ? 'active' : ''}" data-quad="${qk}">
+        <div class="q-head">
+          <span class="q-name"><span class="q-dot" style="background:${meta.color}"></span>${meta.name}</span>
+          <span class="q-rag">
+            ${cnt.g ? `<span class="rag-pip g">${cnt.g}</span>` : ''}
+            ${cnt.a ? `<span class="rag-pip a">${cnt.a}</span>` : ''}
+            ${cnt.r ? `<span class="rag-pip r">${cnt.r}</span>` : ''}
+          </span>
+        </div>
+        ${items.map(i => `
+          <div class="q-metric">
+            <span class="qm-name">${i.name}</span>
+            <span><span class="qm-val">${i.current}</span><span class="qm-tgt">/ ${i.target}</span></span>
+            <span class="qm-status ${i.status}"></span>
           </div>
+        `).join('')}
+      </div>
+    `;
+  }).join('');
 
-          <!-- Arrows -->
-          <div class="flow-arrows">
-            <div class="arrow" style="margin-top:40px;">→</div>
-            <div class="arrow">→</div>
-            <div class="arrow">→</div>
-            <div class="arrow">→</div>
-            <div class="arrow">→</div>
-          </div>
+  el.querySelectorAll('.quadrant').forEach(q => {
+    q.addEventListener('click', () => {
+      const k = q.dataset.quad;
+      activeQuadrant = activeQuadrant === k ? 'all' : k;
+      // sync filter chips: clicking a quadrant = filter matrix to that quadrant only
+      renderQuadrants();
+      renderMatrix();
+    });
+  });
+}
 
-          <!-- Lagging outcomes (right) -->
-          <div class="flow-col">
-            <div style="text-align:center; font-size:12px; font-weight:750; color:var(--accent-2); text-transform:uppercase; letter-spacing:.06em; margin-bottom:6px;">Lagging Outcomes</div>
-            <div class="flow-item" style="border-left:3px solid var(--accent-2);">
-              <div class="fi-name">Revenue (monthly)</div>
-              <div class="fi-desc">Pipeline → demos → closed deals → revenue</div>
-              <div style="margin-top:6px;"><span class="badge info">$4.18M — ▲ 3%</span></div>
-            </div>
-            <div class="flow-item" style="border-left:3px solid var(--accent-2);">
-              <div class="fi-name">Win rate</div>
-              <div class="fi-desc">Proposal quality and ICP fit drive conversion</div>
-              <div style="margin-top:6px;"><span class="badge info">28% — stable</span></div>
-            </div>
-            <div class="flow-item" style="border-left:3px solid var(--warn);">
-              <div class="fi-name">Churn rate (quarterly)</div>
-              <div class="fi-desc">Ticket spikes predict churn 4–8 weeks later</div>
-              <div style="margin-top:6px;"><span class="badge risk">2.8% — trending up</span></div>
-            </div>
-            <div class="flow-item" style="border-left:3px solid var(--accent-2);">
-              <div class="fi-name">Gross margin</div>
-              <div class="fi-desc">Load volume × utilization → cost efficiency</div>
-              <div style="margin-top:6px;"><span class="badge info">34.5% — on target</span></div>
-            </div>
-            <div class="flow-item" style="border-left:3px solid var(--accent-2);">
-              <div class="fi-name">Employee turnover</div>
-              <div class="fi-desc">Engagement predicts voluntary attrition</div>
-              <div style="margin-top:6px;"><span class="badge info">12% annualized — healthy</span></div>
-            </div>
-          </div>
-        </div>
+function renderFlow() {
+  const el = document.getElementById('flowGrid');
+  el.innerHTML = FLOW.map(row => `
+    <div class="flow-row">
+      <div class="flow-pill ${row.lead.state}">
+        <span class="fp-name">${row.lead.name}</span>
+        <span class="fp-val">${row.lead.val}</span>
+      </div>
+      <div class="flow-arrow">→</div>
+      <div class="flow-pill ${row.lag.state}">
+        <span class="fp-name">${row.lag.name}</span>
+        <span class="fp-val">${row.lag.val}</span>
+      </div>
+    </div>
+  `).join('');
+}
 
-        <div class="callout" style="margin-top:12px;">
-          <h4>Signal to watch</h4>
-          <p><strong>Support tickets rose 18% MoM</strong> — historically this predicts a churn uptick 6–8 weeks out. The mid-market segment accounts for 70% of the increase. Recommend: targeted CSM outreach to top 15 at-risk accounts before end of February.</p>
+function renderMatrix() {
+  const rows = document.getElementById('matrixRows');
+  let visible = KPIS.slice();
+  if (activeQuadrant !== 'all') visible = visible.filter(k => k.quadrant === activeQuadrant);
+  if (activeFilter !== 'all')   visible = visible.filter(k => k.status === activeFilter);
+
+  // sort: red, amber, green
+  const order = { r: 0, a: 1, g: 2 };
+  visible.sort((a, b) => order[a.status] - order[b.status]);
+
+  rows.innerHTML = visible.map(k => {
+    const meta = QUADRANTS[k.quadrant];
+    return `
+      <div class="matrix-row" data-ref="${k.ref}">
+        <div class="mref">${k.ref}</div>
+        <div class="mname"><span class="quad-pip" style="background:${meta.color}"></span>${k.name}</div>
+        <div class="mcurrent">${k.current}</div>
+        <div class="mthresh">${k.target}</div>
+        <div><span class="rag-pill ${k.status}"><span class="rdot"></span>${ragLabel(k.status)}</span></div>
+        <div class="mowner"><span class="mavatar">${k.owner}</span>${k.ownerName.split(',')[0]}</div>
+        <div class="mcad">${k.cadence}</div>
+        <div class="mchev">
+          <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
         </div>
       </div>
+    `;
+  }).join('');
 
-      <div class="ftr">
-        <div class="brand"><span class="mark"></span> Gratia (sample)</div>
-        <div class="trust">Sanitized excerpt • Prepared by Gratia • Jan 2026</div>
-        <div>3</div>
-      </div>
-    </section>
+  rows.querySelectorAll('.matrix-row').forEach(r => {
+    r.addEventListener('click', () => openDrawer(r.dataset.ref));
+  });
 
-    <!-- Slide 4: Threshold Table -->
-    <section class="slide" data-slide="4">
-      <div class="hdr">
-        <div class="hdr-left">
-          <div class="kicker">Alert configuration</div>
-          <h1>Threshold definitions with owners, escalation paths, and review cadence</h1>
-          <p class="sub">Each KPI has explicit green/amber/red boundaries so teams don't debate status — they act on it. Color-coded cells enable at-a-glance monitoring.</p>
+  document.getElementById('matrixCount').textContent = String(visible.length);
+}
+
+function updateCounts() {
+  const cnt = { all: KPIS.length, g: 0, a: 0, r: 0 };
+  KPIS.forEach(k => cnt[k.status]++);
+  document.getElementById('cntAll').textContent = cnt.all;
+  document.getElementById('cntG').textContent = cnt.g;
+  document.getElementById('cntA').textContent = cnt.a;
+  document.getElementById('cntR').textContent = cnt.r;
+}
+
+// ========== FILTERS ==========
+document.querySelectorAll('#filters .chip').forEach(chip => {
+  chip.addEventListener('click', () => {
+    document.querySelectorAll('#filters .chip').forEach(c => c.classList.toggle('active', c === chip));
+    activeFilter = chip.dataset.filter;
+    renderMatrix();
+  });
+});
+
+// ========== DRAWER ==========
+function openDrawer(ref) {
+  const k = KPIS.find(x => x.ref === ref);
+  if (!k) return;
+  const meta = QUADRANTS[k.quadrant];
+
+  // Build a tiny mock sparkline (5 quarters)
+  const trendVals = [62, 64, 67, 70, 72]; // dummy upward — varies by KPI in real impl
+  const max = Math.max(...trendVals), min = Math.min(...trendVals);
+  const w = 420, h = 48, padX = 8;
+  const pts = trendVals.map((v, i) => {
+    const x = padX + (i / (trendVals.length - 1)) * (w - padX * 2);
+    const y = (h - 6) - ((v - min) / Math.max(1, max - min)) * (h - 18);
+    return [x, y];
+  });
+  const linePath = pts.map((p, i) => (i === 0 ? 'M' : 'L') + p[0].toFixed(1) + ',' + p[1].toFixed(1)).join(' ');
+
+  document.getElementById('drawerContent').innerHTML = `
+    <div class="drawer-head">
+      <div>
+        <div class="eyebrow" style="display:flex;align-items:center;gap:7px;color:${meta.color}">
+          <span style="width:8px;height:8px;border-radius:2px;background:${meta.color};display:inline-block"></span>
+          ${meta.name} · ${k.ref}
         </div>
-        <div class="hdr-right">
-          <div class="pill"><span class="dot"></span><span>Actionable</span></div>
-        </div>
+        <h2 style="margin-top:4px">${k.name}</h2>
+      </div>
+      <button class="icon-btn" onclick="closeDrawer()" aria-label="Close">
+        <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" stroke-linecap="round"/></svg>
+      </button>
+    </div>
+    <div class="drawer-body">
+
+      <div class="drawer-section">
+        <h4>Current period</h4>
+        <div class="drawer-stat"><span class="lbl">Value</span><span class="val">${k.current}</span></div>
+        <div class="drawer-stat"><span class="lbl">Target</span><span class="val">${k.target}</span></div>
+        <div class="drawer-stat"><span class="lbl">Trend vs prior</span><span class="val">${k.trend}</span></div>
+        <div class="drawer-stat"><span class="lbl">Status</span><span class="val"><span class="rag-pill ${k.status}"><span class="rdot"></span>${ragLabel(k.status)}</span></span></div>
       </div>
 
-      <div class="slide-inner">
-        <table aria-label="KPI threshold definitions">
-          <thead>
-            <tr>
-              <th style="width:170px;">KPI</th>
-              <th style="width:110px;">Green</th>
-              <th style="width:110px;">Amber</th>
-              <th style="width:110px;">Red</th>
-              <th style="width:120px;">Owner</th>
-              <th style="width:130px;">Review cadence</th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td><strong>Revenue (TTM)</strong></td>
-              <td class="cell-g">≥ $48M</td>
-              <td class="cell-a">$44–48M</td>
-              <td class="cell-r">< $44M</td>
-              <td>VP Sales</td>
-              <td>Monthly</td>
-            </tr>
-            <tr>
-              <td><strong>Pipeline coverage</strong></td>
-              <td class="cell-g">≥ 3.0×</td>
-              <td class="cell-a">2.5–3.0×</td>
-              <td class="cell-r">< 2.5×</td>
-              <td>VP Sales</td>
-              <td>Weekly</td>
-            </tr>
-            <tr>
-              <td><strong>On-time delivery</strong></td>
-              <td class="cell-g">≥ 95%</td>
-              <td class="cell-a">92–95%</td>
-              <td class="cell-r">< 92%</td>
-              <td>VP Operations</td>
-              <td>Weekly</td>
-            </tr>
-            <tr>
-              <td><strong>Cost per shipment</strong></td>
-              <td class="cell-g">≤ $150</td>
-              <td class="cell-a">$150–165</td>
-              <td class="cell-r">> $165</td>
-              <td>VP Operations</td>
-              <td>Monthly</td>
-            </tr>
-            <tr>
-              <td><strong>NPS</strong></td>
-              <td class="cell-g">≥ 55</td>
-              <td class="cell-a">45–55</td>
-              <td class="cell-r">< 45</td>
-              <td>VP Customer Success</td>
-              <td>Quarterly</td>
-            </tr>
-            <tr>
-              <td><strong>Logo retention</strong></td>
-              <td class="cell-g">≥ 90%</td>
-              <td class="cell-a">85–90%</td>
-              <td class="cell-r">< 85%</td>
-              <td>VP Customer Success</td>
-              <td>Monthly</td>
-            </tr>
-            <tr>
-              <td><strong>Gross margin</strong></td>
-              <td class="cell-g">≥ 32%</td>
-              <td class="cell-a">28–32%</td>
-              <td class="cell-r">< 28%</td>
-              <td>CFO</td>
-              <td>Monthly</td>
-            </tr>
-            <tr>
-              <td><strong>EBITDA margin</strong></td>
-              <td class="cell-g">≥ 10%</td>
-              <td class="cell-a">7–10%</td>
-              <td class="cell-r">< 7%</td>
-              <td>CFO</td>
-              <td>Monthly</td>
-            </tr>
-          </tbody>
-        </table>
-
-        <div class="grid-2" style="margin-top:12px;">
-          <div class="callout">
-            <h4>Escalation protocol</h4>
-            <p><strong>Amber:</strong> Owner investigates within 48 hours, presents root cause at next review. <strong>Red:</strong> Escalate to leadership within 24 hours with action plan. Two consecutive red readings trigger a dedicated working session.</p>
-          </div>
-          <div class="callout" style="border-left-color:var(--accent-2); background:rgba(14,165,233,.06); border-color:rgba(14,165,233,.18);">
-            <h4>Implementation note</h4>
-            <p>These thresholds should be loaded into your BI tool (Looker, Tableau, Power BI) as conditional formatting rules. Automated Slack/email alerts on amber/red transitions reduce response lag from days to hours.</p>
-          </div>
+      <div class="drawer-section">
+        <h4>Trailing 5 quarters</h4>
+        <div class="drawer-spark">
+          <svg width="100%" height="48" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none">
+            <path d="${linePath}" fill="none" stroke="${meta.color}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+            ${pts.map((p, i) => `<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="${i === pts.length - 1 ? 3 : 2}" fill="${meta.color}" ${i === pts.length - 1 ? '' : 'opacity="0.4"'}/>`).join('')}
+          </svg>
         </div>
       </div>
 
-      <div class="ftr">
-        <div class="brand"><span class="mark"></span> Gratia (sample)</div>
-        <div class="trust">Sanitized excerpt • Prepared by Gratia • Jan 2026</div>
-        <div>4</div>
+      <div class="drawer-section">
+        <h4>Threshold definitions</h4>
+        <div class="drawer-thresh">
+          <div class="drawer-thresh-cell g"><div class="tlbl">Green</div>${k.g}</div>
+          <div class="drawer-thresh-cell a"><div class="tlbl">Amber</div>${k.a}</div>
+          <div class="drawer-thresh-cell r"><div class="tlbl">Red</div>${k.r}</div>
+        </div>
       </div>
-    </section>
 
-  </div>
+      <div class="drawer-section">
+        <h4>Ownership</h4>
+        <div class="drawer-stat"><span class="lbl">Owner</span><span class="val">${k.ownerName}</span></div>
+        <div class="drawer-stat"><span class="lbl">Review cadence</span><span class="val" style="text-transform:capitalize">${k.cadence}</span></div>
+        <div class="drawer-stat"><span class="lbl">Last reviewed</span><span class="val">3 days ago</span></div>
+      </div>
 
-  <script>
-    (function(){
-      const slides = Array.from(document.querySelectorAll('.slide'));
-      let idx = 0;
+    </div>
+  `;
+  document.getElementById('drawer').classList.add('open');
+  document.getElementById('drawer').setAttribute('aria-hidden', 'false');
+  document.getElementById('drawerOverlay').classList.add('open');
+}
 
-      function show(i){
-        idx = Math.max(0, Math.min(slides.length - 1, i));
-        slides.forEach((s, k) => s.classList.toggle('active', k === idx));
-        window.location.hash = `slide-${idx+1}`;
-      }
+function closeDrawer() {
+  document.getElementById('drawer').classList.remove('open');
+  document.getElementById('drawer').setAttribute('aria-hidden', 'true');
+  document.getElementById('drawerOverlay').classList.remove('open');
+}
 
-      function fromHash(){
-        const m = (window.location.hash || '').match(/slide-(\d+)/);
-        if(!m) return;
-        const n = parseInt(m[1], 10);
-        if(!isNaN(n)) show(n-1);
-      }
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closeDrawer();
+});
 
-      document.addEventListener('keydown', (e) => {
-        if (e.key === 'ArrowRight' || e.key === 'PageDown') show(idx + 1);
-        if (e.key === 'ArrowLeft' || e.key === 'PageUp') show(idx - 1);
-        if (e.key === 'Home') show(0);
-        if (e.key === 'End') show(slides.length - 1);
-      });
+// ========== THEME ==========
+document.getElementById('themeToggle').addEventListener('click', () => {
+  const cur = document.documentElement.getAttribute('data-theme') || 'dark';
+  const next = cur === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  try { localStorage.setItem('apollo-theme', next); } catch (e) {}
+});
 
-      window.addEventListener('hashchange', fromHash);
-      fromHash();
-    })();
-  </script>
-<a href="../" style="position:fixed;top:12px;right:16px;z-index:99999;background:#111827;color:#e2e8f0;padding:6px 16px;border-radius:8px;font-size:13px;font-weight:600;text-decoration:none;border:1px solid #475569;font-family:system-ui,sans-serif;transition:background .15s;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#111827'">← Gallery</a>
+// ========== INITIAL RENDER ==========
+updateCounts();
+renderQuadrants();
+renderFlow();
+renderMatrix();
+</script>
+
+</div><!-- /#deck-content -->
 </body>
 </html>

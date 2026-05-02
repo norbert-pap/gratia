@@ -1,347 +1,188 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Gratia — Work Samples</title>
+<meta charset="UTF-8" />
+<title>Gratia — Work Sample Library</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
 <script src="../auth.js"></script>
+<link rel="stylesheet" href="_design.css">
+<script>(function(){try{const s=localStorage.getItem('apollo-theme');if(s==='light'||s==='dark')document.documentElement.setAttribute('data-theme',s);}catch(e){}})();</script>
 <style>
-  :root {
-    --bg: #f8f9fb; --surface: #fff; --ink: #111827; --muted: #6b7280;
-    --line: #e5e7eb; --accent: #18A873; --radius: 12px;
-    --sans: ui-sans-serif, system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial;
-  }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body { font-family: var(--sans); background: var(--bg); color: var(--ink); }
-  .header { background: #111827; color: #fff; padding: 28px 32px 22px; }
-  .header-top { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 12px; margin-bottom: 14px; }
-  .header h1 { font-size: 22px; font-weight: 700; }
-  .header .meta { color: #94a3b8; font-size: 13px; }
-  .header .count { background: var(--accent); color: #fff; font-size: 13px; font-weight: 700; padding: 5px 14px; border-radius: 999px; }
-  .legend { display: flex; flex-wrap: wrap; gap: 14px; padding-top: 12px; border-top: 1px solid #334155; }
-  .legend-item { display: flex; align-items: center; gap: 5px; font-size: 12px; color: #94a3b8; }
-  .legend-dot { width: 8px; height: 8px; border-radius: 999px; }
-  .container { max-width: 1280px; margin: 0 auto; padding: 24px 20px 60px; }
-  .cluster { margin-bottom: 32px; }
-  .cluster-hdr { display: flex; align-items: center; gap: 10px; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 2px solid var(--line); }
-  .cluster-icon { font-size: 22px; }
-  .cluster-hdr h2 { font-size: 18px; font-weight: 700; flex: 1; }
-  .sample-count { font-size: 12px; color: var(--muted); font-weight: 500; }
-  .card-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 16px; }
-  @media (max-width: 900px) { .card-grid { grid-template-columns: repeat(2, 1fr); } }
-  @media (max-width: 560px) { .card-grid { grid-template-columns: 1fr; } }
-  .card { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); overflow: hidden; text-decoration: none; color: inherit; transition: box-shadow .2s, transform .15s; display: flex; flex-direction: column; }
-  .card:hover { box-shadow: 0 8px 24px rgba(17,24,39,.12); transform: translateY(-2px); border-color: var(--accent); }
-  .thumb { aspect-ratio: 16/9; overflow: hidden; background: #f1f5f9; }
-  .thumb img { width: 100%; height: 100%; object-fit: cover; display: block; }
-  .card-body { padding: 12px 14px 14px; }
-  .card-body h4 { font-size: 14px; font-weight: 650; margin-bottom: 3px; }
-  .card-body .client { font-size: 12px; color: var(--muted); margin-bottom: 6px; }
-  .card-meta { display: flex; gap: 6px; flex-wrap: wrap; }
-  .fmt-badge { font-size: 10px; font-weight: 600; padding: 2px 8px; border-radius: 999px; text-transform: uppercase; letter-spacing: 0.04em; }
+  .cluster-section { margin-bottom: 36px; }
+  .cluster-head { display: flex; align-items: baseline; justify-content: space-between; gap: 14px; margin-bottom: 14px; padding-bottom: 10px; border-bottom: 1px solid var(--border); }
+  .cluster-title-wrap { display: flex; align-items: baseline; gap: 12px; }
+  .cluster-title { font-family: 'Inter', sans-serif; font-size: 16px; font-weight: 600; color: var(--ink-0); letter-spacing: -0.014em; }
+  .cluster-meta { font-size: 11px; color: var(--ink-3); font-variant-numeric: tabular-nums; }
+  .cluster-icon { font-size: 14px; opacity: 0.7; }
+
+  .filter-row { display: flex; align-items: center; gap: 8px; padding: 14px 16px; background: var(--bg-1); border: 1px solid var(--border); border-radius: 8px; margin-bottom: 26px; flex-wrap: wrap; }
+  .filter-row .flbl { font-size: 10px; font-weight: 600; color: var(--ink-3); letter-spacing: 0.12em; text-transform: uppercase; margin-right: 6px; }
+
+  .summary-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 8px; margin-bottom: 26px; }
+  .summary-cell { background: var(--bg-1); padding: 14px 18px; }
+  .summary-cell .l { font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 6px; }
+  .summary-cell .v { font-family: 'Inter', sans-serif; font-size: 22px; font-weight: 600; color: var(--gold-ink); letter-spacing: -0.018em; line-height: 1; font-variant-numeric: tabular-nums; }
+  .summary-cell .meta { font-size: 11px; color: var(--ink-2); margin-top: 4px; }
 </style>
 </head>
 <body>
 <div id="deck-content">
-  <div class="header">
-    <div class="header-top">
-      <div>
-        <h1>Gratia — Work Samples</h1>
-        <div class="meta">27 consulting samples across 9 service clusters</div>
-      </div>
-      <div class="count">27 samples</div>
+<div class="glow"></div>
+
+<div class="app">
+  <header class="mainnav">
+    <a class="nav-brand" href="../"><span class="nav-brand-fallback">G</span></a>
+    <div class="nav-context"><div class="nctx-1">Gratia</div><div class="nctx-2">Work Sample Library</div></div>
+    <div class="nav-right">
+      <button class="icon-btn theme-toggle" id="themeToggle" aria-label="Toggle theme"><svg class="ti-moon" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" stroke-linecap="round" stroke-linejoin="round"/></svg><svg class="ti-sun" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" stroke-linecap="round"/></svg></button>
     </div>
-    <div class="legend"><span class="legend-item"><span class="legend-dot" style="background:#94a3b8;"></span>Slide Deck (18)</span><span class="legend-item"><span class="legend-dot" style="background:#92400e;"></span>One-Pager (2)</span><span class="legend-item"><span class="legend-dot" style="background:#1d4ed8;"></span>Document (1)</span><span class="legend-item"><span class="legend-dot" style="background:#059669;"></span>Status Report (1)</span><span class="legend-item"><span class="legend-dot" style="background:#86198f;"></span>Canvas (1)</span><span class="legend-item"><span class="legend-dot" style="background:#c2410c;"></span>Process Doc (1)</span><span class="legend-item"><span class="legend-dot" style="background:#059669;"></span>Live Dashboard (1)</span><span class="legend-item"><span class="legend-dot" style="background:#1d4ed8;"></span>Architecture Doc (1)</span><span class="legend-item"><span class="legend-dot" style="background:#b91c1c;"></span>Playbook (1)</span></div>
-  </div>
-  <div class="container">
-    <section class="cluster">
-      <div class="cluster-hdr">
-        <span class="cluster-icon">📊</span>
-        <h2>Financial Modeling & Valuation</h2>
-        <span class="sample-count">3 samples</span>
+  </header>
+
+  <main class="content">
+    <section class="page-head">
+      <div>
+        <div class="eyebrow-row">
+          <span class="eyebrow">27 samples · 9 service clusters</span>
+          <span class="status-chip" data-status="green"><span class="dot-pulse"></span>All samples live</span>
+        </div>
+        <h1 class="lede">A library of <em>27 anonymized consulting deliverables</em> across financial modeling, market research, dashboards, decks, canvases, and more.</h1>
+        <p class="sublede">Each sample is illustrative — built around a fictional client narrative but grounded in real engagement formats. Click any card to open the full deliverable. Toggle theme top-right.</p>
       </div>
-      <div class="card-grid">
-      <a class="card" href="samples/financial-modeling--valuation-range-memo.html">
-        <div class="thumb"><img src="thumbs/valuation-range-memo.png" alt="Valuation Range Memo" loading="lazy"/></div>
-        <div class="card-body">
-          <h4>Valuation Range Memo</h4>
-          <p class="client">NorthBridge Payments ($42M ARR)</p>
-          <div class="card-meta"><span class="fmt-badge" style="background:#1e293b;color:#94a3b8;">Slide Deck</span></div>
-        </div>
-      </a>
-      <a class="card" href="samples/financial-modeling--financial-forecast.html">
-        <div class="thumb"><img src="thumbs/financial-forecast.png" alt="Multi-Year Financial Forecast" loading="lazy"/></div>
-        <div class="card-body">
-          <h4>Multi-Year Financial Forecast</h4>
-          <p class="client">NorthBridge Payments</p>
-          <div class="card-meta"><span class="fmt-badge" style="background:#1e293b;color:#94a3b8;">Slide Deck</span></div>
-        </div>
-      </a>
-      <a class="card" href="samples/financial-modeling--scenario-sensitivity.html">
-        <div class="thumb"><img src="thumbs/scenario-sensitivity.png" alt="Scenario & Sensitivity Analysis" loading="lazy"/></div>
-        <div class="card-body">
-          <h4>Scenario & Sensitivity Analysis</h4>
-          <p class="client">NorthBridge Payments</p>
-          <div class="card-meta"><span class="fmt-badge" style="background:#1e293b;color:#94a3b8;">Slide Deck</span></div>
-        </div>
-      </a></div>
     </section>
-    <section class="cluster">
-      <div class="cluster-hdr">
-        <span class="cluster-icon">🔍</span>
-        <h2>Market Research & Intelligence</h2>
-        <span class="sample-count">3 samples</span>
-      </div>
-      <div class="card-grid">
-      <a class="card" href="samples/market-research--market-sizing.html">
-        <div class="thumb"><img src="thumbs/market-sizing.png" alt="Market Sizing Summary Sheet" loading="lazy"/></div>
-        <div class="card-body">
-          <h4>Market Sizing Summary Sheet</h4>
-          <p class="client">Embedded Payments / Vertical SaaS</p>
-          <div class="card-meta"><span class="fmt-badge" style="background:#1e293b;color:#94a3b8;">Slide Deck</span></div>
-        </div>
-      </a>
-      <a class="card" href="samples/market-research--comp-dashboard.html">
-        <div class="thumb"><img src="thumbs/comp-dashboard.png" alt="Competitor Dashboard" loading="lazy"/></div>
-        <div class="card-body">
-          <h4>Competitor Dashboard</h4>
-          <p class="client">Embedded Lending / E-commerce</p>
-          <div class="card-meta"><span class="fmt-badge" style="background:#1e293b;color:#94a3b8;">Slide Deck</span></div>
-        </div>
-      </a>
-      <a class="card" href="samples/market-research--cust-seg.html">
-        <div class="thumb"><img src="thumbs/cust-seg.png" alt="Customer Segmentation Map" loading="lazy"/></div>
-        <div class="card-body">
-          <h4>Customer Segmentation Map</h4>
-          <p class="client">SMB Banking / Underserved Verticals</p>
-          <div class="card-meta"><span class="fmt-badge" style="background:#1e293b;color:#94a3b8;">Slide Deck</span></div>
-        </div>
-      </a></div>
+
+    <section class="summary-row">
+      <div class="summary-cell"><div class="l">Total samples</div><div class="v">27</div><div class="meta">across 9 clusters</div></div>
+      <div class="summary-cell"><div class="l">Interactive dashboards</div><div class="v">7</div><div class="meta">live data + drilldown</div></div>
+      <div class="summary-cell"><div class="l">Models &amp; reports</div><div class="v">8</div><div class="meta">analytical depth</div></div>
+      <div class="summary-cell"><div class="l">Decks, canvases &amp; docs</div><div class="v">12</div><div class="meta">structured deliverables</div></div>
     </section>
-    <section class="cluster">
-      <div class="cluster-hdr">
-        <span class="cluster-icon">📈</span>
-        <h2>Data Dashboards & Analytics</h2>
-        <span class="sample-count">3 samples</span>
-      </div>
-      <div class="card-grid">
-      <a class="card" href="samples/data-dashboards--exec-financial-dashboard.html">
-        <div class="thumb"><img src="thumbs/exec-financial-dashboard.png" alt="Executive Financial Dashboard" loading="lazy"/></div>
-        <div class="card-body">
-          <h4>Executive Financial Dashboard</h4>
-          <p class="client">Meridian SaaS ($35M ARR)</p>
-          <div class="card-meta"><span class="fmt-badge" style="background:#1e293b;color:#94a3b8;">Slide Deck</span></div>
+
+    <div class="filter-row">
+      <span class="flbl">Filter by format</span>
+      <button class="chip active" data-fmt="all">All<span class="ct">27</span></button>
+      <button class="chip" data-fmt="dashboard">Dashboards<span class="ct">7</span></button>
+      <button class="chip" data-fmt="model">Models<span class="ct">3</span></button>
+      <button class="chip" data-fmt="report">Reports<span class="ct">3</span></button>
+      <button class="chip" data-fmt="deck">Decks<span class="ct">5</span></button>
+      <button class="chip" data-fmt="canvas">Canvas / map<span class="ct">3</span></button>
+      <button class="chip" data-fmt="doc">Docs &amp; playbooks<span class="ct">3</span></button>
+      <button class="chip" data-fmt="research">Research<span class="ct">3</span></button>
+    </div>
+
+    <div id="clusters"></div>
+
+    <footer class="foot">
+      <div>gratia · work-sample-library · v2.0</div>
+      <div>27 samples · 9 clusters · prepared by Gratia</div>
+    </footer>
+  </main>
+</div>
+
+<script>
+const SAMPLES = [
+  // Financial Modeling & Valuation
+  { cluster: 'fm', file: 'financial-modeling--financial-forecast.html',     name: '5-Year Financial Forecast',     client: 'NorthBridge Payments',       fmt: 'model',     fmtLabel: 'Interactive model',  pip: '#5ad9bc' },
+  { cluster: 'fm', file: 'financial-modeling--scenario-sensitivity.html',   name: 'Scenario &amp; Sensitivity',     client: 'NorthBridge Payments',       fmt: 'model',     fmtLabel: 'Interactive model',  pip: '#5ad9bc' },
+  { cluster: 'fm', file: 'financial-modeling--valuation-range-memo.html',   name: 'Valuation Range Memo',          client: 'NorthBridge Payments',       fmt: 'model',     fmtLabel: 'Memo + chart',       pip: '#5ad9bc' },
+  // Market Research
+  { cluster: 'mr', file: 'market-research--market-sizing.html',             name: 'Market Sizing Summary',         client: 'Embedded Payments',          fmt: 'research',  fmtLabel: 'Sizing report',      pip: '#87b3ec' },
+  { cluster: 'mr', file: 'market-research--comp-dashboard.html',            name: 'Competitor Dashboard',          client: 'Embedded Lending',           fmt: 'research',  fmtLabel: 'Live dashboard',     pip: '#87b3ec' },
+  { cluster: 'mr', file: 'market-research--cust-seg.html',                  name: 'Customer Segmentation Map',     client: 'SMB Banking',                fmt: 'research',  fmtLabel: 'Segmentation map',   pip: '#87b3ec' },
+  // Data Dashboards
+  { cluster: 'dd', file: 'data-dashboards--exec-financial-dashboard.html',  name: 'Exec Financial Dashboard',      client: 'Meridian SaaS · $35M ARR',   fmt: 'dashboard', fmtLabel: 'Live dashboard',     pip: '#16a38a' },
+  { cluster: 'dd', file: 'data-dashboards--kpi-scorecard-framework.html',   name: 'KPI Scorecard Framework',       client: 'Apex Logistics · $50M rev',  fmt: 'dashboard', fmtLabel: 'Live dashboard',     pip: '#16a38a' },
+  { cluster: 'dd', file: 'data-dashboards--pipeline-forecast-dashboard.html',name:'Pipeline &amp; Forecast Dashboard',client: 'Helix CRM · Series B',     fmt: 'dashboard', fmtLabel: 'Live dashboard',     pip: '#16a38a' },
+  // Pitch Decks
+  { cluster: 'pd', file: 'pitch-decks--investor-pitch-deck.html',           name: 'Investor Pitch Deck',           client: 'Canopy Health · Series A',   fmt: 'deck',      fmtLabel: 'Slide deck',         pip: '#e6b259' },
+  { cluster: 'pd', file: 'pitch-decks--exec-strategy-deck.html',            name: 'Exec Strategy Deck',            client: 'Atlas Industrial · $200M',   fmt: 'deck',      fmtLabel: 'Slide deck',         pip: '#e6b259' },
+  { cluster: 'pd', file: 'pitch-decks--high-stakes-proposal.html',          name: 'High-Stakes Proposal',          client: 'Pacific NW Health System',   fmt: 'deck',      fmtLabel: 'RFP response',       pip: '#e6b259' },
+  // Project Management
+  { cluster: 'pm', file: 'project-management--project-charter.html',        name: 'Project Charter',               client: 'Riverton Financial · Core',  fmt: 'doc',       fmtLabel: 'Document',           pip: '#b494e8' },
+  { cluster: 'pm', file: 'project-management--risk-register.html',          name: 'Risk Register',                 client: 'Summit Retail · 200-site POS',fmt:'report',     fmtLabel: 'Report + matrix',    pip: '#b494e8' },
+  { cluster: 'pm', file: 'project-management--status-dashboard.html',       name: 'Status Dashboard',              client: 'Crestview Health · EHR',     fmt: 'dashboard', fmtLabel: 'Live dashboard',     pip: '#b494e8' },
+  // Business Strategy
+  { cluster: 'bs', file: 'business-strategy--growth-thesis.html',           name: 'Growth Thesis',                 client: 'Verdant Energy · Clean energy',fmt:'deck',     fmtLabel: 'Slide deck',         pip: '#2cc2a5' },
+  { cluster: 'bs', file: 'business-strategy--strategic-roadmap.html',       name: 'Strategic Roadmap',             client: 'Palisade Insurance · Digital',fmt:'deck',      fmtLabel: 'Roadmap',            pip: '#2cc2a5' },
+  { cluster: 'bs', file: 'business-strategy--business-model-canvas.html',   name: 'Business Model Canvas',         client: 'Kinetic Labs · Marketplace', fmt: 'canvas',    fmtLabel: 'Canvas',             pip: '#2cc2a5' },
+  // Growth & GTM
+  { cluster: 'gg', file: 'growth-gtm--gtm-strategy-roadmap.html',           name: 'GTM Strategy Roadmap',          client: 'Prism Analytics · Enterprise',fmt:'deck',      fmtLabel: 'Strategy doc',       pip: '#f0928a' },
+  { cluster: 'gg', file: 'growth-gtm--market-entry-matrix.html',            name: 'Market Entry Matrix',           client: 'Cobalt Fintech · LATAM',     fmt: 'canvas',    fmtLabel: 'Matrix',             pip: '#f0928a' },
+  { cluster: 'gg', file: 'growth-gtm--revenue-growth-waterfall.html',       name: 'Revenue Growth Waterfall',      client: 'Beacon SaaS · $15M ARR',     fmt: 'model',     fmtLabel: 'Waterfall + table',  pip: '#f0928a' },
+  // BPO
+  { cluster: 'bp', file: 'bpo--workflow-map.html',                          name: 'Workflow Map',                  client: 'Anchor Logistics · Freight', fmt: 'canvas',    fmtLabel: 'Process map',        pip: '#8f9198' },
+  { cluster: 'bp', file: 'bpo--impact-report.html',                         name: 'Lean Impact Report',            client: 'Forge Manufacturing',        fmt: 'report',    fmtLabel: 'Impact report',      pip: '#8f9198' },
+  { cluster: 'bp', file: 'bpo--ops-dashboard.html',                         name: 'Operations Dashboard',          client: 'Vanguard Claims',            fmt: 'dashboard', fmtLabel: 'Live dashboard',     pip: '#8f9198' },
+  // RevOps
+  { cluster: 'ro', file: 'revops--crm-blueprint.html',                      name: 'CRM Blueprint',                 client: 'Stratos Cloud',              fmt: 'doc',       fmtLabel: 'Architecture doc',   pip: '#5c5e65' },
+  { cluster: 'ro', file: 'revops--revops-dashboard.html',                   name: 'RevOps Dashboard',              client: 'Pinnacle HR · $30M ARR',     fmt: 'dashboard', fmtLabel: 'Live dashboard',     pip: '#5c5e65' },
+  { cluster: 'ro', file: 'revops--sales-playbook.html',                     name: 'Outbound Sales Playbook',       client: 'Nexus Security · Outbound',  fmt: 'doc',       fmtLabel: 'Playbook',           pip: '#5c5e65' },
+];
+
+const CLUSTERS = [
+  { key: 'fm', name: 'Financial Modeling &amp; Valuation', icon: '📊' },
+  { key: 'mr', name: 'Market Research &amp; Intelligence', icon: '🔍' },
+  { key: 'dd', name: 'Data Dashboards &amp; Analytics',    icon: '📈' },
+  { key: 'pd', name: 'Pitch Decks &amp; Proposals',        icon: '🎯' },
+  { key: 'pm', name: 'Project Management',                  icon: '📋' },
+  { key: 'bs', name: 'Business Strategy',                   icon: '🧭' },
+  { key: 'gg', name: 'Growth &amp; GTM Strategy',           icon: '🚀' },
+  { key: 'bp', name: 'Business Process Optimization',       icon: '⚙️' },
+  { key: 'ro', name: 'RevOps &amp; Sales Enablement',       icon: '💼' },
+];
+
+let activeFmt = 'all';
+
+function render() {
+  const wrap = document.getElementById('clusters');
+  const samples = activeFmt === 'all' ? SAMPLES : SAMPLES.filter(s => s.fmt === activeFmt);
+  wrap.innerHTML = CLUSTERS.map(c => {
+    const items = samples.filter(s => s.cluster === c.key);
+    if (!items.length) return '';
+    return `
+      <section class="cluster-section">
+        <div class="cluster-head">
+          <div class="cluster-title-wrap">
+            <span class="cluster-icon">${c.icon}</span>
+            <span class="cluster-title">${c.name}</span>
+          </div>
+          <span class="cluster-meta">${items.length} sample${items.length > 1 ? 's' : ''}</span>
         </div>
-      </a>
-      <a class="card" href="samples/data-dashboards--kpi-scorecard-framework.html">
-        <div class="thumb"><img src="thumbs/kpi-scorecard-framework.png" alt="KPI Scorecard Framework" loading="lazy"/></div>
-        <div class="card-body">
-          <h4>KPI Scorecard Framework</h4>
-          <p class="client">Apex Logistics ($50M rev)</p>
-          <div class="card-meta"><span class="fmt-badge" style="background:#1e293b;color:#94a3b8;">Slide Deck</span></div>
+        <div class="library-grid">
+          ${items.map(s => `
+            <a class="lib-card" href="samples/${s.file}">
+              <div class="lib-eyebrow"><span class="lib-pip" style="background:${s.pip}"></span>${s.fmtLabel}</div>
+              <div class="lib-title">${s.name}</div>
+              <div class="lib-client">${s.client}</div>
+              <div class="lib-foot">
+                <span class="lib-fmt">${s.fmt}</span>
+                <span class="lib-arrow">→</span>
+              </div>
+            </a>
+          `).join('')}
         </div>
-      </a>
-      <a class="card" href="samples/data-dashboards--pipeline-forecast-dashboard.html">
-        <div class="thumb"><img src="thumbs/pipeline-forecast-dashboard.png" alt="Pipeline & Forecast Dashboard" loading="lazy"/></div>
-        <div class="card-body">
-          <h4>Pipeline & Forecast Dashboard</h4>
-          <p class="client">Helix CRM (Series B)</p>
-          <div class="card-meta"><span class="fmt-badge" style="background:#1e293b;color:#94a3b8;">Slide Deck</span></div>
-        </div>
-      </a></div>
-    </section>
-    <section class="cluster">
-      <div class="cluster-hdr">
-        <span class="cluster-icon">🎯</span>
-        <h2>Pitch Decks & Proposals</h2>
-        <span class="sample-count">3 samples</span>
-      </div>
-      <div class="card-grid">
-      <a class="card" href="samples/pitch-decks--investor-pitch-deck.html">
-        <div class="thumb"><img src="thumbs/investor-pitch-deck.png" alt="Investor Pitch Deck" loading="lazy"/></div>
-        <div class="card-body">
-          <h4>Investor Pitch Deck</h4>
-          <p class="client">Canopy Health (Series A)</p>
-          <div class="card-meta"><span class="fmt-badge" style="background:#1e293b;color:#94a3b8;">Slide Deck</span></div>
-        </div>
-      </a>
-      <a class="card" href="samples/pitch-decks--exec-strategy-deck.html">
-        <div class="thumb"><img src="thumbs/exec-strategy-deck.png" alt="Executive Strategy Deck" loading="lazy"/></div>
-        <div class="card-body">
-          <h4>Executive Strategy Deck</h4>
-          <p class="client">Atlas Industrial ($200M)</p>
-          <div class="card-meta"><span class="fmt-badge" style="background:#1e293b;color:#94a3b8;">Slide Deck</span></div>
-        </div>
-      </a>
-      <a class="card" href="samples/pitch-decks--high-stakes-proposal.html">
-        <div class="thumb"><img src="thumbs/high-stakes-proposal.png" alt="High-Stakes Proposal" loading="lazy"/></div>
-        <div class="card-body">
-          <h4>High-Stakes Proposal</h4>
-          <p class="client">Pacific NW Health System</p>
-          <div class="card-meta"><span class="fmt-badge" style="background:#1e293b;color:#94a3b8;">Slide Deck</span></div>
-        </div>
-      </a></div>
-    </section>
-    <section class="cluster">
-      <div class="cluster-hdr">
-        <span class="cluster-icon">📋</span>
-        <h2>Project Management</h2>
-        <span class="sample-count">3 samples</span>
-      </div>
-      <div class="card-grid">
-      <a class="card" href="samples/project-management--project-charter.html">
-        <div class="thumb"><img src="thumbs/project-charter.png" alt="Project Charter" loading="lazy"/></div>
-        <div class="card-body">
-          <h4>Project Charter</h4>
-          <p class="client">Riverton Financial (core banking)</p>
-          <div class="card-meta"><span class="fmt-badge" style="background:#eff6ff;color:#1d4ed8;">Document</span></div>
-        </div>
-      </a>
-      <a class="card" href="samples/project-management--risk-register.html">
-        <div class="thumb"><img src="thumbs/risk-register.png" alt="Risk Register" loading="lazy"/></div>
-        <div class="card-body">
-          <h4>Risk Register</h4>
-          <p class="client">Summit Retail (200-site POS)</p>
-          <div class="card-meta"><span class="fmt-badge" style="background:#fef3c7;color:#92400e;">One-Pager</span></div>
-        </div>
-      </a>
-      <a class="card" href="samples/project-management--status-dashboard.html">
-        <div class="thumb"><img src="thumbs/status-dashboard.png" alt="Status Dashboard" loading="lazy"/></div>
-        <div class="card-body">
-          <h4>Status Dashboard</h4>
-          <p class="client">Crestview Health (EHR)</p>
-          <div class="card-meta"><span class="fmt-badge" style="background:#ecfdf5;color:#059669;">Status Report</span></div>
-        </div>
-      </a></div>
-    </section>
-    <section class="cluster">
-      <div class="cluster-hdr">
-        <span class="cluster-icon">🧭</span>
-        <h2>Business Strategy Services</h2>
-        <span class="sample-count">3 samples</span>
-      </div>
-      <div class="card-grid">
-      <a class="card" href="samples/business-strategy--growth-thesis.html">
-        <div class="thumb"><img src="thumbs/growth-thesis.png" alt="Growth Thesis Deck" loading="lazy"/></div>
-        <div class="card-body">
-          <h4>Growth Thesis Deck</h4>
-          <p class="client">Verdant Energy (clean energy)</p>
-          <div class="card-meta"><span class="fmt-badge" style="background:#1e293b;color:#94a3b8;">Slide Deck</span></div>
-        </div>
-      </a>
-      <a class="card" href="samples/business-strategy--strategic-roadmap.html">
-        <div class="thumb"><img src="thumbs/strategic-roadmap.png" alt="Strategic Roadmap" loading="lazy"/></div>
-        <div class="card-body">
-          <h4>Strategic Roadmap</h4>
-          <p class="client">Palisade Insurance (digital txfm)</p>
-          <div class="card-meta"><span class="fmt-badge" style="background:#1e293b;color:#94a3b8;">Slide Deck</span></div>
-        </div>
-      </a>
-      <a class="card" href="samples/business-strategy--business-model-canvas.html">
-        <div class="thumb"><img src="thumbs/business-model-canvas.png" alt="Business Model Canvas" loading="lazy"/></div>
-        <div class="card-body">
-          <h4>Business Model Canvas</h4>
-          <p class="client">Kinetic Labs (marketplace)</p>
-          <div class="card-meta"><span class="fmt-badge" style="background:#fae8ff;color:#86198f;">Canvas</span></div>
-        </div>
-      </a></div>
-    </section>
-    <section class="cluster">
-      <div class="cluster-hdr">
-        <span class="cluster-icon">🚀</span>
-        <h2>Growth & GTM Strategy</h2>
-        <span class="sample-count">3 samples</span>
-      </div>
-      <div class="card-grid">
-      <a class="card" href="samples/growth-gtm--gtm-strategy-roadmap.html">
-        <div class="thumb"><img src="thumbs/gtm-strategy-roadmap.png" alt="GTM Strategy Roadmap" loading="lazy"/></div>
-        <div class="card-body">
-          <h4>GTM Strategy Roadmap</h4>
-          <p class="client">Prism Analytics (enterprise)</p>
-          <div class="card-meta"><span class="fmt-badge" style="background:#1e293b;color:#94a3b8;">Slide Deck</span></div>
-        </div>
-      </a>
-      <a class="card" href="samples/growth-gtm--market-entry-matrix.html">
-        <div class="thumb"><img src="thumbs/market-entry-matrix.png" alt="Market Entry Matrix" loading="lazy"/></div>
-        <div class="card-body">
-          <h4>Market Entry Matrix</h4>
-          <p class="client">Cobalt Fintech (LATAM)</p>
-          <div class="card-meta"><span class="fmt-badge" style="background:#1e293b;color:#94a3b8;">Slide Deck</span></div>
-        </div>
-      </a>
-      <a class="card" href="samples/growth-gtm--revenue-growth-waterfall.html">
-        <div class="thumb"><img src="thumbs/revenue-growth-waterfall.png" alt="Revenue Growth Waterfall" loading="lazy"/></div>
-        <div class="card-body">
-          <h4>Revenue Growth Waterfall</h4>
-          <p class="client">Beacon SaaS ($15M ARR)</p>
-          <div class="card-meta"><span class="fmt-badge" style="background:#1e293b;color:#94a3b8;">Slide Deck</span></div>
-        </div>
-      </a></div>
-    </section>
-    <section class="cluster">
-      <div class="cluster-hdr">
-        <span class="cluster-icon">⚙️</span>
-        <h2>Business Process Optimization</h2>
-        <span class="sample-count">3 samples</span>
-      </div>
-      <div class="card-grid">
-      <a class="card" href="samples/bpo--workflow-map.html">
-        <div class="thumb"><img src="thumbs/workflow-map.png" alt="Workflow Map" loading="lazy"/></div>
-        <div class="card-body">
-          <h4>Workflow Map</h4>
-          <p class="client">Anchor Logistics (freight)</p>
-          <div class="card-meta"><span class="fmt-badge" style="background:#fff7ed;color:#c2410c;">Process Doc</span></div>
-        </div>
-      </a>
-      <a class="card" href="samples/bpo--impact-report.html">
-        <div class="thumb"><img src="thumbs/impact-report.png" alt="Impact Report" loading="lazy"/></div>
-        <div class="card-body">
-          <h4>Impact Report</h4>
-          <p class="client">Forge Manufacturing (lean)</p>
-          <div class="card-meta"><span class="fmt-badge" style="background:#fef3c7;color:#92400e;">One-Pager</span></div>
-        </div>
-      </a>
-      <a class="card" href="samples/bpo--ops-dashboard.html">
-        <div class="thumb"><img src="thumbs/ops-dashboard.png" alt="Ops Dashboard" loading="lazy"/></div>
-        <div class="card-body">
-          <h4>Ops Dashboard</h4>
-          <p class="client">Vanguard Claims (automation)</p>
-          <div class="card-meta"><span class="fmt-badge" style="background:#ecfdf5;color:#059669;">Live Dashboard</span></div>
-        </div>
-      </a></div>
-    </section>
-    <section class="cluster">
-      <div class="cluster-hdr">
-        <span class="cluster-icon">💼</span>
-        <h2>RevOps & Sales Enablement</h2>
-        <span class="sample-count">3 samples</span>
-      </div>
-      <div class="card-grid">
-      <a class="card" href="samples/revops--crm-blueprint.html">
-        <div class="thumb"><img src="thumbs/crm-blueprint.png" alt="CRM Blueprint" loading="lazy"/></div>
-        <div class="card-body">
-          <h4>CRM Blueprint</h4>
-          <p class="client">Stratos Cloud (CRM design)</p>
-          <div class="card-meta"><span class="fmt-badge" style="background:#eff6ff;color:#1d4ed8;">Architecture Doc</span></div>
-        </div>
-      </a>
-      <a class="card" href="samples/revops--revops-dashboard.html">
-        <div class="thumb"><img src="thumbs/revops-dashboard.png" alt="RevOps Dashboard" loading="lazy"/></div>
-        <div class="card-body">
-          <h4>RevOps Dashboard</h4>
-          <p class="client">Pinnacle HR ($30M ARR)</p>
-          <div class="card-meta"><span class="fmt-badge" style="background:#1e293b;color:#94a3b8;">Slide Deck</span></div>
-        </div>
-      </a>
-      <a class="card" href="samples/revops--sales-playbook.html">
-        <div class="thumb"><img src="thumbs/sales-playbook.png" alt="Sales Playbook" loading="lazy"/></div>
-        <div class="card-body">
-          <h4>Sales Playbook</h4>
-          <p class="client">Nexus Security (outbound)</p>
-          <div class="card-meta"><span class="fmt-badge" style="background:#fef2f2;color:#b91c1c;">Playbook</span></div>
-        </div>
-      </a></div>
-    </section></div>
+      </section>
+    `;
+  }).join('');
+}
+
+document.querySelectorAll('.filter-row .chip').forEach(c => {
+  c.addEventListener('click', () => {
+    document.querySelectorAll('.filter-row .chip').forEach(x => x.classList.toggle('active', x === c));
+    activeFmt = c.dataset.fmt;
+    render();
+  });
+});
+
+document.getElementById('themeToggle').addEventListener('click', () => {
+  const cur = document.documentElement.getAttribute('data-theme') || 'dark';
+  const next = cur === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  try { localStorage.setItem('apollo-theme', next); } catch (e) {}
+});
+
+render();
+</script>
+
 </div>
 </body>
 </html>

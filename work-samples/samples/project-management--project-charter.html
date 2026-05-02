@@ -1,718 +1,192 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Project Charter: Core Banking Platform Migration</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<meta charset="UTF-8" />
+<title>Gratia — Project Charter · Riverton Financial (Sample)</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<script src="../../auth.js"></script>
+<link rel="stylesheet" href="../_design.css">
+<script>(function(){try{const s=localStorage.getItem('apollo-theme');if(s==='light'||s==='dark')document.documentElement.setAttribute('data-theme',s);}catch(e){}})();</script>
+<style>
+  .charter-meta { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 8px; margin-bottom: 22px; }
+  .cm-cell { background: var(--bg-1); padding: 14px 16px; }
+  .cm-cell .l { font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 6px; }
+  .cm-cell .v { font-family: 'Inter', sans-serif; font-size: 16px; font-weight: 600; color: var(--ink-0); letter-spacing: -0.014em; }
+  .cm-cell .meta { font-size: 11px; color: var(--ink-2); margin-top: 3px; }
 
-        html, body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Helvetica Neue', sans-serif;
-            background: #f8f8f8;
-            color: #1a1a1a;
-            line-height: 1.6;
-        }
-
-        .document {
-            max-width: 900px;
-            margin: 40px auto;
-            background: white;
-            padding: 60px 50px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
-            border-radius: 2px;
-        }
-
-        .header-block {
-            border-bottom: 3px solid #18A873;
-            padding-bottom: 30px;
-            margin-bottom: 40px;
-        }
-
-        .header-meta {
-            display: flex;
-            justify-content: space-between;
-            align-items: flex-start;
-            margin-bottom: 20px;
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            color: #666;
-        }
-
-        .classification {
-            background: #f0f0f0;
-            color: #333;
-            padding: 4px 12px;
-            border-radius: 2px;
-            font-size: 11px;
-            font-weight: 600;
-        }
-
-        h1 {
-            font-size: 42px;
-            font-weight: 700;
-            margin-bottom: 8px;
-            color: #1a1a1a;
-        }
-
-        .subtitle {
-            font-size: 16px;
-            color: #666;
-            font-weight: 400;
-            margin-bottom: 16px;
-        }
-
-        .doc-meta {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 16px;
-            padding: 16px;
-            background: #fafafa;
-            border: 1px solid #e0e0e0;
-            font-size: 12px;
-            margin-bottom: 40px;
-        }
-
-        .doc-meta-item {
-            border-right: 1px solid #e0e0e0;
-            padding-right: 12px;
-        }
-
-        .doc-meta-item:last-child {
-            border-right: none;
-        }
-
-        .meta-label {
-            color: #999;
-            text-transform: uppercase;
-            font-size: 10px;
-            margin-bottom: 4px;
-            font-weight: 600;
-            letter-spacing: 0.5px;
-        }
-
-        .meta-value {
-            color: #333;
-            font-weight: 500;
-        }
-
-        /* Signature Block */
-        .signature-block {
-            margin: 40px 0;
-            padding: 24px;
-            background: #f9f9f9;
-            border: 1px solid #e0e0e0;
-        }
-
-        .sig-title {
-            font-size: 14px;
-            font-weight: 600;
-            margin-bottom: 24px;
-            color: #1a1a1a;
-        }
-
-        .sig-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 24px;
-        }
-
-        .sig-line {
-            display: flex;
-            flex-direction: column;
-        }
-
-        .sig-blank {
-            border-bottom: 1px solid #333;
-            height: 40px;
-            margin-bottom: 8px;
-        }
-
-        .sig-label {
-            font-size: 12px;
-            font-weight: 600;
-            color: #666;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .sig-sublabel {
-            font-size: 11px;
-            color: #999;
-            margin-top: 2px;
-        }
-
-        h2 {
-            font-size: 28px;
-            font-weight: 700;
-            margin: 50px 0 30px 0;
-            color: #1a1a1a;
-            padding-bottom: 12px;
-            border-bottom: 2px solid #18A873;
-        }
-
-        h3 {
-            font-size: 16px;
-            font-weight: 600;
-            margin: 24px 0 16px 0;
-            color: #1a1a1a;
-        }
-
-        p {
-            margin-bottom: 16px;
-            color: #333;
-        }
-
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-bottom: 30px;
-            font-size: 14px;
-        }
-
-        th {
-            background: #f5f5f5;
-            padding: 12px;
-            text-align: left;
-            font-weight: 600;
-            color: #1a1a1a;
-            border-bottom: 2px solid #e0e0e0;
-        }
-
-        td {
-            padding: 14px 12px;
-            border-bottom: 1px solid #e0e0e0;
-        }
-
-        tr:nth-child(even) {
-            background: #fafafa;
-        }
-
-        /* RACI Matrix */
-        .raci-matrix {
-            overflow-x: auto;
-            margin-bottom: 30px;
-        }
-
-        .raci-cell {
-            text-align: center;
-            font-weight: 600;
-            color: #18A873;
-            font-size: 13px;
-        }
-
-        /* Gantt Chart SVG */
-        svg {
-            max-width: 100%;
-            height: auto;
-            margin-bottom: 30px;
-        }
-
-        /* Metric Cards */
-        .metrics-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 20px;
-            margin-bottom: 30px;
-        }
-
-        .metric-card {
-            border: 1px solid #e0e0e0;
-            padding: 24px;
-            border-radius: 2px;
-            background: white;
-        }
-
-        .metric-card h3 {
-            margin-top: 0;
-            color: #18A873;
-        }
-
-        .metric-value {
-            font-size: 28px;
-            font-weight: 700;
-            color: #1a1a1a;
-            margin: 12px 0;
-        }
-
-        .metric-desc {
-            font-size: 13px;
-            color: #666;
-        }
-
-        /* Risk Grid */
-        .risk-grid {
-            position: relative;
-            width: 100%;
-            margin-bottom: 30px;
-            background: white;
-            border: 1px solid #e0e0e0;
-            padding: 20px;
-        }
-
-        .risk-svg-container {
-            width: 100%;
-            height: 400px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* Footer */
-        .document-footer {
-            margin-top: 60px;
-            padding-top: 30px;
-            border-top: 1px solid #e0e0e0;
-            text-align: center;
-            font-size: 12px;
-            color: #999;
-        }
-    </style>
+  .doc-section h2 { color: var(--ink-0); border-bottom: 1px solid var(--border); padding-bottom: 8px; }
+  .scope-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .stake-table, .ms-table { width: 100%; border-collapse: separate; border-spacing: 0; font-size: 12.5px; }
+  .stake-table th, .ms-table th { font-size: 9.5px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-3); padding: 9px 12px; border-bottom: 1px solid var(--border); text-align: left; }
+  .stake-table td, .ms-table td { padding: 11px 12px; border-bottom: 1px solid var(--border); color: var(--ink-1); vertical-align: top; }
+  .stake-table tr:last-child td, .ms-table tr:last-child td { border-bottom: none; }
+  .stake-table .nm { font-weight: 600; color: var(--ink-0); }
+  .stake-table .rl { font-size: 10.5px; color: var(--ink-3); }
+  .ms-table .dt { font-family: 'JetBrains Mono', monospace; color: var(--gold-ink); font-size: 11px; }
+  .raci { display: inline-block; width: 22px; height: 22px; line-height: 22px; text-align: center; font-size: 10px; font-weight: 700; border-radius: 4px; font-family: 'JetBrains Mono', monospace; }
+  .raci.r { background: var(--gold-dim); color: var(--gold-ink); border: 1px solid var(--gold-line); }
+  .raci.a { background: rgba(22, 163, 138, 0.18); color: var(--green-ink); border: 1px solid var(--green-line); }
+  .raci.c { background: var(--bg-3); color: var(--ink-1); border: 1px solid var(--border); }
+  .raci.i { background: var(--bg-2); color: var(--ink-3); border: 1px solid var(--border); }
+</style>
 </head>
 <body>
-    <div class="document">
-        <div class="header-block">
-            <div class="header-meta">
-                <div>
-                    <div>Riverton Financial</div>
-                    <div>January 2026 · v1.0</div>
-                </div>
-                <div class="classification">INTERNAL</div>
-            </div>
-            <h1>Project Charter</h1>
-            <p class="subtitle">Core Banking Platform Migration</p>
-        </div>
+<div id="deck-content">
+<div class="glow"></div>
 
-        <div class="doc-meta">
-            <div class="doc-meta-item">
-                <div class="meta-label">Project ID</div>
-                <div class="meta-value">RFN-CBP-2026-001</div>
-            </div>
-            <div class="doc-meta-item">
-                <div class="meta-label">Status</div>
-                <div class="meta-value">Active</div>
-            </div>
-            <div class="doc-meta-item">
-                <div class="meta-label">Effective Date</div>
-                <div class="meta-value">January 20, 2026</div>
-            </div>
-            <div class="doc-meta-item">
-                <div class="meta-label">Review Date</div>
-                <div class="meta-value">July 20, 2026</div>
-            </div>
-        </div>
-
-        <div class="signature-block">
-            <div class="sig-title">Approvals</div>
-            <div class="sig-grid">
-                <div class="sig-line">
-                    <div class="sig-blank"></div>
-                    <div class="sig-label">Project Sponsor</div>
-                    <div class="sig-sublabel">Chief Technology Officer</div>
-                </div>
-                <div class="sig-line">
-                    <div class="sig-blank"></div>
-                    <div class="sig-label">Project Director</div>
-                    <div class="sig-sublabel">Program Management Office</div>
-                </div>
-                <div class="sig-line">
-                    <div class="sig-blank"></div>
-                    <div class="sig-label">Delivery Lead</div>
-                    <div class="sig-sublabel">Gratia Inc</div>
-                </div>
-                <div class="sig-line">
-                    <div class="sig-blank"></div>
-                    <div class="sig-label">Client Stakeholder</div>
-                    <div class="sig-sublabel">VP of Operations</div>
-                </div>
-            </div>
-        </div>
-
-        <h2>Executive Summary</h2>
-        <p>Riverton Financial is undertaking a comprehensive migration from a legacy core banking platform (running on 25+ year old infrastructure) to a modern, cloud-native platform capable of supporting real-time transaction processing, regulatory compliance, and future business expansion. This project is critical to maintaining competitive positioning in the regional banking market and meeting evolving regulatory requirements.</p>
-        <p>The migration will be executed in five phases over 24 weeks, with minimal customer-facing downtime through a phased cutover approach. Total project investment is $4.2M with expected cost recovery through operational efficiency improvements within 18 months.</p>
-
-        <h2>Project Scope</h2>
-        <h3>In-Scope</h3>
-        <table>
-            <thead>
-                <tr>
-                    <th>Item</th>
-                    <th>Description</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><strong>Core Platform Migration</strong></td>
-                    <td>Full migration of deposit, loan, and transaction modules to new platform architecture</td>
-                </tr>
-                <tr>
-                    <td><strong>Data Migration & Validation</strong></td>
-                    <td>Complete customer, account, and transaction history migration with 100% validation</td>
-                </tr>
-                <tr>
-                    <td><strong>Integration Build-Out</strong></td>
-                    <td>APIs for 12 critical systems (ATM network, payment processors, CRM, reporting)</td>
-                </tr>
-                <tr>
-                    <td><strong>Staff Training</strong></td>
-                    <td>250+ employees across operations, compliance, and support teams</td>
-                </tr>
-                <tr>
-                    <td><strong>Testing & QA</strong></td>
-                    <td>Full system, UAT, load, and compliance testing</td>
-                </tr>
-                <tr>
-                    <td><strong>Go-Live Support</strong></td>
-                    <td>24/7 war room and production support for 30 days post-launch</td>
-                </tr>
-            </tbody>
-        </table>
-
-        <h3>Out-of-Scope</h3>
-        <table>
-            <thead>
-                <tr>
-                    <th>Item</th>
-                    <th>Description</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><strong>Wealth Management System</strong></td>
-                    <td>Planned for Q3 2026 in separate project</td>
-                </tr>
-                <tr>
-                    <td><strong>Branch Automation Refresh</strong></td>
-                    <td>Deferred; will integrate with existing kiosks and tellers</td>
-                </tr>
-                <tr>
-                    <td><strong>Customer Portal Rebuild</strong></td>
-                    <td>Will receive minimal UI refresh; backend APIs will be new</td>
-                </tr>
-                <tr>
-                    <td><strong>Regulatory Audit Prep</strong></td>
-                    <td>Separate workstream led by Compliance; this project provides infrastructure</td>
-                </tr>
-                <tr>
-                    <td><strong>Backup/Disaster Recovery Build</strong></td>
-                    <td>Infrastructure-level DR owned by platform vendor</td>
-                </tr>
-                <tr>
-                    <td><strong>Mobile App Rebuild</strong></td>
-                    <td>UI only; backend APIs consumed from core platform</td>
-                </tr>
-            </tbody>
-        </table>
-
-        <h2>Governance & RACI</h2>
-        <p>Decision-making authority and responsibility assignment for six key decision categories.</p>
-
-        <div class="raci-matrix">
-            <table>
-                <thead>
-                    <tr>
-                        <th style="width: 25%;">Decision</th>
-                        <th style="width: 15%;">Sponsor</th>
-                        <th style="width: 15%;">Dir. of Ops</th>
-                        <th style="width: 15%;">Delivery Lead</th>
-                        <th style="width: 15%;">CTO</th>
-                        <th style="width: 15%;">Compliance</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><strong>Scope Changes</strong></td>
-                        <td class="raci-cell">A</td>
-                        <td class="raci-cell">R</td>
-                        <td class="raci-cell">C</td>
-                        <td class="raci-cell">C</td>
-                        <td class="raci-cell">I</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Timeline Adjustments</strong></td>
-                        <td class="raci-cell">A</td>
-                        <td class="raci-cell">R</td>
-                        <td class="raci-cell">R</td>
-                        <td class="raci-cell">C</td>
-                        <td class="raci-cell">I</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Go/No-Go Cutover</strong></td>
-                        <td class="raci-cell">A</td>
-                        <td class="raci-cell">R</td>
-                        <td class="raci-cell">R</td>
-                        <td class="raci-cell">C</td>
-                        <td class="raci-cell">C</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Major Risk Mitigation</strong></td>
-                        <td class="raci-cell">C</td>
-                        <td class="raci-cell">R</td>
-                        <td class="raci-cell">R</td>
-                        <td class="raci-cell">C</td>
-                        <td class="raci-cell">C</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Vendor Change/Disputes</strong></td>
-                        <td class="raci-cell">A</td>
-                        <td class="raci-cell">C</td>
-                        <td class="raci-cell">R</td>
-                        <td class="raci-cell">C</td>
-                        <td class="raci-cell">I</td>
-                    </tr>
-                    <tr>
-                        <td><strong>Budget Reallocation (>$100K)</strong></td>
-                        <td class="raci-cell">A</td>
-                        <td class="raci-cell">R</td>
-                        <td class="raci-cell">C</td>
-                        <td class="raci-cell">C</td>
-                        <td class="raci-cell">I</td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <h2>Timeline & Milestones</h2>
-        <p>5-phase delivery schedule spanning 24 weeks. Critical path highlighted; phase dependencies managed through staged cutover approach.</p>
-
-        <svg width="100%" height="280" viewBox="0 0 850 280" xmlns="http://www.w3.org/2000/svg">
-            <!-- Timeline background -->
-            <rect x="40" y="40" width="800" height="200" fill="none" stroke="#e0e0e0" stroke-width="1"/>
-            
-            <!-- Week markers -->
-            <g font-size="11" fill="#999" text-anchor="middle">
-                <text x="40" y="265">Wk 0</text>
-                <text x="200" y="265">Wk 6</text>
-                <text x="360" y="265">Wk 12</text>
-                <text x="520" y="265">Wk 18</text>
-                <text x="680" y="265">Wk 24</text>
-                <text x="840" y="265">Wk 30</text>
-            </g>
-
-            <!-- Vertical grid lines -->
-            <line x1="40" y1="40" x2="40" y2="240" stroke="#e0e0e0" stroke-width="1"/>
-            <line x1="200" y1="40" x2="200" y2="240" stroke="#e0e0e0" stroke-width="1"/>
-            <line x1="360" y1="40" x2="360" y2="240" stroke="#e0e0e0" stroke-width="1"/>
-            <line x1="520" y1="40" x2="520" y2="240" stroke="#e0e0e0" stroke-width="1"/>
-            <line x1="680" y1="40" x2="680" y2="240" stroke="#e0e0e0" stroke-width="1"/>
-            <line x1="840" y1="40" x2="840" y2="240" stroke="#e0e0e0" stroke-width="1"/>
-
-            <!-- Phase bars -->
-            <!-- Phase 1: Discovery & Design (0-6 weeks) -->
-            <rect x="40" y="60" width="160" height="32" fill="#18A873" rx="2"/>
-            <text x="120" y="81" font-size="12" fill="white" font-weight="600" text-anchor="middle">Phase 1: Discovery</text>
-
-            <!-- Phase 2: Build (6-12 weeks) -->
-            <rect x="200" y="60" width="160" height="32" fill="#18A873" rx="2"/>
-            <text x="280" y="81" font-size="12" fill="white" font-weight="600" text-anchor="middle">Phase 2: Build</text>
-
-            <!-- Phase 3: Testing (12-18 weeks) -->
-            <rect x="360" y="60" width="160" height="32" fill="#18A873" rx="2"/>
-            <text x="440" y="81" font-size="12" fill="white" font-weight="600" text-anchor="middle">Phase 3: Testing</text>
-
-            <!-- Phase 4: Training (14-20 weeks) -->
-            <rect x="280" y="110" width="240" height="32" fill="#ffa94d" rx="2"/>
-            <text x="400" y="131" font-size="12" fill="white" font-weight="600" text-anchor="middle">Phase 4: Training</text>
-
-            <!-- Phase 5: Cutover (18-24 weeks) - CRITICAL PATH -->
-            <rect x="520" y="160" width="160" height="32" fill="#c00000" rx="2"/>
-            <text x="600" y="181" font-size="12" fill="white" font-weight="600" text-anchor="middle">Phase 5: Cutover</text>
-
-            <!-- Milestones (diamonds) -->
-            <!-- M1: Design Approved (Wk 6) -->
-            <polygon points="200,80 204,84 200,88 196,84" fill="#18A873"/>
-            
-            <!-- M2: Code Complete (Wk 12) -->
-            <polygon points="360,80 364,84 360,88 356,84" fill="#18A873"/>
-            
-            <!-- M3: UAT Start (Wk 14) -->
-            <polygon points="480,80 484,84 480,88 476,84" fill="#ffa94d"/>
-            
-            <!-- M4: Go-Live (Wk 24) -->
-            <polygon points="680,165 684,169 680,173 676,169" fill="#c00000"/>
-
-            <!-- Legend -->
-            <rect x="40" y="210" width="12" height="12" fill="#18A873"/>
-            <text x="60" y="219" font-size="11" fill="#333">Core Path</text>
-            
-            <rect x="140" y="210" width="12" height="12" fill="#ffa94d"/>
-            <text x="160" y="219" font-size="11" fill="#333">Parallel Track</text>
-            
-            <rect x="260" y="210" width="12" height="12" fill="#c00000"/>
-            <text x="280" y="219" font-size="11" fill="#333">Critical (0 float)</text>
-        </svg>
-
-        <h2>Risk Register</h2>
-        <p>5x5 probability-impact matrix. Five priority risks plotted; details below.</p>
-
-        <div class="risk-grid">
-            <svg width="100%" height="320" viewBox="0 0 500 320" xmlns="http://www.w3.org/2000/svg">
-                <!-- Grid -->
-                <g stroke="#e0e0e0" stroke-width="1">
-                    <line x1="60" y1="20" x2="60" y2="260" />
-                    <line x1="120" y1="20" x2="120" y2="260" />
-                    <line x1="180" y1="20" x2="180" y2="260" />
-                    <line x1="240" y1="20" x2="240" y2="260" />
-                    <line x1="300" y1="20" x2="300" y2="260" />
-                    <line x1="40" y1="60" x2="300" y2="60" />
-                    <line x1="40" y1="120" x2="300" y2="120" />
-                    <line x1="40" y1="180" x2="300" y2="180" />
-                    <line x1="40" y1="240" x2="300" y2="240" />
-                </g>
-
-                <!-- Axes -->
-                <line x1="40" y1="260" x2="300" y2="260" stroke="#333" stroke-width="2"/>
-                <line x1="40" y1="20" x2="40" y2="260" stroke="#333" stroke-width="2"/>
-
-                <!-- Axis labels -->
-                <text x="170" y="295" font-size="12" fill="#666" text-anchor="middle" font-weight="600">Probability</text>
-                <text x="10" y="140" font-size="12" fill="#666" text-anchor="middle" font-weight="600" transform="rotate(-90 10 140)">Impact</text>
-
-                <!-- Scale -->
-                <g font-size="10" fill="#999" text-anchor="middle">
-                    <text x="60" y="275">1 (Low)</text>
-                    <text x="180" y="275">3 (Med)</text>
-                    <text x="300" y="275">5 (High)</text>
-                </g>
-                <g font-size="10" fill="#999" text-anchor="end">
-                    <text x="35" y="265">5 (High)</text>
-                    <text x="35" y="140">3 (Med)</text>
-                    <text x="35" y="45">1 (Low)</text>
-                </g>
-
-                <!-- Risk dots -->
-                <circle cx="180" cy="120" r="6" fill="#c00000" opacity="0.8"/>
-                <text x="180" y="115" font-size="9" fill="white" font-weight="600" text-anchor="middle">1</text>
-
-                <circle cx="240" cy="180" r="6" fill="#c00000" opacity="0.8"/>
-                <text x="240" y="175" font-size="9" fill="white" font-weight="600" text-anchor="middle">2</text>
-
-                <circle cx="260" cy="100" r="6" fill="#ffa94d" opacity="0.8"/>
-                <text x="260" y="95" font-size="9" fill="white" font-weight="600" text-anchor="middle">3</text>
-
-                <circle cx="120" cy="200" r="6" fill="#ffa94d" opacity="0.8"/>
-                <text x="120" y="195" font-size="9" fill="white" font-weight="600" text-anchor="middle">4</text>
-
-                <circle cx="100" cy="140" r="6" fill="#ffa94d" opacity="0.8"/>
-                <text x="100" y="135" font-size="9" fill="white" font-weight="600" text-anchor="middle">5</text>
-            </svg>
-        </div>
-
-        <table>
-            <thead>
-                <tr>
-                    <th style="width: 8%;">ID</th>
-                    <th style="width: 20%;">Risk</th>
-                    <th style="width: 15%;">Probability</th>
-                    <th style="width: 15%;">Impact</th>
-                    <th style="width: 42%;">Mitigation</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td><strong>1</strong></td>
-                    <td>Data migration gaps/corruption</td>
-                    <td>Medium (3)</td>
-                    <td>High (5)</td>
-                    <td>Parallel runs on 10% of customer base Week 20; full validation audit; rollback plan</td>
-                </tr>
-                <tr>
-                    <td><strong>2</strong></td>
-                    <td>Key staff turnover during delivery</td>
-                    <td>Medium-High (4)</td>
-                    <td>High (4)</td>
-                    <td>Knowledge transfer docs; cross-training; retention bonuses for critical roles</td>
-                </tr>
-                <tr>
-                    <td><strong>3</strong></td>
-                    <td>Integration delays with external vendors (ATM, payment processors)</td>
-                    <td>Medium-High (3)</td>
-                    <td>Medium-High (4)</td>
-                    <td>Vendor engagement plan Week 2; weekly sync calls; API contracts signed upfront</td>
-                </tr>
-                <tr>
-                    <td><strong>4</strong></td>
-                    <td>Regulatory compliance gaps discovered in testing</td>
-                    <td>Low-Medium (2)</td>
-                    <td>High (4)</td>
-                    <td>Compliance QA embedded in Phase 3; external audit Week 16; remediation buffer in Phase 4</td>
-                </tr>
-                <tr>
-                    <td><strong>5</strong></td>
-                    <td>Customer communication breakdown / change resistance</td>
-                    <td>Low (2)</td>
-                    <td>Medium-High (3)</td>
-                    <td>Marketing plan launched Week 10; town halls every 2 weeks; 24/7 support hotline first 30 days</td>
-                </tr>
-            </tbody>
-        </table>
-
-        <h2>Success Criteria</h2>
-        <p>Four quantified success metrics. All must be met for project sign-off.</p>
-
-        <div class="metrics-grid">
-            <div class="metric-card">
-                <h3>On-Time Delivery</h3>
-                <div class="metric-value">100%</div>
-                <div class="metric-desc">Go-live occurs on or before June 30, 2026 with zero customer-facing delays</div>
-            </div>
-            <div class="metric-card">
-                <h3>Budget Variance</h3>
-                <div class="metric-value">< 5%</div>
-                <div class="metric-desc">Final project cost within $210K of $4.2M baseline; no additional funding required</div>
-            </div>
-            <div class="metric-card">
-                <h3>User Adoption</h3>
-                <div class="metric-value">> 90%</div>
-                <div class="metric-desc">95%+ of staff staff proficient on new platform by Week 2 post-launch (assessed via test cases)</div>
-            </div>
-            <div class="metric-card">
-                <h3>Defect-Free Go-Live</h3>
-                <div class="metric-value">Zero Critical</div>
-                <div class="metric-desc">No critical or showstopper defects in production first 30 days; < 5 high-severity issues</div>
-            </div>
-        </div>
-
-        <h2>Approvals (Executive Sign-Off)</h2>
-        <div class="signature-block">
-            <div class="sig-grid">
-                <div class="sig-line">
-                    <div class="sig-blank"></div>
-                    <div class="sig-label">Project Sponsor</div>
-                    <div class="sig-sublabel">CTO</div>
-                    <div style="font-size: 11px; color: #999; margin-top: 4px;">Date: ___________</div>
-                </div>
-                <div class="sig-line">
-                    <div class="sig-blank"></div>
-                    <div class="sig-label">Project Director</div>
-                    <div class="sig-sublabel">PMO</div>
-                    <div style="font-size: 11px; color: #999; margin-top: 4px;">Date: ___________</div>
-                </div>
-                <div class="sig-line">
-                    <div class="sig-blank"></div>
-                    <div class="sig-label">Delivery Lead</div>
-                    <div class="sig-sublabel">Gratia Inc</div>
-                    <div style="font-size: 11px; color: #999; margin-top: 4px;">Date: ___________</div>
-                </div>
-                <div class="sig-line">
-                    <div class="sig-blank"></div>
-                    <div class="sig-label">Client Stakeholder</div>
-                    <div class="sig-sublabel">VP Operations</div>
-                    <div style="font-size: 11px; color: #999; margin-top: 4px;">Date: ___________</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="document-footer">
-            <p>Sanitized excerpt · Prepared by Gratia · Jan 2026</p>
-        </div>
+<div class="app">
+  <header class="mainnav">
+    <a class="nav-brand" href="../"><span class="nav-brand-fallback">R</span></a>
+    <div class="nav-context"><div class="nctx-1">Riverton Financial</div><div class="nctx-2">Project Charter · Core Banking Migration</div></div>
+    <div class="nav-right">
+      <button class="icon-btn theme-toggle" id="themeToggle" aria-label="Toggle theme"><svg class="ti-moon" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" stroke-linecap="round" stroke-linejoin="round"/></svg><svg class="ti-sun" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" stroke-linecap="round"/></svg></button>
     </div>
-<a href="../" style="position:fixed;top:12px;right:16px;z-index:99999;background:#111827;color:#e2e8f0;padding:6px 16px;border-radius:8px;font-size:13px;font-weight:600;text-decoration:none;border:1px solid #475569;font-family:system-ui,sans-serif;transition:background .15s;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#111827'">← Gallery</a>
+  </header>
+
+  <main class="content narrow">
+    <section class="page-head">
+      <div>
+        <div class="eyebrow-row">
+          <span class="eyebrow">Project Charter · v1.2 · Approved Apr 2026</span>
+          <span class="status-chip" data-status="green"><span class="dot-pulse"></span>Approved by Steerco</span>
+        </div>
+        <h1 class="lede">Migrate Riverton Financial's <em>core banking platform</em> from Symitar to FIS Code Connect over 18 months.</h1>
+        <p class="sublede">$84M total program. Wave 1 (deposits + treasury) cuts over Q2 2027; Wave 2 (lending) Q4 2027; Wave 3 (treasury services) Q2 2028. Hypercare runs 90 days post each wave.</p>
+      </div>
+      <div class="head-actions">
+        <button class="btn"><svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 3v12m0 0l-4-4m4 4l4-4M5 21h14" stroke-linecap="round"/></svg>PDF · v1.2</button>
+      </div>
+    </section>
+
+    <div class="charter-meta">
+      <div class="cm-cell"><div class="l">Sponsor</div><div class="v">Marcus Bell</div><div class="meta">CIO, Riverton Financial</div></div>
+      <div class="cm-cell"><div class="l">Program lead</div><div class="v">Andrea Sims</div><div class="meta">VP Core Platforms</div></div>
+      <div class="cm-cell"><div class="l">Budget</div><div class="v">$84M</div><div class="meta">$72M capex · $12M opex</div></div>
+      <div class="cm-cell"><div class="l">Timeline</div><div class="v">18 months</div><div class="meta">Apr '26 → Sep '27 (Wave 1–2)</div></div>
+    </div>
+
+    <section class="doc-section">
+      <h2>Objectives</h2>
+      <ul>
+        <li><strong>Modernize core platform</strong> — replace Symitar (end-of-life FY28) with FIS Code Connect cloud-native core.</li>
+        <li><strong>Reduce IT operating cost by $5.4M annually</strong> — sunset 6 ancillary systems wrapped around legacy core.</li>
+        <li><strong>Enable next-gen products</strong> — instant-issue debit, real-time fraud, embedded banking APIs.</li>
+        <li><strong>Maintain regulatory standing</strong> — SOC 1 Type II + FFIEC parity throughout migration.</li>
+      </ul>
+    </section>
+
+    <section class="doc-section">
+      <h2>Scope</h2>
+      <div class="scope-grid">
+        <div>
+          <h3>In scope</h3>
+          <ul>
+            <li>Deposit accounts (consumer + commercial)</li>
+            <li>Loans (consumer, mortgage, commercial)</li>
+            <li>Treasury services (wires, ACH, lockbox)</li>
+            <li>Card issuance + processing migration</li>
+            <li>Online + mobile banking re-platform</li>
+            <li>Branch teller workflows</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Out of scope</h3>
+          <ul>
+            <li>Trust + wealth management platform (separate program)</li>
+            <li>Marketing CRM (Salesforce stays)</li>
+            <li>HRIS / payroll (Workday stays)</li>
+            <li>Compliance reporting (Riverton-built; integrate via API)</li>
+            <li>ATM hardware refresh (in flight, parallel)</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="doc-section">
+      <h2>Stakeholders &amp; RACI</h2>
+      <div style="display: grid; grid-template-columns: 1fr; gap: 16px;">
+        <div class="card" style="padding: 0;">
+          <table class="stake-table">
+            <thead><tr><th>Stakeholder</th><th>Charter</th><th>Wave 1</th><th>Wave 2</th><th>Cutover</th><th>Hypercare</th></tr></thead>
+            <tbody>
+              <tr><td><div class="nm">Marcus Bell, CIO</div><div class="rl">Executive sponsor</div></td><td><span class="raci a">A</span></td><td><span class="raci a">A</span></td><td><span class="raci a">A</span></td><td><span class="raci a">A</span></td><td><span class="raci c">C</span></td></tr>
+              <tr><td><div class="nm">Andrea Sims, VP Core</div><div class="rl">Program lead</div></td><td><span class="raci r">R</span></td><td><span class="raci r">R</span></td><td><span class="raci r">R</span></td><td><span class="raci r">R</span></td><td><span class="raci r">R</span></td></tr>
+              <tr><td><div class="nm">Sandra Park, COO</div><div class="rl">Branch operations</div></td><td><span class="raci c">C</span></td><td><span class="raci c">C</span></td><td><span class="raci c">C</span></td><td><span class="raci a">A</span></td><td><span class="raci a">A</span></td></tr>
+              <tr><td><div class="nm">Diego Vega, CISO</div><div class="rl">Security + compliance</div></td><td><span class="raci c">C</span></td><td><span class="raci c">C</span></td><td><span class="raci c">C</span></td><td><span class="raci a">A</span></td><td><span class="raci c">C</span></td></tr>
+              <tr><td><div class="nm">Lin Tran, CFO</div><div class="rl">Budget oversight</div></td><td><span class="raci a">A</span></td><td><span class="raci i">I</span></td><td><span class="raci i">I</span></td><td><span class="raci i">I</span></td><td><span class="raci i">I</span></td></tr>
+              <tr><td><div class="nm">FIS engagement team</div><div class="rl">Vendor delivery</div></td><td><span class="raci c">C</span></td><td><span class="raci r">R</span></td><td><span class="raci r">R</span></td><td><span class="raci r">R</span></td><td><span class="raci r">R</span></td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      <p style="font-size: 11.5px; color: var(--ink-3); margin-top: 8px;"><strong>R</strong> Responsible · <strong>A</strong> Accountable · <strong>C</strong> Consulted · <strong>I</strong> Informed</p>
+    </section>
+
+    <section class="doc-section">
+      <h2>Milestones</h2>
+      <div class="card" style="padding: 0;">
+        <table class="ms-table">
+          <thead><tr><th>Date</th><th>Milestone</th><th>Owner</th></tr></thead>
+          <tbody>
+            <tr><td><span class="dt">May 2026</span></td><td>Vendor + SI contracts countersigned · steering committee operational</td><td>Andrea Sims</td></tr>
+            <tr><td><span class="dt">Aug 2026</span></td><td>Wave 1 architecture sign-off · data dictionary v1 locked</td><td>FIS + IT Architecture</td></tr>
+            <tr><td><span class="dt">Nov 2026</span></td><td>Wave 1 build complete · UAT cycle 1 begins</td><td>Andrea Sims · UAT lead</td></tr>
+            <tr><td><span class="dt">Feb 2027</span></td><td>Wave 1 dress rehearsal cutover (mock)</td><td>Sandra Park</td></tr>
+            <tr><td><span class="dt">Apr 2027</span></td><td>Wave 1 cutover · 90-day hypercare begins</td><td>Andrea Sims · COO</td></tr>
+            <tr><td><span class="dt">Jul 2027</span></td><td>Wave 1 hypercare exit · Wave 2 build complete</td><td>Andrea Sims</td></tr>
+            <tr><td><span class="dt">Oct 2027</span></td><td>Wave 2 cutover (lending)</td><td>Andrea Sims</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="doc-section">
+      <h2>Risks &amp; assumptions</h2>
+      <div class="scope-grid">
+        <div>
+          <h3>Top 5 risks</h3>
+          <ul>
+            <li><strong>Vendor execution.</strong> FIS team continuity through 18-month engagement; backstop: 3-person vendor advisory partner contracted.</li>
+            <li><strong>Customer impact during cutover.</strong> Branch + digital downtime &lt;6 hrs target; rollback drilled.</li>
+            <li><strong>Data migration completeness.</strong> 8.4M customer records, 62M transactions; 3-pass cleanse + reconcile.</li>
+            <li><strong>Regulatory exam during migration.</strong> Compliance attestation pre-cutover; mock exam Q1 2027.</li>
+            <li><strong>Talent retention.</strong> Key Riverton SMEs at retention risk; retention bonuses approved.</li>
+          </ul>
+        </div>
+        <div>
+          <h3>Assumptions</h3>
+          <ul>
+            <li>Symitar EOL stays at FY28; no extension push from vendor.</li>
+            <li>FFIEC posture unchanged through migration window.</li>
+            <li>No M&A activity that would alter scope mid-program.</li>
+            <li>Card processor contract aligns to Wave 2 cutover dates.</li>
+            <li>Riverton can dedicate 14 SMEs at &gt;50% allocation throughout.</li>
+          </ul>
+        </div>
+      </div>
+    </section>
+
+    <section class="doc-section">
+      <h2>Approval</h2>
+      <div class="callout"><strong>Charter approved:</strong> Riverton Financial Steering Committee · April 18, 2026 · Marcus Bell (CIO), Andrea Sims (VP Core Platforms), Lin Tran (CFO), Sandra Park (COO), Diego Vega (CISO).</div>
+    </section>
+
+    <footer class="foot">
+      <div>riverton-financial · core-charter · v1.2</div>
+      <div>next charter review: post-Wave 1 dress rehearsal (Feb 2027)</div>
+    </footer>
+  </main>
+</div>
+
+<script>
+document.getElementById('themeToggle').addEventListener('click', () => {
+  const cur = document.documentElement.getAttribute('data-theme') || 'dark';
+  const next = cur === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  try { localStorage.setItem('apollo-theme', next); } catch (e) {}
+});
+</script>
+
+</div>
 </body>
 </html>

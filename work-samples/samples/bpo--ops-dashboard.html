@@ -1,523 +1,336 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ops Dashboard - Vanguard Claims</title>
-    <style>
-        * {
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+<meta charset="UTF-8" />
+<title>Gratia — Claims Ops Dashboard · Vanguard Claims (Sample)</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<script src="../../auth.js"></script>
+<link rel="stylesheet" href="../_design.css">
+<script>
+  (function () { try { const s = localStorage.getItem('apollo-theme'); if (s === 'light' || s === 'dark') document.documentElement.setAttribute('data-theme', s); } catch (e) {} })();
+</script>
+<style>
+  /* Throughput chart */
+  .tput-chart { width: 100%; height: 220px; }
+  .tput-legend { display: flex; gap: 14px; margin-top: 10px; font-size: 10.5px; color: var(--ink-3); }
+  .tput-legend .tk { display: flex; align-items: center; gap: 5px; }
+  .tput-legend .tk-sw { width: 14px; height: 6px; border-radius: 1.5px; }
 
-        body {
-            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif;
-            background: #f5f5f5;
-            padding: 20px;
-            color: #1a1a1a;
-        }
+  /* Funnel by claim type */
+  .ct-grid { display: grid; gap: 10px; }
+  .ct-row { display: grid; grid-template-columns: 130px 1fr 90px 70px; gap: 10px; align-items: center; padding: 6px 0; font-size: 12px; }
+  .ct-row .ct-name { color: var(--ink-1); display: flex; align-items: center; gap: 7px; }
+  .ct-row .ct-name .ct-dot { width: 8px; height: 8px; border-radius: 2px; }
+  .ct-row .ct-bar { height: 14px; background: var(--bg-2); border-radius: 3px; overflow: hidden; }
+  .ct-row .ct-fill { height: 100%; transition: width 0.35s; }
+  .ct-row .ct-amt { font-family: 'Inter', sans-serif; font-weight: 600; color: var(--ink-0); font-variant-numeric: tabular-nums; text-align: right; }
+  .ct-row .ct-share { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: var(--ink-3); text-align: right; }
 
-        .container {
-            max-width: 1280px;
-            margin: 0 auto;
-            background: white;
-            border-radius: 8px;
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-            overflow: hidden;
-            display: flex;
-            flex-direction: column;
-        }
+  /* Bottleneck list */
+  .bottle-list { display: flex; flex-direction: column; }
+  .bot-row { display: grid; grid-template-columns: 1fr 100px 90px 32px; gap: 10px; align-items: center; padding: 12px 18px; border-bottom: 1px solid var(--border); cursor: pointer; transition: background 0.12s; }
+  .bot-row:last-child { border-bottom: none; }
+  .bot-row:hover { background: var(--row-hover); }
+  .bot-name { display: flex; flex-direction: column; gap: 3px; }
+  .bot-name .bn-step { font-size: 12.5px; color: var(--ink-0); font-weight: 500; }
+  .bot-name .bn-meta { font-size: 11px; color: var(--ink-3); }
+  .bot-cycle { font-family: 'Inter', sans-serif; font-weight: 600; color: var(--ink-0); font-variant-numeric: tabular-nums; font-size: 13px; text-align: right; }
+  .bot-vs { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; text-align: right; }
+  .bot-vs.over { color: var(--red-ink); }
+  .bot-vs.under { color: var(--green-ink); }
 
-        .header {
-            background: linear-gradient(135deg, #f8f8f8 0%, #ffffff 100%);
-            padding: 24px 32px;
-            border-bottom: 2px solid #18A873;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
+  /* Team waffle */
+  .team-grid { display: grid; grid-template-columns: repeat(6, 1fr); gap: 6px; }
+  .team-tile { padding: 9px 11px; min-height: 56px; border: 1px solid var(--border); border-radius: 5px; background: var(--bg-2); display: flex; flex-direction: column; gap: 4px; cursor: pointer; transition: transform 0.14s, border-color 0.14s; }
+  .team-tile:hover { transform: translateY(-1px); border-color: var(--border-2); }
+  .team-tile.r { background: var(--red-dim); border-color: var(--red-line); color: var(--red-ink); }
+  .team-tile.a { background: var(--amber-dim); border-color: var(--amber-line); color: var(--amber-ink); }
+  .team-tile.g { background: var(--green-dim); border-color: var(--green-line); color: var(--green-ink); }
+  .team-tile .tt-name { font-size: 10.5px; font-weight: 600; letter-spacing: -0.01em; line-height: 1.2; }
+  .team-tile .tt-num { font-family: 'Inter', sans-serif; font-size: 16px; font-weight: 600; letter-spacing: -0.022em; font-variant-numeric: tabular-nums; }
+  .team-tile .tt-sub { font-size: 9.5px; opacity: 0.85; }
 
-        .header h1 {
-            font-size: 24px;
-            font-weight: 600;
-            color: #1a1a1a;
-        }
-
-        .header-controls {
-            display: flex;
-            gap: 16px;
-            align-items: center;
-        }
-
-        .live-badge {
-            display: flex;
-            align-items: center;
-            gap: 6px;
-            background: #e8f5e9;
-            color: #18A873;
-            padding: 6px 12px;
-            border-radius: 4px;
-            font-size: 12px;
-            font-weight: 700;
-        }
-
-        .pulse {
-            display: inline-block;
-            width: 8px;
-            height: 8px;
-            background: #18A873;
-            border-radius: 50%;
-            animation: pulse 2s infinite;
-        }
-
-        @keyframes pulse {
-            0%, 100% { opacity: 1; }
-            50% { opacity: 0.5; }
-        }
-
-        .timestamp {
-            font-size: 12px;
-            color: #666;
-        }
-
-        .hero-strip {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 20px;
-            padding: 24px 32px;
-            background: #fafafa;
-            border-bottom: 1px solid #e0e0e0;
-        }
-
-        .hero-card {
-            background: white;
-            border: 1px solid #e0e0e0;
-            border-radius: 6px;
-            padding: 20px;
-            text-align: center;
-        }
-
-        .hero-label {
-            font-size: 11px;
-            color: #666;
-            font-weight: 600;
-            margin-bottom: 8px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .hero-value {
-            font-size: 32px;
-            font-weight: 700;
-            color: #18A873;
-            margin-bottom: 4px;
-        }
-
-        .hero-unit {
-            font-size: 12px;
-            color: #999;
-        }
-
-        .main-section {
-            display: grid;
-            grid-template-columns: 1.2fr 1fr;
-            gap: 32px;
-            padding: 32px;
-            background: white;
-        }
-
-        .chart-container {
-            background: #fafafa;
-            border: 1px solid #e0e0e0;
-            border-radius: 6px;
-            padding: 16px;
-        }
-
-        .chart-title {
-            font-size: 13px;
-            font-weight: 700;
-            color: #1a1a1a;
-            margin-bottom: 12px;
-        }
-
-        .trend-chart {
-            width: 100%;
-            height: 180px;
-        }
-
-        .error-chart-title {
-            font-size: 13px;
-            font-weight: 700;
-            color: #1a1a1a;
-            margin-bottom: 12px;
-        }
-
-        .error-breakdown {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .error-row {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .error-label {
-            font-size: 11px;
-            color: #666;
-            width: 140px;
-        }
-
-        .error-bar-container {
-            flex: 1;
-            height: 24px;
-            background: #e0e0e0;
-            border-radius: 3px;
-            overflow: hidden;
-            position: relative;
-        }
-
-        .error-bar {
-            height: 100%;
-            background: linear-gradient(90deg, #3b82f6, #06b6d4);
-            display: flex;
-            align-items: center;
-            justify-content: flex-end;
-            padding-right: 6px;
-        }
-
-        .error-bar-text {
-            font-size: 10px;
-            color: white;
-            font-weight: 600;
-        }
-
-        .error-percent {
-            font-size: 11px;
-            color: #1a1a1a;
-            font-weight: 600;
-            width: 35px;
-            text-align: right;
-        }
-
-        .capacity-gauge {
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            gap: 12px;
-            margin-top: 16px;
-            padding-top: 16px;
-            border-top: 1px solid #e0e0e0;
-        }
-
-        .gauge-label {
-            font-size: 11px;
-            font-weight: 600;
-            color: #666;
-        }
-
-        .gauge-svg {
-            width: 200px;
-            height: 120px;
-        }
-
-        .gauge-value {
-            font-size: 18px;
-            font-weight: 700;
-            color: #f59e0b;
-        }
-
-        .bottom-strip {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 20px;
-            padding: 24px 32px;
-            background: #fafafa;
-            border-top: 1px solid #e0e0e0;
-        }
-
-        .bottom-card {
-            background: white;
-            border: 1px solid #e0e0e0;
-            border-radius: 6px;
-            padding: 16px;
-        }
-
-        .bottom-title {
-            font-size: 12px;
-            font-weight: 700;
-            color: #1a1a1a;
-            margin-bottom: 10px;
-            text-transform: uppercase;
-            letter-spacing: 0.5px;
-        }
-
-        .bottom-content {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-        }
-
-        .bottom-item {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            font-size: 12px;
-        }
-
-        .bottom-label {
-            color: #666;
-        }
-
-        .bottom-value {
-            font-weight: 700;
-            color: #1a1a1a;
-        }
-
-        .status-indicator {
-            display: inline-block;
-            width: 6px;
-            height: 6px;
-            border-radius: 50%;
-            margin-right: 4px;
-        }
-
-        .status-indicator.healthy { background: #18A873; }
-        .status-indicator.warning { background: #f59e0b; }
-        .status-indicator.error { background: #dc2626; }
-
-        .document-footer {
-            background: #fafafa;
-            padding: 12px 32px;
-            border-top: 1px solid #e0e0e0;
-            text-align: center;
-            font-size: 11px;
-            color: #999;
-        }
-    </style>
+  .auto-pie-wrap { display: flex; align-items: center; gap: 18px; }
+  .auto-pie { width: 130px; height: 130px; flex-shrink: 0; }
+  .auto-legend { display: flex; flex-direction: column; gap: 8px; flex: 1; }
+  .auto-leg-row { display: flex; align-items: center; justify-content: space-between; font-size: 12px; padding-bottom: 7px; border-bottom: 1px solid var(--border); }
+  .auto-leg-row:last-child { border-bottom: none; }
+  .auto-leg-row .al-name { color: var(--ink-1); display: flex; align-items: center; gap: 7px; }
+  .auto-leg-row .al-dot { width: 8px; height: 8px; border-radius: 2px; }
+  .auto-leg-row .al-val { color: var(--ink-0); font-weight: 600; font-variant-numeric: tabular-nums; }
+</style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <h1>Ops Dashboard: Claims Processing Automation Monitoring</h1>
-            <div class="header-controls">
-                <div class="live-badge">
-                    <span class="pulse"></span>
-                    LIVE
-                </div>
-                <div class="timestamp">Updated: 2:47 PM EST · Jan 17, 2026</div>
-            </div>
-        </div>
+<div id="deck-content">
+<div class="glow"></div>
 
-        <div class="hero-strip">
-            <div class="hero-card">
-                <div class="hero-label">Claims Today</div>
-                <div class="hero-value">1,247</div>
-                <div class="hero-unit">processed</div>
-            </div>
-            <div class="hero-card">
-                <div class="hero-label">Auto-Adjudicated</div>
-                <div class="hero-value">73.2%</div>
-                <div class="hero-unit">of total</div>
-            </div>
-            <div class="hero-card">
-                <div class="hero-label">Avg Processing Time</div>
-                <div class="hero-value">4.2</div>
-                <div class="hero-unit">minutes</div>
-            </div>
-            <div class="hero-card">
-                <div class="hero-label">SLA Compliance</div>
-                <div class="hero-value">96.8%</div>
-                <div class="hero-unit">within target</div>
-            </div>
-        </div>
-
-        <div class="main-section">
-            <div>
-                <div class="chart-container">
-                    <div class="chart-title">Daily Volume Trend (Last 30 Days)</div>
-                    <svg class="trend-chart" viewBox="0 0 400 180" style="background: white;">
-                        <!-- Grid -->
-                        <line x1="40" y1="140" x2="380" y2="140" stroke="#e0e0e0" stroke-width="1"/>
-                        <line x1="40" y1="100" x2="380" y2="100" stroke="#e0e0e0" stroke-width="1" stroke-dasharray="2,2"/>
-                        <line x1="40" y1="60" x2="380" y2="60" stroke="#e0e0e0" stroke-width="1" stroke-dasharray="2,2"/>
-                        <line x1="40" y1="20" x2="380" y2="20" stroke="#e0e0e0" stroke-width="1" stroke-dasharray="2,2"/>
-
-                        <!-- Volume line -->
-                        <polyline points="50,95 65,85 80,88 95,75 110,72 125,65 140,70 155,62 170,58 185,45 200,50 215,42 230,40 245,35 260,38 275,30 290,28 305,32 320,25 335,22 350,20 365,18" stroke="#3b82f6" stroke-width="2.5" fill="none"/>
-
-                        <!-- Auto-adjudication rate overlay -->
-                        <polyline points="50,110 65,108 80,105 95,102 110,98 125,95 140,92 155,88 170,85 185,80 200,78 215,75 230,72 245,70 260,68 275,65 290,63 305,62 320,60 335,58 350,57 365,55" stroke="#18A873" stroke-width="2.5" fill="none"/>
-
-                        <!-- Y-axis labels (left) -->
-                        <text x="35" y="142" text-anchor="end" font-size="9" fill="#999">0</text>
-                        <text x="35" y="102" text-anchor="end" font-size="9" fill="#999">600</text>
-                        <text x="35" y="62" text-anchor="end" font-size="9" fill="#999">1.2K</text>
-                        <text x="35" y="22" text-anchor="end" font-size="9" fill="#999">1.8K</text>
-
-                        <!-- Y-axis labels (right for %) -->
-                        <text x="385" y="142" text-anchor="start" font-size="9" fill="#999">50%</text>
-                        <text x="385" y="102" text-anchor="start" font-size="9" fill="#999">65%</text>
-                        <text x="385" y="62" text-anchor="start" font-size="9" fill="#999">80%</text>
-                        <text x="385" y="22" text-anchor="start" font-size="9" fill="#999">95%</text>
-
-                        <!-- Legend -->
-                        <line x1="50" y1="8" x2="70" y2="8" stroke="#3b82f6" stroke-width="2"/>
-                        <text x="75" y="12" font-size="9" fill="#666">Volume</text>
-                        <line x1="150" y1="8" x2="170" y2="8" stroke="#18A873" stroke-width="2"/>
-                        <text x="175" y="12" font-size="9" fill="#666">Auto-Adj %</text>
-                    </svg>
-                </div>
-            </div>
-
-            <div>
-                <div class="chart-container">
-                    <div class="error-chart-title">Error Breakdown by Type</div>
-                    <div class="error-breakdown">
-                        <div class="error-row">
-                            <div class="error-label">Missing docs</div>
-                            <div class="error-bar-container">
-                                <div class="error-bar" style="width: 34%;">
-                                    <span class="error-bar-text">34%</span>
-                                </div>
-                            </div>
-                            <div class="error-percent">442</div>
-                        </div>
-                        <div class="error-row">
-                            <div class="error-label">Data mismatch</div>
-                            <div class="error-bar-container">
-                                <div class="error-bar" style="width: 28%;">
-                                    <span class="error-bar-text">28%</span>
-                                </div>
-                            </div>
-                            <div class="error-percent">364</div>
-                        </div>
-                        <div class="error-row">
-                            <div class="error-label">Policy lookup fail</div>
-                            <div class="error-bar-container">
-                                <div class="error-bar" style="width: 18%;">
-                                    <span class="error-bar-text">18%</span>
-                                </div>
-                            </div>
-                            <div class="error-percent">234</div>
-                        </div>
-                        <div class="error-row">
-                            <div class="error-label">Duplicate claim</div>
-                            <div class="error-bar-container">
-                                <div class="error-bar" style="width: 12%;">
-                                    <span class="error-bar-text">12%</span>
-                                </div>
-                            </div>
-                            <div class="error-percent">156</div>
-                        </div>
-                        <div class="error-row">
-                            <div class="error-label">Other</div>
-                            <div class="error-bar-container">
-                                <div class="error-bar" style="width: 8%;">
-                                    <span class="error-bar-text">8%</span>
-                                </div>
-                            </div>
-                            <div class="error-percent">104</div>
-                        </div>
-                    </div>
-
-                    <div class="capacity-gauge">
-                        <div class="gauge-label">Utilization</div>
-                        <svg class="gauge-svg" viewBox="0 0 200 120">
-                            <!-- Gauge background arc -->
-                            <path d="M 30 100 A 70 70 0 0 1 170 100" stroke="#e0e0e0" stroke-width="12" fill="none" stroke-linecap="round"/>
-                            <!-- Gauge fill arc (78%) -->
-                            <path d="M 30 100 A 70 70 0 0 1 142 100" stroke="#f59e0b" stroke-width="12" fill="none" stroke-linecap="round"/>
-                            <!-- Center dot -->
-                            <circle cx="100" cy="100" r="6" fill="#1a1a1a"/>
-                            <!-- Label -->
-                            <text x="100" y="55" text-anchor="middle" font-size="11" fill="#666">Current Load</text>
-                        </svg>
-                        <div class="gauge-value">78% of max capacity</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="bottom-strip">
-            <div class="bottom-card">
-                <div class="bottom-title">Queue Status</div>
-                <div class="bottom-content">
-                    <div class="bottom-item">
-                        <span class="bottom-label">Pending claims:</span>
-                        <span class="bottom-value">142</span>
-                    </div>
-                    <div class="bottom-item">
-                        <span class="bottom-label">Avg wait time:</span>
-                        <span class="bottom-value">8 min</span>
-                    </div>
-                    <div class="bottom-item">
-                        <span class="bottom-label">Max wait time:</span>
-                        <span class="bottom-value">23 min</span>
-                    </div>
-                    <div class="bottom-item">
-                        <span class="bottom-label">Estimated clear:</span>
-                        <span class="bottom-value">3:15 PM</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="bottom-card">
-                <div class="bottom-title">Escalations Today</div>
-                <div class="bottom-content">
-                    <div class="bottom-item">
-                        <span class="bottom-label">Manual reviews:</span>
-                        <span class="bottom-value">7</span>
-                    </div>
-                    <div class="bottom-item">
-                        <span class="bottom-label">Supervisor escalations:</span>
-                        <span class="bottom-value">2</span>
-                    </div>
-                    <div class="bottom-item">
-                        <span class="bottom-label">Legal review:</span>
-                        <span class="bottom-value">0</span>
-                    </div>
-                    <div class="bottom-item">
-                        <span class="bottom-label">Denial rate (today):</span>
-                        <span class="bottom-value">2.1%</span>
-                    </div>
-                </div>
-            </div>
-
-            <div class="bottom-card">
-                <div class="bottom-title">System Health</div>
-                <div class="bottom-content">
-                    <div class="bottom-item">
-                        <span class="status-indicator healthy"></span>
-                        <span class="bottom-label">API latency:</span>
-                        <span class="bottom-value">120ms</span>
-                    </div>
-                    <div class="bottom-item">
-                        <span class="status-indicator healthy"></span>
-                        <span class="bottom-label">DB response:</span>
-                        <span class="bottom-value">45ms</span>
-                    </div>
-                    <div class="bottom-item">
-                        <span class="status-indicator healthy"></span>
-                        <span class="bottom-label">OCR service:</span>
-                        <span class="bottom-value">Active</span>
-                    </div>
-                    <div class="bottom-item">
-                        <span class="status-indicator healthy"></span>
-                        <span class="bottom-label">Uptime (30d):</span>
-                        <span class="bottom-value">99.96%</span>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        <div class="document-footer">
-            Sanitized excerpt · Prepared by Gratia · Jan 2026
-        </div>
+<div class="app">
+  <header class="mainnav">
+    <a class="nav-brand" href="../"><span class="nav-brand-fallback">V</span></a>
+    <div class="nav-context">
+      <div class="nctx-1">Vanguard Claims</div>
+      <div class="nctx-2">Operations Live · Today</div>
     </div>
-<a href="../" style="position:fixed;top:12px;right:16px;z-index:99999;background:#111827;color:#e2e8f0;padding:6px 16px;border-radius:8px;font-size:13px;font-weight:600;text-decoration:none;border:1px solid #475569;font-family:system-ui,sans-serif;transition:background .15s;" onmouseover="this.style.background='#334155'" onmouseout="this.style.background='#111827'">← Gallery</a>
+    <div class="nav-right">
+      <button class="icon-btn theme-toggle" id="themeToggle" aria-label="Toggle theme">
+        <svg class="ti-moon" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <svg class="ti-sun" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" stroke-linecap="round"/></svg>
+      </button>
+      <button class="avatar-btn" title="Renee Ortiz, Ops Director"><span class="avatar">RO</span></button>
+    </div>
+  </header>
+
+  <main class="content">
+    <section class="page-head">
+      <div>
+        <div class="eyebrow-row">
+          <span class="eyebrow">Live · 30 min refresh</span>
+          <span class="status-chip" data-status="amber"><span class="dot-pulse"></span>Auto-adjudication queue building</span>
+        </div>
+        <h1 class="lede"><em>2,840 claims processed</em> in last 24h. Cycle time 2.6 days vs 2.4 day target. Auto-adjudication rate held at 64%.</h1>
+        <p class="sublede">Auto-adjudication queue is 18% above 7-day median — a model retraining is mid-deployment. First-pass yield steady. Two teams flagged red on backlog: Subrogation and Specialty.</p>
+      </div>
+      <div class="head-actions">
+        <button class="btn"><svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 6v6l4 2M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round"/></svg>Shift handoff</button>
+        <button class="btn primary"><svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M19 12H5M12 5l-7 7 7 7" stroke-linecap="round" stroke-linejoin="round"/></svg>Reroute queue</button>
+      </div>
+    </section>
+
+    <section class="kpi-row">
+      <div class="kpi"><div class="label">Claims processed (24h)</div><div class="value num">2,840</div><div class="delta up">▲ 4.1% vs 7-day avg</div></div>
+      <div class="kpi"><div class="label">Avg cycle time</div><div class="value num">2.6<span class="unit"> days</span></div><div class="delta down">▲ 0.2d vs target</div></div>
+      <div class="kpi"><div class="label">Auto-adjudication</div><div class="value num">64<span class="unit">%</span></div><div class="delta flat">– Hold</div></div>
+      <div class="kpi"><div class="label">First-pass yield</div><div class="value num">88<span class="unit">%</span></div><div class="delta up">▲ 1.4pp WoW</div></div>
+      <div class="kpi"><div class="label">Backlog</div><div class="value num">1,420</div><div class="delta down">▲ 8% vs target</div></div>
+    </section>
+
+    <section class="grid-2-wide">
+      <div class="card">
+        <div class="card-head">
+          <h3>Daily throughput · last 14 days</h3>
+          <div class="meta">Processed vs target line</div>
+        </div>
+        <div class="card-body">
+          <svg class="tput-chart" viewBox="0 0 540 220" preserveAspectRatio="xMidYMid meet" id="tputChart"></svg>
+          <div class="tput-legend">
+            <div class="tk"><span class="tk-sw" style="background:var(--gold-bright)"></span>Processed</div>
+            <div class="tk"><span class="tk-sw" style="background:var(--ink-3)"></span>Target (2,750/day)</div>
+            <div class="tk"><span class="tk-sw" style="background:var(--amber)"></span>Backlog tail</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <h3>Auto-adjudication mix</h3>
+          <div class="meta">Today's volume</div>
+        </div>
+        <div class="card-body">
+          <div class="auto-pie-wrap">
+            <svg class="auto-pie" viewBox="0 0 100 100" id="autoPie"></svg>
+            <div class="auto-legend">
+              <div class="auto-leg-row"><span class="al-name"><span class="al-dot" style="background:var(--gold-bright)"></span>Auto-adjudicated</span><span class="al-val">1,818 · 64%</span></div>
+              <div class="auto-leg-row"><span class="al-name"><span class="al-dot" style="background:var(--amber)"></span>Manual review</span><span class="al-val">738 · 26%</span></div>
+              <div class="auto-leg-row"><span class="al-name"><span class="al-dot" style="background:var(--red)"></span>Exception / SIU</span><span class="al-val">284 · 10%</span></div>
+            </div>
+          </div>
+          <div class="callout amber" style="margin-top: 16px;">
+            <strong>Model retraining in flight.</strong> Specialty model dropped to 51% auto-rate yesterday. Retrained version deploying tonight — expected to recover to 60–63% by tomorrow.
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="grid-2">
+      <div class="card">
+        <div class="card-head">
+          <h3>Bottleneck steps · cycle time vs SLA</h3>
+          <div class="meta">Sorted by overage</div>
+        </div>
+        <div class="bottle-list" id="bottleList"></div>
+      </div>
+
+      <div class="card">
+        <div class="card-head">
+          <h3>Volume by claim type</h3>
+          <div class="meta">Today's mix</div>
+        </div>
+        <div class="card-body">
+          <div class="ct-grid" id="ctList"></div>
+        </div>
+      </div>
+    </section>
+
+    <section class="matrix-section">
+      <div class="matrix-head">
+        <div class="matrix-head-wrap"><h2>12 teams</h2><span class="count">Click a tile for backlog detail</span></div>
+        <div class="filter-bar">
+          <button class="chip active">All<span class="ct">12</span></button>
+          <button class="chip"><span class="dot r"></span>Red<span class="ct">2</span></button>
+          <button class="chip"><span class="dot a"></span>Amber<span class="ct">3</span></button>
+          <button class="chip"><span class="dot g"></span>Green<span class="ct">7</span></button>
+        </div>
+      </div>
+      <div class="matrix" style="padding: 14px;"><div class="team-grid" id="teamGrid"></div></div>
+    </section>
+
+    <footer class="foot">
+      <div>vanguard-claims · ops-live · v5.4.0</div>
+      <div>refreshed 4 min ago · Guidewire + Zendesk</div>
+    </footer>
+  </main>
+</div>
+
+<div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
+<aside class="drawer" id="drawer" role="dialog" aria-hidden="true"><div id="drawerContent"></div></aside>
+
+<script>
+const TPUT = [2680,2720,2810,2790,2870,2640,2710, 2780,2820,2900,2860,2930,2740,2840];
+const TARGET = 2750;
+
+const CLAIM_TYPES = [
+  { name: 'Auto - first party', volume: 1240, color: 'var(--gold)' },
+  { name: 'Auto - third party', volume:  680, color: 'var(--gold-bright)' },
+  { name: 'Property',           volume:  520, color: 'var(--blue)' },
+  { name: 'Specialty',          volume:  240, color: 'var(--amber)' },
+  { name: 'Subrogation',        volume:  160, color: 'var(--violet)' },
+];
+
+const BOTTLE = [
+  { step: 'Specialty manual review',  meta: '14 reviewers · queue 320', cycle: 4.8, sla: 3.0 },
+  { step: 'Subrogation intake',       meta: '6 analysts · queue 188',   cycle: 3.6, sla: 2.5 },
+  { step: 'Property field assign',    meta: '22 adjusters · queue 154', cycle: 2.2, sla: 2.4 },
+  { step: 'Auto first-party triage',  meta: '38 agents · queue 94',     cycle: 1.4, sla: 1.5 },
+  { step: 'Document intake',          meta: 'Automated · queue 420',    cycle: 0.4, sla: 0.5 },
+];
+
+const TEAMS = [
+  { name: 'Auto FP - North',   num: 412, sub: 'queue 32',  health: 'g' },
+  { name: 'Auto FP - South',   num: 388, sub: 'queue 41',  health: 'g' },
+  { name: 'Auto FP - West',    num: 366, sub: 'queue 28',  health: 'g' },
+  { name: 'Auto FP - East',    num: 340, sub: 'queue 36',  health: 'g' },
+  { name: 'Auto TP - Liability', num: 280, sub: 'queue 49', health: 'g' },
+  { name: 'Property - Cat',    num: 184, sub: 'queue 64',  health: 'a' },
+  { name: 'Property - Daily',  num: 226, sub: 'queue 38',  health: 'g' },
+  { name: 'Subrogation',       num: 64,  sub: 'queue 188', health: 'r' },
+  { name: 'Specialty',         num: 88,  sub: 'queue 320', health: 'r' },
+  { name: 'SIU / fraud',       num: 42,  sub: 'queue 71',  health: 'a' },
+  { name: 'Customer escal.',   num: 156, sub: 'queue 22',  health: 'g' },
+  { name: 'Quality assurance', num: 294, sub: 'queue 48',  health: 'a' },
+];
+
+function renderTput() {
+  const w = 540, h = 220;
+  const padL = 32, padR = 8, padT = 12, padB = 28;
+  const chartW = w - padL - padR, chartH = h - padT - padB;
+  const max = Math.max(...TPUT, TARGET) * 1.05;
+  const min = Math.min(...TPUT) * 0.92;
+  const rng = max - min;
+  const xAt = i => padL + (i / (TPUT.length - 1)) * chartW;
+  const yAt = v => padT + chartH - ((v - min) / rng) * chartH;
+  let svg = '';
+  // Y grid
+  for (let i = 0; i <= 4; i++) {
+    const v = min + (rng / 4) * i;
+    const y = yAt(v);
+    svg += `<line x1="${padL}" y1="${y}" x2="${w - padR}" y2="${y}" stroke="var(--border)" stroke-width="1" opacity="0.4"/>`;
+    svg += `<text x="${padL - 6}" y="${y + 3}" text-anchor="end" font-size="10" fill="var(--ink-3)">${Math.round(v)}</text>`;
+  }
+  // Target line
+  const ty = yAt(TARGET);
+  svg += `<line x1="${padL}" y1="${ty}" x2="${w - padR}" y2="${ty}" stroke="var(--ink-3)" stroke-dasharray="3,3" stroke-width="1.4"/>`;
+  svg += `<text x="${w - padR}" y="${ty - 4}" text-anchor="end" font-size="10" fill="var(--ink-3)">target ${TARGET}</text>`;
+  // Bars
+  const barW = (chartW / TPUT.length) - 4;
+  TPUT.forEach((v, i) => {
+    const x = xAt(i) - barW / 2;
+    const y = yAt(v);
+    const overTarget = v >= TARGET;
+    const color = overTarget ? 'var(--gold-bright)' : 'var(--amber)';
+    svg += `<rect x="${x}" y="${y}" width="${barW}" height="${(padT + chartH) - y}" rx="2" fill="${color}" opacity="${i === TPUT.length - 1 ? '1' : '0.85'}"/>`;
+  });
+  // X labels
+  ['14d', '12d', '10d', '8d', '6d', '4d', '2d', 'today'].forEach((lbl, i) => {
+    const ix = i * 2;
+    if (ix < TPUT.length) svg += `<text x="${xAt(ix)}" y="${h - 6}" text-anchor="middle" font-size="9.5" fill="var(--ink-3)">${lbl}</text>`;
+  });
+  document.getElementById('tputChart').innerHTML = svg;
+}
+
+function renderPie() {
+  const slices = [
+    { val: 64, color: '#16a38a' },
+    { val: 26, color: '#e6b259' },
+    { val: 10, color: '#e06f64' },
+  ];
+  let cum = 0;
+  const r = 38, cx = 50, cy = 50;
+  let svg = `<circle cx="${cx}" cy="${cy}" r="${r}" fill="var(--bg-2)"/>`;
+  slices.forEach(s => {
+    const start = (cum / 100) * Math.PI * 2 - Math.PI / 2;
+    cum += s.val;
+    const end = (cum / 100) * Math.PI * 2 - Math.PI / 2;
+    const x1 = cx + Math.cos(start) * r, y1 = cy + Math.sin(start) * r;
+    const x2 = cx + Math.cos(end) * r, y2 = cy + Math.sin(end) * r;
+    const large = s.val > 50 ? 1 : 0;
+    svg += `<path d="M ${cx} ${cy} L ${x1.toFixed(2)} ${y1.toFixed(2)} A ${r} ${r} 0 ${large} 1 ${x2.toFixed(2)} ${y2.toFixed(2)} Z" fill="${s.color}"/>`;
+  });
+  svg += `<circle cx="${cx}" cy="${cy}" r="20" fill="var(--bg-1)"/>`;
+  svg += `<text x="${cx}" y="${cy + 1}" text-anchor="middle" font-size="14" font-weight="600" fill="var(--ink-0)" font-family="Inter">64%</text>`;
+  svg += `<text x="${cx}" y="${cy + 12}" text-anchor="middle" font-size="7" fill="var(--ink-3)" font-family="Inter" letter-spacing="0.08em">AUTO-ADJ</text>`;
+  document.getElementById('autoPie').innerHTML = svg;
+}
+
+function renderBottle() {
+  document.getElementById('bottleList').innerHTML = BOTTLE.map(b => {
+    const over = b.cycle - b.sla;
+    const overState = over > 0 ? 'over' : 'under';
+    const overText = over > 0 ? '+' + over.toFixed(1) + 'd over' : over.toFixed(1) + 'd under';
+    return `
+      <div class="bot-row">
+        <div class="bot-name"><span class="bn-step">${b.step}</span><span class="bn-meta">${b.meta} · SLA ${b.sla}d</span></div>
+        <div class="bot-cycle">${b.cycle.toFixed(1)} d</div>
+        <div class="bot-vs ${overState}">${overText}</div>
+        <div style="color: var(--ink-3); display: flex; justify-content: flex-end;"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6" stroke-linecap="round"/></svg></div>
+      </div>
+    `;
+  }).join('');
+}
+
+function renderClaimTypes() {
+  const total = CLAIM_TYPES.reduce((s, c) => s + c.volume, 0);
+  const max = Math.max(...CLAIM_TYPES.map(c => c.volume));
+  document.getElementById('ctList').innerHTML = CLAIM_TYPES.map(c => `
+    <div class="ct-row">
+      <div class="ct-name"><span class="ct-dot" style="background:${c.color}"></span>${c.name}</div>
+      <div class="ct-bar"><div class="ct-fill" style="background:${c.color}; width: ${(c.volume / max) * 100}%"></div></div>
+      <div class="ct-amt">${c.volume.toLocaleString()}</div>
+      <div class="ct-share">${Math.round((c.volume / total) * 100)}%</div>
+    </div>
+  `).join('');
+}
+
+function renderTeams() {
+  document.getElementById('teamGrid').innerHTML = TEAMS.map(t => `
+    <div class="team-tile ${t.health}">
+      <div class="tt-name">${t.name}</div>
+      <div class="tt-num">${t.num}</div>
+      <div class="tt-sub">${t.sub}</div>
+    </div>
+  `).join('');
+}
+
+document.getElementById('themeToggle').addEventListener('click', () => {
+  const cur = document.documentElement.getAttribute('data-theme') || 'dark';
+  const next = cur === 'dark' ? 'light' : 'dark';
+  document.documentElement.setAttribute('data-theme', next);
+  try { localStorage.setItem('apollo-theme', next); } catch (e) {}
+});
+function closeDrawer() { document.getElementById('drawer').classList.remove('open'); document.getElementById('drawerOverlay').classList.remove('open'); }
+
+renderTput(); renderPie(); renderBottle(); renderClaimTypes(); renderTeams();
+</script>
+
+</div>
 </body>
 </html>
