@@ -178,7 +178,34 @@
   </main>
 </div>
 
+<aside class="doc-toc"><div class="doc-toc-head">Contents</div><div id="docTocList"></div></aside>
+
 <script>
+// Doc TOC
+const sections = document.querySelectorAll('.doc-section');
+const tocList = document.getElementById('docTocList');
+sections.forEach((s, i) => {
+  const h = s.querySelector('h2');
+  if (!h) return;
+  const id = 'sec-' + i;
+  s.id = id;
+  const a = document.createElement('a');
+  a.href = '#' + id;
+  a.textContent = h.textContent.trim();
+  a.addEventListener('click', e => { e.preventDefault(); s.scrollIntoView({ behavior: 'smooth', block: 'start' }); });
+  tocList.appendChild(a);
+});
+const tocLinks = document.querySelectorAll('.doc-toc a');
+const obs = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const id = e.target.id;
+      tocLinks.forEach(a => a.classList.toggle('active', a.getAttribute('href') === '#' + id));
+    }
+  });
+}, { threshold: 0.4 });
+sections.forEach(s => obs.observe(s));
+
 document.getElementById('themeToggle').addEventListener('click', () => {
   const cur = document.documentElement.getAttribute('data-theme') || 'dark';
   const next = cur === 'dark' ? 'light' : 'dark';
