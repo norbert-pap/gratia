@@ -274,9 +274,50 @@
 
   .foot { margin-top: 30px; padding: 14px 0; border-top: 1px solid var(--border); display: flex; justify-content: space-between; font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: var(--ink-3); letter-spacing: 0.04em; }
 
+  /* What-if toggle in card head */
+  .card-head-right { display: flex; align-items: center; gap: 14px; }
+  .whatif-switch { display: flex; align-items: center; gap: 7px; cursor: pointer; user-select: none; }
+  .whatif-switch .whatif-label { font-size: 10.5px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); transition: color 0.14s; }
+  .whatif-switch:hover .whatif-label { color: var(--ink-1); }
+  .toggle-track { width: 28px; height: 16px; background: var(--bg-3); border: 1px solid var(--border); border-radius: 9px; position: relative; transition: background 0.14s, border-color 0.14s; flex-shrink: 0; }
+  .toggle-track .toggle-thumb { position: absolute; top: 1px; left: 1px; width: 12px; height: 12px; background: var(--ink-2); border-radius: 50%; transition: left 0.18s, background 0.18s; }
+  .toggle-track.on { background: var(--gold-dim); border-color: var(--gold-line); }
+  .toggle-track.on .toggle-thumb { left: 14px; background: var(--gold-bright); }
+
+  /* Driver sliders panel */
+  .driver-sliders { padding-top: 14px; margin-top: 14px; border-top: 1px solid var(--border); display: grid; grid-template-columns: 1fr 1fr; gap: 10px 18px; }
+  .driver-sliders[hidden] { display: none; }
+  .driver-slider { display: grid; grid-template-columns: 110px 1fr 70px 22px; align-items: center; gap: 8px; }
+  .driver-slider .ds-label { font-size: 11.5px; color: var(--ink-1); font-weight: 500; display: flex; align-items: center; gap: 7px; }
+  .driver-slider .ds-label .ds-pip { width: 8px; height: 8px; border-radius: 2px; flex-shrink: 0; }
+  .driver-slider input[type=range] { -webkit-appearance: none; appearance: none; height: 4px; border-radius: 2px; background: var(--bg-3); outline: none; }
+  .driver-slider input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 14px; height: 14px; border-radius: 50%; background: var(--gold-bright); border: 2px solid var(--bg-1); cursor: pointer; box-shadow: 0 0 0 1px var(--gold-line); }
+  .driver-slider .ds-value { font-family: 'Inter', sans-serif; font-weight: 600; font-size: 12px; font-variant-numeric: tabular-nums; color: var(--ink-0); text-align: right; }
+  .driver-slider .ds-value.overridden { color: var(--gold-ink); }
+  .driver-slider .ds-reset { background: none; border: none; color: var(--ink-4); cursor: pointer; padding: 0; font-size: 13px; transition: color 0.14s; }
+  .driver-slider .ds-reset:hover { color: var(--gold-ink); }
+  .driver-slider .ds-reset[hidden] { visibility: hidden; }
+
+  /* Burn slider in cash card */
+  .burn-edit-row { display: grid; grid-template-columns: 1fr 100px 22px; align-items: center; gap: 10px; padding: 6px 0; border-top: 1px solid var(--border); }
+  .burn-edit-row .lbl { color: var(--ink-1); font-size: 12px; }
+  .burn-edit-row input[type=range] { -webkit-appearance: none; appearance: none; height: 4px; border-radius: 2px; background: var(--bg-3); outline: none; }
+  .burn-edit-row input[type=range]::-webkit-slider-thumb { -webkit-appearance: none; appearance: none; width: 14px; height: 14px; border-radius: 50%; background: var(--red); border: 2px solid var(--bg-1); cursor: pointer; box-shadow: 0 0 0 1px var(--red-line); }
+  .burn-edit-row .v { font-family: 'Inter', sans-serif; font-weight: 600; color: var(--red-ink); font-variant-numeric: tabular-nums; font-size: 13px; text-align: right; }
+  .burn-edit-row .ds-reset { background: none; border: none; color: var(--ink-4); cursor: pointer; padding: 0; font-size: 13px; transition: color 0.14s; }
+  .burn-edit-row .ds-reset:hover { color: var(--red-ink); }
+  .burn-edit-row .ds-reset[hidden] { visibility: hidden; }
+
+  /* Sortable matrix headers */
+  .matrix-head-row .sortable { cursor: pointer; user-select: none; transition: color 0.14s; display: inline-flex; align-items: center; gap: 5px; }
+  .matrix-head-row .sortable:hover { color: var(--ink-1); }
+  .matrix-head-row .sortable.sort-active { color: var(--gold-ink); }
+  .matrix-head-row .sort-indicator { font-size: 9px; opacity: 0.85; min-width: 8px; }
+
   @media (max-width: 980px) {
     .kpi-row { grid-template-columns: repeat(2, 1fr); }
     .hero-grid, .second-grid { grid-template-columns: 1fr; }
+    .driver-sliders { grid-template-columns: 1fr; }
   }
 </style>
 </head>
@@ -334,7 +375,13 @@
       <div class="card">
         <div class="card-head">
           <h3>ARR movement · <span id="wfMonthLabel">January 2026</span></h3>
-          <div class="meta">Beginning → ending bridge</div>
+          <div class="card-head-right">
+            <span class="meta">Beginning → ending bridge</span>
+            <label class="whatif-switch" id="whatifSwitch" title="What-if mode: drag the four drivers to model scenarios">
+              <span class="whatif-label">What-if</span>
+              <span class="toggle-track" id="whatifToggle"><span class="toggle-thumb"></span></span>
+            </label>
+          </div>
         </div>
         <div class="card-body">
           <svg class="waterfall" viewBox="0 0 720 320" preserveAspectRatio="xMidYMid meet" id="waterfall"></svg>
@@ -343,6 +390,32 @@
             <div class="wf-cell"><span class="lbl">Gross churn</span><span class="val" id="wfChurn">−$1.3M</span></div>
             <div class="wf-cell"><span class="lbl">Net</span><span class="val" id="wfNet">+$1.4M</span></div>
             <div class="wf-cell"><span class="lbl">Implied NRR</span><span class="val" id="wfNrr">118%</span></div>
+          </div>
+          <div class="driver-sliders" id="driverSliders" hidden>
+            <div class="driver-slider" data-driver="newBiz">
+              <span class="ds-label"><span class="ds-pip" style="background:var(--gold-bright)"></span>New business</span>
+              <input type="range" min="0" max="3" step="0.05" value="0.9">
+              <span class="ds-value">+$0.9M</span>
+              <button class="ds-reset" hidden title="Reset">↺</button>
+            </div>
+            <div class="driver-slider" data-driver="expansion">
+              <span class="ds-label"><span class="ds-pip" style="background:var(--gold)"></span>Expansion</span>
+              <input type="range" min="0" max="4" step="0.05" value="1.8">
+              <span class="ds-value">+$1.8M</span>
+              <button class="ds-reset" hidden title="Reset">↺</button>
+            </div>
+            <div class="driver-slider" data-driver="contraction">
+              <span class="ds-label"><span class="ds-pip" style="background:var(--amber)"></span>Contraction</span>
+              <input type="range" min="-3" max="0" step="0.05" value="-0.9">
+              <span class="ds-value">−$0.9M</span>
+              <button class="ds-reset" hidden title="Reset">↺</button>
+            </div>
+            <div class="driver-slider" data-driver="churn">
+              <span class="ds-label"><span class="ds-pip" style="background:var(--red)"></span>Churn</span>
+              <input type="range" min="-2" max="0" step="0.05" value="-0.4">
+              <span class="ds-value">−$0.4M</span>
+              <button class="ds-reset" hidden title="Reset">↺</button>
+            </div>
           </div>
         </div>
       </div>
@@ -367,10 +440,15 @@
           </div>
           <div class="cash-segments">
             <div class="cash-row"><span class="cr-name">Cash on hand</span><span class="cr-val num" id="cashOH">$34.2M</span></div>
-            <div class="cash-row"><span class="cr-name">Monthly burn</span><span class="cr-val neg num" id="cashBurn">−$1.9M</span></div>
+            <div class="burn-edit-row">
+              <span class="lbl">Monthly burn (drag to model)</span>
+              <input type="range" id="burnSlider" min="0.8" max="3.5" step="0.05" value="1.9">
+              <span class="v" id="burnSliderVal">−$1.9M</span>
+              <button class="ds-reset" id="burnReset" hidden title="Reset">↺</button>
+            </div>
             <div class="cash-row"><span class="cr-name">Forecast Q2 inflows</span><span class="cr-val pos num">+$2.4M</span></div>
             <div class="cash-row"><span class="cr-name">DSO</span><span class="cr-val num">38 days</span></div>
-            <div class="cash-row"><span class="cr-name">Burn multiple</span><span class="cr-val num">1.36×</span></div>
+            <div class="cash-row"><span class="cr-name">Burn multiple</span><span class="cr-val num" id="burnMultiple">1.36×</span></div>
           </div>
         </div>
       </div>
@@ -419,11 +497,11 @@
       </div>
       <div class="matrix">
         <div class="matrix-head-row">
-          <div>Metric</div>
-          <div>Current</div>
-          <div>Target</div>
-          <div>Trend</div>
-          <div>vs Target</div>
+          <div class="sortable" data-sort="name">Metric<span class="sort-indicator"></span></div>
+          <div class="sortable" data-sort="current">Current<span class="sort-indicator"></span></div>
+          <div class="sortable" data-sort="target">Target<span class="sort-indicator"></span></div>
+          <div class="sortable" data-sort="trend">Trend<span class="sort-indicator"></span></div>
+          <div class="sortable sort-active" data-sort="status">vs Target<span class="sort-indicator">↑</span></div>
           <div></div>
         </div>
         <div id="matrixRows"></div>
@@ -488,8 +566,21 @@ const STATUS_BY_MONTH = {
 
 let activeMonth = 'Jan';
 let activeFilter = 'all';
+let whatIfMode = false;
+let driverOverrides = {}; // { month: { newBiz, expansion, contraction, churn } }
+let burnOverride = null; // null = use DATA[activeMonth].burn
+let activeSort = { col: 'status', dir: 'asc' };
 
-function endingArr(m) { const d = DATA[m]; return d.beginArr + d.newBiz + d.expansion + d.contraction + d.churn; }
+const DRIVER_KEYS = ['newBiz', 'expansion', 'contraction', 'churn'];
+function getDriver(m, key) {
+  if (driverOverrides[m] && driverOverrides[m][key] != null) return driverOverrides[m][key];
+  return DATA[m][key];
+}
+function getBurn(m) { return (m === activeMonth && burnOverride != null) ? burnOverride : DATA[m].burn; }
+function isDriverOverridden(m, key) { return !!(driverOverrides[m] && driverOverrides[m][key] != null); }
+function isAnyOverride(m) { return DRIVER_KEYS.some(k => isDriverOverridden(m, k)); }
+
+function endingArr(m) { const d = DATA[m]; return d.beginArr + getDriver(m,'newBiz') + getDriver(m,'expansion') + getDriver(m,'contraction') + getDriver(m,'churn'); }
 function getStatus(cur, tgt, dir) {
   const r = cur / tgt;
   if (dir === 'high') { if (r >= 1.0) return 'g'; if (r >= 0.95) return 'a'; return 'r'; }
@@ -512,12 +603,13 @@ function renderKpiStrip() {
   const m = activeMonth;
   const d = DATA[m];
   const arr = endingArr(m);
-  const runway = Math.round(d.cash / d.burn);
+  const burn = getBurn(m);
+  const runway = Math.round(d.cash / burn);
   const idx = MONTHS.indexOf(m);
   const prev = idx > 0 ? MONTHS[idx - 1] : null;
   const arrDelta = prev ? ((arr - endingArr(prev)) / endingArr(prev)) * 100 : 0;
   const cashDelta = prev ? ((d.cash - DATA[prev].cash) / DATA[prev].cash) * 100 : 0;
-  const burnDelta = prev ? ((d.burn - DATA[prev].burn) / DATA[prev].burn) * 100 : 0;
+  const burnDelta = prev ? ((burn - DATA[prev].burn) / DATA[prev].burn) * 100 : 0;
   const runwayDelta = prev ? runway - Math.round(DATA[prev].cash / DATA[prev].burn) : 0;
 
   const cards = [
@@ -525,7 +617,7 @@ function renderKpiStrip() {
     { label: 'Net retention', value: d.nrr,                unit: '%',    series: MONTHS.map(mm => DATA[mm].nrr),                  delta: { kind: 'up', text: '▲ Above 115% target' } },
     { label: 'Cash',          value: '$' + d.cash.toFixed(1), unit: 'M', series: MONTHS.map(mm => DATA[mm].cash),                 delta: { kind: cashDelta >= 0 ? 'up' : 'down', text: (cashDelta >= 0 ? '▲ ' : '▼ ') + Math.abs(cashDelta).toFixed(1) + '% MoM' } },
     { label: 'Runway',        value: runway,               unit: ' mo',  series: MONTHS.map(mm => DATA[mm].cash / DATA[mm].burn), delta: { kind: runwayDelta >= 0 ? 'up' : 'down', text: (runwayDelta >= 0 ? '▲ +' : '▼ ') + Math.abs(runwayDelta) + ' mo MoM' } },
-    { label: 'Burn',          value: '$' + d.burn.toFixed(1), unit: 'M', series: MONTHS.map(mm => DATA[mm].burn),                 delta: { kind: burnDelta > 0 ? 'down' : 'up', text: (burnDelta > 0 ? '▲ ' : '▼ ') + Math.abs(burnDelta).toFixed(1) + '% MoM' } },
+    { label: 'Burn',          value: '$' + burn.toFixed(1), unit: 'M', series: MONTHS.map(mm => DATA[mm].burn),                   delta: { kind: burnDelta > 0 ? 'down' : 'up', text: (burnDelta > 0 ? '▲ ' : '▼ ') + Math.abs(burnDelta).toFixed(1) + '% MoM' } },
   ];
   document.getElementById('kpiStrip').innerHTML = cards.map(c => `
     <div class="kpi">
@@ -542,13 +634,17 @@ function renderWaterfall() {
   const d = DATA[m];
   const ending = endingArr(m);
   const begin = d.beginArr;
+  const newBiz = getDriver(m, 'newBiz');
+  const expansion = getDriver(m, 'expansion');
+  const contraction = getDriver(m, 'contraction');
+  const churn = getDriver(m, 'churn');
   const components = [
-    { label: 'Begin',     value: begin,         color: 'var(--ink-3)',     anchor: true },
-    { label: 'New',       value: d.newBiz,      color: 'var(--gold-bright)' },
-    { label: 'Expansion', value: d.expansion,   color: 'var(--gold)' },
-    { label: 'Contract.', value: d.contraction, color: 'var(--amber)' },
-    { label: 'Churn',     value: d.churn,       color: 'var(--red)' },
-    { label: 'Ending',    value: ending,        color: 'var(--gold-ink)',  anchor: true },
+    { label: 'Begin',     value: begin,        color: 'var(--ink-3)',     anchor: true },
+    { label: 'New',       value: newBiz,       color: 'var(--gold-bright)' },
+    { label: 'Expansion', value: expansion,    color: 'var(--gold)' },
+    { label: 'Contract.', value: contraction,  color: 'var(--amber)' },
+    { label: 'Churn',     value: churn,        color: 'var(--red)' },
+    { label: 'Ending',    value: ending,       color: 'var(--gold-ink)',  anchor: true },
   ];
   const w = 720, h = 320;
   const padL = 36, padR = 16, padT = 30, padB = 36;
@@ -598,11 +694,11 @@ function renderWaterfall() {
   });
   document.getElementById('waterfall').innerHTML = svg;
   document.getElementById('wfMonthLabel').textContent = MONTH_FULL[m];
-  document.getElementById('wfGross').textContent = '+$' + (d.newBiz + d.expansion).toFixed(1) + 'M';
-  document.getElementById('wfChurn').textContent = '−$' + Math.abs(d.contraction + d.churn).toFixed(1) + 'M';
+  document.getElementById('wfGross').textContent = '+$' + (newBiz + expansion).toFixed(1) + 'M';
+  document.getElementById('wfChurn').textContent = '−$' + Math.abs(contraction + churn).toFixed(1) + 'M';
   const net = ending - begin;
   document.getElementById('wfNet').textContent = (net >= 0 ? '+' : '−') + '$' + Math.abs(net).toFixed(1) + 'M';
-  const rA = (begin + d.expansion + d.contraction + d.churn) / begin;
+  const rA = (begin + expansion + contraction + churn) / begin;
   document.getElementById('wfNrr').textContent = Math.round(rA * 100) + '%';
 }
 
@@ -680,8 +776,30 @@ function renderMatrix() {
 
   let visible = rows.slice();
   if (activeFilter !== 'all') visible = visible.filter(r => r.status === activeFilter);
-  const order = { r: 0, a: 1, g: 2 };
-  visible.sort((a, b) => order[a.status] - order[b.status]);
+  const sgn = activeSort.dir === 'asc' ? 1 : -1;
+  const ord = { r: 0, a: 1, g: 2 };
+  visible.sort((a, b) => {
+    switch (activeSort.col) {
+      case 'name':    return sgn * a.def.name.localeCompare(b.def.name);
+      case 'current': return sgn * (a.cur - b.cur);
+      case 'target':  return sgn * (a.def.tgt - b.def.tgt);
+      case 'trend':   return sgn * (a.trend - b.trend);
+      case 'status':  return sgn * (ord[a.status] - ord[b.status]);
+      default:        return ord[a.status] - ord[b.status];
+    }
+  });
+  // Sort indicators
+  document.querySelectorAll('.matrix-head-row .sortable').forEach(h => {
+    const col = h.dataset.sort;
+    const ind = h.querySelector('.sort-indicator');
+    if (col === activeSort.col) {
+      h.classList.add('sort-active');
+      if (ind) ind.textContent = activeSort.dir === 'asc' ? '↑' : '↓';
+    } else {
+      h.classList.remove('sort-active');
+      if (ind) ind.textContent = '';
+    }
+  });
   document.getElementById('matrixCount').textContent = visible.length;
 
   document.getElementById('matrixRows').innerHTML = visible.map(r => {
@@ -797,22 +915,54 @@ function renderAll() {
 
   const arr = endingArr(activeMonth);
   const d = DATA[activeMonth];
+  const burn = getBurn(activeMonth);
   const idx = MONTHS.indexOf(activeMonth);
   const prev = idx > 0 ? MONTHS[idx - 1] : null;
   const arrDelta = prev ? arr - endingArr(prev) : 0;
+  const newBiz = getDriver(activeMonth, 'newBiz');
+  const expansion = getDriver(activeMonth, 'expansion');
+  const contraction = getDriver(activeMonth, 'contraction');
+  const churn = getDriver(activeMonth, 'churn');
   document.getElementById('ledeText').innerHTML = `<em>NRR strong at ${d.nrr}%</em>; ARR ${arrDelta >= 0 ? 'up' : 'down'} $${Math.abs(arrDelta).toFixed(1)}M to $${arr.toFixed(1)}M.`;
-  document.getElementById('subledeText').textContent = `Net new ARR $${(d.newBiz + d.expansion).toFixed(1)}M against $${Math.abs(d.contraction + d.churn).toFixed(1)}M of contraction + churn. Cash $${d.cash.toFixed(1)}M, runway ${Math.round(d.cash / d.burn)} months at current burn.`;
+  document.getElementById('subledeText').textContent = `Net new ARR $${(newBiz + expansion).toFixed(1)}M against $${Math.abs(contraction + churn).toFixed(1)}M of contraction + churn. Cash $${d.cash.toFixed(1)}M, runway ${Math.round(d.cash / burn)} months at current burn.`;
 
-  document.getElementById('cashRunway').textContent = Math.round(d.cash / d.burn);
-  document.getElementById('cashMeta').textContent = `$${d.cash.toFixed(1)}M cash · $${d.burn.toFixed(1)}M / mo burn`;
+  document.getElementById('cashRunway').textContent = Math.round(d.cash / burn);
+  document.getElementById('cashMeta').textContent = `$${d.cash.toFixed(1)}M cash · $${burn.toFixed(1)}M / mo burn`;
   document.getElementById('cashOH').textContent = `$${d.cash.toFixed(1)}M`;
-  document.getElementById('cashBurn').textContent = `−$${d.burn.toFixed(1)}M`;
-  const months = Math.min(24, Math.round(d.cash / d.burn));
+  // Burn slider value
+  const burnSlider = document.getElementById('burnSlider');
+  if (burnSlider && document.activeElement !== burnSlider) burnSlider.value = burn;
+  document.getElementById('burnSliderVal').textContent = '−$' + burn.toFixed(1) + 'M';
+  document.getElementById('burnReset').hidden = (burnOverride == null);
+  // Burn multiple = monthly burn / monthly net new ARR (M)
+  const netNew = newBiz + expansion + contraction + churn;
+  const bm = netNew > 0 ? (burn / netNew) : null;
+  document.getElementById('burnMultiple').textContent = bm != null ? bm.toFixed(2) + '×' : '—';
+  const months = Math.min(24, Math.round(d.cash / burn));
   document.getElementById('cashFill').style.width = ((months / 24) * 100) + '%';
 
   renderKpiStrip();
   renderWaterfall();
   renderMatrix();
+  renderDriverSliders();
+}
+
+function renderDriverSliders() {
+  const m = activeMonth;
+  document.querySelectorAll('.driver-slider').forEach(row => {
+    const key = row.dataset.driver;
+    const val = getDriver(m, key);
+    const inp = row.querySelector('input[type=range]');
+    const valEl = row.querySelector('.ds-value');
+    const reset = row.querySelector('.ds-reset');
+    if (inp && document.activeElement !== inp) inp.value = val;
+    const sign = val >= 0 ? '+' : '−';
+    if (valEl) {
+      valEl.textContent = sign + '$' + Math.abs(val).toFixed(1) + 'M';
+      valEl.classList.toggle('overridden', isDriverOverridden(m, key));
+    }
+    if (reset) reset.hidden = !isDriverOverridden(m, key);
+  });
 }
 
 document.querySelectorAll('.period-chip').forEach(chip => {
@@ -820,6 +970,7 @@ document.querySelectorAll('.period-chip').forEach(chip => {
     document.querySelectorAll('.period-chip').forEach(c => c.classList.remove('active'));
     chip.classList.add('active');
     activeMonth = chip.dataset.month;
+    burnOverride = null; // reset burn override on period switch
     renderAll();
   });
 });
@@ -827,6 +978,64 @@ document.querySelectorAll('#filters .chip').forEach(chip => {
   chip.addEventListener('click', () => {
     document.querySelectorAll('#filters .chip').forEach(c => c.classList.toggle('active', c === chip));
     activeFilter = chip.dataset.filter;
+    renderMatrix();
+  });
+});
+
+// What-if toggle
+document.getElementById('whatifSwitch').addEventListener('click', () => {
+  whatIfMode = !whatIfMode;
+  document.getElementById('whatifToggle').classList.toggle('on', whatIfMode);
+  document.getElementById('driverSliders').hidden = !whatIfMode;
+});
+
+// Driver sliders
+document.querySelectorAll('.driver-slider').forEach(row => {
+  const key = row.dataset.driver;
+  const inp = row.querySelector('input[type=range]');
+  const reset = row.querySelector('.ds-reset');
+  if (inp) {
+    inp.addEventListener('input', () => {
+      const v = parseFloat(inp.value);
+      if (isNaN(v)) return;
+      if (!driverOverrides[activeMonth]) driverOverrides[activeMonth] = {};
+      driverOverrides[activeMonth][key] = v;
+      renderAll();
+    });
+  }
+  if (reset) {
+    reset.addEventListener('click', () => {
+      if (driverOverrides[activeMonth]) {
+        delete driverOverrides[activeMonth][key];
+        if (Object.keys(driverOverrides[activeMonth]).length === 0) delete driverOverrides[activeMonth];
+      }
+      renderAll();
+    });
+  }
+});
+
+// Burn slider
+document.getElementById('burnSlider').addEventListener('input', e => {
+  const v = parseFloat(e.target.value);
+  if (isNaN(v)) return;
+  burnOverride = v;
+  renderAll();
+});
+document.getElementById('burnReset').addEventListener('click', () => {
+  burnOverride = null;
+  renderAll();
+});
+
+// Sortable matrix headers
+document.querySelectorAll('.matrix-head-row .sortable').forEach(h => {
+  h.addEventListener('click', () => {
+    const col = h.dataset.sort;
+    if (activeSort.col === col) {
+      activeSort.dir = activeSort.dir === 'asc' ? 'desc' : 'asc';
+    } else {
+      activeSort.col = col;
+      activeSort.dir = (col === 'name' || col === 'status') ? 'asc' : 'desc';
+    }
     renderMatrix();
   });
 });
