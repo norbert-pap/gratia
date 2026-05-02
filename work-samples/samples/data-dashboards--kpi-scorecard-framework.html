@@ -776,6 +776,31 @@
       display: none;
     }
   }
+
+  /* Sortable headers + target overrides */
+  .matrix-head-row .sortable { cursor: pointer; user-select: none; transition: color 0.14s; display: inline-flex; align-items: center; gap: 5px; }
+  .matrix-head-row .sortable:hover { color: var(--ink-1); }
+  .matrix-head-row .sortable.sort-active { color: var(--gold-ink); }
+  .matrix-head-row .sort-indicator { font-size: 9px; opacity: 0.85; min-width: 8px; }
+  .mt-edited { color: var(--amber-ink); font-weight: 700; margin-left: 4px; }
+
+  /* Drawer target editor */
+  .target-edit-input {
+    width: 90px; padding: 5px 9px;
+    border: 1px solid var(--border); border-radius: 4px;
+    background: var(--bg-2); color: var(--ink-0);
+    font-family: 'Inter', sans-serif; font-weight: 600; font-variant-numeric: tabular-nums;
+    text-align: right; outline: none; transition: border-color 0.14s, background 0.14s;
+  }
+  .target-edit-input:focus { border-color: var(--gold-line); background: var(--bg-1); }
+  .target-reset-btn {
+    font-family: 'Inter', sans-serif; font-size: 10px; font-weight: 500;
+    color: var(--ink-3); background: var(--bg-2);
+    border: 1px solid var(--border); border-radius: 3px;
+    padding: 3px 7px; cursor: pointer;
+    transition: color 0.14s, border-color 0.14s;
+  }
+  .target-reset-btn:hover { color: var(--gold-ink); border-color: var(--gold-line); }
 </style>
 </head>
 <body>
@@ -919,12 +944,12 @@
       <div class="matrix">
         <div class="matrix-head-row">
           <div>Ref</div>
-          <div>KPI</div>
-          <div>Current</div>
-          <div>Target</div>
-          <div>Status</div>
+          <div class="sortable" data-sort="name">KPI<span class="sort-indicator"></span></div>
+          <div class="sortable" data-sort="current">Current<span class="sort-indicator"></span></div>
+          <div class="sortable" data-sort="target">Target<span class="sort-indicator"></span></div>
+          <div class="sortable sort-active" data-sort="status">Status<span class="sort-indicator">↑</span></div>
           <div>Owner</div>
-          <div>Cadence</div>
+          <div class="sortable" data-sort="cadence">Cadence<span class="sort-indicator"></span></div>
           <div></div>
         </div>
         <div id="matrixRows"></div>
@@ -956,23 +981,25 @@ const QUADRANTS = {
   finance:   { name: 'Financial Health',       color: '#8f9198' }
 };
 
+const PERIODS = ["Q2'25", "Q3'25", "Q4'25", "Q1'26"];
+
 const KPIS = [
   // GROWTH
-  { ref: 'AL-001', name: 'Revenue (TTM)',         quadrant: 'growth',     current: '$50.2M',  target: '$48M',     g: '≥ $48M',   a: '$44–48M', r: '< $44M',  status: 'g', trend: '▲ 4.2%',  owner: 'JS', ownerName: 'Jamie Soto, VP Sales',     cadence: 'monthly' },
-  { ref: 'AL-002', name: 'Pipeline coverage',     quadrant: 'growth',     current: '2.6×',    target: '3.0×',     g: '≥ 3.0×',   a: '2.5–3.0×', r: '< 2.5×', status: 'a', trend: '▼ 0.3×',  owner: 'JS', ownerName: 'Jamie Soto, VP Sales',     cadence: 'weekly'  },
-  { ref: 'AL-003', name: 'New logos won (QTD)',   quadrant: 'growth',     current: '14',      target: '12',       g: '≥ 12',     a: '9–11',    r: '< 9',     status: 'g', trend: '▲ 2',     owner: 'AB', ownerName: 'Alex Brewer, Sales Mgr',   cadence: 'weekly'  },
+  { ref: 'AL-001', name: 'Revenue (TTM)',        quadrant: 'growth',     dir: 'high', targetNum: 48,  series: { "Q2'25": 44.8, "Q3'25": 46.6, "Q4'25": 48.5, "Q1'26": 50.2 }, prefix: '$', unit: 'M',     decimals: 1, thresh: { g: '≥ $48M',   a: '$44–48M',  r: '< $44M' },  owner: 'JS', ownerName: 'Jamie Soto, VP Sales',     cadence: 'monthly',   lastReviewed: '6 days ago' },
+  { ref: 'AL-002', name: 'Pipeline coverage',    quadrant: 'growth',     dir: 'high', targetNum: 3.0, series: { "Q2'25": 3.1,  "Q3'25": 2.9,  "Q4'25": 2.8,  "Q1'26": 2.6  }, prefix: '',  unit: '×',     decimals: 1, thresh: { g: '≥ 3.0×',   a: '2.5–3.0×', r: '< 2.5×' },  owner: 'JS', ownerName: 'Jamie Soto, VP Sales',     cadence: 'weekly',    lastReviewed: '2 days ago' },
+  { ref: 'AL-003', name: 'New logos won (QTD)',  quadrant: 'growth',     dir: 'high', targetNum: 12,  series: { "Q2'25": 11,   "Q3'25": 13,   "Q4'25": 12,   "Q1'26": 14   }, prefix: '',  unit: '',      decimals: 0, thresh: { g: '≥ 12',     a: '9–11',     r: '< 9' },     owner: 'AB', ownerName: 'Alex Brewer, Sales Mgr',   cadence: 'weekly',    lastReviewed: '1 day ago' },
   // EFFICIENCY
-  { ref: 'AL-004', name: 'On-time delivery',      quadrant: 'efficiency', current: '96.2%',   target: '95%',      g: '≥ 95%',    a: '92–95%',  r: '< 92%',   status: 'g', trend: '▲ 0.4pp', owner: 'MT', ownerName: 'Mei Tanaka, COO',          cadence: 'daily'   },
-  { ref: 'AL-005', name: 'Load utilization',      quadrant: 'efficiency', current: '82%',     target: '80%',      g: '≥ 80%',    a: '75–80%',  r: '< 75%',   status: 'g', trend: '▲ 1.5pp', owner: 'RG', ownerName: 'Raj Gupta, Ops Director',  cadence: 'weekly'  },
-  { ref: 'AL-006', name: 'Cost per shipment',     quadrant: 'efficiency', current: '$154',    target: '$150',     g: '≤ $150',   a: '$150–158',r: '> $158',  status: 'r', trend: '▲ $4',    owner: 'RG', ownerName: 'Raj Gupta, Ops Director',  cadence: 'weekly'  },
+  { ref: 'AL-004', name: 'On-time delivery',     quadrant: 'efficiency', dir: 'high', targetNum: 95,  series: { "Q2'25": 95.4, "Q3'25": 95.6, "Q4'25": 95.8, "Q1'26": 96.2 }, prefix: '',  unit: '%',     decimals: 1, thresh: { g: '≥ 95%',    a: '92–95%',   r: '< 92%' },   owner: 'MT', ownerName: 'Mei Tanaka, COO',          cadence: 'daily',     lastReviewed: 'Today' },
+  { ref: 'AL-005', name: 'Load utilization',     quadrant: 'efficiency', dir: 'high', targetNum: 80,  series: { "Q2'25": 79.2, "Q3'25": 80.4, "Q4'25": 80.5, "Q1'26": 82.0 }, prefix: '',  unit: '%',     decimals: 0, thresh: { g: '≥ 80%',    a: '75–80%',   r: '< 75%' },   owner: 'RG', ownerName: 'Raj Gupta, Ops Director',  cadence: 'weekly',    lastReviewed: '3 days ago' },
+  { ref: 'AL-006', name: 'Cost per shipment',    quadrant: 'efficiency', dir: 'low',  targetNum: 150, series: { "Q2'25": 148,  "Q3'25": 150,  "Q4'25": 152,  "Q1'26": 154  }, prefix: '$', unit: '',      decimals: 0, thresh: { g: '≤ $150',   a: '$150–158', r: '> $158' },  owner: 'RG', ownerName: 'Raj Gupta, Ops Director',  cadence: 'weekly',    lastReviewed: '4 days ago' },
   // CUSTOMER
-  { ref: 'AL-007', name: 'NPS (quarterly)',       quadrant: 'customer',   current: '62',      target: '55',       g: '≥ 55',     a: '45–54',   r: '< 45',    status: 'g', trend: '▲ 7',     owner: 'KP', ownerName: 'Kira Pell, Customer Lead',  cadence: 'quarterly'},
-  { ref: 'AL-008', name: 'Logo retention',        quadrant: 'customer',   current: '89%',     target: '90%',      g: '≥ 90%',    a: '87–90%',  r: '< 87%',   status: 'a', trend: '▼ 1.4pp', owner: 'KP', ownerName: 'Kira Pell, Customer Lead',  cadence: 'monthly' },
-  { ref: 'AL-009', name: 'Support resolution',    quadrant: 'customer',   current: '4.2 hrs', target: '< 6 hrs',  g: '≤ 6 hrs',  a: '6–9 hrs', r: '> 9 hrs', status: 'g', trend: '▼ 0.6 hrs', owner: 'KP', ownerName: 'Kira Pell, Customer Lead', cadence: 'weekly'  },
+  { ref: 'AL-007', name: 'NPS (quarterly)',      quadrant: 'customer',   dir: 'high', targetNum: 55,  series: { "Q2'25": 51,   "Q3'25": 55,   "Q4'25": 55,   "Q1'26": 62   }, prefix: '',  unit: '',      decimals: 0, thresh: { g: '≥ 55',     a: '45–54',    r: '< 45' },    owner: 'KP', ownerName: 'Kira Pell, Customer Lead',  cadence: 'quarterly', lastReviewed: '14 days ago' },
+  { ref: 'AL-008', name: 'Logo retention',       quadrant: 'customer',   dir: 'high', targetNum: 90,  series: { "Q2'25": 92.4, "Q3'25": 91.8, "Q4'25": 90.4, "Q1'26": 89.0 }, prefix: '',  unit: '%',     decimals: 1, thresh: { g: '≥ 90%',    a: '87–90%',   r: '< 87%' },   owner: 'KP', ownerName: 'Kira Pell, Customer Lead',  cadence: 'monthly',   lastReviewed: '7 days ago' },
+  { ref: 'AL-009', name: 'Support resolution',   quadrant: 'customer',   dir: 'low',  targetNum: 6,   series: { "Q2'25": 5.1,  "Q3'25": 4.8,  "Q4'25": 4.6,  "Q1'26": 4.2  }, prefix: '',  unit: ' hrs',  decimals: 1, thresh: { g: '≤ 6 hrs',  a: '6–9 hrs',  r: '> 9 hrs' }, owner: 'KP', ownerName: 'Kira Pell, Customer Lead',  cadence: 'weekly',    lastReviewed: '5 days ago' },
   // FINANCE
-  { ref: 'AL-010', name: 'Gross margin',          quadrant: 'finance',    current: '34.5%',   target: '32%',      g: '≥ 32%',    a: '28–32%',  r: '< 28%',   status: 'g', trend: '▲ 0.8pp', owner: 'DC', ownerName: 'Diana Choi, CFO',         cadence: 'monthly' },
-  { ref: 'AL-011', name: 'EBITDA margin',         quadrant: 'finance',    current: '12.1%',   target: '10%',      g: '≥ 10%',    a: '7–10%',   r: '< 7%',    status: 'g', trend: '▲ 1.2pp', owner: 'DC', ownerName: 'Diana Choi, CFO',         cadence: 'monthly' },
-  { ref: 'AL-012', name: 'DSO',                   quadrant: 'finance',    current: '42 days', target: '< 45 days',g: '≤ 45 days',a: '45–55',   r: '> 55',    status: 'g', trend: '▼ 2 days',owner: 'DC', ownerName: 'Diana Choi, CFO',         cadence: 'monthly' },
+  { ref: 'AL-010', name: 'Gross margin',         quadrant: 'finance',    dir: 'high', targetNum: 32,  series: { "Q2'25": 33.1, "Q3'25": 33.7, "Q4'25": 33.9, "Q1'26": 34.5 }, prefix: '',  unit: '%',     decimals: 1, thresh: { g: '≥ 32%',    a: '28–32%',   r: '< 28%' },   owner: 'DC', ownerName: 'Diana Choi, CFO',          cadence: 'monthly',   lastReviewed: '8 days ago' },
+  { ref: 'AL-011', name: 'EBITDA margin',        quadrant: 'finance',    dir: 'high', targetNum: 10,  series: { "Q2'25": 9.4,  "Q3'25": 10.4, "Q4'25": 11.2, "Q1'26": 12.1 }, prefix: '',  unit: '%',     decimals: 1, thresh: { g: '≥ 10%',    a: '7–10%',    r: '< 7%' },    owner: 'DC', ownerName: 'Diana Choi, CFO',          cadence: 'monthly',   lastReviewed: '8 days ago' },
+  { ref: 'AL-012', name: 'DSO',                  quadrant: 'finance',    dir: 'low',  targetNum: 45,  series: { "Q2'25": 47,   "Q3'25": 45,   "Q4'25": 43,   "Q1'26": 42   }, prefix: '',  unit: ' days', decimals: 0, thresh: { g: '≤ 45 days',a: '45–55',    r: '> 55' },    owner: 'DC', ownerName: 'Diana Choi, CFO',          cadence: 'monthly',   lastReviewed: '8 days ago' },
 ];
 
 const FLOW = [
@@ -983,20 +1010,62 @@ const FLOW = [
   { lead: { name: 'Engagement score',      val: '78/100',state: 'lead' },     lag: { name: 'Voluntary turnover',    val: '12% — healthy',      state: 'lag' } },
 ];
 
+// ========== STATE ==========
 let activeQuadrant = 'all';
 let activeFilter = 'all';
+let activePeriod = "Q1'26";
+let activeSort = { col: 'status', dir: 'asc' };
+let targetOverrides = {};
+let openDrawerRef = null;
 
-// ========== RENDERERS ==========
-
+// ========== HELPERS ==========
+function fmtKpi(v, k) { return (k.prefix || '') + Number(v).toFixed(k.decimals) + (k.unit || ''); }
+function fmtDelta(absDelta, k) {
+  if (k.unit === '%') return absDelta.toFixed(1) + 'pp';
+  if (k.prefix === '$' && k.unit === 'M') return '$' + absDelta.toFixed(1) + 'M';
+  if (k.prefix === '$') return '$' + Math.round(absDelta);
+  if (k.unit === '×') return absDelta.toFixed(1) + '×';
+  if (k.unit === ' hrs') return absDelta.toFixed(1) + 'h';
+  if (k.unit === ' days') return Math.round(absDelta) + 'd';
+  return Math.round(absDelta).toString();
+}
+function valueAt(k, period) { return k.series[period]; }
+function targetFor(k) { return targetOverrides[k.ref] != null ? targetOverrides[k.ref] : k.targetNum; }
+function statusFor(k, period, target) {
+  const v = valueAt(k, period);
+  const t = target != null ? target : targetFor(k);
+  if (k.dir === 'high') {
+    if (v >= t) return 'g';
+    if (v >= t * 0.95) return 'a';
+    return 'r';
+  } else {
+    if (v <= t) return 'g';
+    if (v <= t * 1.10) return 'a';
+    return 'r';
+  }
+}
+function trendFor(k, period) {
+  const idx = PERIODS.indexOf(period);
+  if (idx <= 0) return { text: '— first period', kind: 'flat', delta: 0 };
+  const prior = k.series[PERIODS[idx - 1]];
+  const cur = k.series[period];
+  const delta = cur - prior;
+  if (Math.abs(delta) < 0.05) return { text: '— flat', kind: 'flat', delta: 0 };
+  const positive = (k.dir === 'high' ? delta > 0 : delta < 0);
+  const arrow = delta > 0 ? '▲' : '▼';
+  return { text: arrow + ' ' + (delta > 0 ? '+' : '−') + fmtDelta(Math.abs(delta), k), kind: positive ? 'pos' : 'neg', delta };
+}
+function gapValue(k) { const v = valueAt(k, activePeriod), t = targetFor(k); return k.dir === 'high' ? (v - t) : (t - v); }
 function ragLabel(s) { return s === 'g' ? 'Green' : s === 'a' ? 'Amber' : 'Red'; }
 
+// ========== RENDERERS ==========
 function renderQuadrants() {
   const el = document.getElementById('quadGrid');
   el.innerHTML = Object.keys(QUADRANTS).map(qk => {
     const meta = QUADRANTS[qk];
     const items = KPIS.filter(k => k.quadrant === qk);
     const cnt = { g: 0, a: 0, r: 0 };
-    items.forEach(i => cnt[i.status]++);
+    items.forEach(i => cnt[statusFor(i, activePeriod)]++);
     const isActive = activeQuadrant === qk;
     return `
       <div class="quadrant ${isActive ? 'active' : ''}" data-quad="${qk}">
@@ -1011,8 +1080,8 @@ function renderQuadrants() {
         ${items.map(i => `
           <div class="q-metric">
             <span class="qm-name">${i.name}</span>
-            <span><span class="qm-val">${i.current}</span><span class="qm-tgt">/ ${i.target}</span></span>
-            <span class="qm-status ${i.status}"></span>
+            <span><span class="qm-val">${fmtKpi(valueAt(i, activePeriod), i)}</span><span class="qm-tgt">/ ${fmtKpi(targetFor(i), i)}</span></span>
+            <span class="qm-status ${statusFor(i, activePeriod)}"></span>
           </div>
         `).join('')}
       </div>
@@ -1023,7 +1092,6 @@ function renderQuadrants() {
     q.addEventListener('click', () => {
       const k = q.dataset.quad;
       activeQuadrant = activeQuadrant === k ? 'all' : k;
-      // sync filter chips: clicking a quadrant = filter matrix to that quadrant only
       renderQuadrants();
       renderMatrix();
     });
@@ -1034,43 +1102,47 @@ function renderFlow() {
   const el = document.getElementById('flowGrid');
   el.innerHTML = FLOW.map(row => `
     <div class="flow-row">
-      <div class="flow-pill ${row.lead.state}">
-        <span class="fp-name">${row.lead.name}</span>
-        <span class="fp-val">${row.lead.val}</span>
-      </div>
+      <div class="flow-pill ${row.lead.state}"><span class="fp-name">${row.lead.name}</span><span class="fp-val">${row.lead.val}</span></div>
       <div class="flow-arrow">→</div>
-      <div class="flow-pill ${row.lag.state}">
-        <span class="fp-name">${row.lag.name}</span>
-        <span class="fp-val">${row.lag.val}</span>
-      </div>
+      <div class="flow-pill ${row.lag.state}"><span class="fp-name">${row.lag.name}</span><span class="fp-val">${row.lag.val}</span></div>
     </div>
   `).join('');
+}
+
+function compareKpis(a, b, col, dir) {
+  const sgn = dir === 'asc' ? 1 : -1;
+  switch (col) {
+    case 'name':    return sgn * a.name.localeCompare(b.name);
+    case 'current': return sgn * (valueAt(a, activePeriod) - valueAt(b, activePeriod));
+    case 'target':  return sgn * (targetFor(a) - targetFor(b));
+    case 'status':  { const ord = { r: 0, a: 1, g: 2 }; return sgn * (ord[statusFor(a, activePeriod)] - ord[statusFor(b, activePeriod)]); }
+    case 'cadence': return sgn * a.cadence.localeCompare(b.cadence);
+    default: return 0;
+  }
 }
 
 function renderMatrix() {
   const rows = document.getElementById('matrixRows');
   let visible = KPIS.slice();
   if (activeQuadrant !== 'all') visible = visible.filter(k => k.quadrant === activeQuadrant);
-  if (activeFilter !== 'all')   visible = visible.filter(k => k.status === activeFilter);
-
-  // sort: red, amber, green
-  const order = { r: 0, a: 1, g: 2 };
-  visible.sort((a, b) => order[a.status] - order[b.status]);
+  if (activeFilter !== 'all')   visible = visible.filter(k => statusFor(k, activePeriod) === activeFilter);
+  visible.sort((a, b) => compareKpis(a, b, activeSort.col, activeSort.dir));
 
   rows.innerHTML = visible.map(k => {
     const meta = QUADRANTS[k.quadrant];
+    const v = valueAt(k, activePeriod);
+    const t = targetFor(k);
+    const s = statusFor(k, activePeriod);
     return `
       <div class="matrix-row" data-ref="${k.ref}">
         <div class="mref">${k.ref}</div>
         <div class="mname"><span class="quad-pip" style="background:${meta.color}"></span>${k.name}</div>
-        <div class="mcurrent">${k.current}</div>
-        <div class="mthresh">${k.target}</div>
-        <div><span class="rag-pill ${k.status}"><span class="rdot"></span>${ragLabel(k.status)}</span></div>
+        <div class="mcurrent">${fmtKpi(v, k)}</div>
+        <div class="mthresh">${fmtKpi(t, k)}${targetOverrides[k.ref] != null ? '<span class="mt-edited" title="Custom target">●</span>' : ''}</div>
+        <div><span class="rag-pill ${s}"><span class="rdot"></span>${ragLabel(s)}</span></div>
         <div class="mowner"><span class="mavatar">${k.owner}</span>${k.ownerName.split(',')[0]}</div>
         <div class="mcad">${k.cadence}</div>
-        <div class="mchev">
-          <svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-        </div>
+        <div class="mchev"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
       </div>
     `;
   }).join('');
@@ -1080,18 +1152,42 @@ function renderMatrix() {
   });
 
   document.getElementById('matrixCount').textContent = String(visible.length);
+  updateSortHeaders();
 }
 
 function updateCounts() {
   const cnt = { all: KPIS.length, g: 0, a: 0, r: 0 };
-  KPIS.forEach(k => cnt[k.status]++);
+  KPIS.forEach(k => cnt[statusFor(k, activePeriod)]++);
   document.getElementById('cntAll').textContent = cnt.all;
   document.getElementById('cntG').textContent = cnt.g;
   document.getElementById('cntA').textContent = cnt.a;
   document.getElementById('cntR').textContent = cnt.r;
 }
 
-// ========== FILTERS ==========
+function updateSortHeaders() {
+  document.querySelectorAll('.matrix-head-row .sortable').forEach(h => {
+    const col = h.dataset.sort;
+    const ind = h.querySelector('.sort-indicator');
+    if (col === activeSort.col) {
+      h.classList.add('sort-active');
+      if (ind) ind.textContent = activeSort.dir === 'asc' ? '↑' : '↓';
+    } else {
+      h.classList.remove('sort-active');
+      if (ind) ind.textContent = '';
+    }
+  });
+}
+
+// ========== EVENTS ==========
+document.querySelectorAll('.period-chip').forEach(chip => {
+  chip.addEventListener('click', () => {
+    document.querySelectorAll('.period-chip').forEach(c => c.classList.toggle('active', c === chip));
+    activePeriod = chip.dataset.period;
+    renderAll();
+    if (openDrawerRef) openDrawer(openDrawerRef);
+  });
+});
+
 document.querySelectorAll('#filters .chip').forEach(chip => {
   chip.addEventListener('click', () => {
     document.querySelectorAll('#filters .chip').forEach(c => c.classList.toggle('active', c === chip));
@@ -1100,22 +1196,48 @@ document.querySelectorAll('#filters .chip').forEach(chip => {
   });
 });
 
+document.querySelectorAll('.matrix-head-row .sortable').forEach(h => {
+  h.addEventListener('click', () => {
+    const col = h.dataset.sort;
+    if (activeSort.col === col) {
+      activeSort.dir = activeSort.dir === 'asc' ? 'desc' : 'asc';
+    } else {
+      activeSort.col = col;
+      activeSort.dir = (col === 'status' || col === 'name' || col === 'cadence') ? 'asc' : 'desc';
+    }
+    renderMatrix();
+  });
+});
+
 // ========== DRAWER ==========
 function openDrawer(ref) {
   const k = KPIS.find(x => x.ref === ref);
   if (!k) return;
+  openDrawerRef = ref;
   const meta = QUADRANTS[k.quadrant];
+  const v = valueAt(k, activePeriod);
+  const t = targetFor(k);
+  const s = statusFor(k, activePeriod);
+  const tr = trendFor(k, activePeriod);
 
-  // Build a tiny mock sparkline (5 quarters)
-  const trendVals = [62, 64, 67, 70, 72]; // dummy upward — varies by KPI in real impl
-  const max = Math.max(...trendVals), min = Math.min(...trendVals);
-  const w = 420, h = 48, padX = 8;
-  const pts = trendVals.map((v, i) => {
-    const x = padX + (i / (trendVals.length - 1)) * (w - padX * 2);
-    const y = (h - 6) - ((v - min) / Math.max(1, max - min)) * (h - 18);
+  // Per-KPI sparkline (4 quarters, with target line)
+  const seriesVals = PERIODS.map(p => k.series[p]);
+  const allVals = seriesVals.concat([t]);
+  const max = Math.max(...allVals), min = Math.min(...allVals);
+  const w = 420, h = 64, padX = 8, padY = 10;
+  const range = Math.max(0.001, max - min);
+  const pts = seriesVals.map((vv, i) => {
+    const x = padX + (i / (seriesVals.length - 1)) * (w - padX * 2);
+    const y = (h - padY) - ((vv - min) / range) * (h - padY * 2);
     return [x, y];
   });
+  const targetY = (h - padY) - ((t - min) / range) * (h - padY * 2);
   const linePath = pts.map((p, i) => (i === 0 ? 'M' : 'L') + p[0].toFixed(1) + ',' + p[1].toFixed(1)).join(' ');
+  const seriesColor = s === 'g' ? 'var(--green-ink)' : s === 'a' ? 'var(--amber-ink)' : 'var(--red-ink)';
+
+  const targetStep = k.targetNum < 5 ? 0.1 : k.targetNum < 50 ? 0.5 : 1;
+  const overridden = targetOverrides[k.ref] != null;
+  const trendColor = tr.kind === 'pos' ? 'var(--green-ink)' : tr.kind === 'neg' ? 'var(--red-ink)' : 'var(--ink-2)';
 
   document.getElementById('drawerContent').innerHTML = `
     <div class="drawer-head">
@@ -1133,37 +1255,48 @@ function openDrawer(ref) {
     <div class="drawer-body">
 
       <div class="drawer-section">
-        <h4>Current period</h4>
-        <div class="drawer-stat"><span class="lbl">Value</span><span class="val">${k.current}</span></div>
-        <div class="drawer-stat"><span class="lbl">Target</span><span class="val">${k.target}</span></div>
-        <div class="drawer-stat"><span class="lbl">Trend vs prior</span><span class="val">${k.trend}</span></div>
-        <div class="drawer-stat"><span class="lbl">Status</span><span class="val"><span class="rag-pill ${k.status}"><span class="rdot"></span>${ragLabel(k.status)}</span></span></div>
+        <h4>${activePeriod}</h4>
+        <div class="drawer-stat"><span class="lbl">Value</span><span class="val">${fmtKpi(v, k)}</span></div>
+        <div class="drawer-stat"><span class="lbl">Target</span>
+          <span class="val" style="display: flex; align-items: center; gap: 8px;">
+            <input type="number" id="targetEditInput" class="target-edit-input" value="${t}" step="${targetStep}">
+            <button id="targetReset" class="target-reset-btn" title="Reset to default ${fmtKpi(k.targetNum, k)}" style="display: ${overridden ? 'inline-block' : 'none'};">↺ reset</button>
+          </span>
+        </div>
+        <div class="drawer-stat"><span class="lbl">Trend vs prior</span><span class="val" style="color: ${trendColor}">${tr.text}</span></div>
+        <div class="drawer-stat"><span class="lbl">Status</span><span class="val" id="drawerStatus"><span class="rag-pill ${s}"><span class="rdot"></span>${ragLabel(s)}</span></span></div>
       </div>
 
       <div class="drawer-section">
-        <h4>Trailing 5 quarters</h4>
-        <div class="drawer-spark">
-          <svg width="100%" height="48" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none">
-            <path d="${linePath}" fill="none" stroke="${meta.color}" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
-            ${pts.map((p, i) => `<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="${i === pts.length - 1 ? 3 : 2}" fill="${meta.color}" ${i === pts.length - 1 ? '' : 'opacity="0.4"'}/>`).join('')}
+        <h4>Trailing 4 quarters</h4>
+        <div class="drawer-spark" style="position: relative;">
+          <svg width="100%" height="${h}" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none">
+            <line x1="${padX}" y1="${targetY.toFixed(1)}" x2="${w - padX}" y2="${targetY.toFixed(1)}" stroke="var(--ink-3)" stroke-width="1" stroke-dasharray="3,3" opacity="0.55"/>
+            <text x="${w - padX - 4}" y="${(targetY - 5).toFixed(1)}" text-anchor="end" font-size="9" fill="var(--ink-3)">target ${fmtKpi(t, k)}</text>
+            <path d="${linePath}" fill="none" stroke="${seriesColor}" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            ${pts.map((p, i) => `<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="${PERIODS[i] === activePeriod ? 3.5 : 2}" fill="${seriesColor}" ${PERIODS[i] === activePeriod ? '' : 'opacity="0.45"'}/>`).join('')}
           </svg>
+        </div>
+        <div style="display: flex; justify-content: space-between; padding: 0 8px; margin-top: 4px; font-size: 10px; color: var(--ink-3); font-family: 'JetBrains Mono', monospace; letter-spacing: 0.04em;">
+          ${PERIODS.map(p => `<span style="${p === activePeriod ? 'color: var(--ink-1); font-weight: 600;' : ''}">${p}</span>`).join('')}
         </div>
       </div>
 
       <div class="drawer-section">
         <h4>Threshold definitions</h4>
         <div class="drawer-thresh">
-          <div class="drawer-thresh-cell g"><div class="tlbl">Green</div>${k.g}</div>
-          <div class="drawer-thresh-cell a"><div class="tlbl">Amber</div>${k.a}</div>
-          <div class="drawer-thresh-cell r"><div class="tlbl">Red</div>${k.r}</div>
+          <div class="drawer-thresh-cell g"><div class="tlbl">Green</div>${k.thresh.g}</div>
+          <div class="drawer-thresh-cell a"><div class="tlbl">Amber</div>${k.thresh.a}</div>
+          <div class="drawer-thresh-cell r"><div class="tlbl">Red</div>${k.thresh.r}</div>
         </div>
+        ${overridden ? `<div style="font-size: 11px; color: var(--amber-ink); margin-top: 8px;">⚠ Custom target ${fmtKpi(t, k)} in effect (default ${fmtKpi(k.targetNum, k)}).</div>` : ''}
       </div>
 
       <div class="drawer-section">
         <h4>Ownership</h4>
         <div class="drawer-stat"><span class="lbl">Owner</span><span class="val">${k.ownerName}</span></div>
         <div class="drawer-stat"><span class="lbl">Review cadence</span><span class="val" style="text-transform:capitalize">${k.cadence}</span></div>
-        <div class="drawer-stat"><span class="lbl">Last reviewed</span><span class="val">3 days ago</span></div>
+        <div class="drawer-stat"><span class="lbl">Last reviewed</span><span class="val">${k.lastReviewed}</span></div>
       </div>
 
     </div>
@@ -1171,17 +1304,42 @@ function openDrawer(ref) {
   document.getElementById('drawer').classList.add('open');
   document.getElementById('drawer').setAttribute('aria-hidden', 'false');
   document.getElementById('drawerOverlay').classList.add('open');
+
+  // Wire editable target — live update without re-rendering drawer (preserves cursor)
+  const inp = document.getElementById('targetEditInput');
+  const resetBtn = document.getElementById('targetReset');
+  if (inp) {
+    inp.addEventListener('input', () => {
+      const newT = parseFloat(inp.value);
+      if (isNaN(newT)) return;
+      targetOverrides[k.ref] = newT;
+      const newS = statusFor(k, activePeriod, newT);
+      document.getElementById('drawerStatus').innerHTML = `<span class="rag-pill ${newS}"><span class="rdot"></span>${ragLabel(newS)}</span>`;
+      if (resetBtn) resetBtn.style.display = 'inline-block';
+      renderQuadrants();
+      renderMatrix();
+      updateCounts();
+    });
+  }
+  if (resetBtn) {
+    resetBtn.addEventListener('click', () => {
+      delete targetOverrides[k.ref];
+      openDrawer(ref); // re-render to reset input value + clear notice
+      renderQuadrants();
+      renderMatrix();
+      updateCounts();
+    });
+  }
 }
 
 function closeDrawer() {
   document.getElementById('drawer').classList.remove('open');
   document.getElementById('drawer').setAttribute('aria-hidden', 'true');
   document.getElementById('drawerOverlay').classList.remove('open');
+  openDrawerRef = null;
 }
 
-document.addEventListener('keydown', e => {
-  if (e.key === 'Escape') closeDrawer();
-});
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDrawer(); });
 
 // ========== THEME ==========
 document.getElementById('themeToggle').addEventListener('click', () => {
@@ -1192,10 +1350,13 @@ document.getElementById('themeToggle').addEventListener('click', () => {
 });
 
 // ========== INITIAL RENDER ==========
-updateCounts();
-renderQuadrants();
+function renderAll() {
+  updateCounts();
+  renderQuadrants();
+  renderMatrix();
+}
+renderAll();
 renderFlow();
-renderMatrix();
 </script>
 
 </div><!-- /#deck-content -->
