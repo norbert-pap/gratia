@@ -23,6 +23,10 @@
   .principle-card .num { font-family: 'Inter', sans-serif; font-size: 22px; font-weight: 600; color: var(--gold-ink); }
   .principle-card h3 { font-size: 14px; color: var(--ink-0); margin: 4px 0 6px; }
   .principle-card p { font-size: 12px; color: var(--ink-1); line-height: 1.55; }
+  .rm-cell { cursor: pointer; transition: border-color 0.14s, transform 0.14s; }
+  .rm-cell:hover { transform: translateY(-1px); border-color: var(--gold-line); }
+  .roadmap-grid.dim-others .rm-cell:not(.rm-active) { opacity: 0.35; }
+  .roadmap-grid.dim-others .rm-stream:not(.rm-active) { opacity: 0.4; }
 </style>
 </head>
 <body>
@@ -133,6 +137,63 @@ document.getElementById('themeToggle').addEventListener('click', () => {
   document.documentElement.setAttribute('data-theme', next);
   try { localStorage.setItem('apollo-theme', next); } catch (e) {}
 });
+
+// Roadmap grid: click a cell to dim other streams; click again to clear.
+const roadmapGrid = document.querySelector('.roadmap-grid');
+let activeStream = null;
+function clearRoadmapDim() {
+  if (!roadmapGrid) return;
+  roadmapGrid.classList.remove('dim-others');
+  roadmapGrid.querySelectorAll('.rm-active').forEach(el => el.classList.remove('rm-active'));
+  activeStream = null;
+}
+function highlightStream(streamEl) {
+  if (!roadmapGrid) return;
+  // Walk forward from the rm-stream cell, picking up the next 4 rm-cells (one per quarter)
+  const all = Array.from(roadmapGrid.children);
+  const idx = all.indexOf(streamEl);
+  if (idx < 0) return;
+  clearRoadmapDim();
+  streamEl.classList.add('rm-active');
+  for (let i = idx + 1; i < all.length && i < idx + 5; i++) {
+    if (all[i].classList.contains('rm-cell')) all[i].classList.add('rm-active');
+    else break;
+  }
+  roadmapGrid.classList.add('dim-others');
+}
+if (roadmapGrid) {
+  roadmapGrid.querySelectorAll('.rm-cell').forEach(cell => {
+    cell.addEventListener('click', (e) => {
+      e.stopPropagation();
+      // Find the rm-stream label sibling preceding this cell
+      const all = Array.from(roadmapGrid.children);
+      const idx = all.indexOf(cell);
+      let streamEl = null;
+      for (let i = idx - 1; i >= 0; i--) {
+        if (all[i].classList.contains('rm-stream')) { streamEl = all[i]; break; }
+      }
+      if (!streamEl) return;
+      const streamName = streamEl.textContent.trim();
+      const cellText = cell.textContent.trim().replace(/\s+/g, ' ');
+      if (activeStream === streamEl) {
+        clearRoadmapDim();
+        window.showToast && window.showToast('Cleared roadmap focus', 'info');
+      } else {
+        activeStream = streamEl;
+        highlightStream(streamEl);
+        window.showToast && window.showToast(streamName + ' · ' + cellText.slice(0, 80) + (cellText.length > 80 ? '…' : ''), 'info');
+      }
+    });
+  });
+  roadmapGrid.querySelectorAll('.rm-stream').forEach(s => {
+    s.addEventListener('click', () => {
+      if (activeStream === s) { clearRoadmapDim(); return; }
+      activeStream = s;
+      highlightStream(s);
+      window.showToast && window.showToast('Focused: ' + s.textContent.trim(), 'info');
+    });
+  });
+}
 </script>
 
 </div>

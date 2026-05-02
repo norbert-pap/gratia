@@ -30,6 +30,10 @@
   .stage-cell h3 { font-size: 13px; color: var(--ink-0); margin-top: 6px; letter-spacing: -0.01em; }
   .stage-cell p { font-size: 11px; color: var(--ink-2); margin-top: 4px; line-height: 1.5; }
   .stage-cell .gate { font-size: 10px; color: var(--gold-ink); margin-top: 8px; padding-top: 6px; border-top: 1px dashed var(--border); font-family: 'JetBrains Mono', monospace; }
+  .play-card { cursor: pointer; transition: border-color 0.14s, transform 0.14s; }
+  .play-card:hover { border-color: var(--gold-line); transform: translateY(-1px); }
+  .stage-cell { cursor: pointer; transition: background 0.14s; }
+  .stage-cell:hover { background: var(--bg-2); }
 </style>
 </head>
 <body>
@@ -233,6 +237,23 @@ document.getElementById('themeToggle').addEventListener('click', () => {
   const next = cur === 'dark' ? 'light' : 'dark';
   document.documentElement.setAttribute('data-theme', next);
   try { localStorage.setItem('apollo-theme', next); } catch (e) {}
+});
+
+document.querySelectorAll('.play-card').forEach(card => {
+  card.addEventListener('click', () => {
+    const num = card.querySelector('.play-num')?.textContent.trim() || '';
+    const name = card.querySelector('.play-name')?.textContent.trim() || '';
+    const meta = card.querySelector('.play-meta')?.textContent.trim() || '';
+    window.showToast && window.showToast(num + ' · ' + name + (meta ? ' · ' + meta : ''), 'info');
+  });
+});
+document.querySelectorAll('.stage-cell').forEach(cell => {
+  cell.addEventListener('click', () => {
+    const num = cell.querySelector('.num')?.textContent.trim() || '';
+    const name = cell.querySelector('h3')?.textContent.trim() || '';
+    const gate = cell.querySelector('.gate')?.textContent.trim() || '';
+    window.showToast && window.showToast(num + ' · ' + name + (gate ? ' · ' + gate : ''), 'info');
+  });
 });
 </script>
 

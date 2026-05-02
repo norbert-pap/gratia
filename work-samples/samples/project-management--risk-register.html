@@ -77,9 +77,9 @@
           <table class="heat">
             <thead><tr><th></th><th>Low</th><th>Med</th><th>High</th></tr></thead>
             <tbody>
-              <tr><td class="heat-row-lbl">High</td><td><div class="heat-cell md">2</div></td><td><div class="heat-cell hi">3</div></td><td><div class="heat-cell hi">2</div></td></tr>
-              <tr><td class="heat-row-lbl">Med</td><td><div class="heat-cell lo">1</div></td><td><div class="heat-cell md">2</div></td><td><div class="heat-cell hi">2</div></td></tr>
-              <tr><td class="heat-row-lbl">Low</td><td><div class="heat-cell lo">1</div></td><td><div class="heat-cell lo">1</div></td><td><div class="heat-cell md">0</div></td></tr>
+              <tr><td class="heat-row-lbl">High</td><td><div class="heat-cell md" data-prob="High" data-imp="Low">2</div></td><td><div class="heat-cell hi" data-prob="High" data-imp="Med">3</div></td><td><div class="heat-cell hi" data-prob="High" data-imp="High">2</div></td></tr>
+              <tr><td class="heat-row-lbl">Med</td><td><div class="heat-cell lo" data-prob="Med" data-imp="Low">1</div></td><td><div class="heat-cell md" data-prob="Med" data-imp="Med">2</div></td><td><div class="heat-cell hi" data-prob="Med" data-imp="High">2</div></td></tr>
+              <tr><td class="heat-row-lbl">Low</td><td><div class="heat-cell lo" data-prob="Low" data-imp="Low">1</div></td><td><div class="heat-cell lo" data-prob="Low" data-imp="Med">1</div></td><td><div class="heat-cell md" data-prob="Low" data-imp="High">0</div></td></tr>
             </tbody>
           </table>
           <div class="heat-axis">↑ Probability</div>
@@ -136,9 +136,12 @@ const RISKS = [
 ];
 
 let sevFilter = 'all';
+let piFilter = null; // { prob, imp } from heat cell click
 
 function renderTable() {
-  const visible = sevFilter === 'all' ? RISKS : RISKS.filter(r => r.sev === sevFilter);
+  let visible = RISKS.slice();
+  if (sevFilter !== 'all') visible = visible.filter(r => r.sev === sevFilter);
+  if (piFilter) visible = visible.filter(r => r.prob === piFilter.prob && r.imp === piFilter.imp);
   document.getElementById('riskCount').textContent = visible.length;
   let html = '<thead><tr><th>ID</th><th>Risk</th><th class="cn">P</th><th class="cn">I</th><th>Owner</th><th>Mitigation</th></tr></thead><tbody>';
   visible.forEach(r => {
@@ -154,6 +157,27 @@ document.querySelectorAll('#sevFilters .chip').forEach(c => {
     document.querySelectorAll('#sevFilters .chip').forEach(x => x.classList.toggle('active', x === c));
     sevFilter = c.dataset.sev;
     renderTable();
+  });
+});
+
+// Heat cell click → filter table to P/I combo
+document.querySelectorAll('.heat-cell').forEach(cell => {
+  cell.addEventListener('click', () => {
+    const prob = cell.dataset.prob;
+    const imp = cell.dataset.imp;
+    if (!prob || !imp) return;
+    // Toggle: clicking same combo clears
+    if (piFilter && piFilter.prob === prob && piFilter.imp === imp) {
+      piFilter = null;
+      document.querySelectorAll('.heat-cell').forEach(x => x.style.outline = '');
+    } else {
+      piFilter = { prob, imp };
+      document.querySelectorAll('.heat-cell').forEach(x => x.style.outline = '');
+      cell.style.outline = '2px solid var(--gold-bright)';
+      cell.style.outlineOffset = '-2px';
+    }
+    renderTable();
+    window.showToast && window.showToast(piFilter ? 'Filtered: P=' + prob + ' × I=' + imp : 'Cleared P/I filter', 'info');
   });
 });
 

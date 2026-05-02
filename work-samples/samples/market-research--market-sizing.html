@@ -35,6 +35,10 @@
   .vertical-grid .v-num.dim { color: var(--ink-2); font-weight: 500; }
   .vertical-bar { height: 6px; background: var(--bg-2); border-radius: 3px; overflow: hidden; margin-top: 4px; }
   .vertical-bar .vb { height: 100%; background: var(--gold); }
+  .funnel-tier { cursor: pointer; transition: background 0.14s; padding-left: 8px; padding-right: 8px; margin-left: -8px; margin-right: -8px; border-radius: 4px; }
+  .funnel-tier:hover { background: var(--bg-2); }
+  .vertical-grid:not(.head) { cursor: pointer; transition: background 0.14s; padding-left: 8px; padding-right: 8px; margin-left: -8px; margin-right: -8px; border-radius: 4px; }
+  .vertical-grid:not(.head):hover { background: var(--bg-2); }
 </style>
 </head>
 <body>
@@ -202,6 +206,23 @@ document.getElementById('themeToggle').addEventListener('click', () => {
   const next = cur === 'dark' ? 'light' : 'dark';
   document.documentElement.setAttribute('data-theme', next);
   try { localStorage.setItem('apollo-theme', next); } catch (e) {}
+});
+
+document.querySelectorAll('.funnel-tier').forEach(t => {
+  t.addEventListener('click', () => {
+    const lbl = t.querySelector('.ft-label')?.textContent.trim() || '';
+    const name = t.querySelector('.ft-name')?.textContent.trim() || '';
+    const num = t.querySelector('.ft-num .v')?.textContent.trim() || '';
+    const meta = t.querySelector('.ft-num .meta')?.textContent.trim() || '';
+    window.showToast && window.showToast(lbl + ' · ' + name + ' · ' + num + (meta ? ' (' + meta + ')' : ''), 'info');
+  });
+});
+document.querySelectorAll('.vertical-grid:not(.head)').forEach(row => {
+  row.addEventListener('click', () => {
+    const name = row.querySelector('.v-name')?.textContent.trim() || '';
+    const nums = [...row.querySelectorAll('.v-num')].map(n => n.textContent.trim()).filter(Boolean);
+    if (name) window.showToast && window.showToast(name + (nums.length ? ' · ' + nums.join(' / ') : ''), 'info');
+  });
 });
 
 renderBu();

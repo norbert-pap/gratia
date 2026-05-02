@@ -29,6 +29,11 @@
   .raci.a { background: rgba(22, 163, 138, 0.18); color: var(--green-ink); border: 1px solid var(--green-line); }
   .raci.c { background: var(--bg-3); color: var(--ink-1); border: 1px solid var(--border); }
   .raci.i { background: var(--bg-2); color: var(--ink-3); border: 1px solid var(--border); }
+  .cm-cell { cursor: pointer; transition: background 0.14s; }
+  .cm-cell:hover { background: var(--bg-2); }
+  .ms-table tbody tr, .stake-table tbody tr { cursor: pointer; transition: background 0.14s; }
+  .ms-table tbody tr:hover, .stake-table tbody tr:hover { background: var(--bg-2); }
+  .raci { cursor: help; }
 </style>
 </head>
 <body>
@@ -212,6 +217,39 @@ document.getElementById('themeToggle').addEventListener('click', () => {
   const next = cur === 'dark' ? 'light' : 'dark';
   document.documentElement.setAttribute('data-theme', next);
   try { localStorage.setItem('apollo-theme', next); } catch (e) {}
+});
+
+document.querySelectorAll('.cm-cell').forEach(c => {
+  c.addEventListener('click', () => {
+    const lbl = c.querySelector('.l')?.textContent.trim() || '';
+    const v = c.querySelector('.v')?.textContent.trim() || '';
+    const meta = c.querySelector('.meta')?.textContent.trim() || '';
+    window.showToast && window.showToast(lbl + ' · ' + v + (meta ? ' · ' + meta : ''), 'info');
+  });
+});
+document.querySelectorAll('.ms-table tbody tr').forEach(tr => {
+  tr.addEventListener('click', () => {
+    const cells = tr.querySelectorAll('td');
+    if (cells.length === 0) return;
+    const date = tr.querySelector('.dt')?.textContent.trim() || '';
+    const name = cells[1]?.textContent.trim() || cells[0]?.textContent.trim() || '';
+    window.showToast && window.showToast((date ? date + ' · ' : '') + name, 'info');
+  });
+});
+document.querySelectorAll('.stake-table tbody tr').forEach(tr => {
+  tr.addEventListener('click', () => {
+    const nm = tr.querySelector('.nm')?.textContent.trim() || tr.querySelector('td')?.textContent.trim() || '';
+    const rl = tr.querySelector('.rl')?.textContent.trim() || '';
+    window.showToast && window.showToast(nm + (rl ? ' · ' + rl : ''), 'info');
+  });
+});
+const raciMap = { r: 'Responsible — does the work', a: 'Accountable — owns the outcome', c: 'Consulted — input before action', i: 'Informed — kept in the loop' };
+document.querySelectorAll('.raci').forEach(r => {
+  r.addEventListener('click', (e) => {
+    e.stopPropagation();
+    const k = [...r.classList].find(c => raciMap[c]);
+    if (k) window.showToast && window.showToast(r.textContent.trim() + ' · ' + raciMap[k], 'info');
+  });
 });
 </script>
 

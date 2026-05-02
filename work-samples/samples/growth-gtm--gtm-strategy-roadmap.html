@@ -34,6 +34,12 @@
   .qcard h3 { font-size: 13px; color: var(--gold-ink); margin-bottom: 8px; letter-spacing: 0.04em; }
   .qcard ul li { font-size: 11.5px; color: var(--ink-1); line-height: 1.5; padding-left: 13px; position: relative; margin-bottom: 5px; }
   .qcard ul li::before { content: '·'; position: absolute; left: 4px; color: var(--gold); font-weight: 700; }
+  .icp-card { cursor: pointer; transition: transform 0.14s, border-color 0.14s; }
+  .icp-card:hover { transform: translateY(-1px); border-color: var(--gold-line); }
+  .qcard { cursor: pointer; transition: background 0.14s, border-color 0.14s; }
+  .qcard:hover { background: var(--bg-1); border-color: var(--gold-line); }
+  .motion-row { cursor: pointer; transition: background 0.14s; padding-left: 8px; padding-right: 8px; margin-left: -8px; margin-right: -8px; border-radius: 4px; }
+  .motion-row:hover { background: var(--bg-2); }
 </style>
 </head>
 <body>
@@ -155,6 +161,28 @@ document.getElementById('themeToggle').addEventListener('click', () => {
   const next = cur === 'dark' ? 'light' : 'dark';
   document.documentElement.setAttribute('data-theme', next);
   try { localStorage.setItem('apollo-theme', next); } catch (e) {}
+});
+
+document.querySelectorAll('.icp-card').forEach(c => {
+  c.addEventListener('click', () => {
+    const tag = c.querySelector('.tag')?.textContent.trim() || '';
+    const name = c.querySelector('h3')?.textContent.trim() || '';
+    window.showToast && window.showToast(name + ' · ' + tag, 'info');
+  });
+});
+document.querySelectorAll('.qcard').forEach(c => {
+  c.addEventListener('click', () => {
+    const q = c.querySelector('h3')?.textContent.trim() || '';
+    const items = c.querySelectorAll('ul li').length;
+    window.showToast && window.showToast(q + ' · ' + items + ' workstream' + (items === 1 ? '' : 's'), 'info');
+  });
+});
+document.querySelectorAll('.motion-row').forEach(r => {
+  r.addEventListener('click', () => {
+    const tag = r.querySelector('.motion-tag')?.firstChild?.textContent.trim() || '';
+    const meta = r.querySelector('.motion-tag .meta')?.textContent.trim() || '';
+    window.showToast && window.showToast(tag + (meta ? ' · ' + meta : ''), 'info');
+  });
 });
 </script>
 

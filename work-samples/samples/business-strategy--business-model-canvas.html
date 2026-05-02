@@ -21,7 +21,9 @@
   .bmc-cell.co { grid-area: co; background: var(--bg-2); }
   .bmc-cell.rs { grid-area: rs; background: rgba(22, 163, 138, 0.07); border-color: var(--green-line); }
   .bmc-cell.rs h4 { color: var(--green-ink); }
-  .bmc-cell { display: flex; flex-direction: column; }
+  .bmc-cell { display: flex; flex-direction: column; cursor: pointer; transition: border-color 0.14s, transform 0.14s; }
+  .bmc-cell:hover { border-color: var(--border-2); transform: translateY(-1px); }
+  .bmc-cell.vp:hover, .bmc-cell.rs:hover { border-color: var(--gold-bright); }
   .bmc-cell ul { flex: 1; }
   .bmc-cell .meta { font-size: 10px; color: var(--ink-3); margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--border); font-family: 'JetBrains Mono', monospace; letter-spacing: 0.04em; }
 </style>
@@ -112,12 +114,119 @@
   </main>
 </div>
 
+<aside class="drawer" id="cellDrawer" aria-hidden="true">
+  <div class="drawer-head">
+    <div>
+      <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 4px;" id="drawerEyebrow">Building block</div>
+      <h2 id="drawerTitle">Title</h2>
+    </div>
+    <button class="icon-btn" id="drawerClose" aria-label="Close">
+      <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" style="width:18px;height:18px;"><path d="M6 6l12 12M18 6L6 18" stroke-linecap="round"/></svg>
+    </button>
+  </div>
+  <div class="drawer-body" id="drawerBody"></div>
+</aside>
+<div class="drawer-overlay" id="drawerOverlay"></div>
+
 <script>
 document.getElementById('themeToggle').addEventListener('click', () => {
   const cur = document.documentElement.getAttribute('data-theme') || 'dark';
   const next = cur === 'dark' ? 'light' : 'dark';
   document.documentElement.setAttribute('data-theme', next);
   try { localStorage.setItem('apollo-theme', next); } catch (e) {}
+});
+
+const cellDetails = {
+  kp: {
+    eyebrow: 'Building block · 1 of 9',
+    title: 'Key Partners',
+    body: `<div class="drawer-section"><h4>Why these partners</h4><p style="font-size: 12.5px; color: var(--ink-2); line-height: 1.55;">The 320 vetted studio network is the supply moat. Studios apply (≈140/month inbound), pass a 4-week vetting process (portfolio review + reference work + paid trial brief), and join the active roster. Stripe and Loom are operational glue — payments and async handoff. Staffing partners cover surge demand without diluting the curation bar.</p></div>
+<div class="drawer-section"><h4>Studio-network composition</h4><div class="drawer-stat"><span class="lbl">Active studios</span><span class="val">320</span></div><div class="drawer-stat"><span class="lbl">Onboarded last quarter</span><span class="val">28</span></div><div class="drawer-stat"><span class="lbl">Acceptance rate (apply → active)</span><span class="val">11%</span></div><div class="drawer-stat"><span class="lbl">Studio NPS</span><span class="val">68</span></div><div class="drawer-stat"><span class="lbl">Avg studio tenure on platform</span><span class="val">2.3 yrs</span></div></div>
+<div class="drawer-section"><h4>Operational partners</h4><div class="drawer-stat"><span class="lbl">Stripe</span><span class="val">Payments + payouts</span></div><div class="drawer-stat"><span class="lbl">Loom</span><span class="val">Async handoff</span></div><div class="drawer-stat"><span class="lbl">Staffing partners</span><span class="val">2 (surge cover)</span></div></div>`
+  },
+  ka: {
+    eyebrow: 'Building block · 2 of 9',
+    title: 'Key Activities',
+    body: `<div class="drawer-section"><h4>What we actually do</h4><p style="font-size: 12.5px; color: var(--ink-2); line-height: 1.55;">Vetting and matching are the operational core — both compound returns to the platform. Brand acquisition is the one bought activity (paid + sales). QA + dispute handling is the trust layer that keeps both sides on-platform.</p></div>
+<div class="drawer-section"><h4>Match-making engine</h4><div class="drawer-stat"><span class="lbl">Match velocity (median)</span><span class="val">3.2 days</span></div><div class="drawer-stat"><span class="lbl">Match velocity target FY27</span><span class="val">&lt; 2 days</span></div><div class="drawer-stat"><span class="lbl">Match-acceptance rate</span><span class="val">84%</span></div><div class="drawer-stat"><span class="lbl">Re-match rate</span><span class="val">6%</span></div></div>
+<div class="drawer-section"><h4>QA + dispute</h4><div class="drawer-stat"><span class="lbl">QA touchpoints per project</span><span class="val">3 (kickoff / mid / delivery)</span></div><div class="drawer-stat"><span class="lbl">Disputes / project</span><span class="val">2.1%</span></div><div class="drawer-stat"><span class="lbl">Money-back guarantee invoked</span><span class="val">0.4% of projects</span></div></div>`
+  },
+  kr: {
+    eyebrow: 'Building block · 3 of 9',
+    title: 'Key Resources',
+    body: `<div class="drawer-section"><h4>Why network density is the moat</h4><p style="font-size: 12.5px; color: var(--ink-2); line-height: 1.55;">Once a brand has 3+ studios in their roster, churn drops to near-zero — they have working relationships and switching costs. The match-making algorithm gets better with each project (capacity + brief tags + NPS feedback). Engineering is platform-focused; we don't staff per-project work.</p></div>
+<div class="drawer-section"><h4>Resource snapshot</h4><div class="drawer-stat"><span class="lbl">Brand customers</span><span class="val">84</span></div><div class="drawer-stat"><span class="lbl">Brands with 3+ studios in roster</span><span class="val">52 (62%)</span></div><div class="drawer-stat"><span class="lbl">Engineering team</span><span class="val">12 FTE</span></div><div class="drawer-stat"><span class="lbl">Algorithm signals</span><span class="val">38 features</span></div><div class="drawer-stat"><span class="lbl">Project history (matches)</span><span class="val">1,840 since v3 launch</span></div></div>`
+  },
+  vp: {
+    eyebrow: 'Building block · 4 of 9',
+    title: 'Value Proposition',
+    body: `<div class="drawer-section"><h4>Both sides win on time-to-value</h4><p style="font-size: 12.5px; color: var(--ink-2); line-height: 1.55;">Brands replace 4-6 weeks of agency RFP with 72-hour match. Studios replace BD overhead (10-20 hrs/week historic) with pre-qualified leads. Fixed pricing tiers prevent the race-to-bottom that killed v1; vetted supply prevents the quality variance that killed mid-market freelance.</p></div>
+<div class="drawer-section"><h4>Brand-side metrics</h4><div class="drawer-stat"><span class="lbl">Time to first match</span><span class="val">72 hrs (median)</span></div><div class="drawer-stat"><span class="lbl">Project NPS</span><span class="val">68</span></div><div class="drawer-stat"><span class="lbl">Repeat-project rate</span><span class="val">71%</span></div><div class="drawer-stat"><span class="lbl">Money-back invoked</span><span class="val">0.4%</span></div></div>
+<div class="drawer-section"><h4>Studio-side metrics</h4><div class="drawer-stat"><span class="lbl">BD hours saved / month</span><span class="val">12 (median)</span></div><div class="drawer-stat"><span class="lbl">Project payout SLA</span><span class="val">30 days</span></div><div class="drawer-stat"><span class="lbl">Studio annual churn</span><span class="val">9%</span></div></div>`
+  },
+  cr: {
+    eyebrow: 'Building block · 5 of 9',
+    title: 'Customer Relationships',
+    body: `<div class="drawer-section"><h4>Tiered by ACV, not feature</h4><p style="font-size: 12.5px; color: var(--ink-2); line-height: 1.55;">Self-serve is the default — brands set up projects without sales touch. CSM coverage kicks in above $50K to drive expansion (typically into the Brand Pro tier). Studio account managers handle 8 studios each at the bar, target 1:15 at scale.</p></div>
+<div class="drawer-section"><h4>Coverage model</h4><div class="drawer-stat"><span class="lbl">CSM book size (avg)</span><span class="val">$1.2M ARR</span></div><div class="drawer-stat"><span class="lbl">CSM:account ratio (now)</span><span class="val">1:8</span></div><div class="drawer-stat"><span class="lbl">CSM:account ratio (target)</span><span class="val">1:15</span></div><div class="drawer-stat"><span class="lbl">Quarterly creative reviews</span><span class="val">100% of >$50K accounts</span></div></div>`
+  },
+  ch: {
+    eyebrow: 'Building block · 6 of 9',
+    title: 'Channels',
+    body: `<div class="drawer-section"><h4>Self-serve is the volume play</h4><p style="font-size: 12.5px; color: var(--ink-2); line-height: 1.55;">60% of new logos arrive self-serve. Inbound demo is conversion-heavy (35% of logos, 58% of revenue). Studio referrals close-loop the network — studios refer brands they want to work with, which biases toward high-NPS brands.</p></div>
+<div class="drawer-section"><h4>CAC by channel</h4><div class="drawer-stat"><span class="lbl">Self-serve (paid)</span><span class="val">$6,800</span></div><div class="drawer-stat"><span class="lbl">Self-serve (organic / referral)</span><span class="val">$1,200</span></div><div class="drawer-stat"><span class="lbl">Inbound demo + sales</span><span class="val">$4,900</span></div><div class="drawer-stat"><span class="lbl">Blended</span><span class="val">$4,200</span></div></div>
+<div class="drawer-section"><h4>LTV / CAC</h4><div class="drawer-stat"><span class="lbl">Avg ACV</span><span class="val">$58K</span></div><div class="drawer-stat"><span class="lbl">Gross margin</span><span class="val">71%</span></div><div class="drawer-stat"><span class="lbl">LTV / CAC (blended)</span><span class="val">8.2x</span></div></div>`
+  },
+  cs: {
+    eyebrow: 'Building block · 7 of 9',
+    title: 'Customer Segments',
+    body: `<div class="drawer-section"><h4>Mid-market is the sweet spot</h4><p style="font-size: 12.5px; color: var(--ink-2); line-height: 1.55;">Mid-market brands (50–500 employees) are too big for freelancer roulette and too small to staff a full in-house creative team. Series A–B startups use us as a stop-gap before their first creative hire. PE portfolio companies want playbook-driven brand work across 4–8 portcos.</p></div>
+<div class="drawer-section"><h4>Segment mix</h4><div class="drawer-stat"><span class="lbl">Mid-market brands</span><span class="val">52 (62%)</span></div><div class="drawer-stat"><span class="lbl">Series A–B startups</span><span class="val">24 (29%)</span></div><div class="drawer-stat"><span class="lbl">PE portfolio cos</span><span class="val">8 (9%)</span></div><div class="drawer-stat"><span class="lbl">Avg ACV</span><span class="val">$58K</span></div><div class="drawer-stat"><span class="lbl">PE portco avg ACV</span><span class="val">$142K</span></div></div>`
+  },
+  co: {
+    eyebrow: 'Building block · 8 of 9',
+    title: 'Cost Structure',
+    body: `<div class="drawer-section"><h4>True opex is ~$5.6M</h4><p style="font-size: 12.5px; color: var(--ink-2); line-height: 1.55;">88% of GMV is studio payouts — that's pass-through cost, not margin spend. The actual cost-of-business is engineering, sales, and CSM. Almost entirely fixed; the scale lever is match volume against this base.</p></div>
+<div class="drawer-section"><h4>Opex breakdown (FY26)</h4><div class="drawer-stat"><span class="lbl">Studio payouts (GMV pass-through)</span><span class="val">$42.2M</span></div><div class="drawer-stat"><span class="lbl">Engineering + product</span><span class="val">$2.4M</span></div><div class="drawer-stat"><span class="lbl">Sales + marketing</span><span class="val">$1.8M</span></div><div class="drawer-stat"><span class="lbl">CSMs + account managers</span><span class="val">$1.1M</span></div><div class="drawer-stat"><span class="lbl">Platform infra</span><span class="val">$280K</span></div><div class="drawer-stat"><span class="lbl">Total true opex</span><span class="val">$5.6M</span></div></div>`
+  },
+  rs: {
+    eyebrow: 'Building block · 9 of 9',
+    title: 'Revenue Streams',
+    body: `<div class="drawer-section"><h4>Three streams, take rate is the engine</h4><p style="font-size: 12.5px; color: var(--ink-2); line-height: 1.55;">12% take rate on every project — up from 4% in v1 because curation + bundling moved comparison off price. Brand Pro subscription is the new growth wedge ($1,500/mo, 28% adoption, retention parity vs PAYG). Add-ons (rush + asset hosting) are the long tail.</p></div>
+<div class="drawer-section"><h4>FY26 revenue mix</h4><div class="drawer-stat"><span class="lbl">Take rate (12% on $48M GMV)</span><span class="val">$5.0M (86%)</span></div><div class="drawer-stat"><span class="lbl">Brand Pro subscription</span><span class="val">$560K (10%)</span></div><div class="drawer-stat"><span class="lbl">Add-ons (rush + hosting)</span><span class="val">$240K (4%)</span></div><div class="drawer-stat"><span class="lbl">Total revenue</span><span class="val">$5.8M</span></div></div>
+<div class="drawer-section"><h4>Take-rate history</h4><div class="drawer-stat"><span class="lbl">v1 (open marketplace)</span><span class="val">4%</span></div><div class="drawer-stat"><span class="lbl">v2 (agency roster)</span><span class="val">7%</span></div><div class="drawer-stat"><span class="lbl">v3 (curated + bundled)</span><span class="val">12%</span></div></div>`
+  }
+};
+
+const drawer = document.getElementById('cellDrawer');
+const overlay = document.getElementById('drawerOverlay');
+const closeBtn = document.getElementById('drawerClose');
+function openCell(key) {
+  const d = cellDetails[key];
+  if (!d) return;
+  document.getElementById('drawerEyebrow').textContent = d.eyebrow;
+  document.getElementById('drawerTitle').textContent = d.title;
+  document.getElementById('drawerBody').innerHTML = d.body;
+  drawer.classList.add('open');
+  drawer.setAttribute('aria-hidden', 'false');
+  overlay.classList.add('open');
+  overlay.setAttribute('aria-hidden', 'false');
+}
+function closeDrawer() {
+  drawer.classList.remove('open');
+  drawer.setAttribute('aria-hidden', 'true');
+  overlay.classList.remove('open');
+  overlay.setAttribute('aria-hidden', 'true');
+}
+closeBtn.addEventListener('click', closeDrawer);
+overlay.addEventListener('click', closeDrawer);
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeDrawer(); });
+
+document.querySelectorAll('.bmc-cell').forEach(cell => {
+  cell.addEventListener('click', () => {
+    const key = [...cell.classList].find(c => c !== 'bmc-cell');
+    openCell(key);
+  });
 });
 </script>
 

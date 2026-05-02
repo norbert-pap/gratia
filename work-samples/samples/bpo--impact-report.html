@@ -28,10 +28,17 @@
 
   .change-row { display: grid; grid-template-columns: 1fr 100px 100px 110px; gap: 12px; align-items: center; padding: 10px 0; border-bottom: 1px solid var(--border); font-size: 12px; }
   .change-row:last-child { border-bottom: none; }
-  .change-row.head { font-size: 9.5px; font-weight: 600; color: var(--ink-3); letter-spacing: 0.1em; text-transform: uppercase; padding-bottom: 9px; }
+  .change-row.head { font-size: 9.5px; font-weight: 600; color: var(--ink-3); letter-spacing: 0.1em; text-transform: uppercase; padding-bottom: 9px; cursor: default; }
+  .change-row.body-row { cursor: pointer; transition: background 0.14s; padding-left: 8px; padding-right: 8px; margin-left: -8px; margin-right: -8px; border-radius: 4px; }
+  .change-row.body-row:hover { background: var(--bg-2); }
   .change-row .ch-name { color: var(--ink-0); font-weight: 500; }
   .change-row .ch-val { font-family: 'Inter', sans-serif; font-weight: 600; color: var(--ink-0); font-variant-numeric: tabular-nums; text-align: right; }
   .change-row .ch-arrow { font-family: 'JetBrains Mono', monospace; text-align: center; color: var(--gold-ink); font-weight: 600; }
+
+  .impact-cell { cursor: pointer; transition: background 0.14s; }
+  .impact-cell:hover { background: var(--bg-2); }
+  .ba-cell { cursor: pointer; transition: opacity 0.14s; }
+  .ba-cell:hover { opacity: 0.85; }
 </style>
 </head>
 <body>
@@ -70,10 +77,10 @@
     </section>
 
     <section class="impact-grid">
-      <div class="impact-cell"><div class="lbl">Annualized savings</div><div class="v">$4.8<span class="unit">M</span></div><div class="meta">vs. baseline FY24 cost</div></div>
-      <div class="impact-cell"><div class="lbl">Cycle time</div><div class="v">−38<span class="unit">%</span></div><div class="meta">8.2 → 5.1 hrs avg per assembly</div></div>
-      <div class="impact-cell"><div class="lbl">Scrap rate</div><div class="v">−4<span class="unit">pp</span></div><div class="meta">6.2% → 2.2% across 3 plants</div></div>
-      <div class="impact-cell"><div class="lbl">OEE</div><div class="v">+12<span class="unit">pp</span></div><div class="meta">71% → 83% asset utilization</div></div>
+      <div class="impact-cell" data-kpi="savings"><div class="lbl">Annualized savings</div><div class="v">$4.8<span class="unit">M</span></div><div class="meta">vs. baseline FY24 cost</div></div>
+      <div class="impact-cell" data-kpi="cycle"><div class="lbl">Cycle time</div><div class="v">−38<span class="unit">%</span></div><div class="meta">8.2 → 5.1 hrs avg per assembly</div></div>
+      <div class="impact-cell" data-kpi="scrap"><div class="lbl">Scrap rate</div><div class="v">−4<span class="unit">pp</span></div><div class="meta">6.2% → 2.2% across 3 plants</div></div>
+      <div class="impact-cell" data-kpi="oee"><div class="lbl">OEE</div><div class="v">+12<span class="unit">pp</span></div><div class="meta">71% → 83% asset utilization</div></div>
     </section>
 
     <section class="card" style="margin-bottom: 16px;">
@@ -103,13 +110,13 @@
           <div style="text-align:right">Now</div>
           <div style="text-align:right">Change</div>
         </div>
-        <div class="change-row"><div class="ch-name">Cost per unit</div><div class="ch-val">$184</div><div class="ch-val">$118</div><div class="ch-arrow">−36%</div></div>
-        <div class="change-row"><div class="ch-name">Lead time (cell to ship)</div><div class="ch-val">14 hrs</div><div class="ch-val">3.4 hrs</div><div class="ch-arrow">−76%</div></div>
-        <div class="change-row"><div class="ch-name">First-pass yield</div><div class="ch-val">88%</div><div class="ch-val">96%</div><div class="ch-arrow">+8 pp</div></div>
-        <div class="change-row"><div class="ch-name">Inventory days</div><div class="ch-val">42 days</div><div class="ch-val">19 days</div><div class="ch-arrow">−55%</div></div>
-        <div class="change-row"><div class="ch-name">Schedule attainment</div><div class="ch-val">79%</div><div class="ch-val">94%</div><div class="ch-arrow">+15 pp</div></div>
-        <div class="change-row"><div class="ch-name">Operator productivity</div><div class="ch-val">62 units/shift</div><div class="ch-val">94 units/shift</div><div class="ch-arrow">+52%</div></div>
-        <div class="change-row"><div class="ch-name">Recordable safety incidents</div><div class="ch-val">4 per quarter</div><div class="ch-val">1 per quarter</div><div class="ch-arrow">−75%</div></div>
+        <div class="change-row body-row" data-metric="cpu"><div class="ch-name">Cost per unit</div><div class="ch-val">$184</div><div class="ch-val">$118</div><div class="ch-arrow">−36%</div></div>
+        <div class="change-row body-row" data-metric="lead"><div class="ch-name">Lead time (cell to ship)</div><div class="ch-val">14 hrs</div><div class="ch-val">3.4 hrs</div><div class="ch-arrow">−76%</div></div>
+        <div class="change-row body-row" data-metric="fpy"><div class="ch-name">First-pass yield</div><div class="ch-val">88%</div><div class="ch-val">96%</div><div class="ch-arrow">+8 pp</div></div>
+        <div class="change-row body-row" data-metric="inv"><div class="ch-name">Inventory days</div><div class="ch-val">42 days</div><div class="ch-val">19 days</div><div class="ch-arrow">−55%</div></div>
+        <div class="change-row body-row" data-metric="sched"><div class="ch-name">Schedule attainment</div><div class="ch-val">79%</div><div class="ch-val">94%</div><div class="ch-arrow">+15 pp</div></div>
+        <div class="change-row body-row" data-metric="prod"><div class="ch-name">Operator productivity</div><div class="ch-val">62 units/shift</div><div class="ch-val">94 units/shift</div><div class="ch-arrow">+52%</div></div>
+        <div class="change-row body-row" data-metric="safety"><div class="ch-name">Recordable safety incidents</div><div class="ch-val">4 per quarter</div><div class="ch-val">1 per quarter</div><div class="ch-arrow">−75%</div></div>
       </div>
     </section>
 
@@ -141,12 +148,123 @@
   </main>
 </div>
 
+<aside class="drawer" id="detailDrawer" aria-hidden="true">
+  <div class="drawer-head">
+    <div>
+      <div style="font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 4px;" id="drawerEyebrow">Detail</div>
+      <h2 id="drawerTitle">Title</h2>
+    </div>
+    <button class="icon-btn" id="drawerClose" aria-label="Close">
+      <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24" style="width:18px;height:18px;"><path d="M6 6l12 12M18 6L6 18" stroke-linecap="round"/></svg>
+    </button>
+  </div>
+  <div class="drawer-body" id="drawerBody"></div>
+</aside>
+<div class="drawer-overlay" id="drawerOverlay"></div>
+
 <script>
 document.getElementById('themeToggle').addEventListener('click', () => {
   const cur = document.documentElement.getAttribute('data-theme') || 'dark';
   const next = cur === 'dark' ? 'light' : 'dark';
   document.documentElement.setAttribute('data-theme', next);
   try { localStorage.setItem('apollo-theme', next); } catch (e) {}
+});
+
+const kpiDetails = {
+  savings: {
+    eyebrow: 'Headline KPI · annualized',
+    title: 'Annualized savings · $4.8M',
+    body: `<div class="drawer-section"><h4>Composition</h4><div class="drawer-stat"><span class="lbl">Material yield (scrap + rework)</span><span class="val">$1.4M</span></div><div class="drawer-stat"><span class="lbl">Labor productivity</span><span class="val">$1.7M</span></div><div class="drawer-stat"><span class="lbl">Inventory carry reduction</span><span class="val">$0.9M</span></div><div class="drawer-stat"><span class="lbl">Energy + utility</span><span class="val">$0.4M</span></div><div class="drawer-stat"><span class="lbl">Quality (warranty + return)</span><span class="val">$0.4M</span></div><div class="drawer-stat"><span class="lbl">Total annualized</span><span class="val">$4.8M</span></div></div>
+<div class="drawer-section"><h4>Engagement economics</h4><div class="drawer-stat"><span class="lbl">Engagement cost</span><span class="val">$1.6M</span></div><div class="drawer-stat"><span class="lbl">Self-funded by</span><span class="val">Month 7</span></div><div class="drawer-stat"><span class="lbl">12-month ROI</span><span class="val">3.0x</span></div></div>
+<div class="drawer-section"><h4>Validation</h4><p style="font-size: 12px; color: var(--ink-2); line-height: 1.5;">Independent re-measurement by Forge controllership. Methodology: standard cost roll-up against FY24 baseline, tagged at the work-cell level. Q1 26 close.</p></div>`
+  },
+  cycle: {
+    eyebrow: 'Operational · 12-month delta',
+    title: 'Cycle time · −38%',
+    body: `<div class="drawer-section"><h4>Drivers</h4><div class="drawer-stat"><span class="lbl">Changeover (SMED)</span><span class="val">47 → 12 min</span></div><div class="drawer-stat"><span class="lbl">WIP cap (kanban, 3 cells)</span><span class="val">42 → 8 units</span></div><div class="drawer-stat"><span class="lbl">Source inspection (rework loops)</span><span class="val">2.4% → 0.6%</span></div></div>
+<div class="drawer-section"><h4>By plant</h4><div class="drawer-stat"><span class="lbl">Plant A</span><span class="val">8.6 → 4.9 hrs</span></div><div class="drawer-stat"><span class="lbl">Plant B</span><span class="val">7.9 → 5.2 hrs</span></div><div class="drawer-stat"><span class="lbl">Plant C</span><span class="val">8.1 → 5.2 hrs</span></div><div class="drawer-stat"><span class="lbl">Weighted avg</span><span class="val">8.2 → 5.1 hrs</span></div></div>
+<div class="drawer-section"><h4>Next bottleneck</h4><p style="font-size: 12px; color: var(--ink-2); line-height: 1.5;">Test-rig allocation is the new constraint — single test cell per plant. Next 6 months: parallelize test prep + automate fixture-load.</p></div>`
+  },
+  scrap: {
+    eyebrow: 'Quality · 12-month delta',
+    title: 'Scrap rate · −4 percentage points',
+    body: `<div class="drawer-section"><h4>By plant</h4><div class="drawer-stat"><span class="lbl">Plant A</span><span class="val">7.1% → 2.0%</span></div><div class="drawer-stat"><span class="lbl">Plant B</span><span class="val">5.8% → 2.4%</span></div><div class="drawer-stat"><span class="lbl">Plant C</span><span class="val">5.7% → 2.2%</span></div><div class="drawer-stat"><span class="lbl">Weighted avg</span><span class="val">6.2% → 2.2%</span></div></div>
+<div class="drawer-section"><h4>What moved it</h4><div class="drawer-stat"><span class="lbl">Source inspection at each station</span><span class="val">primary</span></div><div class="drawer-stat"><span class="lbl">5-Why root-cause cadence</span><span class="val">daily</span></div><div class="drawer-stat"><span class="lbl">Operator-led process audits</span><span class="val">weekly</span></div></div>
+<div class="drawer-section"><h4>Financial impact</h4><div class="drawer-stat"><span class="lbl">Material savings</span><span class="val">$1.4M</span></div><div class="drawer-stat"><span class="lbl">Net of inspection labor</span><span class="val">$1.1M</span></div></div>`
+  },
+  oee: {
+    eyebrow: 'Asset utilization · 12-month delta',
+    title: 'OEE · +12 percentage points',
+    body: `<div class="drawer-section"><h4>OEE breakdown</h4><div class="drawer-stat"><span class="lbl">Availability</span><span class="val">86% → 91%</span></div><div class="drawer-stat"><span class="lbl">Performance</span><span class="val">87% → 95%</span></div><div class="drawer-stat"><span class="lbl">Quality</span><span class="val">95% → 98%</span></div><div class="drawer-stat"><span class="lbl">Composite OEE</span><span class="val">71% → 83%</span></div></div>
+<div class="drawer-section"><h4>Drivers</h4><p style="font-size: 12px; color: var(--ink-2); line-height: 1.5;">Availability moved on changeover SMED + paired tooling. Performance moved on paced flow with kanban WIP cap. Quality moved on source inspection.</p></div>
+<div class="drawer-section"><h4>Headroom</h4><div class="drawer-stat"><span class="lbl">World-class OEE benchmark</span><span class="val">85%</span></div><div class="drawer-stat"><span class="lbl">Forge target FY27</span><span class="val">87%</span></div></div>`
+  }
+};
+
+const metricDetails = {
+  cpu: { eyebrow: 'Operating metric', title: 'Cost per unit · $184 → $118', body: `<div class="drawer-section"><h4>Driver mix</h4><div class="drawer-stat"><span class="lbl">Material yield gain</span><span class="val">$28</span></div><div class="drawer-stat"><span class="lbl">Labor productivity</span><span class="val">$24</span></div><div class="drawer-stat"><span class="lbl">Inventory + overhead</span><span class="val">$10</span></div><div class="drawer-stat"><span class="lbl">Energy</span><span class="val">$4</span></div><div class="drawer-stat"><span class="lbl">Total reduction</span><span class="val">$66</span></div></div><div class="drawer-section"><h4>Annualized impact</h4><p style="font-size: 12px; color: var(--ink-2);">$66 × 72,400 units = $4.78M, the largest contributor to headline savings.</p></div>` },
+  lead: { eyebrow: 'Operating metric', title: 'Lead time · 14 → 3.4 hrs', body: `<div class="drawer-section"><h4>Source of reduction</h4><div class="drawer-stat"><span class="lbl">WIP cap (kanban)</span><span class="val">42 → 8 units</span></div><div class="drawer-stat"><span class="lbl">Cell layout (steps removed)</span><span class="val">22 → 9</span></div><div class="drawer-stat"><span class="lbl">Pull system signal</span><span class="val">visual andon</span></div></div><div class="drawer-section"><h4>Customer-facing impact</h4><p style="font-size: 12px; color: var(--ink-2);">On-time delivery moved from 79% to 94%. Now able to commit to next-day shipping for 6 of 11 product families.</p></div>` },
+  fpy: { eyebrow: 'Quality metric', title: 'First-pass yield · 88% → 96%', body: `<div class="drawer-section"><h4>What changed</h4><div class="drawer-stat"><span class="lbl">Source inspection</span><span class="val">at each station</span></div><div class="drawer-stat"><span class="lbl">Standardized work</span><span class="val">38 ops documented</span></div><div class="drawer-stat"><span class="lbl">Andon escalation</span><span class="val">avg 4 min response</span></div></div><div class="drawer-section"><h4>Downstream effect</h4><div class="drawer-stat"><span class="lbl">Rework rate</span><span class="val">2.4% → 0.6%</span></div><div class="drawer-stat"><span class="lbl">QC headcount needed</span><span class="val">−2 FTE</span></div></div>` },
+  inv: { eyebrow: 'Working-capital metric', title: 'Inventory days · 42 → 19', body: `<div class="drawer-section"><h4>What changed</h4><div class="drawer-stat"><span class="lbl">Pull system on raw + WIP</span><span class="val">primary</span></div><div class="drawer-stat"><span class="lbl">Supplier kanban (3 vendors)</span><span class="val">2-week orders</span></div><div class="drawer-stat"><span class="lbl">Finished-goods buffer</span><span class="val">5 → 2 days</span></div></div><div class="drawer-section"><h4>Cash impact</h4><div class="drawer-stat"><span class="lbl">Working capital released</span><span class="val">$3.2M</span></div><div class="drawer-stat"><span class="lbl">Annualized carry savings</span><span class="val">$0.9M</span></div></div>` },
+  sched: { eyebrow: 'Operating metric', title: 'Schedule attainment · 79% → 94%', body: `<div class="drawer-section"><h4>What changed</h4><div class="drawer-stat"><span class="lbl">Tier-1 huddles</span><span class="val">daily, 12 min</span></div><div class="drawer-stat"><span class="lbl">Andon escalation rules</span><span class="val">3-min trigger</span></div><div class="drawer-stat"><span class="lbl">Weekly leader gemba</span><span class="val">every cell</span></div></div><div class="drawer-section"><h4>Customer-facing</h4><p style="font-size: 12px; color: var(--ink-2);">On-time-in-full to top-10 customers up from 81% to 96%. One customer expanded share of wallet by 22% on this signal.</p></div>` },
+  prod: { eyebrow: 'Productivity metric', title: 'Operator productivity · 62 → 94 units/shift', body: `<div class="drawer-section"><h4>Driver mix</h4><div class="drawer-stat"><span class="lbl">Standardized work (best-known method)</span><span class="val">38 ops</span></div><div class="drawer-stat"><span class="lbl">Paired tooling (point-of-use)</span><span class="val">12 cells</span></div><div class="drawer-stat"><span class="lbl">Reduced rework loops</span><span class="val">2.4% → 0.6%</span></div></div><div class="drawer-section"><h4>Headcount</h4><p style="font-size: 12px; color: var(--ink-2);">Productivity gains absorbed via attrition; no layoffs. 3 expediter roles eliminated, redeployed to kaizen team.</p></div>` },
+  safety: { eyebrow: 'Safety metric', title: 'Recordable incidents · 4 → 1 per quarter', body: `<div class="drawer-section"><h4>What changed</h4><div class="drawer-stat"><span class="lbl">5S deployment</span><span class="val">all 12 cells</span></div><div class="drawer-stat"><span class="lbl">Ergonomic kaizen</span><span class="val">4 cells</span></div><div class="drawer-stat"><span class="lbl">Near-miss reporting</span><span class="val">2 → 22 / month</span></div></div><div class="drawer-section"><h4>Note</h4><p style="font-size: 12px; color: var(--ink-2);">Higher near-miss reporting rate is intentional (psychological-safety) — leading indicator improving while lagging indicator (recordables) drops.</p></div>` }
+};
+
+const baDetails = {
+  changeover: {
+    eyebrow: 'Before / After · changeover',
+    title: 'Changeover time · 47 → 12 min',
+    body: `<div class="drawer-section"><h4>SMED kaizen, line 2</h4><p style="font-size: 12.5px; color: var(--ink-2); line-height: 1.55;">5-day rapid improvement workshop with operators, maintenance, and engineering. Separated internal vs external steps; converted 11 internal-only steps into parallel external prep.</p></div><div class="drawer-section"><h4>What moved the needle</h4><div class="drawer-stat"><span class="lbl">Steps reduced</span><span class="val">22 → 9</span></div><div class="drawer-stat"><span class="lbl">Operators</span><span class="val">2 → 1</span></div><div class="drawer-stat"><span class="lbl">Tooling</span><span class="val">central → point-of-use carts</span></div><div class="drawer-stat"><span class="lbl">External prep added</span><span class="val">11 steps</span></div></div>`
+  },
+  wip: {
+    eyebrow: 'Before / After · work-in-progress',
+    title: 'WIP across 3 cells · 42 → 8 units',
+    body: `<div class="drawer-section"><h4>Pull system + kanban</h4><p style="font-size: 12.5px; color: var(--ink-2); line-height: 1.55;">Replaced push-batch with single-piece kanban. Each cell has a max-WIP card count; downstream pull triggers upstream replenishment. Andon escalation on 3-min stoppage.</p></div><div class="drawer-section"><h4>Effect</h4><div class="drawer-stat"><span class="lbl">Lead time</span><span class="val">14 → 3.4 hrs</span></div><div class="drawer-stat"><span class="lbl">Expediter roles</span><span class="val">3 → 0</span></div><div class="drawer-stat"><span class="lbl">Daily firefighting events</span><span class="val">~6 → ~1</span></div></div>`
+  },
+  quality: {
+    eyebrow: 'Before / After · quality',
+    title: 'Quality · source inspection',
+    body: `<div class="drawer-section"><h4>Inspection moved upstream</h4><p style="font-size: 12.5px; color: var(--ink-2); line-height: 1.55;">Inspection used to happen at end-of-cell QC — defects accumulated across stations. Now each station inspects at source: a defect surfaced where it was created, not minutes downstream.</p></div><div class="drawer-section"><h4>Effect</h4><div class="drawer-stat"><span class="lbl">Rework rate</span><span class="val">2.4% → 0.6%</span></div><div class="drawer-stat"><span class="lbl">Root-cause logs</span><span class="val">ad-hoc → daily 5-Why</span></div><div class="drawer-stat"><span class="lbl">QC headcount</span><span class="val">−2 FTE (redeployed)</span></div></div>`
+  }
+};
+
+const drawer = document.getElementById('detailDrawer');
+const overlay = document.getElementById('drawerOverlay');
+const closeBtn = document.getElementById('drawerClose');
+function openDetail(detail) {
+  if (!detail) return;
+  document.getElementById('drawerEyebrow').textContent = detail.eyebrow;
+  document.getElementById('drawerTitle').textContent = detail.title;
+  document.getElementById('drawerBody').innerHTML = detail.body;
+  drawer.classList.add('open');
+  drawer.setAttribute('aria-hidden', 'false');
+  overlay.classList.add('open');
+  overlay.setAttribute('aria-hidden', 'false');
+}
+function closeDrawer() {
+  drawer.classList.remove('open');
+  drawer.setAttribute('aria-hidden', 'true');
+  overlay.classList.remove('open');
+  overlay.setAttribute('aria-hidden', 'true');
+}
+closeBtn.addEventListener('click', closeDrawer);
+overlay.addEventListener('click', closeDrawer);
+document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeDrawer(); });
+
+document.querySelectorAll('.impact-cell').forEach(c => {
+  c.addEventListener('click', () => openDetail(kpiDetails[c.dataset.kpi]));
+});
+document.querySelectorAll('.change-row.body-row').forEach(r => {
+  r.addEventListener('click', () => openDetail(metricDetails[r.dataset.metric]));
+});
+// ba-grid pairs: 1st = changeover, 2nd = wip, 3rd = quality
+const baGrids = document.querySelectorAll('.ba-grid');
+const baKeys = ['changeover', 'wip', 'quality'];
+baGrids.forEach((grid, i) => {
+  grid.querySelectorAll('.ba-cell').forEach(cell => {
+    cell.addEventListener('click', () => openDetail(baDetails[baKeys[i]]));
+  });
 });
 </script>
 

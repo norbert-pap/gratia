@@ -266,11 +266,12 @@ function openTornadoDrawer(name) {
 function closeDrawer() { document.getElementById('drawer').classList.remove('open'); document.getElementById('drawerOverlay').classList.remove('open'); }
 document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDrawer(); });
 
-function renderSensTable(elId, rows, cols, fn, baseRow, baseCol, fmt) {
+function renderSensTable(elId, rows, cols, fn, baseRow, baseCol, fmt, rowLabel, colLabel, outLabel) {
   // generate matrix
   const mat = rows.map(r => cols.map(c => fn(r, c)));
   const flat = mat.flat();
   const min = Math.min(...flat), max = Math.max(...flat);
+  const baseV = mat[baseRow][baseCol];
 
   let html = '<thead><tr><th></th>';
   cols.forEach(c => { html += `<th>${c}</th>`; });
@@ -281,12 +282,28 @@ function renderSensTable(elId, rows, cols, fn, baseRow, baseCol, fmt) {
       const v = mat[ri][ci];
       const cls = colorBucket(v, min, max);
       const isBase = (ri === baseRow && ci === baseCol);
-      html += `<td><div class="sens-cell ${cls} ${isBase ? 'base' : ''}">${fmt(v)}</div></td>`;
+      html += `<td><div class="sens-cell ${cls} ${isBase ? 'base' : ''}" data-r="${r}" data-c="${c}" data-v="${v}">${fmt(v)}</div></td>`;
     });
     html += '</tr>';
   });
   html += '</tbody>';
   document.getElementById(elId).innerHTML = html;
+
+  // Wire clicks
+  document.querySelectorAll('#' + elId + ' .sens-cell').forEach(cell => {
+    cell.addEventListener('click', () => {
+      const r = cell.dataset.r;
+      const c = cell.dataset.c;
+      const v = parseFloat(cell.dataset.v);
+      const delta = v - baseV;
+      const sign = delta > 0 ? '+' : (delta < 0 ? '−' : '');
+      const isBase = cell.classList.contains('base');
+      window.showToast && window.showToast(
+        (isBase ? 'BASE CASE · ' : '') + rowLabel + ' ' + r + (typeof r === 'number' && rowLabel.includes('%') ? '' : '') + ' × ' + colLabel + ' ' + c + ' → ' + outLabel + ' ' + fmt(v) + (isBase ? '' : ' (' + sign + Math.abs(delta).toFixed(0) + ' vs base)'),
+        'info'
+      );
+    });
+  });
 }
 
 document.getElementById('themeToggle').addEventListener('click', () => {
@@ -297,8 +314,8 @@ document.getElementById('themeToggle').addEventListener('click', () => {
 });
 
 renderTornado();
-renderSensTable('sens1', SENS1_GROWTH, SENS1_NRR, nrrGrowth, 2, 2, v => '$' + v + 'M');
-renderSensTable('sens2', SENS2_SM, SENS2_PB, ebitdaMargin, 2, 2, v => v + '%');
+renderSensTable('sens1', SENS1_GROWTH, SENS1_NRR, nrrGrowth, 2, 2, v => '$' + v + 'M', 'Growth', 'NRR', 'FY30 ARR');
+renderSensTable('sens2', SENS2_SM, SENS2_PB, ebitdaMargin, 2, 2, v => v + '%', 'S&M %', 'Payback', 'EBITDA margin');
 </script>
 
 </div>

@@ -177,6 +177,38 @@ document.getElementById('themeToggle').addEventListener('click', () => {
   document.documentElement.setAttribute('data-theme', next);
   try { localStorage.setItem('apollo-theme', next); } catch (e) {}
 });
+
+// Make workflow steps clickable
+document.querySelectorAll('.step').forEach(step => {
+  step.addEventListener('click', () => {
+    const name = step.querySelector('.step-name')?.textContent || '';
+    const meta = step.querySelector('.step-meta')?.textContent || '';
+    if (step.classList.contains('pain')) {
+      // Highlight the matching pain row in the table below
+      const rows = document.querySelectorAll('.pain-table tbody tr');
+      let match = null;
+      rows.forEach(r => {
+        const t = (r.querySelector('.pain-name')?.textContent || '').toLowerCase();
+        // Match on key words from step name
+        const keywords = name.toLowerCase().split(/\s+/).filter(w => w.length > 3);
+        if (keywords.some(k => t.includes(k))) match = r;
+      });
+      if (match) {
+        match.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        const orig = match.style.background;
+        match.style.transition = 'background 0.3s';
+        match.style.background = 'var(--red-dim)';
+        setTimeout(() => { match.style.background = orig; }, 1800);
+      } else {
+        window.showToast && window.showToast('Pain point: ' + name + ' — see table below for mitigation', 'info');
+      }
+    } else if (step.classList.contains('bot')) {
+      window.showToast && window.showToast('Already automated · ' + meta, 'info');
+    } else {
+      window.showToast && window.showToast(name + (meta ? ' · ' + meta : ''), 'info');
+    }
+  });
+});
 </script>
 
 </div>
