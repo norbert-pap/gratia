@@ -163,12 +163,12 @@
 
     <section class="matrix-section">
       <div class="matrix-head">
-        <div class="matrix-head-wrap"><h2>12 teams</h2><span class="count">Click a tile for backlog detail</span></div>
-        <div class="filter-bar">
-          <button class="chip active">All<span class="ct">12</span></button>
-          <button class="chip"><span class="dot r"></span>Red<span class="ct">2</span></button>
-          <button class="chip"><span class="dot a"></span>Amber<span class="ct">3</span></button>
-          <button class="chip"><span class="dot g"></span>Green<span class="ct">7</span></button>
+        <div class="matrix-head-wrap"><h2><span id="teamCount">12</span> teams</h2><span class="count">Click a tile for backlog detail</span></div>
+        <div class="filter-bar" id="teamFilters">
+          <button class="chip active" data-filter="all">All<span class="ct">12</span></button>
+          <button class="chip" data-filter="r"><span class="dot r"></span>Red<span class="ct">2</span></button>
+          <button class="chip" data-filter="a"><span class="dot a"></span>Amber<span class="ct">3</span></button>
+          <button class="chip" data-filter="g"><span class="dot g"></span>Green<span class="ct">7</span></button>
         </div>
       </div>
       <div class="matrix" style="padding: 14px;"><div class="team-grid" id="teamGrid"></div></div>
@@ -282,12 +282,12 @@ function renderPie() {
 }
 
 function renderBottle() {
-  document.getElementById('bottleList').innerHTML = BOTTLE.map(b => {
+  document.getElementById('bottleList').innerHTML = BOTTLE.map((b, i) => {
     const over = b.cycle - b.sla;
     const overState = over > 0 ? 'over' : 'under';
     const overText = over > 0 ? '+' + over.toFixed(1) + 'd over' : over.toFixed(1) + 'd under';
     return `
-      <div class="bot-row">
+      <div class="bot-row" data-bot="${i}">
         <div class="bot-name"><span class="bn-step">${b.step}</span><span class="bn-meta">${b.meta} · SLA ${b.sla}d</span></div>
         <div class="bot-cycle">${b.cycle.toFixed(1)} d</div>
         <div class="bot-vs ${overState}">${overText}</div>
@@ -295,6 +295,9 @@ function renderBottle() {
       </div>
     `;
   }).join('');
+  document.querySelectorAll('.bot-row').forEach(r => {
+    r.addEventListener('click', () => openBottleDrawer(parseInt(r.dataset.bot, 10)));
+  });
 }
 
 function renderClaimTypes() {
@@ -310,14 +313,112 @@ function renderClaimTypes() {
   `).join('');
 }
 
+let teamFilter = 'all';
+
 function renderTeams() {
-  document.getElementById('teamGrid').innerHTML = TEAMS.map(t => `
-    <div class="team-tile ${t.health}">
+  const visible = teamFilter === 'all' ? TEAMS : TEAMS.filter(t => t.health === teamFilter);
+  document.getElementById('teamCount').textContent = visible.length;
+  document.getElementById('teamGrid').innerHTML = visible.map((t, i) => `
+    <div class="team-tile ${t.health}" data-team="${TEAMS.indexOf(t)}">
       <div class="tt-name">${t.name}</div>
       <div class="tt-num">${t.num}</div>
       <div class="tt-sub">${t.sub}</div>
     </div>
   `).join('');
+  document.querySelectorAll('.team-tile').forEach(tile => {
+    tile.addEventListener('click', () => openTeamDrawer(parseInt(tile.dataset.team, 10)));
+  });
+}
+
+// Filter chips
+document.querySelectorAll('#teamFilters .chip').forEach(c => {
+  c.addEventListener('click', () => {
+    document.querySelectorAll('#teamFilters .chip').forEach(x => x.classList.toggle('active', x === c));
+    teamFilter = c.dataset.filter;
+    renderTeams();
+  });
+});
+
+// Team drawer
+function openTeamDrawer(idx) {
+  const t = TEAMS[idx];
+  if (!t) return;
+  const healthLabel = t.health === 'r' ? 'Red · off track' : t.health === 'a' ? 'Amber · pending' : 'Green · on track';
+  const queueNum = parseInt(t.sub.replace(/[^0-9]/g, ''), 10) || 0;
+  // Mock 7-day throughput trend
+  const trend = [t.num - 12, t.num + 8, t.num - 4, t.num + 14, t.num - 6, t.num + 2, t.num];
+  const tMax = Math.max(...trend), tMin = Math.min(...trend);
+  const w = 380, h = 70, padX = 8, padY = 8;
+  const pts = trend.map((v, i) => [padX + (i / (trend.length - 1)) * (w - padX * 2), (h - padY) - ((v - tMin) / Math.max(0.001, tMax - tMin)) * (h - padY * 2)]);
+  const path = pts.map((p, i) => (i === 0 ? 'M' : 'L') + p[0].toFixed(1) + ',' + p[1].toFixed(1)).join(' ');
+  const color = t.health === 'r' ? 'var(--red-ink)' : t.health === 'a' ? 'var(--amber-ink)' : 'var(--green-ink)';
+
+  document.getElementById('drawerContent').innerHTML = `
+    <div class="drawer-head">
+      <div><div class="eyebrow">${healthLabel}</div><h2 style="margin-top:4px">${t.name}</h2></div>
+      <button class="icon-btn" onclick="closeDrawer()" aria-label="Close"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" stroke-linecap="round"/></svg></button>
+    </div>
+    <div class="drawer-body">
+      <div class="drawer-section">
+        <h4>Today</h4>
+        <div class="drawer-stat"><span class="lbl">Processed (24h)</span><span class="val">${t.num.toLocaleString()}</span></div>
+        <div class="drawer-stat"><span class="lbl">Queue depth</span><span class="val" style="color: ${queueNum > 100 ? 'var(--red-ink)' : queueNum > 40 ? 'var(--amber-ink)' : 'var(--ink-0)'};">${queueNum}</span></div>
+        <div class="drawer-stat"><span class="lbl">Health</span><span class="val"><span class="rag-pill ${t.health}"><span class="rdot"></span>${t.health === 'r' ? 'Off track' : t.health === 'a' ? 'Pending' : 'On track'}</span></span></div>
+      </div>
+      <div class="drawer-section">
+        <h4>7-day throughput</h4>
+        <div style="background: var(--bg-2); border-radius: 6px; padding: 10px; height: 90px;">
+          <svg width="100%" height="${h}" viewBox="0 0 ${w} ${h}" preserveAspectRatio="none">
+            <path d="${path}" fill="none" stroke="${color}" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/>
+            ${pts.map((p, i) => `<circle cx="${p[0].toFixed(1)}" cy="${p[1].toFixed(1)}" r="${i === pts.length - 1 ? 3 : 2}" fill="${color}" ${i === pts.length - 1 ? '' : 'opacity="0.4"'}/>`).join('')}
+          </svg>
+        </div>
+      </div>
+      <div class="drawer-section">
+        <h4>Recommended actions</h4>
+        <div style="font-size: 12.5px; color: var(--ink-1); line-height: 1.55;">
+          ${t.health === 'r' ? '<strong style="color:var(--red-ink)">Critical.</strong> Backlog above SLA. Reroute 30% of incoming volume to ' + (TEAMS.find(x => x.health === 'g' && x.name.split(' ')[0] === t.name.split(' ')[0])?.name || 'sister team') + ', escalate to ops manager.'
+            : t.health === 'a' ? '<strong style="color:var(--amber-ink)">Watch.</strong> Queue building, throughput dipping. Add 1 floater for the next shift.'
+            : 'On track. No intervention needed.'}
+        </div>
+      </div>
+    </div>
+  `;
+  document.getElementById('drawer').classList.add('open');
+  document.getElementById('drawerOverlay').classList.add('open');
+}
+
+// Bottleneck drawer
+function openBottleDrawer(idx) {
+  const b = BOTTLE[idx];
+  if (!b) return;
+  const over = b.cycle - b.sla;
+  const breach = over > 0;
+  document.getElementById('drawerContent').innerHTML = `
+    <div class="drawer-head">
+      <div><div class="eyebrow">${breach ? 'SLA breach' : 'Within SLA'}</div><h2 style="margin-top:4px">${b.step}</h2></div>
+      <button class="icon-btn" onclick="closeDrawer()" aria-label="Close"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" stroke-linecap="round"/></svg></button>
+    </div>
+    <div class="drawer-body">
+      <div class="drawer-section">
+        <h4>Cycle time vs SLA</h4>
+        <div class="drawer-stat"><span class="lbl">Current cycle</span><span class="val">${b.cycle.toFixed(1)} days</span></div>
+        <div class="drawer-stat"><span class="lbl">SLA target</span><span class="val">${b.sla.toFixed(1)} days</span></div>
+        <div class="drawer-stat"><span class="lbl">Overage</span><span class="val" style="color: ${breach ? 'var(--red-ink)' : 'var(--green-ink)'};">${breach ? '+' : ''}${over.toFixed(1)} days</span></div>
+        <div class="drawer-stat"><span class="lbl">Capacity context</span><span class="val">${b.meta}</span></div>
+      </div>
+      <div class="drawer-section">
+        <h4>Recommended action</h4>
+        <div style="font-size: 12.5px; color: var(--ink-1); line-height: 1.55;">
+          ${breach
+            ? '<strong style="color:var(--red-ink)">In breach.</strong> ' + (over > 1 ? 'Recommend escalation: add capacity, defer non-urgent work, or reroute to sister queue.' : 'Recommend monitoring + 24h check-in.')
+            : 'No action needed — running within SLA. Maintain current capacity.'}
+        </div>
+      </div>
+    </div>
+  `;
+  document.getElementById('drawer').classList.add('open');
+  document.getElementById('drawerOverlay').classList.add('open');
 }
 
 document.getElementById('themeToggle').addEventListener('click', () => {
@@ -327,6 +428,7 @@ document.getElementById('themeToggle').addEventListener('click', () => {
   try { localStorage.setItem('apollo-theme', next); } catch (e) {}
 });
 function closeDrawer() { document.getElementById('drawer').classList.remove('open'); document.getElementById('drawerOverlay').classList.remove('open'); }
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDrawer(); });
 
 renderTput(); renderPie(); renderBottle(); renderClaimTypes(); renderTeams();
 </script>
