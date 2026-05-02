@@ -110,6 +110,9 @@
   </main>
 </div>
 
+<div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
+<aside class="drawer" id="drawer" role="dialog" aria-hidden="true"><div id="drawerContent"></div></aside>
+
 <script>
 const METHODS = [
   { name: 'DCF · base case',          meta: 'WACC 11%, terminal g 3%',           low: 300, high: 360, mid: 330, color: 'var(--blue)' },
@@ -159,15 +162,59 @@ function renderFF() {
   });
   document.getElementById('ffChart').innerHTML = svg;
 }
+const METH_NOTES = {
+  'DCF · base case':            'Discounted cash flow on the FY26-FY30 plan + terminal value. Assumes 11% WACC and 3% terminal growth. Stress-tested against 9-13% WACC range.',
+  'Public comps (EV/Revenue)':  'Median 7× EV/Revenue across 12 vertical SaaS comps. NorthBridge premium reflects above-median growth (32% vs 22%) and margin profile (78% vs 71%).',
+  'Public comps (EV/ARR)':      'Adjusts for ARR-vs-revenue gap. ARR multiples typically 0.5-1× higher than revenue multiples. Same comp set as EV/Revenue.',
+  'Precedent transactions':     'M&A multiples paid in 7 payments-sector deals last 24 months. Trends premium because it includes control / synergy values.',
+  'Last round step-up (1.7×)':  'Series B closed at $185M post in Q3 2024. Standard 1.7-2.0× step-up to Series C reflects normal pacing for a healthy company.',
+};
+
 function renderMeth() {
   let html = '<thead><tr><th>Methodology</th><th class="num">Low</th><th class="num">Mid</th><th class="num">High</th><th class="num">Implied multiple</th></tr></thead><tbody>';
   METHODS.forEach(m => {
     const mult = (m.mid / 42).toFixed(1) + '× ARR';
-    html += `<tr><td><div class="meth-name">${m.name}</div><div class="meth-meta">${m.meta}</div></td><td class="meth-num">$${m.low}M</td><td class="meth-num meth-mid">$${m.mid}M</td><td class="meth-num">$${m.high}M</td><td class="meth-num">${mult}</td></tr>`;
+    html += `<tr style="cursor:pointer; transition: background 0.14s;" onmouseover="this.style.background='var(--row-hover)'" onmouseout="this.style.background=''" data-meth="${m.name}"><td><div class="meth-name">${m.name}</div><div class="meth-meta">${m.meta}</div></td><td class="meth-num">$${m.low}M</td><td class="meth-num meth-mid">$${m.mid}M</td><td class="meth-num">$${m.high}M</td><td class="meth-num">${mult}</td></tr>`;
   });
   html += '</tbody>';
   document.getElementById('methTable').innerHTML = html;
+  document.querySelectorAll('#methTable tr[data-meth]').forEach(r => {
+    r.addEventListener('click', () => openMethDrawer(r.dataset.meth));
+  });
 }
+
+function openMethDrawer(name) {
+  const m = METHODS.find(x => x.name === name);
+  if (!m) return;
+  const note = METH_NOTES[name] || '';
+  const recommended = m.low <= 420 && m.high >= 360;
+  document.getElementById('drawerContent').innerHTML = `
+    <div class="drawer-head">
+      <div><div class="eyebrow" style="color:${m.color}">Valuation methodology</div><h2 style="margin-top:4px">${name}</h2></div>
+      <button class="icon-btn" onclick="closeDrawer()" aria-label="Close"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" stroke-linecap="round"/></svg></button>
+    </div>
+    <div class="drawer-body">
+      <div class="drawer-section">
+        <h4>Range</h4>
+        <div class="drawer-stat"><span class="lbl">Low</span><span class="val">$${m.low}M</span></div>
+        <div class="drawer-stat"><span class="lbl">Mid</span><span class="val">$${m.mid}M</span></div>
+        <div class="drawer-stat"><span class="lbl">High</span><span class="val">$${m.high}M</span></div>
+        <div class="drawer-stat"><span class="lbl">Implied EV/ARR</span><span class="val">${(m.mid / 42).toFixed(1)}×</span></div>
+        <div class="drawer-stat"><span class="lbl">Inputs</span><span class="val" style="font-size: 11.5px; max-width: 60%; text-align: right;">${m.meta}</span></div>
+      </div>
+      <div class="drawer-section">
+        <h4>Methodology note</h4>
+        <div style="font-size: 12.5px; color: var(--ink-1); line-height: 1.6;">${note}</div>
+      </div>
+      ${recommended ? '<div class="drawer-section"><div class="callout"><strong>Within recommended range.</strong> $360-420M. Defensible to most investors.</div></div>' : ''}
+    </div>
+  `;
+  document.getElementById('drawer').classList.add('open');
+  document.getElementById('drawerOverlay').classList.add('open');
+}
+
+function closeDrawer() { document.getElementById('drawer').classList.remove('open'); document.getElementById('drawerOverlay').classList.remove('open'); }
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDrawer(); });
 function renderComps() {
   let html = '<thead><tr><th>Company</th><th>Revenue</th><th>Growth</th><th>GM</th><th>EV/Rev</th><th>EV</th></tr></thead><tbody>';
   COMPS.forEach(c => {
