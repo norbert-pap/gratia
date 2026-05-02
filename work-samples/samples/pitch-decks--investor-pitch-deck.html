@@ -188,7 +188,45 @@
   </main>
 </div>
 
+<aside class="slide-nav" aria-label="Slide navigation"><div id="slideNavList"></div><div class="slide-nav-hint">↑ ↓</div></aside>
+
 <script>
+// Slide navigator + keyboard
+const slides = document.querySelectorAll('.slide');
+const navList = document.getElementById('slideNavList');
+slides.forEach((s, i) => {
+  const btn = document.createElement('button');
+  btn.textContent = String(i + 1).padStart(2, '0');
+  const eyebrow = s.querySelector('.slide-eyebrow');
+  btn.title = (eyebrow ? eyebrow.textContent : 'Slide ' + (i + 1)).trim();
+  btn.addEventListener('click', () => s.scrollIntoView({ behavior: 'smooth', block: 'start' }));
+  navList.appendChild(btn);
+});
+const navBtns = document.querySelectorAll('.slide-nav button');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const idx = Array.prototype.indexOf.call(slides, e.target);
+      navBtns.forEach((b, i) => b.classList.toggle('active', i === idx));
+    }
+  });
+}, { threshold: 0.55 });
+slides.forEach(s => observer.observe(s));
+document.addEventListener('keydown', e => {
+  if (e.target.tagName === 'INPUT' || e.target.tagName === 'TEXTAREA') return;
+  const active = document.querySelector('.slide-nav button.active');
+  const idx = active ? Array.prototype.indexOf.call(navBtns, active) : 0;
+  if (e.key === 'ArrowDown' || e.key === 'ArrowRight' || e.key === 'PageDown' || e.key === ' ') {
+    if (idx < slides.length - 1) { slides[idx + 1].scrollIntoView({ behavior: 'smooth', block: 'start' }); e.preventDefault(); }
+  } else if (e.key === 'ArrowUp' || e.key === 'ArrowLeft' || e.key === 'PageUp') {
+    if (idx > 0) { slides[idx - 1].scrollIntoView({ behavior: 'smooth', block: 'start' }); e.preventDefault(); }
+  } else if (e.key === 'Home') {
+    slides[0].scrollIntoView({ behavior: 'smooth', block: 'start' }); e.preventDefault();
+  } else if (e.key === 'End') {
+    slides[slides.length - 1].scrollIntoView({ behavior: 'smooth', block: 'start' }); e.preventDefault();
+  }
+});
+
 document.getElementById('themeToggle').addEventListener('click', () => {
   const cur = document.documentElement.getAttribute('data-theme') || 'dark';
   const next = cur === 'dark' ? 'light' : 'dark';
