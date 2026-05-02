@@ -156,12 +156,12 @@
 
     <section class="matrix-section">
       <div class="matrix-head">
-        <div class="matrix-head-wrap"><h2>8 workstreams</h2><span class="count">Sorted by status</span></div>
-        <div class="filter-bar">
-          <button class="chip active">All<span class="ct">8</span></button>
-          <button class="chip"><span class="dot r"></span>Off-track<span class="ct">2</span></button>
-          <button class="chip"><span class="dot a"></span>At-risk<span class="ct">2</span></button>
-          <button class="chip"><span class="dot g"></span>On-track<span class="ct">4</span></button>
+        <div class="matrix-head-wrap"><h2><span id="wsCount">8</span> workstreams</h2><span class="count">Click a row for detail</span></div>
+        <div class="filter-bar" id="wsFilters">
+          <button class="chip active" data-filter="all">All<span class="ct">8</span></button>
+          <button class="chip" data-filter="r"><span class="dot r"></span>Off-track<span class="ct">2</span></button>
+          <button class="chip" data-filter="a"><span class="dot a"></span>At-risk<span class="ct">2</span></button>
+          <button class="chip" data-filter="g"><span class="dot g"></span>On-track<span class="ct">4</span></button>
         </div>
       </div>
       <div class="matrix">
@@ -176,6 +176,9 @@
     </footer>
   </main>
 </div>
+
+<div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
+<aside class="drawer" id="drawer" role="dialog" aria-hidden="true"><div id="drawerContent"></div></aside>
 
 <script>
 const PLAN = [100, 96, 92, 88, 84, 80, 76, 72, 68, 64, 60, 56, 52, 48, 44, 40, 36, 32, 28];
@@ -268,9 +271,13 @@ function renderRisks() {
   `).join('');
 }
 
+let wsFilter = 'all';
+
 function renderWs() {
-  document.getElementById('wsRows').innerHTML = WORKSTREAMS.map(w => `
-    <div class="ws-grid">
+  const visible = wsFilter === 'all' ? WORKSTREAMS : WORKSTREAMS.filter(w => w.status === wsFilter);
+  document.getElementById('wsCount').textContent = visible.length;
+  document.getElementById('wsRows').innerHTML = visible.map(w => `
+    <div class="ws-grid" data-id="${w.id}">
       <div class="ws-id">${w.id}</div>
       <div class="ws-name">${w.name}<span class="ws-lead"><span class="ws-av">${w.li}</span>${w.lead.split(',')[0]}</span></div>
       <div class="ws-pct">${w.pct}%</div>
@@ -279,7 +286,100 @@ function renderWs() {
       <div class="ws-chev"><svg width="13" height="13" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6" stroke-linecap="round"/></svg></div>
     </div>
   `).join('');
+  document.querySelectorAll('.ws-grid').forEach(r => {
+    r.addEventListener('click', () => openWsDrawer(r.dataset.id));
+  });
 }
+
+// Filter chips
+document.querySelectorAll('#wsFilters .chip').forEach(c => {
+  c.addEventListener('click', () => {
+    document.querySelectorAll('#wsFilters .chip').forEach(x => x.classList.toggle('active', x === c));
+    wsFilter = c.dataset.filter;
+    renderWs();
+  });
+});
+
+// Make milestone + risk rows clickable
+document.querySelectorAll('.ms-row').forEach((r, i) => {
+  r.style.cursor = 'pointer';
+  r.addEventListener('click', () => openMsDrawer(i));
+});
+
+const WS_NOTES = {
+  'WS-01': { recent: 'Clinical workflows signed off · piloting in 4 sites this week.', risks: 'Two physician scheduling conflicts being worked through.', next: 'May 9: cohort 2 training kickoff. May 14: dress rehearsal.' },
+  'WS-02': { recent: 'All 38 order sets finalized + clinical review complete.', risks: 'None active.', next: 'May 9: handoff to clinical informatics complete.' },
+  'WS-03': { recent: 'Behind plan — only 12 of 22 sites enrolled in training.', risks: 'CRITICAL: Adoption risk if training doesn\'t complete pre go-live.', next: 'Add 2 trainers + self-paced video module by May 9.' },
+  'WS-04': { recent: 'Lab vendor sandbox latency exceeding spec; joint review pending.', risks: 'Vendor SLA on sandbox response time at risk.', next: 'May 14 cutover dry-run depends on lab sign-off.' },
+  'WS-05': { recent: 'ISP slip resolved · 3 rural sites still being upgraded.', risks: 'Cellular failover untested.', next: 'May 15: all sites cutover-ready.' },
+  'WS-06': { recent: '24 of 34 reports built · 8 pending stakeholder review.', risks: 'None active.', next: 'May 19: full report suite live.' },
+  'WS-07': { recent: 'Behind on stakeholder communications cascade.', risks: 'Provider awareness of go-live timing inconsistent across sites.', next: 'Town hall sequence May 12-21 · cohort comms on schedule by May 15.' },
+  'WS-08': { recent: 'Cutover plan v3 · all checklists socialized.', risks: 'Rollback drill scheduled for May 17.', next: 'May 17: dry-run · May 24: go-live.' },
+};
+
+function openWsDrawer(id) {
+  const w = WORKSTREAMS.find(x => x.id === id);
+  if (!w) return;
+  const notes = WS_NOTES[id] || {};
+  const statusLabel = w.status === 'g' ? 'On track' : w.status === 'a' ? 'At risk' : 'Off track';
+  document.getElementById('drawerContent').innerHTML = `
+    <div class="drawer-head">
+      <div><div class="eyebrow">${id} · Lead: ${w.lead}</div><h2 style="margin-top:4px">${w.name}</h2></div>
+      <button class="icon-btn" onclick="closeDrawer()" aria-label="Close"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" stroke-linecap="round"/></svg></button>
+    </div>
+    <div class="drawer-body">
+      <div class="drawer-section">
+        <h4>Status</h4>
+        <div class="drawer-stat"><span class="lbl">Progress</span><span class="val">${w.pct}%</span></div>
+        <div class="drawer-stat"><span class="lbl">Health</span><span class="val"><span class="rag-pill ${w.status}"><span class="rdot"></span>${statusLabel}</span></span></div>
+        <div class="drawer-stat"><span class="lbl">Due</span><span class="val">${w.due}</span></div>
+      </div>
+      <div class="drawer-section">
+        <h4>Recent activity</h4>
+        <div style="font-size: 12.5px; color: var(--ink-1); line-height: 1.55;">${notes.recent || 'No recent activity logged.'}</div>
+      </div>
+      <div class="drawer-section">
+        <h4>Open risks</h4>
+        <div style="font-size: 12.5px; color: ${w.status === 'r' ? 'var(--red-ink)' : 'var(--ink-1)'}; line-height: 1.55;">${notes.risks || 'No active risks.'}</div>
+      </div>
+      <div class="drawer-section">
+        <h4>Next milestone</h4>
+        <div style="font-size: 12.5px; color: var(--ink-1); line-height: 1.55;">${notes.next || ''}</div>
+      </div>
+    </div>
+  `;
+  document.getElementById('drawer').classList.add('open');
+  document.getElementById('drawerOverlay').classList.add('open');
+}
+
+function openMsDrawer(idx) {
+  const m = MILESTONES[idx];
+  if (!m) return;
+  document.getElementById('drawerContent').innerHTML = `
+    <div class="drawer-head">
+      <div><div class="eyebrow">${m.date}</div><h2 style="margin-top:4px">${m.name}</h2></div>
+      <button class="icon-btn" onclick="closeDrawer()" aria-label="Close"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" stroke-linecap="round"/></svg></button>
+    </div>
+    <div class="drawer-body">
+      <div class="drawer-section">
+        <h4>Milestone</h4>
+        <div class="drawer-stat"><span class="lbl">Date</span><span class="val">${m.date}</span></div>
+        <div class="drawer-stat"><span class="lbl">Scope</span><span class="val">${m.meta}</span></div>
+        <div class="drawer-stat"><span class="lbl">Progress</span><span class="val">${m.pct}%</span></div>
+        <div class="drawer-stat"><span class="lbl">Status</span><span class="val"><span class="rag-pill ${m.pct >= 80 ? 'g' : m.pct >= 30 ? 'a' : 'r'}"><span class="rdot"></span>${m.pct >= 80 ? 'On track' : m.pct >= 30 ? 'In progress' : 'Pending'}</span></span></div>
+      </div>
+      <div class="drawer-section">
+        <h4>Notes</h4>
+        <div style="font-size: 12.5px; color: var(--ink-1); line-height: 1.55;">${m.pct >= 80 ? 'Tracking to plan. No issues flagged.' : m.pct >= 30 ? 'In progress · monitor closely.' : 'Not yet started · ensure dependencies clear before kickoff.'}</div>
+      </div>
+    </div>
+  `;
+  document.getElementById('drawer').classList.add('open');
+  document.getElementById('drawerOverlay').classList.add('open');
+}
+
+function closeDrawer() { document.getElementById('drawer').classList.remove('open'); document.getElementById('drawerOverlay').classList.remove('open'); }
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDrawer(); });
 
 document.getElementById('themeToggle').addEventListener('click', () => {
   const cur = document.documentElement.getAttribute('data-theme') || 'dark';
