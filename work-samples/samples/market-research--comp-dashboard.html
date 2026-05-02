@@ -104,8 +104,14 @@
 
     <section class="card" style="margin-bottom: 16px;">
       <div class="card-head">
-        <h3>Feature comparison · 7 competitors × 8 capabilities</h3>
-        <div class="meta">Hover row for source</div>
+        <h3>Feature comparison · <span id="compCount">7</span> competitors × 8 capabilities</h3>
+        <div class="filter-bar" id="stageFilters" style="gap:6px;">
+          <button class="chip active" data-stage="all">All<span class="ct">7</span></button>
+          <button class="chip" data-stage="Series A">Series A<span class="ct">2</span></button>
+          <button class="chip" data-stage="Series B">Series B<span class="ct">2</span></button>
+          <button class="chip" data-stage="Series C">Series C<span class="ct">2</span></button>
+          <button class="chip" data-stage="Seed">Seed<span class="ct">1</span></button>
+        </div>
       </div>
       <table class="comp-table" id="compTable"></table>
     </section>
@@ -161,6 +167,9 @@
     </footer>
   </main>
 </div>
+
+<div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
+<aside class="drawer" id="drawer" role="dialog" aria-hidden="true"><div id="drawerContent"></div></aside>
 
 <script>
 const COMPETITORS = [
@@ -236,24 +245,109 @@ function renderMap() {
   document.getElementById('mapSvg').innerHTML = svg;
 }
 
+let stageFilter = 'all';
+
 function renderTable() {
+  let visible = stageFilter === 'all' ? COMPETITORS : COMPETITORS.filter(c => c.stage === stageFilter);
+  document.getElementById('compCount').textContent = visible.length;
+
   let html = '<thead><tr><th>Competitor</th>';
   FEATURES.forEach(f => { html += `<th class="num">${f}</th>`; });
   html += '<th class="num">ARR</th></tr></thead><tbody>';
   // Us first, highlighted
-  html += `<tr class="row" style="background: var(--gold-dim);"><td><div class="comp-co"><div class="comp-logo" style="background:${US.color}; color: #051815;">${US.initials}</div><div><div class="comp-name" style="color: var(--gold-ink);">Us</div><div class="comp-stage">Reference</div></div></div></td>`;
+  html += `<tr class="row" data-name="Us" style="background: var(--gold-dim);"><td><div class="comp-co"><div class="comp-logo" style="background:${US.color}; color: #051815;">${US.initials}</div><div><div class="comp-name" style="color: var(--gold-ink);">Us</div><div class="comp-stage">Reference</div></div></div></td>`;
   F_DATA['Us'].forEach(v => { html += `<td style="text-align:right" class="feature-cell"><span class="${v === 'y' ? 'fc-y' : v === 'p' ? 'fc-p' : 'fc-n'}">${v === 'y' ? '●' : v === 'p' ? '◐' : '○'}</span></td>`; });
   html += `<td class="comp-num">$${US.arr}M</td></tr>`;
   // Sorted by ARR
-  const sorted = COMPETITORS.slice().sort((a, b) => b.arr - a.arr);
+  const sorted = visible.slice().sort((a, b) => b.arr - a.arr);
   sorted.forEach(c => {
-    html += `<tr class="row"><td><div class="comp-co"><div class="comp-logo" style="background:${c.color}">${c.initials}</div><div><div class="comp-name">${c.name}</div><div class="comp-stage">${c.stage}</div></div></div></td>`;
+    html += `<tr class="row" data-name="${c.name}"><td><div class="comp-co"><div class="comp-logo" style="background:${c.color}">${c.initials}</div><div><div class="comp-name">${c.name}</div><div class="comp-stage">${c.stage}</div></div></div></td>`;
     F_DATA[c.name].forEach(v => { html += `<td style="text-align:right" class="feature-cell"><span class="${v === 'y' ? 'fc-y' : v === 'p' ? 'fc-p' : 'fc-n'}">${v === 'y' ? '●' : v === 'p' ? '◐' : '○'}</span></td>`; });
     html += `<td class="comp-num">$${c.arr}M</td></tr>`;
   });
   html += '</tbody>';
   document.getElementById('compTable').innerHTML = html;
+  document.querySelectorAll('.comp-table tr.row').forEach(r => {
+    r.addEventListener('click', () => openCompDrawer(r.dataset.name));
+  });
 }
+
+// Filter chips
+document.querySelectorAll('#stageFilters .chip').forEach(c => {
+  c.addEventListener('click', () => {
+    document.querySelectorAll('#stageFilters .chip').forEach(x => x.classList.toggle('active', x === c));
+    stageFilter = c.dataset.stage;
+    renderTable();
+  });
+});
+
+const COMP_NOTES = {
+  'Capital Float':     { strength: 'Underwriting speed (8 hrs avg)', weakness: 'Higher origination fee · less embedded API depth', positioning: 'Most mature competitor · 2.1× our ARR · trying to expand to vertical SaaS partnerships', winRate: '34% h2h with us' },
+  'Kinetic Credit':    { strength: 'Vertical SaaS-native, fastest underwrite (4 hrs)', weakness: 'Limited risk modeling · no multi-currency', positioning: 'Newest entrant · aggressive on speed · winning sub-$50K SMB segment', winRate: '52% h2h with us (we\'re losing)' },
+  'Rangefinder':       { strength: 'White-label embedded · partner-friendly', weakness: 'Limited risk modeling depth · slower onboarding', positioning: 'Channel-led · doesn\'t compete head-to-head often', winRate: '60% h2h with us' },
+  'Ledgerbridge':      { strength: 'Most complete feature set', weakness: 'Premium pricing · long sales cycle', positioning: 'Enterprise-focused · larger deals than ours · slower-moving', winRate: '48% h2h with us' },
+  'Quill Capital':     { strength: 'Niche specialty (consumer credit)', weakness: 'Tiny scale · minimal product breadth', positioning: 'Not a real threat · seed-stage · monitor', winRate: 'rarely overlap' },
+  'Northwind Lending': { strength: 'Strong in SMB segment we\'re weak in', weakness: 'Limited enterprise capability · no multi-currency', positioning: 'Direct competitor in SMB · regional strength in NW US', winRate: '42% h2h with us' },
+  'Apex Underwriting': { strength: 'Strongest brand · deepest risk modeling', weakness: 'Slowest cycle · highest pricing', positioning: 'Premium incumbent · 2.3× our ARR · slower at speed-to-yes', winRate: '56% h2h with us' },
+  'Us':                { strength: 'Underwriting depth + merchant integration', weakness: 'Speed-to-yes (24 hrs · slow vs Kinetic)', positioning: 'Mid-market vertical SaaS sweet spot · fastest-growing player in our segment', winRate: '—' }
+};
+
+function openCompDrawer(name) {
+  const all = [US].concat(COMPETITORS);
+  const c = all.find(x => x.name === name);
+  if (!c) return;
+  const notes = COMP_NOTES[name] || {};
+  const isUs = name === 'Us';
+  const features = F_DATA[name] || [];
+
+  document.getElementById('drawerContent').innerHTML = `
+    <div class="drawer-head">
+      <div>
+        <div class="eyebrow">${c.stage}${isUs ? '' : ' · Funding $' + c.funding + 'M raised'}</div>
+        <h2 style="margin-top:4px; display:flex; align-items:center; gap:9px;">
+          <span style="width:24px; height:24px; border-radius:5px; display:inline-flex; align-items:center; justify-content:center; background:${c.color}; color:white; font-size:11px; font-weight:700;">${c.initials}</span>
+          ${c.name}
+        </h2>
+      </div>
+      <button class="icon-btn" onclick="closeDrawer()" aria-label="Close"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" stroke-linecap="round"/></svg></button>
+    </div>
+    <div class="drawer-body">
+      <div class="drawer-section">
+        <h4>Snapshot</h4>
+        <div class="drawer-stat"><span class="lbl">ARR</span><span class="val">$${c.arr}M</span></div>
+        <div class="drawer-stat"><span class="lbl">Product breadth</span><span class="val">${c.breadth} / 10</span></div>
+        ${!isUs ? `<div class="drawer-stat"><span class="lbl">Win rate vs us (h2h)</span><span class="val">${notes.winRate || '—'}</span></div>` : ''}
+      </div>
+      <div class="drawer-section">
+        <h4>Strengths</h4>
+        <div style="font-size: 12.5px; color: var(--green-ink); line-height: 1.55;">${notes.strength || ''}</div>
+      </div>
+      <div class="drawer-section">
+        <h4>Weaknesses</h4>
+        <div style="font-size: 12.5px; color: var(--red-ink); line-height: 1.55;">${notes.weakness || ''}</div>
+      </div>
+      <div class="drawer-section">
+        <h4>Positioning &amp; threat</h4>
+        <div style="font-size: 12.5px; color: var(--ink-1); line-height: 1.55;">${notes.positioning || ''}</div>
+      </div>
+      <div class="drawer-section">
+        <h4>Feature scorecard</h4>
+        <div style="display: grid; grid-template-columns: 1fr auto; gap: 8px 14px; font-size: 12px;">
+          ${FEATURES.map((f, i) => {
+            const v = features[i];
+            const status = v === 'y' ? { sym: '●', col: 'var(--green-ink)' } : v === 'p' ? { sym: '◐', col: 'var(--amber-ink)' } : { sym: '○', col: 'var(--ink-3)' };
+            return `<span style="color:var(--ink-1)">${f.replace(/<br>/g, ' ')}</span><span style="color:${status.col}; font-size: 14px; line-height: 1; text-align:center;">${status.sym}</span>`;
+          }).join('')}
+        </div>
+      </div>
+    </div>
+  `;
+  document.getElementById('drawer').classList.add('open');
+  document.getElementById('drawerOverlay').classList.add('open');
+}
+
+function closeDrawer() { document.getElementById('drawer').classList.remove('open'); document.getElementById('drawerOverlay').classList.remove('open'); }
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDrawer(); });
 
 function renderNews() {
   document.getElementById('newsList').innerHTML = NEWS.map(n => `
