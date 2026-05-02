@@ -75,6 +75,9 @@
   </main>
 </div>
 
+<div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
+<aside class="drawer" id="drawer" role="dialog" aria-hidden="true"><div id="drawerContent"></div></aside>
+
 <script>
 const SEGMENTS = [
   { id: 'S1', name: 'Established main-street retail',   color: '#8f9198', x: 0.30, y: 0.20, tam: 2.8, customers: 740000, arpu: 1280, churn: '14%', primary: 'Branch convenience', secondary: 'Cheap deposit account', need: '<strong>Loyal but low-margin.</strong> Will switch only on egregious pricing — incumbents are entrenched. Not a target.', focus: false },
@@ -119,7 +122,7 @@ function renderMap() {
 
 function renderSegs() {
   document.getElementById('segGrid').innerHTML = SEGMENTS.map(s => `
-    <div class="seg-card">
+    <div class="seg-card" data-id="${s.id}">
       <div class="seg-eyebrow"><span class="seg-pip" style="background:${s.color}"></span>${s.id} · ${s.focus ? 'TARGET' : 'Watch'}</div>
       <h3>${s.name}</h3>
       <div class="seg-sub">Primary need: ${s.primary} · Secondary: ${s.secondary}</div>
@@ -131,7 +134,57 @@ function renderSegs() {
       <div class="seg-need">${s.need}</div>
     </div>
   `).join('');
+  document.querySelectorAll('.seg-card').forEach(c => {
+    c.addEventListener('click', () => openSegDrawer(c.dataset.id));
+  });
 }
+
+const SEG_GTM = {
+  S1: 'GTM: not a target. Do not invest acquisition spend. Defensive: ensure pricing competitive on deposit-account product.',
+  S2: 'GTM: dedicated SMB sales team + integrations marketplace (QuickBooks, FieldEdge, ServiceTitan). Target $42M ARR from this segment within 24 months.',
+  S3: 'GTM: partnership angle only. Co-launch with Toast / Square. Build POS-integrated banking module rather than competing head-to-head.',
+  S4: 'GTM: PLG self-serve + freemium. Tax automation + multi-currency as paid upgrades. Compete with Mercury/Wise on tax tooling depth.',
+  S5: 'GTM: enterprise sales motion. 6-9 month sales cycle, RFP-driven. Defer until Segments 2 + 4 traction validates ICP.',
+};
+
+function openSegDrawer(id) {
+  const s = SEGMENTS.find(x => x.id === id);
+  if (!s) return;
+  const arpu = (s.tam * 1e9 / s.customers).toFixed(0);
+  document.getElementById('drawerContent').innerHTML = `
+    <div class="drawer-head">
+      <div><div class="eyebrow" style="color:${s.color}">${s.id} · ${s.focus ? 'TARGET segment' : 'Watch segment'}</div><h2 style="margin-top:4px">${s.name}</h2></div>
+      <button class="icon-btn" onclick="closeDrawer()" aria-label="Close"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" stroke-linecap="round"/></svg></button>
+    </div>
+    <div class="drawer-body">
+      <div class="drawer-section">
+        <h4>Sizing</h4>
+        <div class="drawer-stat"><span class="lbl">TAM</span><span class="val">$${s.tam}B</span></div>
+        <div class="drawer-stat"><span class="lbl">Customers</span><span class="val">${s.customers.toLocaleString()}</span></div>
+        <div class="drawer-stat"><span class="lbl">Implied ARPU</span><span class="val">$${parseInt(arpu).toLocaleString()}</span></div>
+        <div class="drawer-stat"><span class="lbl">Annual churn</span><span class="val">${s.churn}</span></div>
+      </div>
+      <div class="drawer-section">
+        <h4>Needs</h4>
+        <div class="drawer-stat"><span class="lbl">Primary</span><span class="val" style="font-size: 12px;">${s.primary}</span></div>
+        <div class="drawer-stat"><span class="lbl">Secondary</span><span class="val" style="font-size: 12px;">${s.secondary}</span></div>
+      </div>
+      <div class="drawer-section">
+        <h4>Strategic call</h4>
+        <div style="font-size: 12.5px; color: var(--ink-1); line-height: 1.6;">${s.need}</div>
+      </div>
+      <div class="drawer-section">
+        <h4>GTM approach</h4>
+        <div class="callout ${s.focus ? '' : 'amber'}"><strong>${s.focus ? 'TARGET' : 'WATCH'}.</strong> ${SEG_GTM[id] || ''}</div>
+      </div>
+    </div>
+  `;
+  document.getElementById('drawer').classList.add('open');
+  document.getElementById('drawerOverlay').classList.add('open');
+}
+
+function closeDrawer() { document.getElementById('drawer').classList.remove('open'); document.getElementById('drawerOverlay').classList.remove('open'); }
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDrawer(); });
 
 document.getElementById('themeToggle').addEventListener('click', () => {
   const cur = document.documentElement.getAttribute('data-theme') || 'dark';

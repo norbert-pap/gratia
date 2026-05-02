@@ -9,7 +9,8 @@
 <script>(function(){try{const s=localStorage.getItem('apollo-theme');if(s==='light'||s==='dark')document.documentElement.setAttribute('data-theme',s);}catch(e){}})();</script>
 <style>
   .wf-svg { width: 100%; height: 360px; }
-  .driver-grid { display: grid; grid-template-columns: 1fr 90px 110px 110px 80px; gap: 12px; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--border); font-size: 12.5px; }
+  .driver-grid { display: grid; grid-template-columns: 1fr 90px 110px 110px 80px; gap: 12px; align-items: center; padding: 12px 0; border-bottom: 1px solid var(--border); font-size: 12.5px; cursor: pointer; transition: background 0.14s; }
+  .driver-grid:not(.head):hover { background: var(--row-hover); }
   .driver-grid:last-child { border-bottom: none; }
   .driver-grid.head { font-size: 10px; font-weight: 600; color: var(--ink-3); letter-spacing: 0.1em; text-transform: uppercase; padding-bottom: 9px; }
   .driver-name { display: flex; align-items: center; gap: 9px; }
@@ -111,6 +112,9 @@
   </main>
 </div>
 
+<div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
+<aside class="drawer" id="drawer" role="dialog" aria-hidden="true"><div id="drawerContent"></div></aside>
+
 <script>
 const COMPONENTS = [
   { label: 'FY24 ending', value: 15.0,  color: 'var(--ink-3)', anchor: true },
@@ -185,6 +189,17 @@ function renderWf() {
   });
   document.getElementById('wfSvg').innerHTML = svg;
 }
+const DRIVER_NOTES = {
+  'Mid-market expansion': '38 mid-market customers expanded an average of $111K per account. Driven by second-renewal upsell motion launched Q2. Top expansions: 5 customers added Premium Analytics ($85K avg), 12 added Workforce module ($65K avg).',
+  'New logos':            '142 new customers signed; average ACV $24K. SMB-skewed by volume but mid-market drove most of the dollars. 12 enterprise logos contributed 28% of new-logo revenue.',
+  'SMB churn':            '86 SMB customers lost. Modal pattern: support ticket spike 4-6 weeks before notification. Health-score model in flight for FY26 to flag earlier.',
+  'Down-sell':            '22 customers downgraded tier. 14 from over-purchase at signing (right-sized). 8 from active dissatisfaction (CSM intervention failed).',
+  'Enterprise churn':     '4 logos lost; collectively $1.2M ARR. 2 to acquisition (acquirer used incumbent), 1 to procurement reset, 1 to clear competitive loss.',
+  'SMB upsell':           '64 SMB customers upgraded plan tier. Tied to feature usage thresholds + 90-day check-in cadence.',
+  'Cross-sell':           '18 customers added a second product line. Highest cross-sell among customers > 2 years old.',
+  'Pricing changes':      '320 customers experienced a 5% list-price increase at renewal. Full pass-through; minimal churn impact.',
+};
+
 function renderDrivers() {
   document.getElementById('driverRows').innerHTML = DRIVERS.map(d => {
     const sgn = d.imp >= 0 ? 'pos' : 'neg';
@@ -192,7 +207,7 @@ function renderDrivers() {
       ? `<div class="db-fill" style="left: 50%; width: ${Math.min(50, Math.abs(d.imp) * 6)}%; background: ${d.color};"></div>`
       : `<div class="db-fill" style="right: 50%; width: ${Math.min(50, Math.abs(d.imp) * 6)}%; background: ${d.color};"></div>`;
     return `
-      <div class="driver-grid">
+      <div class="driver-grid" data-name="${d.name}">
         <div class="driver-name"><span class="dn-pip" style="background:${d.color}"></span><span class="dn-text">${d.name}</span></div>
         <div class="driver-num dim" style="text-align:right">${d.cust}</div>
         <div class="driver-num ${sgn}" style="text-align:right">${d.imp >= 0 ? '+' : '−'}$${Math.abs(d.imp).toFixed(1)}M</div>
@@ -201,7 +216,40 @@ function renderDrivers() {
       </div>
     `;
   }).join('');
+  document.querySelectorAll('.driver-grid:not(.head)').forEach(r => {
+    r.addEventListener('click', () => openDriverDrawer(r.dataset.name));
+  });
 }
+
+function openDriverDrawer(name) {
+  const d = DRIVERS.find(x => x.name === name);
+  if (!d) return;
+  const note = DRIVER_NOTES[name] || '';
+  document.getElementById('drawerContent').innerHTML = `
+    <div class="drawer-head">
+      <div><div class="eyebrow" style="color:${d.color}">FY25 driver</div><h2 style="margin-top:4px">${name}</h2></div>
+      <button class="icon-btn" onclick="closeDrawer()" aria-label="Close"><svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" stroke-linecap="round"/></svg></button>
+    </div>
+    <div class="drawer-body">
+      <div class="drawer-section">
+        <h4>Contribution</h4>
+        <div class="drawer-stat"><span class="lbl">Customers affected</span><span class="val">${d.cust}</span></div>
+        <div class="drawer-stat"><span class="lbl">$M impact</span><span class="val" style="color:${d.imp >= 0 ? 'var(--green-ink)' : 'var(--red-ink)'}">${d.imp >= 0 ? '+' : '−'}$${Math.abs(d.imp).toFixed(1)}M</span></div>
+        <div class="drawer-stat"><span class="lbl">Share of net</span><span class="val">${d.share}%</span></div>
+        <div class="drawer-stat"><span class="lbl">vs FY24</span><span class="val">${d.vs}</span></div>
+      </div>
+      <div class="drawer-section">
+        <h4>What's behind it</h4>
+        <div style="font-size: 12.5px; color: var(--ink-1); line-height: 1.6;">${note}</div>
+      </div>
+    </div>
+  `;
+  document.getElementById('drawer').classList.add('open');
+  document.getElementById('drawerOverlay').classList.add('open');
+}
+
+function closeDrawer() { document.getElementById('drawer').classList.remove('open'); document.getElementById('drawerOverlay').classList.remove('open'); }
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeDrawer(); });
 document.getElementById('themeToggle').addEventListener('click', () => {
   const cur = document.documentElement.getAttribute('data-theme') || 'dark';
   const next = cur === 'dark' ? 'light' : 'dark';

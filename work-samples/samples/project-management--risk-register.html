@@ -95,7 +95,15 @@
     </section>
 
     <section class="card" style="margin-bottom: 16px;">
-      <div class="card-head"><h3>Active risks · sorted by severity</h3><div class="meta">14 open · 2 closed this week</div></div>
+      <div class="card-head">
+        <h3><span id="riskCount">14</span> active risks</h3>
+        <div class="filter-bar" id="sevFilters" style="gap:6px;">
+          <button class="chip active" data-sev="all">All<span class="ct">14</span></button>
+          <button class="chip" data-sev="r"><span class="dot r"></span>High<span class="ct">6</span></button>
+          <button class="chip" data-sev="a"><span class="dot a"></span>Med<span class="ct">6</span></button>
+          <button class="chip" data-sev="g"><span class="dot g"></span>Low<span class="ct">2</span></button>
+        </div>
+      </div>
       <div style="padding: 0;">
         <table class="risk-table" id="riskTable"></table>
       </div>
@@ -126,15 +134,27 @@ const RISKS = [
   { id: 'R-16', name: 'Legacy POS license renewal',   desc: 'Avoidable cost if cutover slips past Aug 1.',                                         prob: 'Low',  imp: 'Low',  sev: 'g', owner: 'Procurement', mit: '$0.4M soft cost if missed; not material to project ROI.' },
 ];
 
+let sevFilter = 'all';
+
 function renderTable() {
+  const visible = sevFilter === 'all' ? RISKS : RISKS.filter(r => r.sev === sevFilter);
+  document.getElementById('riskCount').textContent = visible.length;
   let html = '<thead><tr><th>ID</th><th>Risk</th><th class="cn">P</th><th class="cn">I</th><th>Owner</th><th>Mitigation</th></tr></thead><tbody>';
-  RISKS.forEach(r => {
+  visible.forEach(r => {
     const sevPill = `<span class="rag-pill ${r.sev}"><span class="rdot"></span>${r.sev === 'r' ? 'High' : r.sev === 'a' ? 'Med' : 'Low'}</span>`;
     html += `<tr><td class="risk-id">${r.id}</td><td><span class="risk-name">${r.name}</span><span class="risk-desc">${r.desc}</span></td><td style="text-align:center"><span style="color:${r.prob === 'High' ? 'var(--red-ink)' : r.prob === 'Med' ? 'var(--amber-ink)' : 'var(--ink-2)'}">${r.prob.charAt(0)}</span></td><td style="text-align:center"><span style="color:${r.imp === 'High' ? 'var(--red-ink)' : r.imp === 'Med' ? 'var(--amber-ink)' : 'var(--ink-2)'}">${r.imp.charAt(0)}</span></td><td class="risk-owner">${r.owner}<br>${sevPill}</td><td class="risk-mit">${r.mit}</td></tr>`;
   });
   html += '</tbody>';
   document.getElementById('riskTable').innerHTML = html;
 }
+
+document.querySelectorAll('#sevFilters .chip').forEach(c => {
+  c.addEventListener('click', () => {
+    document.querySelectorAll('#sevFilters .chip').forEach(x => x.classList.toggle('active', x === c));
+    sevFilter = c.dataset.sev;
+    renderTable();
+  });
+});
 
 document.getElementById('themeToggle').addEventListener('click', () => {
   const cur = document.documentElement.getAttribute('data-theme') || 'dark';

@@ -99,20 +99,15 @@
 
     <section class="grid-2">
       <div class="card">
-        <div class="card-head"><h3>Bottoms-up build</h3><div class="meta">Per-vertical assumptions</div></div>
+        <div class="card-head"><h3>Bottoms-up build</h3><div class="meta">Drag take-rate adjuster below</div></div>
         <div style="padding: 0 4px;">
-          <table class="build-table">
-            <thead><tr><th>$M, FY30</th><th>Customers</th><th>Avg GMV</th><th>Take rate</th><th>Revenue</th></tr></thead>
-            <tbody>
-              <tr><td>Healthcare</td><td>9,200</td><td>$280K</td><td>0.62%</td><td>$160</td></tr>
-              <tr><td>Field services</td><td>11,400</td><td>$210K</td><td>0.58%</td><td>$139</td></tr>
-              <tr><td>Restaurants</td><td>8,800</td><td>$340K</td><td>0.71%</td><td>$212</td></tr>
-              <tr><td>Fitness</td><td>5,600</td><td>$140K</td><td>0.55%</td><td>$43</td></tr>
-              <tr><td>Education</td><td>3,000</td><td>$190K</td><td>0.48%</td><td>$27</td></tr>
-              <tr class="formula"><td>Total bottoms-up</td><td>38,000</td><td>—</td><td>0.63% avg</td><td>$581</td></tr>
-            </tbody>
-          </table>
-          <div class="callout amber" style="margin: 14px 18px 18px;"><strong>Bottoms-up triangulates ~5× our FY30 plan.</strong> The capture-rate assumption (38K customers / SAM-eligible 750K) is 5.1% — modest. Plan is internally conservative.</div>
+          <table class="build-table" id="buBuildTable"></table>
+          <div style="display: grid; grid-template-columns: 130px 1fr 70px; gap: 10px; align-items: center; padding: 14px 16px; border-top: 1px solid var(--border); font-size: 12px;">
+            <span style="color: var(--ink-1); font-weight: 500;">Take-rate adjuster</span>
+            <input type="range" id="takeRateAdjust" min="-0.4" max="0.4" step="0.05" value="0" style="-webkit-appearance: none; appearance: none; height: 4px; background: var(--bg-3); border-radius: 2px; outline: none;">
+            <span id="takeRateAdjustVal" style="font-family: 'Inter', sans-serif; font-weight: 600; color: var(--ink-0); font-variant-numeric: tabular-nums; text-align: right;">+0.00pp</span>
+          </div>
+          <div class="callout amber" style="margin: 0 18px 18px;"><strong id="bUpInsight">Bottoms-up triangulates ~5× our FY30 plan.</strong> <span id="bUpDetail">The capture-rate assumption (38K customers / SAM-eligible 750K) is 5.1% — modest. Plan is internally conservative.</span></div>
         </div>
       </div>
 
@@ -151,12 +146,64 @@
 </div>
 
 <script>
+const VERTICALS = [
+  { name: 'Healthcare',     customers: 9200,  gmvK: 280, baseRate: 0.62 },
+  { name: 'Field services', customers: 11400, gmvK: 210, baseRate: 0.58 },
+  { name: 'Restaurants',    customers: 8800,  gmvK: 340, baseRate: 0.71 },
+  { name: 'Fitness',        customers: 5600,  gmvK: 140, baseRate: 0.55 },
+  { name: 'Education',      customers: 3000,  gmvK: 190, baseRate: 0.48 },
+];
+let rateAdjust = 0;
+function renderBu() {
+  let totalRev = 0, totalCust = 0;
+  let html = '<thead><tr><th>$M, FY30</th><th>Customers</th><th>Avg GMV</th><th>Take rate</th><th>Revenue</th></tr></thead><tbody>';
+  VERTICALS.forEach(v => {
+    const rate = v.baseRate + rateAdjust;
+    const rev = (v.customers * v.gmvK * 1000 * rate / 100) / 1e6; // $M
+    totalRev += rev;
+    totalCust += v.customers;
+    html += `<tr><td>${v.name}</td><td>${v.customers.toLocaleString()}</td><td>$${v.gmvK}K</td><td>${rate.toFixed(2)}%</td><td>$${rev.toFixed(0)}</td></tr>`;
+  });
+  const avgRate = (rateAdjust + (VERTICALS.reduce((s, v) => s + v.baseRate, 0) / VERTICALS.length)).toFixed(2);
+  html += `<tr class="formula"><td>Total bottoms-up</td><td>${totalCust.toLocaleString()}</td><td>—</td><td>${avgRate}% avg</td><td>$${totalRev.toFixed(0)}</td></tr>`;
+  html += '</tbody>';
+  document.getElementById('buBuildTable').innerHTML = html;
+
+  // Insight text
+  const planRevenue = 160; // FY30 plan
+  const ratio = totalRev / planRevenue;
+  const insightEl = document.getElementById('bUpInsight');
+  const detailEl = document.getElementById('bUpDetail');
+  if (ratio >= 4) {
+    insightEl.textContent = `Bottoms-up triangulates ~${ratio.toFixed(1)}× our FY30 plan.`;
+    detailEl.textContent = 'The capture-rate assumption (38K customers / SAM-eligible 750K) is 5.1% — modest. Plan is internally conservative.';
+  } else if (ratio >= 2) {
+    insightEl.textContent = `Bottoms-up triangulates ${ratio.toFixed(1)}× our FY30 plan.`;
+    detailEl.textContent = 'Comfortable buffer over plan. Most of our internal growth assumptions hold even with this take-rate.';
+  } else if (ratio >= 1) {
+    insightEl.textContent = `Bottoms-up triangulates ${ratio.toFixed(1)}× our FY30 plan — narrow margin.`;
+    detailEl.textContent = 'Plan needs to clear with no execution slip. Revisit growth model if take-rate trends here.';
+  } else {
+    insightEl.textContent = `Bottoms-up at $${totalRev.toFixed(0)}M — below the $160M plan.`;
+    detailEl.textContent = 'Take-rate compression below 0.5% would invalidate the FY30 plan. Pricing pressure scenario to model.';
+  }
+}
+function updateAdjust() {
+  rateAdjust = parseFloat(document.getElementById('takeRateAdjust').value) || 0;
+  const sign = rateAdjust > 0 ? '+' : (rateAdjust < 0 ? '−' : '+');
+  document.getElementById('takeRateAdjustVal').textContent = sign + Math.abs(rateAdjust).toFixed(2) + 'pp';
+  renderBu();
+}
+document.getElementById('takeRateAdjust').addEventListener('input', updateAdjust);
+
 document.getElementById('themeToggle').addEventListener('click', () => {
   const cur = document.documentElement.getAttribute('data-theme') || 'dark';
   const next = cur === 'dark' ? 'light' : 'dark';
   document.documentElement.setAttribute('data-theme', next);
   try { localStorage.setItem('apollo-theme', next); } catch (e) {}
 });
+
+renderBu();
 </script>
 
 </div>
