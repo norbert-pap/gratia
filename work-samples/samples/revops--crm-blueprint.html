@@ -58,6 +58,7 @@
     <section class="page-head">
       <div>
         <div class="eyebrow-row">
+          <span class="sample-chip">Sample · illustrative data</span>
           <span class="eyebrow">CRM Blueprint · Salesforce + Marketing Cloud + ABM</span>
           <span class="status-chip" data-status="green"><span class="dot-pulse"></span>Approved · build kickoff Apr 22</span>
         </div>
@@ -193,21 +194,52 @@ document.getElementById('themeToggle').addEventListener('click', () => {
   try { localStorage.setItem('apollo-theme', next); } catch (e) {}
 });
 
+// Open a drawer with the layer + pill detail; reuses on-page text + adds owner/integrations
 document.querySelectorAll('.layer-pill').forEach(p => {
   p.addEventListener('click', () => {
-    const layer = p.closest('.arch-layer')?.querySelector('.layer-name')?.textContent.trim() || '';
-    const strong = p.querySelector('strong')?.textContent.trim() || '';
-    const meta = p.querySelector('.meta')?.textContent.trim() || '';
-    const fallback = p.textContent.trim().replace(/\s+/g, ' ').slice(0, 80);
-    const label = strong || fallback;
-    window.showToast && window.showToast(layer + ' · ' + label + (meta ? ' · ' + meta : ''), 'info');
+    const layer = (p.closest('.arch-layer')?.querySelector('.layer-name')?.textContent || '').trim();
+    const strong = (p.querySelector('strong')?.textContent || '').trim();
+    const meta = (p.querySelector('.meta')?.textContent || '').trim();
+    const isCore = p.closest('.arch-layer')?.classList.contains('core');
+    const body = `
+      <div class="drawer-section">
+        <h4>What it is</h4>
+        <p style="font-size: 12.5px; color: var(--ink-2); line-height: 1.6;">${meta || 'Component of the ' + layer + ' layer in the Stratos CRM architecture.'}</p>
+      </div>
+      <div class="drawer-section">
+        <h4>Architectural role</h4>
+        <div class="drawer-stat"><span class="lbl">Layer</span><span class="val">${layer}</span></div>
+        <div class="drawer-stat"><span class="lbl">Tier</span><span class="val">${isCore ? 'Core record (single source of truth)' : 'Built on core'}</span></div>
+        <div class="drawer-stat"><span class="lbl">Owner</span><span class="val">RevOps · Stratos</span></div>
+        <div class="drawer-stat"><span class="lbl">Status</span><span class="val">Approved · build kickoff Apr 22</span></div>
+      </div>
+      ${isCore ? '<div class="drawer-section"><div class="callout"><strong>Core record.</strong> Changes here propagate up through Layers 3 and 4. Schema changes go through architecture review.</div></div>' : ''}
+    `;
+    window.gratiaDrawer.open({ eyebrow: 'Architecture component · ' + layer, title: strong || 'Component', body });
   });
 });
+
+const OBJ_DETAIL = {
+  'Account': { fields: 'industry · ARR · NPS · health score · CSM owner · ICS tier', integrations: 'Marketo · Gainsight · Looker', records: '~4,200', key: 'Single account-of-truth — never duplicated' },
+  'Contact': { fields: 'role · seniority · buying-influence · last touched', integrations: 'Outreach · LinkedIn Sales Nav', records: '~28,000', key: 'Multi-account membership supported (e.g., consultants)' },
+  'Lead': { fields: 'source · UTM · MQL score · routing rule · status', integrations: 'Marketo · Drift · web forms', records: '~600 / mo', key: 'Auto-converts to existing accounts on email-domain match' },
+  'Opportunity': { fields: 'stage · close date · ACV · product line · loss reason', integrations: 'Clari (forecast roll-up)', records: '~340 open', key: 'Stage gates enforced; close date freshness alerted at 14 days' },
+  'Product': { fields: 'name · pricing · entitlements · SKU', integrations: 'CPQ · billing', records: '~22 SKUs', key: 'Drives upsell triggers on usage thresholds' },
+  'Quote': { fields: 'line items · discount · approval state · expiry', integrations: 'CPQ · DocuSign', records: '~280 / quarter', key: '12% discount auto-approved; deeper requires VP gate' },
+  'Case': { fields: 'severity · channel · CSM · resolution time', integrations: 'Zendesk · Slack · Status Page', records: '~140 open', key: 'P1 cases auto-create war-room channel in Slack' }
+};
 document.querySelectorAll('.obj-table tbody tr').forEach(tr => {
   tr.addEventListener('click', () => {
-    const name = tr.querySelector('.obj-name')?.textContent.trim() || '';
-    const purpose = tr.querySelector('.obj-purpose')?.textContent.trim() || '';
-    if (name) window.showToast && window.showToast(name + (purpose ? ' · ' + purpose.slice(0, 80) + (purpose.length > 80 ? '…' : '') : ''), 'info');
+    const name = (tr.querySelector('.obj-name')?.textContent || '').trim();
+    const purpose = (tr.querySelector('.obj-purpose')?.textContent || '').trim();
+    const detail = OBJ_DETAIL[name] || {};
+    const body = `
+      <div class="drawer-section"><h4>Purpose</h4><p style="font-size: 12.5px; color: var(--ink-2); line-height: 1.6;">${purpose || ''}</p></div>
+      ${detail.fields ? `<div class="drawer-section"><h4>Key fields</h4><div style="font-family: 'JetBrains Mono', monospace; font-size: 11.5px; color: var(--ink-2); line-height: 1.7;">${detail.fields}</div></div>` : ''}
+      ${detail.integrations || detail.records ? `<div class="drawer-section"><h4>Operational</h4>${detail.integrations ? `<div class="drawer-stat"><span class="lbl">Integrations</span><span class="val">${detail.integrations}</span></div>` : ''}${detail.records ? `<div class="drawer-stat"><span class="lbl">Active records</span><span class="val">${detail.records}</span></div>` : ''}</div>` : ''}
+      ${detail.key ? `<div class="drawer-section"><div class="callout"><strong>Key rule.</strong> ${detail.key}</div></div>` : ''}
+    `;
+    window.gratiaDrawer.open({ eyebrow: 'Salesforce object', title: name, body });
   });
 });
 </script>

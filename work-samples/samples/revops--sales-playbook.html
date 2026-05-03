@@ -53,6 +53,7 @@
     <section class="page-head">
       <div>
         <div class="eyebrow-row">
+          <span class="sample-chip">Sample · illustrative data</span>
           <span class="eyebrow">Outbound playbook · v2 · Q1 2026</span>
           <span class="status-chip" data-status="green"><span class="dot-pulse"></span>Validated · 28% reply rate</span>
         </div>
@@ -239,20 +240,75 @@ document.getElementById('themeToggle').addEventListener('click', () => {
   try { localStorage.setItem('apollo-theme', next); } catch (e) {}
 });
 
+// Reusable drawer for play + stage detail
+const PLAY_DETAIL = {
+  'Play 1': {
+    eyebrow: 'Play · highest-performing trigger',
+    title: 'Play 1 · "You just had a tabletop"',
+    body: `<div class="drawer-section"><h4>Performance · last 90 days</h4><div class="drawer-stat"><span class="lbl">Sends</span><span class="val">1,840</span></div><div class="drawer-stat"><span class="lbl">Reply rate</span><span class="val">32%</span></div><div class="drawer-stat"><span class="lbl">Demo-set rate</span><span class="val">11%</span></div><div class="drawer-stat"><span class="lbl">Opp creation rate</span><span class="val">5.4%</span></div><div class="drawer-stat"><span class="lbl">Pipeline created</span><span class="val">$2.1M</span></div><div class="drawer-stat"><span class="lbl">Closed won</span><span class="val">3 deals · $480K ACV</span></div></div>
+<div class="drawer-section"><h4>Why it works</h4><p style="font-size: 12.5px; color: var(--ink-2); line-height: 1.6;">Tabletop exercises trigger an internal "gap audit" mood at the buyer. SOC managers are looking for what failed in detection, response time, or escalation. Our hook leans into that — naming a specific thing that probably didn't work — rather than feature-pitching.</p></div>
+<div class="drawer-section"><h4>A/B winners</h4><div class="drawer-stat"><span class="lbl">Subject line</span><span class="val">"Tabletop debrief — 1 question"</span></div><div class="drawer-stat"><span class="lbl">Send time</span><span class="val">Tue/Wed 9am local</span></div><div class="drawer-stat"><span class="lbl">Best follow-up</span><span class="val">+3 days · case study</span></div></div>`
+  },
+  'Play 2': {
+    eyebrow: 'Play · pricing-pain wedge',
+    title: 'Play 2 · "You\'re paying twice for detection"',
+    body: `<div class="drawer-section"><h4>Performance · last 90 days</h4><div class="drawer-stat"><span class="lbl">Sends</span><span class="val">1,140</span></div><div class="drawer-stat"><span class="lbl">Reply rate</span><span class="val">26%</span></div><div class="drawer-stat"><span class="lbl">Demo-set rate</span><span class="val">8.2%</span></div><div class="drawer-stat"><span class="lbl">Opp creation rate</span><span class="val">4.1%</span></div><div class="drawer-stat"><span class="lbl">Pipeline created</span><span class="val">$1.3M</span></div></div>
+<div class="drawer-section"><h4>Why it works</h4><p style="font-size: 12.5px; color: var(--ink-2); line-height: 1.6;">2024 economic environment made every CISO line-itemize their tool stack. Buyers respond to a dollar argument when their CFO is breathing down their neck. We use BuiltWith + Datanyze signals to detect overlap and call it out specifically.</p></div>
+<div class="drawer-section"><h4>A/B winners</h4><div class="drawer-stat"><span class="lbl">Subject line</span><span class="val">"$X overlap on detection"</span></div><div class="drawer-stat"><span class="lbl">Best follow-up</span><span class="val">+2 days · ROI calc link</span></div></div>`
+  },
+  'Play 3': {
+    eyebrow: 'Play · regulatory wedge',
+    title: 'Play 3 · "Compliance forced your hand"',
+    body: `<div class="drawer-section"><h4>Performance · last 90 days</h4><div class="drawer-stat"><span class="lbl">Sends</span><span class="val">680</span></div><div class="drawer-stat"><span class="lbl">Reply rate</span><span class="val">24%</span></div><div class="drawer-stat"><span class="lbl">Demo-set rate</span><span class="val">9.4%</span></div><div class="drawer-stat"><span class="lbl">Avg deal cycle</span><span class="val">38 days (fastest of 3)</span></div><div class="drawer-stat"><span class="lbl">Win rate when in cycle</span><span class="val">61%</span></div></div>
+<div class="drawer-section"><h4>Why it works</h4><p style="font-size: 12.5px; color: var(--ink-2); line-height: 1.6;">Regulatory deadlines remove the "we'll get to it later" objection. SOX, SOC 2, CMMC, NYDFS Part 500 — each creates a forcing function. Lower volume, much higher conversion.</p></div>
+<div class="drawer-section"><h4>Targeting filters</h4><div class="drawer-stat"><span class="lbl">Industry</span><span class="val">Finserv, defense, healthcare</span></div><div class="drawer-stat"><span class="lbl">Audit-event signal</span><span class="val">PR / 8-K filings · 90-day window</span></div></div>`
+  }
+};
+const STAGE_DETAIL = {
+  '01 · Discover': {
+    eyebrow: 'Pipeline stage · 1 of 5',
+    title: 'Discover · identify a problem',
+    body: `<div class="drawer-section"><h4>Stage mechanics</h4><div class="drawer-stat"><span class="lbl">Owner</span><span class="val">SDR</span></div><div class="drawer-stat"><span class="lbl">Goal</span><span class="val">Discovery booked</span></div><div class="drawer-stat"><span class="lbl">Avg time-in-stage</span><span class="val">4 days</span></div><div class="drawer-stat"><span class="lbl">Conversion to next</span><span class="val">62%</span></div></div>
+<div class="drawer-section"><h4>What good looks like</h4><p style="font-size: 12.5px; color: var(--ink-2); line-height: 1.6;">Discovery is booked when the prospect has confirmed availability with a specific, mutually-held problem statement — not just a calendar slot. SDR sends a 3-line context note 24 hrs before to lock the agenda.</p></div>`
+  },
+  '02 · Qualify': {
+    eyebrow: 'Pipeline stage · 2 of 5',
+    title: 'Qualify · confirm pain & budget',
+    body: `<div class="drawer-section"><h4>Stage mechanics</h4><div class="drawer-stat"><span class="lbl">Owner</span><span class="val">AE</span></div><div class="drawer-stat"><span class="lbl">Goal</span><span class="val">BANT lite confirmed</span></div><div class="drawer-stat"><span class="lbl">Avg time-in-stage</span><span class="val">9 days</span></div><div class="drawer-stat"><span class="lbl">Conversion to next</span><span class="val">71%</span></div></div>
+<div class="drawer-section"><h4>BANT lite</h4><p style="font-size: 12.5px; color: var(--ink-2); line-height: 1.6;">We don't run full BANT — we confirm pain (named & priced), authority (decision-maker identified), and ballpark budget (range good enough to scope). Timeline is gated to fiscal year for now. AE writes a 1-paragraph pain statement; if they can't, we exit.</p></div>`
+  },
+  '03 · Demo': {
+    eyebrow: 'Pipeline stage · 3 of 5',
+    title: 'Demo · show one measurable claim',
+    body: `<div class="drawer-section"><h4>Stage mechanics</h4><div class="drawer-stat"><span class="lbl">Owner</span><span class="val">Lead SE</span></div><div class="drawer-stat"><span class="lbl">Goal</span><span class="val">Tech eval scoped</span></div><div class="drawer-stat"><span class="lbl">Avg time-in-stage</span><span class="val">11 days</span></div><div class="drawer-stat"><span class="lbl">Conversion to next</span><span class="val">58%</span></div></div>
+<div class="drawer-section"><h4>The one-number rule</h4><p style="font-size: 12.5px; color: var(--ink-2); line-height: 1.6;">No feature tour. Pick one number that matters to this buyer (false-positive rate, MTTR, alert volume). Build the demo around moving that number. The buyer leaves with one quantitative claim they can repeat to their boss.</p></div>`
+  },
+  '04 · Tech eval': {
+    eyebrow: 'Pipeline stage · 4 of 5',
+    title: 'Tech eval · run the gauntlet',
+    body: `<div class="drawer-section"><h4>Stage mechanics</h4><div class="drawer-stat"><span class="lbl">Owner</span><span class="val">SE</span></div><div class="drawer-stat"><span class="lbl">Goal</span><span class="val">Tech green-light</span></div><div class="drawer-stat"><span class="lbl">Avg time-in-stage</span><span class="val">14 days (fixed)</span></div><div class="drawer-stat"><span class="lbl">Conversion to next</span><span class="val">82%</span></div></div>
+<div class="drawer-section"><h4>What's in scope</h4><p style="font-size: 12.5px; color: var(--ink-2); line-height: 1.6;">Pre-scoped tests in their environment, not a generic POC. 5–8 specific scenarios written out before kickoff. Daily Slack updates from SE keep momentum. If a test fails, we triage same-day — no surprises at the readout.</p></div>`
+  },
+  '05 · Close': {
+    eyebrow: 'Pipeline stage · 5 of 5',
+    title: 'Close · buy & sign',
+    body: `<div class="drawer-section"><h4>Stage mechanics</h4><div class="drawer-stat"><span class="lbl">Owner</span><span class="val">AE</span></div><div class="drawer-stat"><span class="lbl">Goal</span><span class="val">Order form signed</span></div><div class="drawer-stat"><span class="lbl">Avg time-in-stage</span><span class="val">21 days (procurement-bound)</span></div><div class="drawer-stat"><span class="lbl">Win rate at this stage</span><span class="val">73%</span></div></div>
+<div class="drawer-section"><h4>Pricing discipline</h4><p style="font-size: 12.5px; color: var(--ink-2); line-height: 1.6;">Pricing presented after tech eval, never before. Standard 3-tier menu, no custom decks. AE has 12% discount authority; deeper requires VP sign-off + multi-year commit. We hold the line on a published price list — discounts are negotiation theatre.</p></div>`
+  }
+};
+
 document.querySelectorAll('.play-card').forEach(card => {
   card.addEventListener('click', () => {
-    const num = card.querySelector('.play-num')?.textContent.trim() || '';
-    const name = card.querySelector('.play-name')?.textContent.trim() || '';
-    const meta = card.querySelector('.play-meta')?.textContent.trim() || '';
-    window.showToast && window.showToast(num + ' · ' + name + (meta ? ' · ' + meta : ''), 'info');
+    const num = (card.querySelector('.play-num')?.textContent || '').trim();
+    const detail = PLAY_DETAIL[num];
+    if (detail) window.gratiaDrawer.open(detail);
   });
 });
 document.querySelectorAll('.stage-cell').forEach(cell => {
   cell.addEventListener('click', () => {
-    const num = cell.querySelector('.num')?.textContent.trim() || '';
-    const name = cell.querySelector('h3')?.textContent.trim() || '';
-    const gate = cell.querySelector('.gate')?.textContent.trim() || '';
-    window.showToast && window.showToast(num + ' · ' + name + (gate ? ' · ' + gate : ''), 'info');
+    const num = (cell.querySelector('.num')?.textContent || '').trim();
+    const detail = STAGE_DETAIL[num];
+    if (detail) window.gratiaDrawer.open(detail);
   });
 });
 </script>

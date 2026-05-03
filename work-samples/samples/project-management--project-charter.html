@@ -53,6 +53,7 @@
     <section class="page-head">
       <div>
         <div class="eyebrow-row">
+          <span class="sample-chip">Sample · illustrative data</span>
           <span class="eyebrow">Project Charter · v1.2 · Approved Apr 2026</span>
           <span class="status-chip" data-status="green"><span class="dot-pulse"></span>Approved by Steerco</span>
         </div>
@@ -219,30 +220,67 @@ document.getElementById('themeToggle').addEventListener('click', () => {
   try { localStorage.setItem('apollo-theme', next); } catch (e) {}
 });
 
+const CM_DETAIL = {
+  'Sponsor': { eyebrow: 'Charter meta · executive sponsor', title: 'Marcus Bell · CIO', body: `<div class="drawer-section"><h4>Role on this program</h4><p style="font-size: 12.5px; color: var(--ink-2); line-height: 1.6;">Final accountability for program outcome. Removes blockers across IT and lines-of-business. Reports program status to board quarterly.</p></div><div class="drawer-section"><h4>Engagement cadence</h4><div class="drawer-stat"><span class="lbl">Steerco</span><span class="val">Bi-weekly · Wed 4pm</span></div><div class="drawer-stat"><span class="lbl">Status updates</span><span class="val">Weekly written; ad-hoc Slack</span></div><div class="drawer-stat"><span class="lbl">Escalation SLA</span><span class="val">Same business day</span></div></div>` },
+  'Program lead': { eyebrow: 'Charter meta · program leadership', title: 'Andrea Sims · VP Core Platforms', body: `<div class="drawer-section"><h4>Role on this program</h4><p style="font-size: 12.5px; color: var(--ink-2); line-height: 1.6;">Day-to-day program owner. 70% of capacity is committed to this engagement through Wave 2 cutover. Direct reports: 4 workstream leads (deposits, lending, treasury, integration).</p></div><div class="drawer-section"><h4>Operating model</h4><div class="drawer-stat"><span class="lbl">Workstream leads</span><span class="val">4 (named)</span></div><div class="drawer-stat"><span class="lbl">Standup</span><span class="val">Daily 9am · 15 min</span></div><div class="drawer-stat"><span class="lbl">Wave kickoff</span><span class="val">3-day all-hands offsite</span></div></div>` },
+  'Budget': { eyebrow: 'Charter meta · approved capital', title: '$84M total program', body: `<div class="drawer-section"><h4>Allocation</h4><div class="drawer-stat"><span class="lbl">FIS license + cloud</span><span class="val">$28M</span></div><div class="drawer-stat"><span class="lbl">Implementation partner</span><span class="val">$22M</span></div><div class="drawer-stat"><span class="lbl">Internal labor (capex)</span><span class="val">$14M</span></div><div class="drawer-stat"><span class="lbl">Data migration tooling</span><span class="val">$5M</span></div><div class="drawer-stat"><span class="lbl">Internal opex (run team)</span><span class="val">$12M</span></div><div class="drawer-stat"><span class="lbl">Contingency (8%)</span><span class="val">$3M</span></div></div><div class="drawer-section"><h4>Approval gates</h4><p style="font-size: 12.5px; color: var(--ink-2); line-height: 1.6;">±5% variance approved by sponsor. >5% requires CFO + board notification. Program-lead has discretionary $200K reallocation authority within waves.</p></div>` },
+  'Timeline': { eyebrow: 'Charter meta · approved timeline', title: '18 months · Apr 26 → Sep 27', body: `<div class="drawer-section"><h4>Wave structure</h4><div class="drawer-stat"><span class="lbl">Wave 1 — Deposits + treasury</span><span class="val">Apr 26 → Q2 27 cutover</span></div><div class="drawer-stat"><span class="lbl">Wave 2 — Lending</span><span class="val">Q2 27 → Q4 27 cutover</span></div><div class="drawer-stat"><span class="lbl">Wave 3 — Treasury services</span><span class="val">Q4 27 → Q2 28 cutover (post-charter)</span></div></div><div class="drawer-section"><h4>Critical path risks</h4><p style="font-size: 12.5px; color: var(--ink-2); line-height: 1.6;">Data migration testing windows are the bottleneck — each wave needs 6 weeks of parallel-running before cutover. Holiday code-freeze (Nov–Jan) compresses planning.</p></div>` }
+};
+
 document.querySelectorAll('.cm-cell').forEach(c => {
   c.addEventListener('click', () => {
-    const lbl = c.querySelector('.l')?.textContent.trim() || '';
-    const v = c.querySelector('.v')?.textContent.trim() || '';
-    const meta = c.querySelector('.meta')?.textContent.trim() || '';
-    window.showToast && window.showToast(lbl + ' · ' + v + (meta ? ' · ' + meta : ''), 'info');
+    const lbl = (c.querySelector('.l')?.textContent || '').trim();
+    const detail = CM_DETAIL[lbl];
+    if (detail) window.gratiaDrawer.open(detail);
   });
 });
+
 document.querySelectorAll('.ms-table tbody tr').forEach(tr => {
   tr.addEventListener('click', () => {
     const cells = tr.querySelectorAll('td');
     if (cells.length === 0) return;
-    const date = tr.querySelector('.dt')?.textContent.trim() || '';
-    const name = cells[1]?.textContent.trim() || cells[0]?.textContent.trim() || '';
-    window.showToast && window.showToast((date ? date + ' · ' : '') + name, 'info');
+    const date = (tr.querySelector('.dt')?.textContent || '').trim();
+    const name = (cells[1]?.textContent || cells[0]?.textContent || '').trim();
+    const owner = (cells[2]?.textContent || '').trim();
+    const rest = [...cells].slice(3).map(c => c.textContent.trim()).filter(Boolean);
+    window.gratiaDrawer.open({
+      eyebrow: 'Milestone' + (date ? ' · ' + date : ''),
+      title: name,
+      body: `
+        <div class="drawer-section">
+          <h4>Milestone meta</h4>
+          ${date ? `<div class="drawer-stat"><span class="lbl">Target date</span><span class="val">${date}</span></div>` : ''}
+          ${owner ? `<div class="drawer-stat"><span class="lbl">Owner</span><span class="val">${owner}</span></div>` : ''}
+          ${rest.length ? `<div class="drawer-stat"><span class="lbl">Notes</span><span class="val" style="font-size: 11.5px; max-width: 60%; text-align: right;">${rest.join(' · ')}</span></div>` : ''}
+        </div>
+        <div class="drawer-section">
+          <h4>Definition of done</h4>
+          <p style="font-size: 12.5px; color: var(--ink-2); line-height: 1.6;">Steerco sign-off on artefact + entry of next-phase prerequisites confirmed by workstream leads.</p>
+        </div>
+      `
+    });
   });
 });
+
 document.querySelectorAll('.stake-table tbody tr').forEach(tr => {
   tr.addEventListener('click', () => {
-    const nm = tr.querySelector('.nm')?.textContent.trim() || tr.querySelector('td')?.textContent.trim() || '';
-    const rl = tr.querySelector('.rl')?.textContent.trim() || '';
-    window.showToast && window.showToast(nm + (rl ? ' · ' + rl : ''), 'info');
+    const nm = (tr.querySelector('.nm')?.textContent || tr.querySelector('td')?.textContent || '').trim();
+    const rl = (tr.querySelector('.rl')?.textContent || '').trim();
+    const cells = tr.querySelectorAll('td');
+    const phases = ['Charter', 'Wave 1', 'Wave 2', 'Cutover', 'Hypercare'];
+    let raciHtml = '';
+    [...cells].slice(1).forEach((c, i) => {
+      const text = c.textContent.trim();
+      if (text && phases[i]) raciHtml += `<div class="drawer-stat"><span class="lbl">${phases[i]}</span><span class="val">${text}</span></div>`;
+    });
+    window.gratiaDrawer.open({
+      eyebrow: 'Stakeholder · RACI by phase',
+      title: nm + (rl ? ' · ' + rl : ''),
+      body: `<div class="drawer-section"><h4>RACI per phase</h4>${raciHtml}</div><div class="drawer-section"><div class="callout"><strong>R</strong> = Responsible · <strong>A</strong> = Accountable · <strong>C</strong> = Consulted · <strong>I</strong> = Informed</div></div>`
+    });
   });
 });
+
 const raciMap = { r: 'Responsible — does the work', a: 'Accountable — owns the outcome', c: 'Consulted — input before action', i: 'Informed — kept in the loop' };
 document.querySelectorAll('.raci').forEach(r => {
   r.addEventListener('click', (e) => {

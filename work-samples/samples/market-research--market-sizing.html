@@ -65,6 +65,7 @@
     <section class="page-head">
       <div>
         <div class="eyebrow-row">
+          <span class="sample-chip">Sample · illustrative data</span>
           <span class="eyebrow">Market sizing · 5 verticals</span>
           <span class="status-chip" data-status="green"><span class="dot-pulse"></span>$2.8B SOM by 2030</span>
         </div>
@@ -208,20 +209,32 @@ document.getElementById('themeToggle').addEventListener('click', () => {
   try { localStorage.setItem('apollo-theme', next); } catch (e) {}
 });
 
+const FUNNEL_DETAIL = {
+  'TAM': { eyebrow: 'TAM · top-down', title: 'Total addressable market · $24B', body: `<div class="drawer-section"><h4>Source</h4><p style="font-size: 12.5px; color: var(--ink-2); line-height: 1.6;">Bain × Stripe 2024 embedded payments forecast for vertical SaaS, projected to 2030. Includes processing fees, instant-deposit, and merchant float revenue across all global vertical SaaS endpoints.</p></div><div class="drawer-section"><h4>Method</h4><div class="drawer-stat"><span class="lbl">Base year</span><span class="val">2024</span></div><div class="drawer-stat"><span class="lbl">Forecast year</span><span class="val">2030</span></div><div class="drawer-stat"><span class="lbl">CAGR assumed</span><span class="val">22%</span></div><div class="drawer-stat"><span class="lbl">Geography</span><span class="val">Global</span></div></div>` },
+  'SAM': { eyebrow: 'SAM · serviceable filter', title: 'Serviceable addressable · $7.2B', body: `<div class="drawer-section"><h4>Filter applied</h4><p style="font-size: 12.5px; color: var(--ink-2); line-height: 1.6;">Restricted to 5 vertical SaaS markets where we have working product-market fit signals: healthcare, field services, restaurants, fitness, education. Geography limited to North America (~62% of TAM remaining after vertical filter).</p></div><div class="drawer-section"><h4>Vertical contribution</h4><div class="drawer-stat"><span class="lbl">Healthcare</span><span class="val">$2.4B</span></div><div class="drawer-stat"><span class="lbl">Field services</span><span class="val">$1.8B</span></div><div class="drawer-stat"><span class="lbl">Restaurants</span><span class="val">$1.6B</span></div><div class="drawer-stat"><span class="lbl">Fitness</span><span class="val">$0.9B</span></div><div class="drawer-stat"><span class="lbl">Education</span><span class="val">$0.5B</span></div></div>` },
+  'SOM': { eyebrow: 'SOM · realistic capture', title: 'Serviceable obtainable · $2.8B', body: `<div class="drawer-section"><h4>Capture-rate logic</h4><p style="font-size: 12.5px; color: var(--ink-2); line-height: 1.6;">Triangulates with bottoms-up build. 39% of SAM is the assumed share for 2030 — inside-out: customer count × ARPU × take rate. Outside-in: market-share precedent for #2/3 player in vertical-SaaS embedded payments (Toast = ~28%, Mindbody = ~18%, Cetera ~12%).</p></div><div class="drawer-section"><h4>Sensitivity</h4><div class="drawer-stat"><span class="lbl">Conservative (25% capture)</span><span class="val">$1.8B</span></div><div class="drawer-stat"><span class="lbl">Base (39%)</span><span class="val">$2.8B</span></div><div class="drawer-stat"><span class="lbl">Stretch (52%)</span><span class="val">$3.7B</span></div></div>` },
+  'FY30 plan': { eyebrow: 'Internal target · Series C alignment', title: 'FY30 internal plan · $160M', body: `<div class="drawer-section"><h4>Plan composition</h4><div class="drawer-stat"><span class="lbl">Customers</span><span class="val">38,000</span></div><div class="drawer-stat"><span class="lbl">Avg payments revenue / customer</span><span class="val">$4,200/yr</span></div><div class="drawer-stat"><span class="lbl">Implied take rate</span><span class="val">0.6%</span></div><div class="drawer-stat"><span class="lbl">Capture vs SOM</span><span class="val">5.7%</span></div></div><div class="drawer-section"><div class="callout"><strong>Headroom.</strong> $160M plan is conservative — bottoms-up SOM at $2.8B leaves 17× headroom over 5+ years.</div></div>` }
+};
+const VERTICAL_DETAIL = {
+  'Healthcare':     { eyebrow: 'Bottoms-up · vertical', title: 'Healthcare', body: `<div class="drawer-section"><h4>Build</h4><div class="drawer-stat"><span class="lbl">Customers eligible</span><span class="val">9,200 mid-size practices</span></div><div class="drawer-stat"><span class="lbl">Avg GMV</span><span class="val">$280K/yr</span></div><div class="drawer-stat"><span class="lbl">Base take rate</span><span class="val">0.62%</span></div><div class="drawer-stat"><span class="lbl">Implied revenue (base)</span><span class="val">$16M</span></div></div><div class="drawer-section"><h4>Why we win here</h4><p style="font-size: 12.5px; color: var(--ink-2); line-height: 1.6;">Insurance billing complexity favors a vertical solution. PCI compliance is in our SOC 2 envelope. Network of 4 EHR integrations (Epic, Cerner, Athena, Practice Fusion) is the moat.</p></div>` },
+  'Field services': { eyebrow: 'Bottoms-up · vertical', title: 'Field services', body: `<div class="drawer-section"><h4>Build</h4><div class="drawer-stat"><span class="lbl">Customers eligible</span><span class="val">11,400 SMB ops</span></div><div class="drawer-stat"><span class="lbl">Avg GMV</span><span class="val">$210K/yr</span></div><div class="drawer-stat"><span class="lbl">Base take rate</span><span class="val">0.58%</span></div><div class="drawer-stat"><span class="lbl">Implied revenue (base)</span><span class="val">$14M</span></div></div><div class="drawer-section"><h4>Why we win here</h4><p style="font-size: 12.5px; color: var(--ink-2); line-height: 1.6;">QuickBooks-incompatible legacy bank UX is the wedge. Job-costing integration + net-30 financing on payments is the bundled offer.</p></div>` },
+  'Restaurants':    { eyebrow: 'Bottoms-up · vertical', title: 'Restaurants', body: `<div class="drawer-section"><h4>Build</h4><div class="drawer-stat"><span class="lbl">Customers eligible</span><span class="val">8,800 mid-size operators</span></div><div class="drawer-stat"><span class="lbl">Avg GMV</span><span class="val">$340K/yr</span></div><div class="drawer-stat"><span class="lbl">Base take rate</span><span class="val">0.71% (highest)</span></div><div class="drawer-stat"><span class="lbl">Implied revenue (base)</span><span class="val">$21M</span></div></div><div class="drawer-section"><h4>Constraint</h4><p style="font-size: 12.5px; color: var(--ink-2); line-height: 1.6;">Dominated by Toast and Square. Strategy is partnership, not direct compete. Modeled as 30% effective addressability of stated count.</p></div>` },
+  'Fitness':        { eyebrow: 'Bottoms-up · vertical', title: 'Fitness', body: `<div class="drawer-section"><h4>Build</h4><div class="drawer-stat"><span class="lbl">Customers eligible</span><span class="val">5,600 boutique studios</span></div><div class="drawer-stat"><span class="lbl">Avg GMV</span><span class="val">$140K/yr</span></div><div class="drawer-stat"><span class="lbl">Base take rate</span><span class="val">0.55%</span></div><div class="drawer-stat"><span class="lbl">Implied revenue (base)</span><span class="val">$4M</span></div></div><div class="drawer-section"><h4>Note</h4><p style="font-size: 12.5px; color: var(--ink-2); line-height: 1.6;">Mindbody-led market. Smaller but high-NRR cohort. Worth holding presence even if not a primary growth bet.</p></div>` },
+  'Education':      { eyebrow: 'Bottoms-up · vertical', title: 'Education', body: `<div class="drawer-section"><h4>Build</h4><div class="drawer-stat"><span class="lbl">Customers eligible</span><span class="val">3,000 K-12 + private</span></div><div class="drawer-stat"><span class="lbl">Avg GMV</span><span class="val">$190K/yr</span></div><div class="drawer-stat"><span class="lbl">Base take rate</span><span class="val">0.48%</span></div><div class="drawer-stat"><span class="lbl">Implied revenue (base)</span><span class="val">$3M</span></div></div><div class="drawer-section"><h4>Why low</h4><p style="font-size: 12.5px; color: var(--ink-2); line-height: 1.6;">Long procurement cycles + price-sensitive buyers. Consider for FY28+, not in current 18-month plan.</p></div>` }
+};
+
 document.querySelectorAll('.funnel-tier').forEach(t => {
   t.addEventListener('click', () => {
-    const lbl = t.querySelector('.ft-label')?.textContent.trim() || '';
-    const name = t.querySelector('.ft-name')?.textContent.trim() || '';
-    const num = t.querySelector('.ft-num .v')?.textContent.trim() || '';
-    const meta = t.querySelector('.ft-num .meta')?.textContent.trim() || '';
-    window.showToast && window.showToast(lbl + ' · ' + name + ' · ' + num + (meta ? ' (' + meta + ')' : ''), 'info');
+    const lbl = (t.querySelector('.ft-label')?.textContent || '').trim();
+    const detail = FUNNEL_DETAIL[lbl];
+    if (detail) window.gratiaDrawer.open(detail);
   });
 });
 document.querySelectorAll('.vertical-grid:not(.head)').forEach(row => {
   row.addEventListener('click', () => {
-    const name = row.querySelector('.v-name')?.textContent.trim() || '';
-    const nums = [...row.querySelectorAll('.v-num')].map(n => n.textContent.trim()).filter(Boolean);
-    if (name) window.showToast && window.showToast(name + (nums.length ? ' · ' + nums.join(' / ') : ''), 'info');
+    const name = (row.querySelector('.v-name')?.textContent || '').trim();
+    const detail = VERTICAL_DETAIL[name];
+    if (detail) window.gratiaDrawer.open(detail);
   });
 });
 

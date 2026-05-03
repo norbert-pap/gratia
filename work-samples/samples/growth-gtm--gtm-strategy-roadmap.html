@@ -59,6 +59,7 @@
     <section class="page-head">
       <div>
         <div class="eyebrow-row">
+          <span class="sample-chip">Sample · illustrative data</span>
           <span class="eyebrow">FY26 GTM · Enterprise focus</span>
           <span class="status-chip" data-status="green"><span class="dot-pulse"></span>Recommended path locked</span>
         </div>
@@ -163,25 +164,65 @@ document.getElementById('themeToggle').addEventListener('click', () => {
   try { localStorage.setItem('apollo-theme', next); } catch (e) {}
 });
 
+const ICP_DETAIL = {
+  'Enterprise data & analytics teams': {
+    eyebrow: 'ICP · primary · 80% capacity',
+    title: 'Enterprise data & analytics teams',
+    body: `<div class="drawer-section"><h4>Why this is the bet</h4><p style="font-size: 12.5px; color: var(--ink-2); line-height: 1.6;">4 enterprise wins last year happened ad-hoc — without a dedicated motion. Each was profitable but unrepeatable. Building the engine to run this play 30+ times a year is the FY26 bet.</p></div>
+<div class="drawer-section"><h4>Unit economics</h4><div class="drawer-stat"><span class="lbl">Avg ACV</span><span class="val">$280K</span></div><div class="drawer-stat"><span class="lbl">Sales cycle</span><span class="val">112 days</span></div><div class="drawer-stat"><span class="lbl">Win rate</span><span class="val">26%</span></div><div class="drawer-stat"><span class="lbl">Blended CAC</span><span class="val">$48K</span></div><div class="drawer-stat"><span class="lbl">Gross margin</span><span class="val">82%</span></div><div class="drawer-stat"><span class="lbl">Payback</span><span class="val">7 mo</span></div><div class="drawer-stat"><span class="lbl">3-yr LTV</span><span class="val">$680K</span></div></div>
+<div class="drawer-section"><h4>Buyer & wedge</h4><div class="drawer-stat"><span class="lbl">Economic buyer</span><span class="val">VP Data / Head of Analytics</span></div><div class="drawer-stat"><span class="lbl">Champion</span><span class="val">Senior Analytics Eng</span></div><div class="drawer-stat"><span class="lbl">Wedge</span><span class="val">Custom semantic layer</span></div><div class="drawer-stat"><span class="lbl">Trust signals</span><span class="val">SOC 2 Type II · dbt + Snowflake native</span></div></div>
+<div class="drawer-section"><h4>Hiring plan</h4><div class="drawer-stat"><span class="lbl">Enterprise AEs</span><span class="val">6 (3 by Q2, 3 by Q4)</span></div><div class="drawer-stat"><span class="lbl">Solutions consultants</span><span class="val">3</span></div><div class="drawer-stat"><span class="lbl">Field SEs</span><span class="val">2</span></div></div>`
+  },
+  'Mid-market analytics teams': {
+    eyebrow: 'ICP · hold · 18% capacity',
+    title: 'Mid-market analytics teams',
+    body: `<div class="drawer-section"><h4>Why hold, not grow</h4><p style="font-size: 12.5px; color: var(--ink-2); line-height: 1.6;">PLG funnel is healthy and we win consistently here, but the segment is product-bound — adding sales capacity won't move the needle. Volume is capped by signups; signups are capped by current product fit. No incremental investment makes sense.</p></div>
+<div class="drawer-section"><h4>Unit economics</h4><div class="drawer-stat"><span class="lbl">Avg ACV</span><span class="val">$42K</span></div><div class="drawer-stat"><span class="lbl">Sales cycle</span><span class="val">38 days</span></div><div class="drawer-stat"><span class="lbl">Win rate</span><span class="val">42%</span></div><div class="drawer-stat"><span class="lbl">Blended CAC</span><span class="val">$8K</span></div><div class="drawer-stat"><span class="lbl">Payback</span><span class="val">4 mo</span></div></div>
+<div class="drawer-section"><h4>Operating model</h4><p style="font-size: 12.5px; color: var(--ink-2); line-height: 1.6;">PLG funnel + light sales-assist. 2 hybrid AEs cover the entire mid-market book. Customer success is shared with self-serve. Hold spend flat at ~$420K/yr.</p></div>`
+  },
+  'SMB self-serve': {
+    eyebrow: 'ICP · sunset · 0% capacity',
+    title: 'SMB self-serve',
+    body: `<div class="drawer-section"><h4>Why sunset</h4><p style="font-size: 12.5px; color: var(--ink-2); line-height: 1.6;">LTV:CAC of 0.7× — every SMB self-serve customer destroys value over their lifetime. 52% annual churn means the cohort never recovers acquisition cost. Free tier becomes the gateway; paid SMB tier deprecates Q3.</p></div>
+<div class="drawer-section"><h4>Failed economics</h4><div class="drawer-stat"><span class="lbl">CAC</span><span class="val">$2,400</span></div><div class="drawer-stat"><span class="lbl">Avg ACV</span><span class="val">$1,200</span></div><div class="drawer-stat"><span class="lbl">Annual churn</span><span class="val">52%</span></div><div class="drawer-stat"><span class="lbl">LTV : CAC</span><span class="val">0.7×</span></div><div class="drawer-stat"><span class="lbl">Annual loss</span><span class="val">~$420K (180 customers)</span></div></div>
+<div class="drawer-section"><h4>Migration plan</h4><p style="font-size: 12.5px; color: var(--ink-2); line-height: 1.6;">~180 paying SMB customers move to community tier on Q3 renewal. White-glove migration — preserve their data + dashboards on community. Estimated 35% will churn entirely; the rest stay as community users + brand ambassadors.</p></div>`
+  }
+};
+const QUARTER_DETAIL = {
+  'Q1 26': { eyebrow: 'Roadmap · Q1 FY26', title: 'Q1 26 · foundation', body: `<div class="drawer-section"><h4>Workstreams</h4><div class="drawer-stat"><span class="lbl">Hiring</span><span class="val">3 enterprise AEs · 1 SC</span></div><div class="drawer-stat"><span class="lbl">Product</span><span class="val">SOC 2 Type II audit close</span></div><div class="drawer-stat"><span class="lbl">Marketing</span><span class="val">Enterprise positioning · case studies</span></div><div class="drawer-stat"><span class="lbl">Outbound</span><span class="val">Allbound playbook v1</span></div></div><div class="drawer-section"><h4>Exit gates</h4><p style="font-size: 12.5px; color: var(--ink-2);">3 enterprise AEs onboarded and ramped. SOC 2 Type II report shipped. 4 named-account playbooks in CRM.</p></div>` },
+  'Q2 26': { eyebrow: 'Roadmap · Q2 FY26', title: 'Q2 26 · activate', body: `<div class="drawer-section"><h4>Workstreams</h4><div class="drawer-stat"><span class="lbl">Hiring</span><span class="val">+3 AEs · 2 BDRs · 1 RVP</span></div><div class="drawer-stat"><span class="lbl">Product</span><span class="val">Custom semantic layer GA</span></div><div class="drawer-stat"><span class="lbl">Sales</span><span class="val">First $1M deal in pipeline</span></div></div><div class="drawer-section"><h4>Exit gates</h4><p style="font-size: 12.5px; color: var(--ink-2);">$8M qualified pipeline · 3 enterprise design partners committed.</p></div>` },
+  'Q3 26': { eyebrow: 'Roadmap · Q3 FY26', title: 'Q3 26 · close & sunset', body: `<div class="drawer-section"><h4>Workstreams</h4><div class="drawer-stat"><span class="lbl">Sales</span><span class="val">Close 4 enterprise wins</span></div><div class="drawer-stat"><span class="lbl">Operations</span><span class="val">SMB sunset migration</span></div><div class="drawer-stat"><span class="lbl">Customer</span><span class="val">First QBRs with new logos</span></div></div><div class="drawer-section"><h4>Exit gates</h4><p style="font-size: 12.5px; color: var(--ink-2);">$1.4M new ARR booked · SMB community migration complete · NRR ≥ 110% across pilot enterprise cohort.</p></div>` },
+  'Q4 26': { eyebrow: 'Roadmap · Q4 FY26', title: 'Q4 26 · scale signal', body: `<div class="drawer-section"><h4>Workstreams</h4><div class="drawer-stat"><span class="lbl">Sales</span><span class="val">Repeatability proof — 6+ wins</span></div><div class="drawer-stat"><span class="lbl">Marketing</span><span class="val">Field events · 2 industry tracks</span></div><div class="drawer-stat"><span class="lbl">Product</span><span class="val">Multi-region deployment GA</span></div></div><div class="drawer-section"><h4>Exit gates</h4><p style="font-size: 12.5px; color: var(--ink-2);">$5.4M new enterprise ARR · 8 logos · pipeline coverage 4×.</p></div>` }
+};
+
 document.querySelectorAll('.icp-card').forEach(c => {
   c.addEventListener('click', () => {
-    const tag = c.querySelector('.tag')?.textContent.trim() || '';
-    const name = c.querySelector('h3')?.textContent.trim() || '';
-    window.showToast && window.showToast(name + ' · ' + tag, 'info');
+    const name = (c.querySelector('h3')?.textContent || '').trim();
+    const detail = ICP_DETAIL[name];
+    if (detail) window.gratiaDrawer.open(detail);
   });
 });
 document.querySelectorAll('.qcard').forEach(c => {
   c.addEventListener('click', () => {
-    const q = c.querySelector('h3')?.textContent.trim() || '';
-    const items = c.querySelectorAll('ul li').length;
-    window.showToast && window.showToast(q + ' · ' + items + ' workstream' + (items === 1 ? '' : 's'), 'info');
+    const q = (c.querySelector('h3')?.textContent || '').trim();
+    const detail = QUARTER_DETAIL[q];
+    if (detail) window.gratiaDrawer.open(detail);
+    else {
+      const items = c.querySelectorAll('ul li').length;
+      window.showToast && window.showToast(q + ' · ' + items + ' workstreams', 'info');
+    }
   });
 });
 document.querySelectorAll('.motion-row').forEach(r => {
   r.addEventListener('click', () => {
-    const tag = r.querySelector('.motion-tag')?.firstChild?.textContent.trim() || '';
-    const meta = r.querySelector('.motion-tag .meta')?.textContent.trim() || '';
-    window.showToast && window.showToast(tag + (meta ? ' · ' + meta : ''), 'info');
+    const motionLabel = (r.querySelector('.motion-tag')?.childNodes[0]?.textContent || '').trim();
+    const meta = (r.querySelector('.motion-tag .meta')?.textContent || '').trim();
+    const body = (r.querySelector('.motion-body')?.innerHTML || '');
+    window.gratiaDrawer.open({
+      eyebrow: 'GTM motion' + (meta ? ' · ' + meta : ''),
+      title: motionLabel,
+      body: '<div class="drawer-section"><div style="font-size: 13px; color: var(--ink-1); line-height: 1.6;">' + body + '</div></div>'
+    });
   });
 });
 </script>

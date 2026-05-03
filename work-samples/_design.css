@@ -134,6 +134,20 @@ body {
 .status-chip .dot-pulse { width: 5px; height: 5px; border-radius: 50%; background: currentColor; box-shadow: 0 0 0 2px color-mix(in srgb, currentColor 18%, transparent); animation: pulse 1.6s infinite; }
 @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.45; } }
 
+/* ==== SAMPLE CHIP (trust signal: this is illustrative, not real client data) ==== */
+.sample-chip {
+  display: inline-flex; align-items: center; gap: 6px;
+  height: 22px; padding: 0 10px;
+  border-radius: 4px;
+  font-size: 10px; font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+  color: var(--ink-2); background: var(--bg-2); border: 1px dashed var(--border-2);
+  font-variant-numeric: tabular-nums;
+}
+.sample-chip::before {
+  content: ''; width: 6px; height: 6px; border-radius: 50%;
+  background: var(--amber); box-shadow: 0 0 0 2px var(--amber-dim);
+}
+
 /* ==== PERIOD BAR ==== */
 .period-bar { display: flex; align-items: center; gap: 6px; margin-bottom: 22px; padding: 10px 12px; background: var(--bg-1); border: 1px solid var(--border); border-radius: 8px; flex-wrap: wrap; }
 .period-label { font-size: 10px; font-weight: 600; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.12em; margin-right: 6px; }
