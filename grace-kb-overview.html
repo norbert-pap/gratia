@@ -164,7 +164,7 @@ body {
 @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.45; } }
 
 /* ==== KPI ==== */
-.kpi-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 8px; margin-bottom: 28px; overflow: hidden; }
+.kpi-row { display: grid; grid-template-columns: repeat(5, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 8px; margin-bottom: 28px; overflow: hidden; }
 .kpi { background: var(--bg-1); padding: 14px 18px; display: flex; flex-direction: column; gap: 4px; }
 .kpi .label { font-size: 10.5px; font-weight: 500; letter-spacing: 0.06em; text-transform: uppercase; color: var(--ink-3); }
 .kpi .value { font-family: 'Inter', sans-serif; font-size: 28px; font-weight: 600; letter-spacing: -0.022em; color: var(--ink-0); line-height: 1.05; display: flex; align-items: baseline; gap: 6px; margin-top: 4px; }
@@ -470,6 +470,121 @@ body {
 .fu-card.inbound ol li::before { background: var(--blue-dim); color: var(--blue); }
 .fu-card code { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--gold-ink); background: var(--bg-2); padding: 1px 5px; border-radius: 3px; }
 
+/* ==== PRACTICE CASE DETAIL ==== */
+.case-list { display: flex; flex-direction: column; gap: 10px; margin-bottom: 18px; }
+.case-item { background: var(--bg-1); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; transition: border-color 0.14s; }
+.case-item:hover { border-color: var(--border-2); }
+.case-item[open] { border-color: var(--gold-line); }
+.case-summary { list-style: none; padding: 14px 18px; display: flex; align-items: center; gap: 14px; cursor: pointer; transition: background 0.12s; }
+.case-summary::-webkit-details-marker { display: none; }
+.case-summary:hover { background: var(--row-hover); }
+.case-difficulty { font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 700; padding: 3px 8px; border-radius: 4px; letter-spacing: 0.1em; flex-shrink: 0; min-width: 64px; text-align: center; }
+.case-difficulty[data-diff="foundational"] { background: var(--blue-dim); color: var(--blue); border: 1px solid var(--blue-line); }
+.case-difficulty[data-diff="intermediate"] { background: var(--amber-dim); color: var(--amber-ink); border: 1px solid var(--amber-line); }
+.case-difficulty[data-diff="advanced"] { background: var(--red-dim); color: var(--red-ink); border: 1px solid var(--red-line); }
+.case-name { font-size: 14px; font-weight: 600; color: var(--ink-0); letter-spacing: -0.01em; flex: 1; }
+.case-meta { font-size: 11.5px; color: var(--ink-3); display: flex; align-items: center; gap: 8px; flex-wrap: wrap; justify-content: flex-end; }
+.case-meta span { white-space: nowrap; }
+.case-chev { color: var(--ink-3); transition: transform 0.18s; flex-shrink: 0; }
+.case-item[open] .case-chev { transform: rotate(90deg); color: var(--gold-ink); }
+
+.case-body { padding: 0 18px 20px; border-top: 1px solid var(--border); padding-top: 18px; display: flex; flex-direction: column; gap: 18px; }
+.case-persona { display: flex; align-items: flex-start; gap: 14px; padding: 14px 16px; background: var(--bg-2); border: 1px solid var(--border); border-radius: 8px; }
+.persona-avatar { width: 44px; height: 44px; border-radius: 50%; background: linear-gradient(135deg, var(--gold), var(--gold-bright)); color: white; font-weight: 600; font-size: 14px; display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; letter-spacing: 0.02em; }
+.persona-info { flex: 1; min-width: 0; }
+.persona-info h4 { font-size: 14px; font-weight: 600; color: var(--ink-0); letter-spacing: -0.01em; margin-bottom: 3px; }
+.persona-info .pcompany { font-size: 12.5px; color: var(--ink-2); line-height: 1.55; }
+.persona-info .ptone { font-size: 11.5px; color: var(--ink-3); margin-top: 6px; padding-top: 6px; border-top: 1px dashed var(--border); line-height: 1.5; font-style: italic; }
+.persona-info .ptone strong { color: var(--ink-2); font-style: normal; font-weight: 600; }
+
+.case-section h5 { font-size: 11px; font-weight: 600; letter-spacing: 0.08em; text-transform: uppercase; color: var(--ink-3); margin-bottom: 8px; }
+.brief-quote { padding: 12px 14px 12px 18px; background: var(--bg-2); border-left: 3px solid var(--gold); border-radius: 4px; font-size: 13px; color: var(--ink-1); line-height: 1.6; font-style: italic; }
+.brief-quote::before { content: '"'; color: var(--gold-ink); font-size: 22px; line-height: 0.5; margin-right: 4px; vertical-align: -2px; font-style: normal; font-weight: 700; }
+
+.stage-flow { display: flex; flex-direction: column; gap: 8px; }
+.stage-row { display: grid; grid-template-columns: 36px 1fr; gap: 12px; padding: 12px 14px; background: var(--bg-2); border: 1px solid var(--border); border-radius: 6px; }
+.stage-num { width: 26px; height: 26px; border-radius: 50%; background: var(--gold-dim); color: var(--gold-ink); border: 1px solid var(--gold-line); display: inline-flex; align-items: center; justify-content: center; font-family: 'JetBrains Mono', monospace; font-size: 11px; font-weight: 700; }
+.stage-content { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
+.stage-name { font-size: 13px; font-weight: 600; color: var(--ink-0); letter-spacing: -0.01em; display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.stage-name .pass-badge { font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 600; padding: 2px 6px; border-radius: 3px; background: var(--bg-3); color: var(--ink-2); border: 1px solid var(--border); letter-spacing: 0.04em; }
+.stage-obj { font-size: 12px; color: var(--ink-2); line-height: 1.55; }
+.stage-meta { font-size: 11px; color: var(--ink-3); display: flex; align-items: center; gap: 8px; flex-wrap: wrap; padding-top: 4px; border-top: 1px dashed var(--border); margin-top: 2px; }
+.stage-meta .artifact-pill { display: inline-flex; align-items: center; gap: 4px; padding: 2px 7px; background: var(--bg-3); border: 1px solid var(--border); border-radius: 3px; color: var(--ink-2); font-size: 11px; }
+.stage-meta .artifact-pill.has-qa { background: var(--gold-dim); color: var(--gold-ink); border-color: var(--gold-line); }
+.stage-meta .artifact-pill.has-qa::before { content: '↳'; opacity: 0.7; }
+
+.twist-row { background: var(--amber-dim); border: 1px solid var(--amber-line); border-radius: 6px; padding: 12px 14px 12px 14px; position: relative; display: flex; flex-direction: column; gap: 6px; margin-left: 12px; }
+.twist-row::before { content: '⚠'; position: absolute; left: -16px; top: 16px; width: 24px; height: 24px; border-radius: 50%; background: var(--amber-dim); color: var(--amber-ink); border: 1px solid var(--amber-line); display: inline-flex; align-items: center; justify-content: center; font-size: 12px; }
+.twist-label { font-size: 10px; font-weight: 700; letter-spacing: 0.12em; color: var(--amber-ink); text-transform: uppercase; }
+.twist-label .twist-id { font-family: 'JetBrains Mono', monospace; opacity: 0.8; margin-left: 6px; }
+.twist-msg { font-size: 12.5px; color: var(--ink-1); line-height: 1.55; font-style: italic; }
+.twist-affects { font-size: 11.5px; color: var(--ink-2); line-height: 1.5; padding-top: 6px; border-top: 1px dashed var(--amber-line); margin-top: 4px; }
+.twist-affects strong { color: var(--amber-ink); font-style: normal; font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em; font-size: 10px; margin-right: 6px; }
+
+.attribution-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1px; background: var(--border); border: 1px solid var(--border); border-radius: 6px; overflow: hidden; }
+.attr-cell { background: var(--bg-2); padding: 10px 14px; }
+.attr-cell .eyebrow { display: block; margin-bottom: 5px; }
+.attr-cell .pills { display: flex; flex-wrap: wrap; gap: 4px; }
+.attr-cell .pills .ap { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; padding: 2px 7px; border-radius: 3px; background: var(--bg-3); color: var(--ink-1); border: 1px solid var(--border); }
+.attr-cell .pts { font-family: 'Inter', sans-serif; font-size: 14px; font-weight: 600; color: var(--ink-0); font-variant-numeric: tabular-nums; }
+.attr-cell .pts .pts-meta { font-size: 11px; color: var(--ink-3); font-weight: 500; margin-left: 6px; }
+
+.custhint { font-size: 11.5px; color: var(--ink-2); line-height: 1.55; padding: 10px 12px; background: var(--bg-2); border: 1px dashed var(--border); border-radius: 6px; }
+.custhint strong { color: var(--ink-1); font-weight: 600; }
+
+/* ==== ASSESSMENT SECTION ==== */
+.assess-card { background: var(--bg-1); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+.assess-head { padding: 16px 20px; border-bottom: 1px solid var(--border); display: flex; align-items: flex-start; gap: 16px; flex-wrap: wrap; }
+.assess-head .acode { font-family: 'JetBrains Mono', monospace; font-size: 11px; padding: 3px 8px; border-radius: 4px; background: var(--gold-dim); color: var(--gold-ink); border: 1px solid var(--gold-line); flex-shrink: 0; letter-spacing: 0.04em; }
+.assess-head .ainfo { flex: 1; min-width: 0; }
+.assess-head h3 { font-size: 16px; font-weight: 600; color: var(--ink-0); letter-spacing: -0.014em; margin-bottom: 4px; }
+.assess-head p { font-size: 12.5px; color: var(--ink-2); line-height: 1.55; }
+.assess-head .status-chip { flex-shrink: 0; align-self: flex-start; }
+.assess-body { padding: 18px 20px; display: flex; flex-direction: column; gap: 18px; }
+
+.mode-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.mode-card { padding: 12px 14px; background: var(--bg-2); border: 1px solid var(--border); border-radius: 6px; }
+.mode-card.primary { background: var(--gold-dim); border-color: var(--gold-line); }
+.mode-card .mtitle { font-size: 13px; font-weight: 600; color: var(--ink-0); margin-bottom: 4px; display: flex; align-items: center; gap: 8px; }
+.mode-card.primary .mtitle { color: var(--gold-ink); }
+.mode-card .mtitle .mtag { font-family: 'JetBrains Mono', monospace; font-size: 10px; font-weight: 600; padding: 2px 6px; border-radius: 3px; background: var(--bg-3); color: var(--ink-2); }
+.mode-card.primary .mtitle .mtag { background: var(--bg-1); color: var(--gold-ink); border: 1px solid var(--gold-line); }
+.mode-card .mdesc { font-size: 12px; color: var(--ink-2); line-height: 1.55; }
+
+.dim-pill-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; }
+.dim-pill { padding: 10px 12px; background: var(--bg-2); border: 1px solid var(--border); border-radius: 6px; }
+.dim-pill .dnum { font-family: 'JetBrains Mono', monospace; font-size: 9.5px; color: var(--gold-ink); letter-spacing: 0.06em; }
+.dim-pill .dname { font-size: 12.5px; font-weight: 600; color: var(--ink-0); margin: 3px 0 4px; letter-spacing: -0.01em; }
+.dim-pill .dwhen { font-size: 10.5px; color: var(--ink-3); line-height: 1.45; }
+.dim-pill .dwhen.always { color: var(--gold-ink); }
+
+.q-format-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.qfmt-card { padding: 12px 14px; background: var(--bg-2); border: 1px solid var(--border); border-radius: 6px; }
+.qfmt-card .qftype { font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: var(--blue); padding: 2px 7px; background: var(--blue-dim); border: 1px solid var(--blue-line); border-radius: 3px; display: inline-block; margin-bottom: 6px; letter-spacing: 0.04em; }
+.qfmt-card.free .qftype { color: var(--violet); background: var(--violet-dim); border-color: var(--violet-line); }
+.qfmt-card .qftitle { font-size: 12.5px; font-weight: 600; color: var(--ink-0); margin-bottom: 5px; }
+.qfmt-card .qfdesc { font-size: 11.5px; color: var(--ink-2); line-height: 1.55; }
+.qfmt-card .qfscore { font-size: 11px; color: var(--ink-3); margin-top: 8px; padding-top: 8px; border-top: 1px dashed var(--border); font-family: 'JetBrains Mono', monospace; }
+
+.q-sample { padding: 12px 14px; background: var(--bg-2); border: 1px solid var(--border); border-radius: 6px; }
+.q-sample .qslabel { font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; color: var(--gold-ink); margin-bottom: 6px; }
+.q-sample .qstem { font-size: 12.5px; color: var(--ink-1); line-height: 1.55; margin-bottom: 8px; }
+.q-sample .qopts { display: flex; flex-direction: column; gap: 4px; }
+.q-sample .qopt { display: grid; grid-template-columns: 24px 1fr 28px; gap: 8px; padding: 6px 8px; background: var(--bg-1); border: 1px solid var(--border); border-radius: 4px; font-size: 11.5px; color: var(--ink-2); align-items: center; }
+.q-sample .qopt .ol { font-family: 'JetBrains Mono', monospace; color: var(--ink-3); }
+.q-sample .qopt.correct { background: var(--gold-dim); border-color: var(--gold-line); color: var(--ink-1); }
+.q-sample .qopt.correct .ol { color: var(--gold-ink); }
+.q-sample .qopt .qscore { font-family: 'JetBrains Mono', monospace; font-weight: 600; font-size: 10.5px; color: var(--ink-3); text-align: right; }
+.q-sample .qopt.correct .qscore { color: var(--gold-bright); }
+
+.scoring-formula { padding: 14px 16px; background: var(--bg-2); border: 1px solid var(--border); border-radius: 6px; font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--ink-1); line-height: 1.7; }
+.scoring-formula .label { color: var(--ink-3); display: inline-block; min-width: 130px; }
+.scoring-formula .formula { color: var(--gold-ink); }
+
+.report-sections { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; }
+.report-section-pill { padding: 8px 10px; background: var(--bg-2); border: 1px solid var(--border); border-radius: 4px; font-size: 11px; color: var(--ink-2); display: flex; align-items: center; gap: 6px; }
+.report-section-pill .rsnum { font-family: 'JetBrains Mono', monospace; color: var(--gold-ink); font-weight: 600; }
+
 /* ==== FOOTER ==== */
 .footer { margin-top: 40px; padding: 16px 0; border-top: 1px solid var(--border); display: flex; justify-content: space-between; gap: 14px; font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: var(--ink-3); letter-spacing: 0.04em; flex-wrap: wrap; }
 
@@ -481,6 +596,9 @@ body {
   .ev-grid { grid-template-columns: repeat(3, 1fr); }
   .vetting-flow, .source-flow { grid-template-columns: repeat(2, 1fr); }
   .vetting-step::after { display: none; }
+  .dim-pill-grid { grid-template-columns: repeat(3, 1fr); }
+  .report-sections { grid-template-columns: repeat(3, 1fr); }
+  .attribution-row { grid-template-columns: 1fr; gap: 1px; }
 }
 @media (max-width: 880px) {
   .layout { grid-template-columns: 1fr; gap: 0; }
@@ -503,6 +621,10 @@ body {
   .spec-body { grid-template-columns: 1fr; }
   .brief-status-flow { grid-template-columns: 1fr; }
   .score-tier-grid { grid-template-columns: repeat(2, 1fr); }
+  .dim-pill-grid { grid-template-columns: repeat(2, 1fr); }
+  .mode-grid, .q-format-grid { grid-template-columns: 1fr; }
+  .report-sections { grid-template-columns: repeat(2, 1fr); }
+  .case-meta { display: none; }
 }
 
 /* ==== PRINT ==== */
@@ -530,7 +652,7 @@ body {
     <div class="nctx-2">Overview & gap list · working doc for the co-founder</div>
   </div>
   <div class="nav-right">
-    <button class="btn amber" id="gapJump"><span>14 gaps</span><span class="ct">to fill</span></button>
+    <button class="btn amber" id="gapJump"><span>18 gaps</span><span class="ct">to fill</span></button>
     <button class="icon-btn theme-toggle" id="themeToggle" aria-label="Toggle theme">
       <svg class="ti-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
       <svg class="ti-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
@@ -551,6 +673,7 @@ body {
       <a class="toc-link" href="#services"><span class="toc-num">7</span><span>Service types</span></a>
       <a class="toc-link" href="#vetting"><span class="toc-num">8</span><span>Vetting process</span></a>
       <a class="toc-link" href="#briefs"><span class="toc-num">9</span><span>Project briefs</span></a>
+      <a class="toc-link" href="#assessments"><span class="toc-num">10</span><span>Assessments &amp; cases</span></a>
     </div>
     <div class="toc-card amber-card">
       <span class="eyebrow">Gaps to fill</span>
@@ -558,6 +681,7 @@ body {
       <a class="toc-link" href="#gap-discovery">Discovery refund policy</a>
       <a class="toc-link" href="#gap-pricing">Margin, discounts, premium uplift</a>
       <a class="toc-link" href="#gap-briefs">Brief intake automation</a>
+      <a class="toc-link" href="#gap-assess">Domain skill assessments &amp; case coverage</a>
     </div>
   </aside>
 
@@ -575,8 +699,9 @@ body {
     <div class="kpi-row">
       <div class="kpi"><span class="label">Specializations</span><span class="value">9</span><span class="delta">3-tier deliverables &middot; 8 rubric dims each</span></div>
       <div class="kpi"><span class="label">Analyst levels</span><span class="value">7</span><span class="delta">A1 → M1 + E1 engineering track</span></div>
-      <div class="kpi"><span class="label">Engagement models</span><span class="value">3</span><span class="delta">Managed · project · staff aug</span></div>
-      <div class="kpi amber"><span class="label">Open gaps</span><span class="value">14</span><span class="delta">Across pricing, specs, briefs</span></div>
+      <div class="kpi"><span class="label">Practice cases</span><span class="value">5</span><span class="delta">88h total &middot; 5 archetypes seeded</span></div>
+      <div class="kpi gold"><span class="label">Live assessments</span><span class="value">2</span><span class="delta">AI Readiness · QA Review</span></div>
+      <div class="kpi amber"><span class="label">Open gaps</span><span class="value">18</span><span class="delta">Specs · pricing · briefs · assess</span></div>
     </div>
 
     <!-- ============ SECTION 1: SPECIALIZATIONS ============ -->
@@ -1223,24 +1348,452 @@ body {
         </div>
       </div>
 
-      <div class="card" style="margin-bottom: 14px;">
-        <div class="card-head"><h3>6.1 Practice cases &middot; S-level</h3><span class="meta">5 seeded cases · capped at 30 per spec</span></div>
-        <div class="card-body" style="padding: 0;">
-          <table class="gtable" style="border: none; border-radius: 0;">
-            <thead><tr><th>Slug</th><th>Difficulty</th><th>Hours</th><th>Specializations</th><th>Core competencies</th><th>Pts pass / excellent</th></tr></thead>
-            <tbody>
-              <tr><td class="label-cell">market-entry-foundational<br/><span style="color:var(--ink-3); font-weight:400; font-size:11px;">Fern Labs · COO Sasha Kovač</span></td><td><span class="rag-pill b">Foundational</span></td><td class="num">8</td><td>market-research</td><td>business-acumen</td><td><span class="num">2 / 4</span></td></tr>
-              <tr><td class="label-cell">growth-strategy-intermediate<br/><span style="color:var(--ink-3); font-weight:400; font-size:11px;">Cova · founder Priya Iyer</span></td><td><span class="rag-pill a">Intermediate</span></td><td class="num">16</td><td>business-strategy, revops-gtm</td><td>business-acumen, decision-excellence</td><td><span class="num">6 / 12</span></td></tr>
-              <tr><td class="label-cell">due-diligence-intermediate<br/><span style="color:var(--ink-3); font-weight:400; font-size:11px;">Marlow Capital · ID Wei Tan</span></td><td><span class="rag-pill a">Intermediate</span></td><td class="num">18</td><td>market-research, business-strategy</td><td>decision-excellence, business-acumen</td><td><span class="num">6 / 12</span></td></tr>
-              <tr><td class="label-cell">financial-modeling-advanced<br/><span style="color:var(--ink-3); font-weight:400; font-size:11px;">Lumen Robotics · CFO Henrik Lindqvist</span></td><td><span class="rag-pill r">Advanced</span></td><td class="num">28</td><td>financial-models, pitch-decks</td><td>execution-mastery, business-acumen</td><td><span class="num">8 / 16</span></td></tr>
-              <tr><td class="label-cell">operational-diagnostic-intermediate<br/><span style="color:var(--ink-3); font-weight:400; font-size:11px;">NovaSaúde · COO Camila Rocha</span></td><td><span class="rag-pill a">Intermediate</span></td><td class="num">18</td><td>process-optimization, business-strategy</td><td>execution-mastery, stakeholder-impact</td><td><span class="num">6 / 12</span></td></tr>
-            </tbody>
-          </table>
-        </div>
+      <div style="display: flex; align-items: baseline; justify-content: space-between; gap: 14px; margin-bottom: 12px; flex-wrap: wrap;">
+        <h3 style="font-size: 14px; font-weight: 600; color: var(--ink-0); letter-spacing: -0.014em;">6.1 Practice cases &middot; S-level</h3>
+        <span style="font-size: 11.5px; color: var(--ink-3);">5 seeded templates &middot; capped at 30 per spec &middot; <span class="num" style="color: var(--ink-2);">88h</span> total practice time available</span>
+      </div>
+      <p style="font-size: 12.5px; color: var(--ink-2); line-height: 1.6; margin-bottom: 12px;">Each case runs as a multi-stage Grace conversation with an AI-played client persona. Stages each emit a deliverable that gets QA-reviewed against the matching specialization rubric. A mid-case <strong style="color: var(--amber-ink);">twist</strong> changes the brief on advance and tests how the analyst handles change. <strong style="color: var(--ink-1)">"Excellent"</strong> = overall score ≥ 85. Each case can be lightly customized per analyst (industry/sector) but the core scenario, persona, and twist stay stable.</p>
+
+      <div class="case-list">
+        <!-- Case 1: market-entry-foundational -->
+        <details class="case-item">
+          <summary class="case-summary">
+            <span class="case-difficulty" data-diff="foundational">FND</span>
+            <span class="case-name">Market entry for a European SaaS platform</span>
+            <span class="case-meta">
+              <span><span class="num" style="color: var(--ink-1);">8h</span></span>
+              <span>·</span>
+              <span><code style="font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: var(--gold-ink);">market-entry</code></span>
+              <span>·</span>
+              <span>3 stages</span>
+              <svg class="case-chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+            </span>
+          </summary>
+          <div class="case-body">
+            <div class="case-persona">
+              <div class="persona-avatar">SK</div>
+              <div class="persona-info">
+                <h4>Sasha Kovač &middot; COO at Fern Labs</h4>
+                <p class="pcompany">€40M ARR Slovenian SaaS platform selling procurement automation to mid-market manufacturers. Evaluating expansion into the Nordics.</p>
+                <p class="ptone"><strong>Personality:</strong> Pragmatic COO under board pressure to show a credible Nordic plan within six weeks. Pushes on numbers, mistrusts vague TAM claims, respects directness.</p>
+              </div>
+            </div>
+
+            <div class="case-section">
+              <h5>Initial brief &middot; what the analyst sees</h5>
+              <div class="brief-quote">Hi, I'm Sasha from Fern Labs. Our board wants a decision in six weeks on whether to open a Nordic go-to-market in 2027. I need a scoping memo first — what we'd study, in what order, and what we'd need from my side to make it real. Keep it practical.</div>
+            </div>
+
+            <div class="case-section">
+              <h5>Stages</h5>
+              <div class="stage-flow">
+                <div class="stage-row">
+                  <span class="stage-num">1</span>
+                  <div class="stage-content">
+                    <div class="stage-name">Scoping memo <span class="pass-badge">pass ≥ 3.5</span></div>
+                    <div class="stage-obj">Produce a one-page scoping memo: the key questions to answer, the data sources you plan to use, and the decision the client will make at the end.</div>
+                    <div class="stage-meta"><span class="artifact-pill">scoping memo</span></div>
+                  </div>
+                </div>
+
+                <div class="stage-row">
+                  <span class="stage-num">2</span>
+                  <div class="stage-content">
+                    <div class="stage-name">Market research <span class="pass-badge">pass ≥ 3.5</span></div>
+                    <div class="stage-obj">Deliver a research pack covering market size, competitive landscape, buyer personas, and pricing benchmarks across the four Nordic countries.</div>
+                    <div class="stage-meta"><span class="artifact-pill has-qa">research pack &middot; QA: market-research</span></div>
+                  </div>
+                </div>
+
+                <div class="twist-row">
+                  <div class="twist-label">Twist on advance <span class="twist-id">budget-cut</span></div>
+                  <div class="twist-msg">"Quick update — the board just cut the launch budget by 30%. Please factor that into the go-to-market plan."</div>
+                  <div class="twist-affects"><strong>Affects next stage:</strong> The GTM plan must land within the reduced budget envelope and still hit the six-week decision timeline.</div>
+                </div>
+
+                <div class="stage-row">
+                  <span class="stage-num">3</span>
+                  <div class="stage-content">
+                    <div class="stage-name">GTM recommendation deck <span class="pass-badge">pass ≥ 4.0</span></div>
+                    <div class="stage-obj">Pitch a go-to-market recommendation: which country first, why, channel mix, headcount, investment ask, and kill criteria.</div>
+                    <div class="stage-meta"><span class="artifact-pill has-qa">final deck &middot; QA: pitch-deck</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="case-section">
+              <h5>Attribution &amp; scoring</h5>
+              <div class="attribution-row">
+                <div class="attr-cell"><span class="eyebrow">Specializations</span><div class="pills"><span class="ap">market-research</span></div></div>
+                <div class="attr-cell"><span class="eyebrow">Core competencies</span><div class="pills"><span class="ap">business-acumen</span></div></div>
+                <div class="attr-cell"><span class="eyebrow">Points</span><div class="pts">4 <span class="pts-meta">on pass</span> &middot; 8 <span class="pts-meta">on excellent</span></div></div>
+              </div>
+            </div>
+
+            <div class="custhint"><strong>Customization hint:</strong> Light-tailor the fictional company name and industry angle to the analyst's recent project service clusters if any are provided. Keep the core scenario stable.</div>
+          </div>
+        </details>
+
+        <!-- Case 2: growth-strategy-intermediate -->
+        <details class="case-item">
+          <summary class="case-summary">
+            <span class="case-difficulty" data-diff="intermediate">INT</span>
+            <span class="case-name">Reigniting growth at a stalled D2C wellness brand</span>
+            <span class="case-meta">
+              <span><span class="num" style="color: var(--ink-1);">16h</span></span>
+              <span>·</span>
+              <span><code style="font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: var(--gold-ink);">growth-strategy</code></span>
+              <span>·</span>
+              <span>4 stages</span>
+              <svg class="case-chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+            </span>
+          </summary>
+          <div class="case-body">
+            <div class="case-persona">
+              <div class="persona-avatar">PI</div>
+              <div class="persona-info">
+                <h4>Priya Iyer &middot; Founder &amp; CEO at Cova</h4>
+                <p class="pcompany">$35M ARR US D2C premium wellness drinks brand (adaptogen-based teas and tonics). Series B with PE-adjacent investors. Growth slowed from 70% to 9% YoY after CAC blew up post-iOS 14 — retention is healthy, acquisition stalled. New CFO joined six weeks ago from a PE-backed CPG roll-up, pushing for a defensible 3-year growth plan.</p>
+                <p class="ptone"><strong>Personality:</strong> Founder who built Cova from a Brooklyn pop-up. Warm but allergic to fluff. Asks "so what does this mean for next quarter?" a lot. Will push back on any recommendation without a number, milestone, and kill criterion.</p>
+              </div>
+            </div>
+
+            <div class="case-section">
+              <h5>Initial brief</h5>
+              <div class="brief-quote">Hey, Priya from Cova. Quick context: we hit $35M last year but growth has flatlined and the new CFO wants a three-year plan he can defend to the board. I do not want a 60-slide deck — I want a clear point of view on where the next $50M of revenue comes from and what we have to stop doing to get there. Start with how you would approach this. What would you look at first, and what decision should I have at the end?</div>
+            </div>
+
+            <div class="case-section">
+              <h5>Stages</h5>
+              <div class="stage-flow">
+                <div class="stage-row">
+                  <span class="stage-num">1</span>
+                  <div class="stage-content">
+                    <div class="stage-name">Growth diagnostic memo <span class="pass-badge">pass ≥ 3.5</span></div>
+                    <div class="stage-obj">Diagnose the current growth picture: where revenue is actually coming from, where it is leaking, what the unit economics look like by channel, and which two or three drivers matter most. End with a sharp framing of the central question the strategy needs to answer.</div>
+                    <div class="stage-meta"><span class="artifact-pill">diagnostic memo</span></div>
+                  </div>
+                </div>
+
+                <div class="stage-row">
+                  <span class="stage-num">2</span>
+                  <div class="stage-content">
+                    <div class="stage-name">Strategic options brief <span class="pass-badge">pass ≥ 3.5</span></div>
+                    <div class="stage-obj">Lay out three distinct, mutually exclusive growth strategies (e.g. double down on existing channels and retention, expand into a new product category, or open wholesale / retail). For each: thesis, rough size of prize, resource ask, key risks, and what would have to be true.</div>
+                    <div class="stage-meta"><span class="artifact-pill has-qa">options brief &middot; QA: business-strategy</span></div>
+                  </div>
+                </div>
+
+                <div class="twist-row">
+                  <div class="twist-label">Twist on advance <span class="twist-id">acquisition-curveball</span></div>
+                  <div class="twist-msg">"Heads up — the CFO just told me a smaller competitor (Resta, ~$8M ARR, similar audience but adaptogen-free) is on the market and might go for ~$15M. He thinks it could be a faster path to scale than building. I am skeptical but I need you to weigh it against your top option in the next deliverable."</div>
+                  <div class="twist-affects"><strong>Affects next stage:</strong> The recommended plan must stress-test build-vs-buy: include a Resta acquisition scenario alongside the organic plan, with a clear recommendation and the conditions under which you would flip.</div>
+                </div>
+
+                <div class="stage-row">
+                  <span class="stage-num">3</span>
+                  <div class="stage-content">
+                    <div class="stage-name">Recommended growth plan <span class="pass-badge">pass ≥ 3.8</span></div>
+                    <div class="stage-obj">Pick one option (or hybrid), and turn it into a plan: operating model changes, hiring, capital ask, year-one to year-three milestones, leading KPIs, and explicit kill criteria. Include a build-vs-buy view incorporating the Resta scenario.</div>
+                    <div class="stage-meta"><span class="artifact-pill has-qa">growth plan &middot; QA: business-strategy</span></div>
+                  </div>
+                </div>
+
+                <div class="stage-row">
+                  <span class="stage-num">4</span>
+                  <div class="stage-content">
+                    <div class="stage-name">Board-ready deck <span class="pass-badge">pass ≥ 4.0</span></div>
+                    <div class="stage-obj">Translate the recommended plan into a 10–15 slide board deck: situation, options considered, recommendation, plan, asks, risks. Tight narrative, no filler.</div>
+                    <div class="stage-meta"><span class="artifact-pill has-qa">board deck &middot; QA: pitch-deck</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="case-section">
+              <h5>Attribution &amp; scoring</h5>
+              <div class="attribution-row">
+                <div class="attr-cell"><span class="eyebrow">Specializations</span><div class="pills"><span class="ap">business-strategy</span><span class="ap">revops-gtm</span></div></div>
+                <div class="attr-cell"><span class="eyebrow">Core competencies</span><div class="pills"><span class="ap">business-acumen</span><span class="ap">decision-excellence</span></div></div>
+                <div class="attr-cell"><span class="eyebrow">Points</span><div class="pts">6 <span class="pts-meta">on pass</span> &middot; 12 <span class="pts-meta">on excellent</span></div></div>
+              </div>
+            </div>
+
+            <div class="custhint"><strong>Customization hint:</strong> Lightly tailor company name and product category to analyst recent clusters (e.g. lean into food &amp; beverage). Keep Priya as persona and the CFO + acquisition twist intact — they drive the case.</div>
+          </div>
+        </details>
+
+        <!-- Case 3: due-diligence-intermediate -->
+        <details class="case-item">
+          <summary class="case-summary">
+            <span class="case-difficulty" data-diff="intermediate">INT</span>
+            <span class="case-name">Commercial DD on a Southeast Asian SME lending fintech</span>
+            <span class="case-meta">
+              <span><span class="num" style="color: var(--ink-1);">18h</span></span>
+              <span>·</span>
+              <span><code style="font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: var(--gold-ink);">due-diligence</code></span>
+              <span>·</span>
+              <span>4 stages</span>
+              <svg class="case-chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+            </span>
+          </summary>
+          <div class="case-body">
+            <div class="case-persona">
+              <div class="persona-avatar">WT</div>
+              <div class="persona-info">
+                <h4>Wei Tan &middot; Investment Director at Marlow Capital</h4>
+                <p class="pcompany">Singapore-based growth equity fund (~$1.2B AUM) focused on SE Asian tech. Evaluating a $40–60M minority investment in PinjamPro, an Indonesian B2B lending fintech serving SMEs (~$22M ARR, ~70% YoY growth). Exclusivity ends in three weeks; final IC the week after.</p>
+                <p class="ptone"><strong>Personality:</strong> Former McKinsey consultant who moved to growth equity five years ago. Sharp, time-pressured, allergic to consultant-speak in IC documents. Wants sharp judgement calls, not balanced both-sides analysis. Routinely asks "what would have to be true for this to be a no?" and rewards clear thinking on risks more than optimistic theses.</p>
+              </div>
+            </div>
+
+            <div class="case-section">
+              <h5>Initial brief</h5>
+              <div class="brief-quote">Hi — Wei from Marlow. We are running commercial DD on PinjamPro, a B2B SME lender out of Jakarta. Strong topline, decent unit economics on paper, but I have nagging questions on customer concentration and credit cycle exposure. Three weeks to IC. Start by walking me through how you would scope the DD and what the two or three deal-breaker questions are. We can pull data from their VDR as you go.</div>
+            </div>
+
+            <div class="case-section">
+              <h5>Stages</h5>
+              <div class="stage-flow">
+                <div class="stage-row">
+                  <span class="stage-num">1</span>
+                  <div class="stage-content">
+                    <div class="stage-name">DD scope and key questions <span class="pass-badge">pass ≥ 3.5</span></div>
+                    <div class="stage-obj">Produce a DD scoping memo: hypotheses on the investment thesis, the two or three deal-breaker questions (commercial, financial, operational), the workstreams you would run, and the specific data room asks per workstream. Be opinionated about what to deprioritize.</div>
+                    <div class="stage-meta"><span class="artifact-pill">scoping memo</span></div>
+                  </div>
+                </div>
+
+                <div class="stage-row">
+                  <span class="stage-num">2</span>
+                  <div class="stage-content">
+                    <div class="stage-name">Commercial DD pack <span class="pass-badge">pass ≥ 3.5</span></div>
+                    <div class="stage-obj">Deliver a commercial DD pack: market size and growth, competitive intensity (incumbents, neobanks, super-app lenders), customer segment economics, channel dependency, and durability of the growth trajectory. End with a sharp view on top-line risk to the thesis.</div>
+                    <div class="stage-meta"><span class="artifact-pill has-qa">commercial DD pack &middot; QA: market-research</span></div>
+                  </div>
+                </div>
+
+                <div class="twist-row">
+                  <div class="twist-label">Twist on advance <span class="twist-id">concentration-shock</span></div>
+                  <div class="twist-msg">"Hot off the deal team: PinjamPro's top customer (~25% of disbursed loan volume, a regional logistics platform) has been quietly piloting an in-house BNPL with a competitor. CEO is downplaying it. We need this in the next deliverable — what does it do to the model and the thesis?"</div>
+                  <div class="twist-affects"><strong>Affects next stage:</strong> The financial / operational memo must explicitly stress-test a downside case where the top customer churns within 12 months, including the impact on revenue, unit economics, and covenants.</div>
+                </div>
+
+                <div class="stage-row">
+                  <span class="stage-num">3</span>
+                  <div class="stage-content">
+                    <div class="stage-name">Financial &amp; operational DD memo <span class="pass-badge">pass ≥ 3.8</span></div>
+                    <div class="stage-obj">Quality of revenue, unit economics by cohort, NPL / vintage analysis, cost structure, key-person risk, governance flags. Stress-test the top-customer downside. Surface what would change your view.</div>
+                    <div class="stage-meta"><span class="artifact-pill has-qa">financial / operational memo &middot; QA: business-strategy</span></div>
+                  </div>
+                </div>
+
+                <div class="stage-row">
+                  <span class="stage-num">4</span>
+                  <div class="stage-content">
+                    <div class="stage-name">IC memo and recommendation <span class="pass-badge">pass ≥ 4.0</span></div>
+                    <div class="stage-obj">Deliver an 8–12 page IC memo: investment thesis, key DD findings, valuation framing (EV/Revenue and EV/Earnings ranges with comps), risk register with mitigants, conditions to invest (price, structure, board rights), and walk-away triggers. Clear go / no-go / conditional recommendation.</div>
+                    <div class="stage-meta"><span class="artifact-pill has-qa">IC memo &middot; QA: proposal</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="case-section">
+              <h5>Attribution &amp; scoring</h5>
+              <div class="attribution-row">
+                <div class="attr-cell"><span class="eyebrow">Specializations</span><div class="pills"><span class="ap">market-research</span><span class="ap">business-strategy</span></div></div>
+                <div class="attr-cell"><span class="eyebrow">Core competencies</span><div class="pills"><span class="ap">decision-excellence</span><span class="ap">business-acumen</span></div></div>
+                <div class="attr-cell"><span class="eyebrow">Points</span><div class="pts">6 <span class="pts-meta">on pass</span> &middot; 12 <span class="pts-meta">on excellent</span></div></div>
+              </div>
+            </div>
+
+            <div class="custhint"><strong>Customization hint:</strong> Tailor target sector (logistics-tech, healthtech, B2B SaaS) to analyst recent clusters. Keep Wei, the SE Asia growth equity setting, and the concentration twist intact — they define the case.</div>
+          </div>
+        </details>
+
+        <!-- Case 4: financial-modeling-advanced -->
+        <details class="case-item">
+          <summary class="case-summary">
+            <span class="case-difficulty" data-diff="advanced">ADV</span>
+            <span class="case-name">Series D fundraise model for an industrial robotics scale-up</span>
+            <span class="case-meta">
+              <span><span class="num" style="color: var(--ink-1);">28h</span></span>
+              <span>·</span>
+              <span><code style="font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: var(--gold-ink);">financial-modeling</code></span>
+              <span>·</span>
+              <span>4 stages</span>
+              <svg class="case-chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+            </span>
+          </summary>
+          <div class="case-body">
+            <div class="case-persona">
+              <div class="persona-avatar">HL</div>
+              <div class="persona-info">
+                <h4>Henrik Lindqvist &middot; CFO at Lumen Robotics</h4>
+                <p class="pcompany">Stockholm-headquartered Series C industrial automation company building warehouse robotics ($80M ARR, ~95% NRR, 55% gross margin, still cash-burning). Planning a $150M Series D in six months. CEO and lead investor expect a fully integrated, investor-grade financial model that drives the data room and the deck.</p>
+                <p class="ptone"><strong>Personality:</strong> Ex-McKinsey, three years as CFO. Thinks in operating drivers and scenarios, not summary numbers. Will challenge any assumption not mechanically derived from a real driver, and will catch circularity, sign errors, and hard-coded inputs in seconds. Tone: precise, direct, lightly impatient with sloppy thinking. Prefers questions over corrections.</p>
+              </div>
+            </div>
+
+            <div class="case-section">
+              <h5>Initial brief</h5>
+              <div class="brief-quote">Hello — Henrik, CFO at Lumen Robotics. We're gearing up for a $150M Series D in about six months and I need an investor-grade integrated financial model as the spine of the fundraise. Three-statement, bottom-up revenue from robots-deployed and utilization, cohort-based revenue build, full opex build, working capital, capex, and a clean scenario layer (base / upside / downside). Start by walking me through how you'd architect the model — drivers, sheet structure, scenario mechanism, and what an investor would expect to interrogate first.</div>
+            </div>
+
+            <div class="case-section">
+              <h5>Stages</h5>
+              <div class="stage-flow">
+                <div class="stage-row">
+                  <span class="stage-num">1</span>
+                  <div class="stage-content">
+                    <div class="stage-name">Model architecture &amp; assumption framework <span class="pass-badge">pass ≥ 3.5</span></div>
+                    <div class="stage-obj">Architecture memo: sheet structure, driver tree (robots deployed → utilization → throughput → ARPC → ARR), scenario approach (base/upside/downside, single switch), assumption hub design, and inventory of the key questions an investor will hit on day one.</div>
+                    <div class="stage-meta"><span class="artifact-pill">architecture memo</span></div>
+                  </div>
+                </div>
+
+                <div class="stage-row">
+                  <span class="stage-num">2</span>
+                  <div class="stage-content">
+                    <div class="stage-name">Bottom-up operating model <span class="pass-badge">pass ≥ 3.8</span></div>
+                    <div class="stage-obj">Build the operating model in Excel: bottom-up revenue (cohort-based deployments, utilization curves, ARPC by segment, NRR), gross margin walk, opex build by function with headcount-driven logic, and clean scenario switching. Fully driver-linked with no hard-coded outputs.</div>
+                    <div class="stage-meta"><span class="artifact-pill has-qa">operating model &middot; QA: financial-model</span></div>
+                  </div>
+                </div>
+
+                <div class="twist-row">
+                  <div class="twist-label">Twist on advance <span class="twist-id">capex-shock</span></div>
+                  <div class="twist-msg">"Quick wrinkle — two of our top ten customers just told us they are pushing planned expansions from 2026 into 2027 because of their own budget cycles. Also: our hardware partner is raising COGS ~12% on the next batch order. Both need to land in the integrated model, and the downside scenario has to reflect them."</div>
+                  <div class="twist-affects"><strong>Affects next stage:</strong> The integrated 3-statement model must reflect the customer-expansion delay and the COGS hike in the downside scenario, with explicit impact on cash runway and Series D ask sizing.</div>
+                </div>
+
+                <div class="stage-row">
+                  <span class="stage-num">3</span>
+                  <div class="stage-content">
+                    <div class="stage-name">Integrated three-statement model <span class="pass-badge">pass ≥ 4.0</span></div>
+                    <div class="stage-obj">Extend to a fully linked three-statement model: P&amp;L, balance sheet, cash flow with circular-safe debt schedule, working capital roll, capex schedule, equity / SBC mechanics. Show customer-delay and COGS-hike impacts in the downside. Cash balance and runway must tie cleanly across all three.</div>
+                    <div class="stage-meta"><span class="artifact-pill has-qa">integrated model &middot; QA: financial-model</span></div>
+                  </div>
+                </div>
+
+                <div class="stage-row">
+                  <span class="stage-num">4</span>
+                  <div class="stage-content">
+                    <div class="stage-name">Fundraise model &amp; investor deck excerpt <span class="pass-badge">pass ≥ 4.0</span></div>
+                    <div class="stage-obj">Investor-facing package: scenario summary, valuation framing (last-round step-up, ARR multiple comp set, primary vs. secondary mix), use-of-proceeds tied to driver milestones, and an excerpted investor deck (5–8 slides). Anticipate the three hardest investor questions and answer them.</div>
+                    <div class="stage-meta"><span class="artifact-pill has-qa">final model &middot; QA: financial-model</span><span class="artifact-pill has-qa">deck excerpt &middot; QA: pitch-deck</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="case-section">
+              <h5>Attribution &amp; scoring</h5>
+              <div class="attribution-row">
+                <div class="attr-cell"><span class="eyebrow">Specializations</span><div class="pills"><span class="ap">financial-models</span><span class="ap">pitch-decks</span></div></div>
+                <div class="attr-cell"><span class="eyebrow">Core competencies</span><div class="pills"><span class="ap">execution-mastery</span><span class="ap">business-acumen</span></div></div>
+                <div class="attr-cell"><span class="eyebrow">Points</span><div class="pts">8 <span class="pts-meta">on pass</span> &middot; 16 <span class="pts-meta">on excellent</span></div></div>
+              </div>
+            </div>
+
+            <div class="custhint"><strong>Customization hint:</strong> Tailor industry (fintech infra, climate-tech hardware, healthtech) to recent clusters. Keep Henrik, the Series D framing, the operating-driver discipline, and the customer-delay + COGS twist intact.</div>
+          </div>
+        </details>
+
+        <!-- Case 5: operational-diagnostic-intermediate -->
+        <details class="case-item">
+          <summary class="case-summary">
+            <span class="case-difficulty" data-diff="intermediate">INT</span>
+            <span class="case-name">Performance variance diagnostic at a multi-site clinic chain</span>
+            <span class="case-meta">
+              <span><span class="num" style="color: var(--ink-1);">18h</span></span>
+              <span>·</span>
+              <span><code style="font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: var(--gold-ink);">operational-diagnostic</code></span>
+              <span>·</span>
+              <span>4 stages</span>
+              <svg class="case-chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+            </span>
+          </summary>
+          <div class="case-body">
+            <div class="case-persona">
+              <div class="persona-avatar">CR</div>
+              <div class="persona-info">
+                <h4>Camila Rocha &middot; COO at NovaSaúde Clínicas</h4>
+                <p class="pcompany">Brazilian primary-care and basic-diagnostics clinic chain (65 clinics across São Paulo and Rio metros, ~R$420M revenue, ~3,500 staff). PE-backed, grown fast via roll-up. Clinic-level economics vary wildly: top-quartile EBITDA ~24%, bottom-quartile ~6%, with no clean explanation. Board wants a diagnosis and intervention plan within eight weeks.</p>
+                <p class="ptone"><strong>Personality:</strong> Former hospital operator, joined NovaSaúde 18 months ago. Calm, methodical, allergic to consultant frameworks divorced from operational reality. Will keep asking "but what would a clinic manager actually do differently on Monday?" Navigates a politically loaded board (one director is the founder of a recently acquired clinic group) and respects candor about people issues, delivered carefully.</p>
+              </div>
+            </div>
+
+            <div class="case-section">
+              <h5>Initial brief</h5>
+              <div class="brief-quote">Olá — Camila, COO at NovaSaúde. We have 65 clinics, very different EBITDA margins across them, and the board wants a diagnosis plus a credible intervention plan inside eight weeks. I do not need another deck telling me sites differ; I need a clear view of which drivers are controllable, which are structural, and what we should actually do first. Start with how you would approach the diagnostic, what data you would need, and what categories of root cause you would test.</div>
+            </div>
+
+            <div class="case-section">
+              <h5>Stages</h5>
+              <div class="stage-flow">
+                <div class="stage-row">
+                  <span class="stage-num">1</span>
+                  <div class="stage-content">
+                    <div class="stage-name">Diagnostic framework &amp; data plan <span class="pass-badge">pass ≥ 3.5</span></div>
+                    <div class="stage-obj">Hypotheses for variance (mix, demand patterns, staffing model, leader quality, vintage, geography, supplier costs), the dimensions you'd slice 65 clinics on, the data needed from operations and finance, and how to separate controllable from structural drivers.</div>
+                    <div class="stage-meta"><span class="artifact-pill">diagnostic plan memo</span></div>
+                  </div>
+                </div>
+
+                <div class="stage-row">
+                  <span class="stage-num">2</span>
+                  <div class="stage-content">
+                    <div class="stage-name">Performance variance analysis <span class="pass-badge">pass ≥ 3.5</span></div>
+                    <div class="stage-obj">Cluster the 65 clinics by performance, identify the three to five drivers that explain most of the gap (with rough quantification), and call out where data is too thin to conclude. Distinguish controllable drivers (scheduling, staffing mix, supplier discipline) from structural ones (catchment demographics).</div>
+                    <div class="stage-meta"><span class="artifact-pill has-qa">variance analysis pack &middot; QA: process-optimization</span></div>
+                  </div>
+                </div>
+
+                <div class="twist-row">
+                  <div class="twist-label">Twist on advance <span class="twist-id">acquired-cohort-politics</span></div>
+                  <div class="twist-msg">"One thing you should know before the next step: the bottom-quartile clinics are heavily concentrated in the Vitalis group we acquired 14 months ago, which still runs with most of the original leadership team. Their founder, Dr. Mendes, is now on our board. Whatever interventions you propose need to be honest about that — but landable politically. Surface what you really think."</div>
+                  <div class="twist-affects"><strong>Affects next stage:</strong> Recommendations must directly address the Vitalis-cohort underperformance, with a clear view on leadership / operating-model changes, sequenced in a way that is operationally and politically credible.</div>
+                </div>
+
+                <div class="stage-row">
+                  <span class="stage-num">3</span>
+                  <div class="stage-content">
+                    <div class="stage-name">Operating model recommendations <span class="pass-badge">pass ≥ 3.8</span></div>
+                    <div class="stage-obj">Concrete intervention playbook: standardised staffing model, scheduling/rota changes, supplier and consumables discipline, clinic-leader development, and a position on the Vitalis leadership question. Per intervention: expected margin impact, ease of execution, dependencies, sequencing.</div>
+                    <div class="stage-meta"><span class="artifact-pill has-qa">recommendations pack &middot; QA: process-optimization</span></div>
+                  </div>
+                </div>
+
+                <div class="stage-row">
+                  <span class="stage-num">4</span>
+                  <div class="stage-content">
+                    <div class="stage-name">Implementation roadmap &amp; board readout <span class="pass-badge">pass ≥ 4.0</span></div>
+                    <div class="stage-obj">90-day pilot + 12-month rollout plan with sites for the first wave, KPIs and tripwires, change-management approach for the Vitalis cohort, and a 10–12 slide board readout: diagnosis, plan, asks, risks. End with a clear set of decisions Camila needs from the board.</div>
+                    <div class="stage-meta"><span class="artifact-pill has-qa">board readout deck &middot; QA: pitch-deck</span></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="case-section">
+              <h5>Attribution &amp; scoring</h5>
+              <div class="attribution-row">
+                <div class="attr-cell"><span class="eyebrow">Specializations</span><div class="pills"><span class="ap">process-optimization</span><span class="ap">business-strategy</span></div></div>
+                <div class="attr-cell"><span class="eyebrow">Core competencies</span><div class="pills"><span class="ap">execution-mastery</span><span class="ap">stakeholder-impact</span></div></div>
+                <div class="attr-cell"><span class="eyebrow">Points</span><div class="pts">6 <span class="pts-meta">on pass</span> &middot; 12 <span class="pts-meta">on excellent</span></div></div>
+              </div>
+            </div>
+
+            <div class="custhint"><strong>Customization hint:</strong> Tailor service line (dental, veterinary, fitness studios, retail banking branches) and country to recent clusters. Keep Camila, the multi-site variance setup, and the acquired-cohort-with-board-politics twist intact.</div>
+          </div>
+        </details>
       </div>
 
-      <div class="callout" style="margin-bottom: 18px; font-size: 12.5px;">
-        Each case runs in stages with an AI-played client persona, and includes a <strong>mid-case "twist"</strong> (budget cut, board acquisition curveball, top-customer concentration shock, COGS hike, board politics) to test how the analyst handles change. Each stage's deliverable is QA-reviewed against the matching specialization rubric. <strong>"Excellent"</strong> = overall score ≥ 85.
+      <div class="callout amber" style="margin-bottom: 18px; font-size: 12.5px;">
+        <strong>Coverage gap.</strong> Five archetypes are seeded today: <code style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--amber-ink);">market-entry</code>, <code style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--amber-ink);">growth-strategy</code>, <code style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--amber-ink);">due-diligence</code>, <code style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--amber-ink);">financial-modeling</code>, <code style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--amber-ink);">operational-diagnostic</code>. The interface also defines <code style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--amber-ink);">pricing</code> and <code style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--amber-ink);">market-research</code> archetypes — not yet implemented. Standalone <strong>process-optimization, RFP, dashboard, and RevOps</strong> cases are also missing direct coverage; today they're tested as secondary specs in the diagnostic and growth cases.
       </div>
 
       <div class="grid-2">
@@ -1490,9 +2043,243 @@ body {
       </div>
     </section>
 
+    <!-- ============ SECTION 10: ASSESSMENTS ============ -->
+    <section id="assessments" class="doc-section">
+      <div class="section-head">
+        <div>
+          <div class="section-num">SECTION 10</div>
+          <div class="section-title">Assessments</div>
+          <div class="section-sub">Two assessments are live in Grace today as <strong>skills</strong> (prompt + reference docs, no separate model). One is whole-person (AI Readiness), one is per-deliverable (QA Review). Both run inside Grace chat — admin-driven, no analyst-facing flow yet.</div>
+        </div>
+      </div>
+
+      <!-- 10.1 AI Readiness Assessment -->
+      <div class="assess-card" style="margin-bottom: 18px;">
+        <div class="assess-head">
+          <div class="acode">10.1</div>
+          <div class="ainfo">
+            <h3>AI Readiness Assessment</h3>
+            <p>Whole-person assessment of how prepared a candidate is to leverage AI in management consulting work. Slug <code style="font-family: 'JetBrains Mono', monospace; color: var(--gold-ink); font-size: 11.5px;">ai-readiness-assessment</code>. Admin-driven — admin runs it on behalf of the person, answering as them.</p>
+          </div>
+          <span class="status-chip" data-status="green"><span class="dot-pulse"></span>Live in Grace</span>
+        </div>
+        <div class="assess-body">
+
+          <div class="case-section">
+            <h5>Two run modes</h5>
+            <div class="mode-grid">
+              <div class="mode-card primary">
+                <div class="mtitle">Real assessment <span class="mtag">production</span></div>
+                <div class="mdesc">Real person (CV upload or analyst lookup). Grace extracts profile, picks dimensions, asks questions one at a time, scores answers, optionally proposes a practical project, generates an HTML report.</div>
+              </div>
+              <div class="mode-card">
+                <div class="mtitle">Demo mode <span class="mtag">walkthrough</span></div>
+                <div class="mdesc">Generates a complete walkthrough with a real or fictional profile. Deep CV analysis up front, then a fast-forward simulated conversation while the report renders. Shows admins what the assessment can do end-to-end.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="case-section">
+            <h5>Real assessment · two depths</h5>
+            <div class="mode-grid">
+              <div class="mode-card">
+                <div class="mtitle">Quick <span class="mtag">~15 min</span></div>
+                <div class="mdesc"><strong style="color: var(--ink-1)">2–3 dimensions</strong> &middot; 2 questions each (1 single-choice + 1 free-text) &middot; no practical project. Best for a fast snapshot. Always includes AI Fundamentals.</div>
+              </div>
+              <div class="mode-card">
+                <div class="mtitle">Full <span class="mtag">~45 min</span></div>
+                <div class="mdesc"><strong style="color: var(--ink-1)">4–6 dimensions</strong> &middot; 3–4 questions each, mixed difficulty &middot; optional practical project. Always includes AI Fundamentals + Prompt Engineering.</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="case-section">
+            <h5>Eight-dimension pool · Grace selects 2–6 per person</h5>
+            <div class="dim-pill-grid">
+              <div class="dim-pill"><div class="dnum">D1</div><div class="dname">AI Fundamentals</div><div class="dwhen always">Always included</div></div>
+              <div class="dim-pill"><div class="dnum">D2</div><div class="dname">Prompt Engineering</div><div class="dwhen always">Always in full mode</div></div>
+              <div class="dim-pill"><div class="dnum">D3</div><div class="dname">AI-Assisted Research &amp; Analysis</div><div class="dwhen">Analysts, researchers, strategists</div></div>
+              <div class="dim-pill"><div class="dnum">D4</div><div class="dname">AI-Powered Productivity</div><div class="dwhen">CV mentions Excel / PowerPoint / Workspace</div></div>
+              <div class="dim-pill"><div class="dnum">D5</div><div class="dname">Automation &amp; Workflows</div><div class="dwhen">Ops / PM roles</div></div>
+              <div class="dim-pill"><div class="dnum">D6</div><div class="dname">AI Ethics &amp; Data Privacy</div><div class="dwhen">Everyone &middot; weighted higher senior</div></div>
+              <div class="dim-pill"><div class="dnum">D7</div><div class="dname">Vibe Coding &amp; Prototyping</div><div class="dwhen">CV mentions Python / SQL / technical</div></div>
+              <div class="dim-pill"><div class="dnum">D8</div><div class="dname">AI Strategy</div><div class="dwhen">Senior / manager only</div></div>
+            </div>
+          </div>
+
+          <div class="case-section">
+            <h5>Question formats</h5>
+            <div class="q-format-grid">
+              <div class="qfmt-card">
+                <span class="qftype">single-choice</span>
+                <div class="qftitle">4 options &middot; deterministic 1–5 mapping</div>
+                <div class="qfdesc">Each option maps to a fixed score (1–5). Grace MUST present options exactly as written — distribution and option lengths are balanced to avoid position bias. Stem can be personalized; options never.</div>
+                <div class="qfscore">score = rubric[answer]</div>
+              </div>
+              <div class="qfmt-card free">
+                <span class="qftype">free-text</span>
+                <div class="qftitle">Open answer &middot; AI-evaluated against rubric</div>
+                <div class="qfdesc">Grace evaluates the response against the dimension rubric (e.g. "look for systematic approach: identify failure pattern, adjust prompt, cross-reference outputs"), assigns 1–5 with a short internal justification.</div>
+                <div class="qfscore">score = grace.eval(answer, rubric)</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="case-section">
+            <h5>Sample question · D1 / F1 (foundational, single-choice)</h5>
+            <div class="q-sample">
+              <div class="qslabel">AI Fundamentals · F1</div>
+              <div class="qstem">"When would you NOT recommend using an AI tool for a work task?"</div>
+              <div class="qopts">
+                <div class="qopt"><span class="ol">A</span><span>When you need to process a large volume of repetitive data and compile it into a structured summary.</span><span class="qscore">1</span></div>
+                <div class="qopt"><span class="ol">B</span><span>When working under a tight deadline and need to produce results quickly, since AI might slow you down.</span><span class="qscore">2</span></div>
+                <div class="qopt"><span class="ol">C</span><span>When the task involves creative brainstorming, like generating campaign ideas or naming a product.</span><span class="qscore">1</span></div>
+                <div class="qopt correct"><span class="ol">D</span><span>When the output must be 100% factually accurate with zero margin for error, like legal compliance filings.</span><span class="qscore">5</span></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="case-section">
+            <h5>Difficulty mix · Grace picks based on seniority</h5>
+            <div class="grid-3" style="gap: 8px;">
+              <div style="padding: 10px 12px; background: var(--bg-2); border: 1px solid var(--blue-line); border-radius: 6px;">
+                <div style="font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: var(--blue); letter-spacing: 0.06em;">FOUNDATIONAL</div>
+                <div style="font-size: 12px; color: var(--ink-1); margin-top: 4px; line-height: 1.5;">Concepts &amp; recognition. "When would you not recommend using AI for X?"</div>
+              </div>
+              <div style="padding: 10px 12px; background: var(--bg-2); border: 1px solid var(--amber-line); border-radius: 6px;">
+                <div style="font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: var(--amber-ink); letter-spacing: 0.06em;">INTERMEDIATE</div>
+                <div style="font-size: 12px; color: var(--ink-1); margin-top: 4px; line-height: 1.5;">Application. "Walk through how you'd use AI tools to go from blank page to client-ready deliverable."</div>
+              </div>
+              <div style="padding: 10px 12px; background: var(--bg-2); border: 1px solid var(--red-line); border-radius: 6px;">
+                <div style="font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: var(--red-ink); letter-spacing: 0.06em;">ADVANCED</div>
+                <div style="font-size: 12px; color: var(--ink-1); margin-top: 4px; line-height: 1.5;">Judgement &amp; nuance. "Outputs keep including inaccurate stats — describe your iterative troubleshooting."</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="case-section">
+            <h5>Optional practical project · 4 role templates</h5>
+            <div class="grid-2" style="gap: 8px;">
+              <div style="padding: 10px 12px; background: var(--bg-2); border: 1px solid var(--border); border-radius: 6px; font-size: 12px; color: var(--ink-1); line-height: 1.55;"><strong style="color: var(--ink-0);">Data analyst:</strong> diagnose a 15% sales drop with a 20% marketing spend increase. One-page analysis + workflow.</div>
+              <div style="padding: 10px 12px; background: var(--bg-2); border: 1px solid var(--border); border-radius: 6px; font-size: 12px; color: var(--ink-1); line-height: 1.55;"><strong style="color: var(--ink-0);">Strategy consultant:</strong> one-page competitive landscape for industry, 3–5 players, one emerging trend.</div>
+              <div style="padding: 10px 12px; background: var(--bg-2); border: 1px solid var(--border); border-radius: 6px; font-size: 12px; color: var(--ink-1); line-height: 1.55;"><strong style="color: var(--ink-0);">PM / ops:</strong> automated weekly status report workflow for a team of 5. Sources, steps, output.</div>
+              <div style="padding: 10px 12px; background: var(--bg-2); border: 1px solid var(--border); border-radius: 6px; font-size: 12px; color: var(--ink-1); line-height: 1.55;"><strong style="color: var(--ink-0);">Financial analyst:</strong> simple DCF template for a SaaS company with assumptions. Output + delegation breakdown.</div>
+            </div>
+            <p style="font-size: 11.5px; color: var(--ink-3); margin-top: 8px; line-height: 1.55;">Evaluated on AI delegation (1–5), output quality (1–5), critical review (1–5), process awareness (1–5). Scored as a <strong style="color: var(--ink-1);">bonus dimension</strong> — adds to the report but doesn't penalize if skipped.</p>
+          </div>
+
+          <div class="case-section">
+            <h5>Scoring formulas</h5>
+            <div class="scoring-formula">
+              <div><span class="label">Question score</span><span class="formula">1–5 (deterministic for SC, AI-eval for FT)</span></div>
+              <div><span class="label">Dimension score</span><span class="formula">((avg(question_scores) − 1) / 4) × 100 → 0–100</span></div>
+              <div><span class="label">Overall score</span><span class="formula">equal-weighted average of all dimension scores</span></div>
+              <div><span class="label">Level mapping</span><span class="formula">learning (1–1.9) · familiar (2–2.9) · proficient (3–4.4) · leading (4.5–5)</span></div>
+            </div>
+          </div>
+
+          <div class="case-section">
+            <h5>Deliverable · branded HTML report</h5>
+            <p style="font-size: 12px; color: var(--ink-2); line-height: 1.55; margin-bottom: 8px;">Rendered server-side via the <code style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--gold-ink); background: var(--bg-2); padding: 1px 5px; border-radius: 3px;">createAiReadinessReport</code> tool with a pre-built template (no LLM-generated HTML). Grace supplies structured data; tool renders.</p>
+            <div class="report-sections">
+              <div class="report-section-pill"><span class="rsnum">01</span>Header &amp; initials avatar</div>
+              <div class="report-section-pill"><span class="rsnum">02</span>Score summary cards</div>
+              <div class="report-section-pill"><span class="rsnum">03</span>SVG radar chart</div>
+              <div class="report-section-pill"><span class="rsnum">04</span>Dimension breakdown bars</div>
+              <div class="report-section-pill"><span class="rsnum">05</span>Before / after with AI</div>
+              <div class="report-section-pill"><span class="rsnum">06</span>AI delegation matrix</div>
+              <div class="report-section-pill"><span class="rsnum">07</span>30-60-90 day plan</div>
+              <div class="report-section-pill"><span class="rsnum">08</span>Curated resources</div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 10.2 QA Review Skill -->
+      <div class="assess-card" style="margin-bottom: 18px;">
+        <div class="assess-head">
+          <div class="acode">10.2</div>
+          <div class="ainfo">
+            <h3>QA Review Skill &middot; the V-flow engine</h3>
+            <p>Per-deliverable review against the 4 universal + 4 specialization dimensions. Slug <code style="font-family: 'JetBrains Mono', monospace; color: var(--gold-ink); font-size: 11.5px;">qa-review</code>. This is what produces the <strong style="color: var(--ink-1);">first-submission score</strong> that feeds AQS, and the substantive-vs-polish classification that drives revision rate.</p>
+          </div>
+          <span class="status-chip" data-status="green"><span class="dot-pulse"></span>Live in Grace</span>
+        </div>
+        <div class="assess-body">
+
+          <div class="case-section">
+            <h5>The six-step review process</h5>
+            <div class="stage-flow">
+              <div class="stage-row"><span class="stage-num">1</span><div class="stage-content"><div class="stage-name">Identify deliverable type</div><div class="stage-obj">Determine which of the 9 specializations this falls under (pitch-deck, financial-model, market-research, business-strategy, dashboard, process-optimization, project-management, proposal, revops-gtm). Ask the analyst if unclear.</div></div></div>
+              <div class="stage-row"><span class="stage-num">2</span><div class="stage-content"><div class="stage-name">Gather brief context</div><div class="stage-obj">Confirm the client ask, audience, and any specific requirements. Don't ask questions you can answer from available context.</div></div></div>
+              <div class="stage-row"><span class="stage-num">3</span><div class="stage-content"><div class="stage-name">Gather scoring context</div><div class="stage-obj">Some dimensions can't be assessed from the file alone. Ask upfront: "When was this due, when did you submit?" (timeliness) and any completeness gaps. Combine with step 2 — one round of questions, then score.</div></div></div>
+              <div class="stage-row"><span class="stage-num">4</span><div class="stage-content"><div class="stage-name">Score all 8 dimensions (1–5)</div><div class="stage-obj">Universal: completeness, accuracy, presentation, timeliness. Specialization: load reference doc via <code style="font-family: monospace; font-size: 11px; color: var(--gold-ink);">loadSkill(qa-review, &lt;type&gt;)</code> for the 4 spec dimensions.</div></div></div>
+              <div class="stage-row"><span class="stage-num">5</span><div class="stage-content"><div class="stage-name">Present review</div><div class="stage-obj">Overall assessment + average score → outcome. Per-dimension score with substantive/polish tag. Top 3–5 priority fixes if any dimension &lt; 3.5; otherwise "client-ready, polish optional."</div></div></div>
+              <div class="stage-row"><span class="stage-num">6</span><div class="stage-content"><div class="stage-name">Save via saveQaReview tool</div><div class="stage-obj">Persist the structured scores. This is what feeds AQS Work Quality (35%) and becomes V-level evidence for spec/competency points.</div></div></div>
+            </div>
+          </div>
+
+          <div class="case-section">
+            <h5>Score scale</h5>
+            <table class="gtable">
+              <thead><tr><th>Score</th><th>Label</th><th>Meaning</th></tr></thead>
+              <tbody>
+                <tr><td><span class="rag-pill gold">5</span></td><td class="label-cell">Exceptional</td><td>Exceeds expectations, no changes needed.</td></tr>
+                <tr><td><span class="rag-pill g">4</span></td><td class="label-cell">Strong</td><td>Meets expectations with minor suggestions.</td></tr>
+                <tr><td><span class="rag-pill a">3</span></td><td class="label-cell">Acceptable</td><td>Meets minimum standards, some improvements needed.</td></tr>
+                <tr><td><span class="rag-pill r">2</span></td><td class="label-cell">Below expectations</td><td>Significant gaps, revision required.</td></tr>
+                <tr><td><span class="rag-pill r">1</span></td><td class="label-cell">Unacceptable</td><td>Fundamental issues, restart required.</td></tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="case-section">
+            <h5>Nine specialization reference docs · loaded on demand</h5>
+            <div class="grid-3" style="gap: 6px;">
+              <div style="padding: 8px 10px; background: var(--bg-2); border: 1px solid var(--border); border-radius: 4px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--gold-ink); display: flex; align-items: center; gap: 6px;"><span style="color: var(--ink-3);">↳</span>financial-model.md</div>
+              <div style="padding: 8px 10px; background: var(--bg-2); border: 1px solid var(--border); border-radius: 4px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--gold-ink); display: flex; align-items: center; gap: 6px;"><span style="color: var(--ink-3);">↳</span>market-research.md</div>
+              <div style="padding: 8px 10px; background: var(--bg-2); border: 1px solid var(--border); border-radius: 4px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--gold-ink); display: flex; align-items: center; gap: 6px;"><span style="color: var(--ink-3);">↳</span>business-strategy.md</div>
+              <div style="padding: 8px 10px; background: var(--bg-2); border: 1px solid var(--border); border-radius: 4px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--gold-ink); display: flex; align-items: center; gap: 6px;"><span style="color: var(--ink-3);">↳</span>pitch-deck.md</div>
+              <div style="padding: 8px 10px; background: var(--bg-2); border: 1px solid var(--border); border-radius: 4px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--gold-ink); display: flex; align-items: center; gap: 6px;"><span style="color: var(--ink-3);">↳</span>dashboard.md</div>
+              <div style="padding: 8px 10px; background: var(--bg-2); border: 1px solid var(--border); border-radius: 4px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--gold-ink); display: flex; align-items: center; gap: 6px;"><span style="color: var(--ink-3);">↳</span>process-optimization.md</div>
+              <div style="padding: 8px 10px; background: var(--bg-2); border: 1px solid var(--border); border-radius: 4px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--gold-ink); display: flex; align-items: center; gap: 6px;"><span style="color: var(--ink-3);">↳</span>project-management.md</div>
+              <div style="padding: 8px 10px; background: var(--bg-2); border: 1px solid var(--border); border-radius: 4px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--gold-ink); display: flex; align-items: center; gap: 6px;"><span style="color: var(--ink-3);">↳</span>proposal.md</div>
+              <div style="padding: 8px 10px; background: var(--bg-2); border: 1px solid var(--border); border-radius: 4px; font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--gold-ink); display: flex; align-items: center; gap: 6px;"><span style="color: var(--ink-3);">↳</span>revops-gtm.md</div>
+            </div>
+            <p style="font-size: 11.5px; color: var(--ink-3); margin-top: 8px; line-height: 1.55;">Each reference doc lists the 4 specialization dimensions for that type. Loading is lazy via the <code style="font-family: monospace; font-size: 11px; color: var(--gold-ink);">loadSkill</code> tool — keeps the main prompt lean.</p>
+          </div>
+
+          <div class="case-section">
+            <h5>Substantive vs polish · the revision-rate guard</h5>
+            <div class="grid-2" style="gap: 10px;">
+              <div style="padding: 12px 14px; background: var(--gold-dim); border: 1px solid var(--gold-line); border-radius: 6px;">
+                <div style="font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: var(--gold-ink); letter-spacing: 0.08em;">SUBSTANTIVE · MUST FIX</div>
+                <div style="font-size: 12.5px; color: var(--ink-1); margin-top: 6px; line-height: 1.55;">Missing brief requirements, factual errors, methodology problems, broken formulas, missing scenario coverage. Counts toward AQS revision rate.</div>
+              </div>
+              <div style="padding: 12px 14px; background: var(--bg-2); border: 1px solid var(--border); border-radius: 6px;">
+                <div style="font-family: 'JetBrains Mono', monospace; font-size: 10.5px; color: var(--ink-3); letter-spacing: 0.08em;">POLISH · OPTIONAL</div>
+                <div style="font-size: 12.5px; color: var(--ink-2); margin-top: 6px; line-height: 1.55;">Copy tightening, formatting tweaks, word choice, minor refinements. Does NOT count as a revision — prevents AQS deflation from perfectionism.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 10.3 What's missing -->
+      <div class="callout amber gap-card" id="gap-assess">
+        <strong>Gaps to fill in &middot; assessments</strong>
+        <ul>
+          <li><strong>Skill assessments per domain</strong> (vetting step 2). The 4-step vetting flow names "knowledge tests by domain" but no question banks exist yet — only the AI Readiness Assessment (cross-cutting) and QA Review (post-submission). Domain-specific knowledge tests need to be defined.</li>
+          <li><strong>Practice case archetype gaps.</strong> <code style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--amber-ink);">pricing</code> and <code style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--amber-ink);">market-research</code> archetypes are defined in the type system but have no seeded templates yet. Standalone process-optimization, RFP, dashboard, and RevOps cases also missing.</li>
+          <li><strong>Analyst-facing flow.</strong> Both assessments are admin-driven today. No self-service analyst path to take a practice case or run their own AI Readiness Assessment.</li>
+          <li><strong>Re-take policy.</strong> Can an analyst retake a failed practice case? After how long? Does the latest score replace the prior, or is there a best-of policy?</li>
+        </ul>
+      </div>
+    </section>
+
     <div class="footer">
-      <span>GRACE-KB · OVERVIEW · v1 · 2026-05-02</span>
-      <span>Open gaps: 14 · please add comments inline</span>
+      <span>GRACE-KB · OVERVIEW · v2 · 2026-05-03</span>
+      <span>Open gaps: 18 · please add comments inline</span>
     </div>
   </main>
 </div>
