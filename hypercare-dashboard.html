@@ -2663,6 +2663,69 @@
     `).join('');
   }
   renderRepeatIssues(REPEAT_ISSUES);
+
+  // ===== TICKETS BY CATEGORY CHART =====
+  // Tickets by category, last 14 days. Ordered: 5 categories per day.
+  // Values are total tickets opened that day, broken out by category.
+  // Ordering of stack (bottom to top): workflow, data, training, ux, integration.
+  const CAT_COLORS = ['var(--red-ink)', 'var(--amber-ink)', 'var(--gold-ink)', '#87b3ec', '#b07ce0'];
+  const CAT_DATA = [
+    { day: 1,  workflow: 4, data: 3, training: 2, ux: 2, integration: 1 }, // 12
+    { day: 2,  workflow: 5, data: 3, training: 2, ux: 2, integration: 1 }, // 13
+    { day: 3,  workflow: 4, data: 4, training: 2, ux: 2, integration: 1 }, // 13
+    { day: 4,  workflow: 5, data: 3, training: 2, ux: 1, integration: 1 }, // 12
+    { day: 5,  workflow: 4, data: 3, training: 2, ux: 1, integration: 0 }, // 10
+    { day: 6,  workflow: 4, data: 2, training: 2, ux: 1, integration: 0 }, // 9
+    { day: 7,  workflow: 3, data: 2, training: 2, ux: 1, integration: 0 }, // 8
+    { day: 8,  workflow: 3, data: 2, training: 1, ux: 1, integration: 0 }, // 7
+    { day: 9,  workflow: 2, data: 2, training: 1, ux: 1, integration: 0 }, // 6
+    { day: 10, workflow: 2, data: 1, training: 1, ux: 1, integration: 0 }, // 5
+    { day: 11, workflow: 2, data: 1, training: 1, ux: 0, integration: 0 }, // 4
+    { day: 12, workflow: 1, data: 1, training: 1, ux: 0, integration: 0 }, // 3
+    { day: 13, workflow: 1, data: 1, training: 1, ux: 0, integration: 0 }, // 3
+    { day: 14, workflow: 1, data: 1, training: 1, ux: 0, integration: 0 }, // 3
+  ];
+
+  function renderCategoryChart() {
+    const svg = document.getElementById('catChart');
+    if (!svg) return;
+    const W = 720, H = 240, padL = 40, padR = 20, padT = 20, padB = 30;
+    const innerW = W - padL - padR;
+    const innerH = H - padT - padB;
+    const days = CAT_DATA.length;
+    const barW = innerW / days * 0.62;
+    const slotW = innerW / days;
+    const max = Math.max(...CAT_DATA.map(d => d.workflow + d.data + d.training + d.ux + d.integration));
+    const yScale = innerH / max;
+    const keys = ['workflow', 'data', 'training', 'ux', 'integration'];
+
+    let svgContent = '';
+    // Y gridlines
+    for (let i = 0; i <= 4; i++) {
+      const y = padT + (innerH * i / 4);
+      const v = Math.round(max - (max * i / 4));
+      svgContent += `<line x1="${padL}" y1="${y}" x2="${W-padR}" y2="${y}" stroke="var(--border)" stroke-dasharray="2 4" stroke-width="1"/>`;
+      svgContent += `<text x="${padL-6}" y="${y+3}" text-anchor="end" font-size="9.5" font-family="JetBrains Mono, monospace" fill="var(--ink-3)">${v}</text>`;
+    }
+    // Bars
+    CAT_DATA.forEach((d, i) => {
+      const xCenter = padL + slotW * (i + 0.5);
+      const x = xCenter - barW / 2;
+      let yCursor = padT + innerH;
+      keys.forEach((k, kIdx) => {
+        const h = d[k] * yScale;
+        if (h <= 0) return;
+        yCursor -= h;
+        svgContent += `<rect x="${x}" y="${yCursor}" width="${barW}" height="${h}" fill="${CAT_COLORS[kIdx]}" opacity="0.85"/>`;
+      });
+      // X axis label every 2 days
+      if ((i + 1) % 2 === 1 || i === days - 1) {
+        svgContent += `<text x="${xCenter}" y="${padT+innerH+18}" text-anchor="middle" font-size="9.5" font-family="JetBrains Mono, monospace" fill="var(--ink-3)">D${d.day}</text>`;
+      }
+    });
+    svg.innerHTML = svgContent;
+  }
+  renderCategoryChart();
 </script>
 
 </div><!-- /#deck-content -->
