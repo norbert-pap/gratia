@@ -1499,23 +1499,18 @@
           <div class="eyebrow-row">
             <span class="eyebrow">Apollo · Kissflow Hypercare · Day 12 of 30</span>
             <div class="client-filter">
-              <button class="client-select" id="clientSelectBtn" title="Filter by acquired entity" aria-haspopup="listbox" aria-expanded="false">
-                <span id="clientSelectLabel">Apex Ventures</span>
-                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-              </button>
-              <ul class="client-menu" id="clientMenu" role="listbox" hidden>
-                <li class="client-menu-label">Acquired entity</li>
-                <li class="client-menu-item active" role="option" data-client="all">All entities</li>
-                <li class="client-menu-item" role="option" data-client="carina">Apex Ventures</li>
-                <li class="client-menu-item" role="option" data-client="nyl">Apex Logistics</li>
-                <li class="client-menu-item" role="option" data-client="athene">Apex Mfg</li>
-                <li class="client-menu-item" role="option" data-client="abc">Apex Asia</li>
-                <li class="client-menu-item" role="option" data-client="def">Apex EU</li>
-                <li class="client-menu-item" role="option" data-client="ghi">Apex Foods</li>
-                <li class="client-menu-item" role="option" data-client="jkl">Apex Beverage</li>
-                <li class="client-menu-item" role="option" data-client="mno">Apex Retail</li>
-              </ul>
-            </div>
+  <button class="client-select" id="viewSelectBtn" title="Group rows" aria-haspopup="listbox" aria-expanded="false">
+    <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M3 6h18M6 12h12M9 18h6" stroke-linecap="round"/></svg>
+    <span id="viewSelectLabel">All teams</span>
+    <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+  </button>
+  <ul class="client-menu" id="viewMenu" role="listbox" hidden>
+    <li class="client-menu-label">Group by</li>
+    <li class="client-menu-item active" role="option" data-view="team">All teams</li>
+    <li class="client-menu-item" role="option" data-view="region">By region</li>
+    <li class="client-menu-item" role="option" data-view="role">By role</li>
+  </ul>
+</div>
             <span class="status-chip" id="statusChip" data-status="amber"><span class="dot-pulse"></span><span id="statusChipLabel">Stabilizing on track</span></span>
           </div>
           <h1 class="lede" id="dashLede">3 of 6 exit criteria met. <em>Tickets down 38% week-over-week</em>. Hypercare on track for June 30 exit.</h1>
