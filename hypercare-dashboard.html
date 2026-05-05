@@ -704,9 +704,10 @@
     display: flex; align-items: center; justify-content: center;
     font-size: 9.5px; font-weight: 600;
     color: var(--ink-1);
-    background: var(--bg-3);
+    background: var(--bg-3) center/cover no-repeat;
     border: 1px solid var(--border-2);
     letter-spacing: 0;
+    flex-shrink: 0;
   }
   .matrix-row .days {
     font-size: 12px; text-align: right;
@@ -718,6 +719,44 @@
     color: var(--ink-4); transition: all 0.15s;
     display: flex; justify-content: flex-end;
   }
+
+  /* Hypercare team matrix — new cell styles */
+  .matrix-row .team .team-name { font-weight: 500; color: var(--ink-0); }
+  .matrix-row .region-pill {
+    font-size: 10.5px;
+    color: var(--ink-2);
+    background: var(--bg-3);
+    border: 1px solid var(--border);
+    padding: 2px 6px;
+    border-radius: 4px;
+    font-family: 'JetBrains Mono', monospace;
+    margin-left: 6px;
+  }
+  .matrix-row .lead-name { color: var(--ink-1); }
+  .matrix-row .adopt-cell { display: flex; align-items: center; gap: 8px; }
+  .matrix-row .adopt-bar {
+    flex: 1;
+    height: 5px;
+    background: var(--bg-3);
+    border-radius: 3px;
+    overflow: hidden;
+    min-width: 60px;
+  }
+  .matrix-row .adopt-fill { display: block; height: 100%; border-radius: 3px; }
+  .matrix-row .adopt-fill.g { background: var(--green); }
+  .matrix-row .adopt-fill.a { background: var(--amber); }
+  .matrix-row .adopt-fill.r { background: var(--red); }
+  .matrix-row .adopt-num { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--ink-1); min-width: 36px; text-align: right; }
+  .matrix-row .num-cell { font-family: 'JetBrains Mono', monospace; font-size: 12.5px; color: var(--ink-1); text-align: right; }
+  .matrix-row .num-cell.warn { color: var(--amber-ink); }
+  .matrix-row .num-cell.bad  { color: var(--red-ink); font-weight: 500; }
+  .matrix-row .ll-cell { font-size: 12px; color: var(--ink-2); }
+  .matrix-row .ll-cell.warn { color: var(--amber-ink); }
+  .matrix-row .ll-cell.bad  { color: var(--red-ink); font-weight: 500; }
+  .matrix-row .status-text { font-size: 12px; }
+  .matrix-row .status-text.status-g { color: var(--green-ink); }
+  .matrix-row .status-text.status-a { color: var(--amber-ink); }
+  .matrix-row .status-text.status-r { color: var(--red-ink); }
 
   /* Bottom cards */
   .bottom-grid {
@@ -2023,47 +2062,41 @@
   }
 
   function renderMatrix(teams) {
-    matrixRows.innerHTML = '';
-    const sorted = [...teams].sort((a, b) => b.risk - a.risk);
-    sorted.forEach(t => {
-      const segs = STAGES.map((_, idx) => {
-        if (idx < t.stageIdx) return '<div class="seg done"></div>';
-        if (idx === t.stageIdx) return `<div class="seg cur-${t.health}"></div>`;
-        return '<div class="seg future"></div>';
-      }).join('');
-
-      const row = document.createElement('div');
-      row.className = 'matrix-row';
-      row.dataset.health = t.health;
-      row.dataset.team = t.name;
-      row.dataset.stage = String(t.stageIdx);
-      row.onclick = () => openDrawer(t.name);
-
-      const daysClass = t.health === 'r' ? 'bad' : t.health === 'a' ? 'warn' : '';
-      const depCell = (t.health === 'a' && t.depTag)
-        ? `<span class="dep-tag">${t.depTag}</span>`
-        : '<span class="dep-empty">·</span>';
-
-      row.innerHTML = `
-        <div class="ref">${t.ref}</div>
-        <div class="team">
-          <span class="tip" data-tip="${HEALTH_DESC[t.health]}"><span class="health ${t.health}"></span></span>
-          <span>${t.name}</span>
-        </div>
-        <div class="stages">${segs}</div>
-        <div class="dep-cell">${depCell}</div>
-        <div class="assignee">
-          <span class="av">${t.leadInit}</span>
-          <span>${t.lead.split(' ').slice(-1)[0]}</span>
-        </div>
-        <div class="days ${daysClass}">${t.days}d</div>
-        <div class="chev">
-          <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    const root = document.getElementById('matrix-rows');
+    if (!root) return;
+    const STATUS_LABEL = { g: 'On-track', a: 'Lagging', r: 'At risk' };
+    root.innerHTML = teams.map(t => {
+      // Adoption bar color: ≥90% g, 75–89% a, <75% r
+      const adCls = t.adoption >= 90 ? 'g' : (t.adoption >= 75 ? 'a' : 'r');
+      // Last-login class: >7d red, 4–7d amber, else neutral
+      const llCls = t.lastLogin === '>7d' ? 'bad' : (t.lastLogin === '4–7d' ? 'warn' : '');
+      // Open-tickets class
+      const tkCls = t.openTickets >= 4 ? 'bad' : (t.openTickets >= 2 ? 'warn' : '');
+      return `
+        <div class="matrix-row" data-status="${t.status}" data-region="${t.region}" data-role="${t.role}">
+          <div class="team">
+            <span class="health ${t.status}"></span>
+            <span class="team-name">${t.name}</span>
+            <span class="region-pill">${t.region}</span>
+          </div>
+          <div class="assignee">
+            <span class="av" style="background-image:url('${t.avatarUrl}')">${t.leadInit}</span>
+            <span class="lead-name">${t.lead}</span>
+          </div>
+          <div class="adopt-cell">
+            <div class="adopt-bar"><span class="adopt-fill ${adCls}" style="width:${t.adoption}%"></span></div>
+            <span class="adopt-num">${t.adoption}%</span>
+          </div>
+          <div class="num-cell ${tkCls}">${t.openTickets}</div>
+          <div class="num-cell">${t.training}%</div>
+          <div class="ll-cell ${llCls}">${t.lastLogin}</div>
+          <div><span class="status-text status-${t.status}">${STATUS_LABEL[t.status]}</span></div>
+          <div class="num-cell">${t.days}</div>
         </div>
       `;
-      matrixRows.appendChild(row);
-    });
+    }).join('');
   }
+  renderMatrix(HYPERCARE_TEAMS);
 
   function renderHeader(config) {
     document.getElementById('clientSelectLabel').textContent = config.name;
@@ -2119,55 +2152,7 @@
     document.getElementById('matrixTeamCount').textContent = String(teams.length);
   }
 
-  function renderClient(clientId) {
-    const config = CLIENTS[clientId] || CLIENTS.all;
-    currentClientId = clientId;
-    currentTeams = buildTeams(config.archetype);
-    renderHeader(config);
-    renderKpis(currentTeams, config);
-    renderMatrix(currentTeams);
-    // Reset filters on client change
-    healthFilter = 'all';
-    stageFilter = null;
-    document.querySelectorAll('#filters .chip').forEach(c => c.classList.toggle('active', c.dataset.filter === 'all'));
-    applyFilters();
-  }
-
-  // ========== FILTERS (health + stage, combined) ==========
-  let healthFilter = 'all';
-  let stageFilter = null;
-
-  function applyFilters() {
-    document.querySelectorAll('.matrix-row').forEach(r => {
-      const healthOk = (healthFilter === 'all') || r.dataset.health === healthFilter;
-      const stageOk = (stageFilter === null) || r.dataset.stage === String(stageFilter);
-      r.classList.toggle('hidden', !(healthOk && stageOk));
-    });
-    const banner = document.getElementById('stageBanner');
-    const bannerName = document.getElementById('stageBannerName');
-    if (stageFilter !== null) {
-      banner.classList.add('active');
-      bannerName.textContent = STAGES[stageFilter];
-    } else {
-      banner.classList.remove('active');
-    }
-  }
-
-  const filterChips = document.querySelectorAll('#filters .chip');
-  filterChips.forEach(chip => {
-    chip.onclick = () => {
-      filterChips.forEach(c => c.classList.remove('active'));
-      chip.classList.add('active');
-      healthFilter = chip.dataset.filter;
-      applyFilters();
-    };
-  });
-
-  document.getElementById('stageBannerClear').addEventListener('click', e => {
-    e.stopPropagation();
-    stageFilter = null;
-    applyFilters();
-  });
+  // renderClient removed — single fixed dataset HYPERCARE_TEAMS, no per-client switching needed.
 
   // ========== TOAST ==========
   const toastStack = document.createElement('div');
@@ -2384,16 +2369,7 @@
       e.stopPropagation();
       menu.hidden ? open() : close();
     });
-    menu.addEventListener('click', e => {
-      const item = e.target.closest('.client-menu-item');
-      if (!item) return;
-      menu.querySelectorAll('.client-menu-item').forEach(i => i.classList.toggle('active', i === item));
-      const clientId = item.dataset.client;
-      if (clientId && CLIENTS[clientId]) {
-        renderClient(clientId);
-      }
-      close();
-    });
+    // view-select click is wired by wireViewSelect() below
     document.addEventListener('click', e => {
       if (!btn.contains(e.target) && !menu.contains(e.target)) close();
     });
@@ -2475,7 +2451,7 @@
   })();
 
   // ========== INITIAL RENDER ==========
-  renderClient('all');
+  // renderMatrix(HYPERCARE_TEAMS) already called at end of renderMatrix definition above.
 
   // ===== Exit-criteria failing-row jump =====
   document.getElementById('exitList').addEventListener('click', (e) => {
