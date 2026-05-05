@@ -388,46 +388,6 @@
   }
   .card-body { padding: 18px 20px 20px; }
 
-  /* Pacing SVG */
-  .pacing-svg { width: 100%; height: auto; display: block; }
-  .pacing-svg text { font-family: 'Inter', sans-serif; }
-
-  /* Waffle -named */
-  .waffle-grid {
-    display: grid; grid-template-columns: 1fr 1fr;
-    gap: 3px;
-  }
-  .waffle-grid[hidden] { display: none; }
-  .waffle-cell {
-    padding: 5px 8px;
-    border-radius: 3px;
-    font-size: 10.5px; font-weight: 500;
-    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-    display: flex; align-items: center; gap: 6px;
-    cursor: pointer;
-    transition: all 0.14s;
-    border: 1px solid transparent;
-  }
-  .waffle-cell:hover { transform: translateY(-1px); }
-  .waffle-cell .dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
-  .waffle-cell.r { background: var(--red-dim); color: var(--red-ink); border-color: var(--red-line); }
-  .waffle-cell.a { background: var(--amber-dim); color: var(--amber-ink); border-color: var(--amber-line); }
-  .waffle-cell.g { background: var(--green-dim); color: var(--green-ink); border-color: var(--green-line); }
-  .waffle-cell.r .dot { background: var(--red); }
-  .waffle-cell.a .dot { background: var(--amber); }
-  .waffle-cell.g .dot { background: var(--green); }
-
-  .waffle-head-toggle {
-    display: flex; gap: 4px;
-  }
-  .waffle-head-toggle button {
-    font-size: 11px; color: var(--ink-3);
-    padding: 3px 7px; border-radius: 4px;
-    transition: all 0.12s;
-  }
-  .waffle-head-toggle button:hover { color: var(--ink-1); }
-  .waffle-head-toggle button.active { background: var(--bg-3); color: var(--ink-0); }
-
   /* Teams view (left-card alternative to pacing chart) */
   .teams-grid[hidden] { display: none; }
   .teams-grid {
@@ -487,90 +447,6 @@
     background: var(--ink-3); opacity: 0.55;
   }
 
-  /* Status list view */
-  .status-list[hidden] { display: none; }
-  .status-list {
-    display: flex; flex-direction: column;
-    max-height: 300px; overflow-y: auto;
-    margin: -2px -8px 0;
-  }
-  .status-list-item {
-    display: grid;
-    grid-template-columns: 8px 1fr auto auto;
-    gap: 10px;
-    padding: 7px 8px;
-    align-items: center;
-    cursor: pointer;
-    border-bottom: 1px solid var(--border);
-    transition: background 0.12s;
-    font-size: 12px;
-  }
-  .status-list-item:last-child { border-bottom: none; }
-  .status-list-item:hover { background: var(--row-hover); }
-  .status-list-item .dot {
-    width: 6px; height: 6px; border-radius: 50%;
-  }
-  .status-list-item .dot.r { background: var(--red); box-shadow: 0 0 0 2px var(--red-dim); }
-  .status-list-item .dot.a { background: var(--amber); box-shadow: 0 0 0 2px var(--amber-dim); }
-  .status-list-item .dot.g { background: var(--green); box-shadow: 0 0 0 2px var(--green-dim); }
-  .status-list-item .name { color: var(--ink-0); font-weight: 500; }
-  .status-list-item .stage {
-    color: var(--ink-2); font-size: 11px;
-    letter-spacing: 0.01em;
-    font-weight: 500;
-  }
-  .status-list-item .days {
-    color: var(--ink-2); font-size: 11px;
-    font-variant-numeric: tabular-nums;
-    min-width: 28px; text-align: right;
-  }
-
-  /* Movers list (Teams-view companion in right card) */
-  .movers-list {
-    padding: 4px 0;
-    max-height: 300px;
-    overflow-y: auto;
-  }
-  .movers-list:empty::after {
-    content: 'No status changes since last week';
-    display: block;
-    padding: 18px 20px;
-    color: var(--ink-3);
-    font-size: 12px;
-  }
-  .movers-item {
-    display: grid;
-    grid-template-columns: 16px 1fr auto;
-    gap: 10px;
-    padding: 9px 20px;
-    align-items: center;
-    cursor: pointer;
-    border-bottom: 1px solid var(--border);
-    transition: background 0.12s;
-    font-size: 12px;
-  }
-  .movers-item:hover { background: var(--row-hover); }
-  .movers-item:last-child { border-bottom: none; }
-  .movers-item .arrow {
-    display: inline-flex; align-items: center; justify-content: center;
-  }
-  .movers-item.worse .arrow { color: var(--red-ink); }
-  .movers-item.better .arrow { color: var(--green-ink); }
-  .movers-item .name { color: var(--ink-0); font-weight: 500; }
-  .movers-item .change {
-    display: inline-flex; align-items: center; gap: 5px;
-    color: var(--ink-3);
-    font-size: 10.5px;
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-  }
-  .movers-item .change .swatch {
-    width: 7px; height: 7px; border-radius: 50%;
-  }
-  .movers-item .change .swatch.r { background: var(--red); }
-  .movers-item .change .swatch.a { background: var(--amber); }
-  .movers-item .change .swatch.g { background: var(--green); }
-  .movers-item .change .arr { color: var(--ink-3); font-size: 11px; }
 
   /* ========== MATRIX ========== */
   .matrix-section { margin-bottom: 28px; }
@@ -642,27 +518,6 @@
     transition: background 0.12s;
     position: relative;
   }
-  .matrix-row .dep-cell {
-    display: flex; align-items: center;
-    min-width: 0;
-  }
-  .matrix-row .dep-tag {
-    display: inline-flex; align-items: center;
-    font-size: 10.5px; font-weight: 600;
-    padding: 2px 7px;
-    border-radius: 3px;
-    background: var(--amber-dim);
-    color: var(--amber-ink);
-    border: 1px solid var(--amber-line);
-    letter-spacing: 0.02em;
-    white-space: nowrap;
-    overflow: hidden; text-overflow: ellipsis;
-    max-width: 100%;
-  }
-  .matrix-row .dep-empty {
-    color: var(--ink-4);
-    font-size: 12px;
-  }
   .matrix-row:last-child { border-bottom: none; }
   .matrix-row:hover { background: var(--row-hover); }
   .matrix-row:hover .chev { color: var(--gold-bright); transform: translateX(2px); }
@@ -681,20 +536,6 @@
   .matrix-row .team .health.r { background: var(--red); box-shadow: 0 0 0 3px var(--red-dim); }
   .matrix-row .team .health.a { background: var(--amber); box-shadow: 0 0 0 3px var(--amber-dim); }
   .matrix-row .team .health.g { background: var(--green); box-shadow: 0 0 0 3px var(--green-dim); }
-  .matrix-row .stages {
-    display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px;
-    align-items: center;
-  }
-  .matrix-row .seg { height: 4px; border-radius: 1.5px; position: relative; }
-  .matrix-row .seg.done { background: var(--ink-2); }
-  .matrix-row .seg.future { background: var(--bg-4); }
-  .matrix-row .seg.cur-r { background: var(--red); }
-  .matrix-row .seg.cur-a { background: var(--amber); }
-  .matrix-row .seg.cur-g { background: var(--green); }
-  .matrix-row .stage-label {
-    font-size: 12px; color: var(--ink-2);
-    display: flex; align-items: center; gap: 7px; justify-content: flex-end;
-  }
   .matrix-row .assignee {
     font-size: 12px; color: var(--ink-2);
     display: flex; align-items: center; gap: 8px;
@@ -1290,8 +1131,6 @@
     z-index: 30;
     pointer-events: none;
   }
-  /* Stage column headers wrap `Impact<br>Assessment` etc; .tip's inline-flex breaks that. */
-  .matrix-head-row .stage-labels .tip { display: inline-block; }
   /* Wide variant: wrap multi-sentence copy. */
   .tip.tip-wide[data-tip]:hover::after,
   .tip.tip-wide[data-tip]:focus::after {
@@ -1316,95 +1155,6 @@
     border-top: 1px solid var(--border-2);
   }
 
-  /* ========== REF NUM + PENDING BADGE ========== */
-  .matrix-row .ref {
-    font-family: 'JetBrains Mono', monospace;
-    font-size: 10.5px;
-    color: var(--ink-3);
-    font-weight: 500;
-    letter-spacing: 0.02em;
-  }
-  .matrix-row .team .pending-tag {
-    display: inline-flex; align-items: center;
-    font-size: 9.5px; font-weight: 600;
-    padding: 1.5px 5px;
-    border-radius: 3px;
-    background: var(--amber-dim);
-    color: var(--amber-ink);
-    border: 1px solid var(--amber-line);
-    letter-spacing: 0.04em;
-    text-transform: uppercase;
-    white-space: nowrap;
-  }
-  .matrix-row .team .pending-tag.client {
-    background: var(--kf-blue-dim);
-    color: var(--kf-blue);
-    border-color: var(--kf-blue-line);
-  }
-
-  /* ========== INTERACTIVE STAGE ROW (chart) ========== */
-  .pacing-svg .stage-row { cursor: pointer; }
-  .pacing-svg .stage-row .stage-row-bg { transition: fill 0.15s; }
-  .pacing-svg .stage-row:hover .stage-row-bg { fill: var(--row-hover); }
-  .pacing-svg .stage-row.active .stage-row-bg { fill: var(--gold-dim); }
-  .pacing-svg .stage-row.active text:first-of-type { fill: var(--gold-ink); }
-
-  /* Pacing chart hover scrubber */
-  .hero-grid .card-body { position: relative; }
-  .pacing-svg .pacing-cursor { stroke: var(--ink-2); stroke-dasharray: 2 3; opacity: 0.7; pointer-events: none; }
-  .pacing-svg .pacing-cursor-plan { fill: var(--ink-2); pointer-events: none; }
-  .pacing-svg .pacing-cursor-actual { fill: var(--red); pointer-events: none; }
-  .pacing-tooltip {
-    position: absolute;
-    background: var(--bg-2);
-    border: 1px solid var(--border-2);
-    border-radius: 5px;
-    padding: 8px 10px;
-    font-size: 11.5px;
-    line-height: 1.45;
-    color: var(--ink-0);
-    pointer-events: none;
-    z-index: 5;
-    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
-    min-width: 130px;
-    font-variant-numeric: tabular-nums;
-  }
-  .pacing-tooltip[hidden] { display: none; }
-  .pacing-tooltip .day {
-    font-size: 10px; font-weight: 600;
-    letter-spacing: 0.06em; text-transform: uppercase;
-    color: var(--ink-3);
-    margin-bottom: 4px;
-  }
-  .pacing-tooltip .row {
-    display: flex; align-items: center; gap: 6px;
-    margin-top: 2px;
-  }
-  .pacing-tooltip .row .swatch {
-    width: 10px; height: 2px; border-radius: 1px;
-    flex-shrink: 0;
-  }
-  .pacing-tooltip .row .swatch.plan { background: var(--ink-3); }
-  .pacing-tooltip .row .swatch.actual { background: var(--red); }
-  .pacing-tooltip .row .swatch.proj { background: var(--red); opacity: 0.65; }
-  .pacing-tooltip .row .k { color: var(--ink-2); width: 64px; }
-  .pacing-tooltip .row .v { color: var(--ink-0); font-weight: 500; }
-
-  /* Pacing chart -theme-aware fills/strokes */
-  .pacing-svg .ax       { stroke: var(--border-2); }
-  .pacing-svg .ax-grid  { stroke: var(--border); }
-  .pacing-svg .label    { fill: var(--ink-3); }
-  .pacing-svg .label-mid    { fill: var(--ink-2); }
-  .pacing-svg .label-bright { fill: var(--ink-1); }
-  .pacing-svg .plan-line   { stroke: var(--ink-3); }
-  .pacing-svg .today-line  { stroke: var(--ink-2); }
-  .pacing-svg .actual-line { stroke: var(--red); }
-  .pacing-svg .actual-dot-out { fill: var(--red); }
-  .pacing-svg .actual-dot-in  { fill: var(--bg); }
-  .pacing-svg .projected   { stroke: var(--red); }
-  .pacing-svg .end-dot     { stroke: var(--red); }
-  .pacing-svg .red-text    { fill: var(--red-ink); }
-  .pacing-svg .callout-bg  { fill: var(--bg-2); stroke: var(--border-2); }
 
   /* Stabilization chart */
   #stabChart .ax       { stroke: var(--border-2); }
@@ -1528,25 +1278,6 @@
   /* Smooth hide/show on matrix rows */
   .matrix-row { transition: opacity 0.18s, padding 0.18s; }
   .matrix-row.hidden { display: none; }
-
-  /* Active stage filter banner */
-  .stage-filter-banner {
-    display: none;
-    align-items: center; gap: 8px;
-    font-size: 12px;
-    color: var(--ink-1);
-    background: var(--gold-dim);
-    border: 1px solid var(--gold-line);
-    padding: 4px 10px 4px 12px;
-    border-radius: 5px;
-  }
-  .stage-filter-banner.active { display: inline-flex; }
-  .stage-filter-banner .x {
-    color: var(--gold-ink); cursor: pointer; padding: 2px;
-    border-radius: 3px; transition: background 0.14s;
-    display: flex; align-items: center;
-  }
-  .stage-filter-banner .x:hover { background: var(--gold-line); }
 
   /* ========== BOTTOM ROW ========== */
   .bottom-row {
@@ -1929,45 +1660,6 @@
     { name: 'Compliance',            region: 'NY',      lead: 'Rachel Stone',   leadInit: 'RS', avatarUrl: 'https://randomuser.me/api/portraits/women/12.jpg', wave: 1, days: 12, adoption: 89, openTickets: 0, training: 100, lastLogin: 'Today', status: 'g', role: 'Glance-only' },
   ];
 
-  // 9 entities (incl. All) -each points to an archetype + per-entity metadata
-  const CLIENTS = {
-    all:    { name: 'All entities',     archetype: 'behind',   goLive: 'May 13', daysSlip: 8,   statusKey: 'amber', statusLabel: 'Slightly behind',
-              lede: '<em>8 entities in flight.</em> 3 on track, 3 slightly behind, 2 off-track.',
-              sublede: 'Aggregate view across the Apex acquisition portfolio. Filter by entity to drill in.' },
-    carina: { name: 'Apex Ventures',    archetype: 'behind',   goLive: 'May 13', daysSlip: 8,   statusKey: 'amber', statusLabel: 'Slightly behind',
-              lede: '5 workstreams off-track. <em>4 workstreams cleared sign-off</em>. On pace for May 13 cutover.',
-              sublede: 'IT Cutover and Customer Migration remain the bottlenecks. Legal contract harmonization cleared this week, IT Cutover dry-run restarting now.' },
-    nyl:    { name: 'Apex Logistics',   archetype: 'ontrack',  goLive: 'May 5',  daysSlip: -2,  statusKey: 'green', statusLabel: 'On track',
-              lede: '<em>13 workstreams already live</em>; 8 in final UAT. Ahead of plan.',
-              sublede: 'No active blockers. On pace for early cutover on May 5.' },
-    athene: { name: 'Apex Mfg',         archetype: 'offtrack', goLive: 'Jun 18', daysSlip: 35,  statusKey: 'red',   statusLabel: 'Off track',
-              lede: '<em>13 workstreams off-track.</em> Integration at risk. Projected cutover slipping to Jun 18.',
-              sublede: 'Legal contract harmonization at 18 days outstanding. Acquired-side leadership unresponsive on chart-of-accounts, SSO config, and stakeholder list.' },
-    abc:    { name: 'Apex Asia',        archetype: 'behind',   goLive: 'May 16', daysSlip: 11,  statusKey: 'amber', statusLabel: 'Slightly behind',
-              lede: '5 workstreams off-track. <em>4 workstreams cleared sign-off</em>. Projected May 16 cutover.',
-              sublede: 'Financial Reporting baseline received this week. IT Cutover still working through Legal contract markup.' },
-    def:    { name: 'Apex EU',          archetype: 'offtrack', goLive: 'Jun 11', daysSlip: 28,  statusKey: 'red',   statusLabel: 'Off track',
-              lede: '<em>13 workstreams off-track.</em> Integration stalled. Cutover slipped to Jun 11.',
-              sublede: 'Tax residency documentation still missing across sub-entities. Acquired-side engagement intermittent since week 1.' },
-    ghi:    { name: 'Apex Foods',       archetype: 'ontrack',  goLive: 'May 7',  daysSlip: 0,   statusKey: 'green', statusLabel: 'On track',
-              lede: '<em>13 workstreams live</em>; 8 in final UAT. Tracking exactly to plan.',
-              sublede: 'Two pending items in last-stage UAT. Cutover date held at May 7.' },
-    jkl:    { name: 'Apex Beverage',    archetype: 'behind',   goLive: 'May 18', daysSlip: 13,  statusKey: 'amber', statusLabel: 'Slightly behind',
-              lede: '5 workstreams off-track. <em>4 workstreams cleared sign-off</em>. Projected May 18 cutover.',
-              sublede: 'Customer record mapping in progress. IT Cutover bank routing template due back from Legal next week.' },
-    mno:    { name: 'Apex Retail',      archetype: 'ontrack',  goLive: 'May 9',  daysSlip: 2,   statusKey: 'green', statusLabel: 'On track',
-              lede: '<em>13 workstreams live</em>; 8 in final UAT. Two-day buffer over plan.',
-              sublede: 'No blockers. Final IT cutover dry-run scheduled for next week.' },
-  };
-
-  const HEALTH_LABEL = { r: 'Off track', a: 'Pending info', g: 'On track' };
-  const HEALTH_DESC = {
-    r: 'Workstream is off track and not meeting stage-time SLAs',
-    a: 'Workstream is pending input from another team or the acquired entity',
-    g: 'On track',
-  };
-  const HEALTH_VAR = { g: 'var(--green)', a: 'var(--amber)', r: 'var(--red)' };
-
   // Stabilization chart per-day data (Day 1..30)
   // tickets[i] is open count on day i+1; adopt[i] is adoption % on day i+1
   const STAB_DATA = {
@@ -2024,150 +1716,6 @@
 
   renderExitCriteria(EXIT_CRITERIA);
 
-  function deriveLastWeekHealth(team) {
-    // Deterministic 60% same / 20% improved (was worse) / 20% worsened (was better) split
-    // keyed off ref so the story is stable across renders.
-    const ref = team.ref || '';
-    const seed = (ref.charCodeAt(ref.length - 1) || 0) + (ref.charCodeAt(ref.length - 2) || 0);
-    const roll = seed % 10;
-    if (roll < 6) return team.health;
-    if (roll < 8) {
-      if (team.health === 'g') return 'a';
-      if (team.health === 'a') return 'r';
-      return 'r';
-    }
-    if (team.health === 'r') return 'a';
-    if (team.health === 'a') return 'g';
-    return 'g';
-  }
-
-  function buildTeams(archetypeKey) {
-    const arch = ARCHETYPES[archetypeKey] || ARCHETYPES.behind;
-    return TEAM_META.map((meta, i) => {
-      const t = Object.assign({}, meta, arch[i]);
-      t.lastWeekHealth = deriveLastWeekHealth(t);
-      return t;
-    });
-  }
-
-  function parseGoLive(label) {
-    const months = { Jan:0, Feb:1, Mar:2, Apr:3, May:4, Jun:5, Jul:6, Aug:7, Sep:8, Oct:9, Nov:10, Dec:11 };
-    const [m, d] = label.split(' ');
-    return new Date(new Date().getFullYear(), months[m] || 0, parseInt(d, 10));
-  }
-
-  // ========== STATE ==========
-  let currentTeams = buildTeams('behind');
-  let currentClientId = 'all';
-
-  // ========== DOM REFS ==========
-  const waffleEl = document.getElementById('waffle');
-  const statusListEl = document.getElementById('status-list');
-  const matrixRows = document.getElementById('matrix-rows');
-  const teamsGridEl = document.getElementById('teams-grid');
-  const moversListEl = document.getElementById('moversList');
-  const moversMetaEl = document.getElementById('moversMeta');
-
-  // ========== RENDERERS ==========
-  function renderWaffle(teams) {
-    waffleEl.innerHTML = '';
-    const sorted = [...teams].sort((a, b) => {
-      const p = { r: 0, a: 1, g: 2 };
-      return p[a.health] - p[b.health];
-    });
-    sorted.forEach(t => {
-      const cell = document.createElement('div');
-      cell.className = `waffle-cell ${t.health}`;
-      cell.innerHTML = `<span class="dot"></span>${t.name}`;
-      cell.title = `${t.name} · ${HEALTH_DESC[t.health]} · ${STAGES[t.stageIdx]}`;
-      cell.onclick = () => openDrawer(t.name);
-      waffleEl.appendChild(cell);
-    });
-  }
-
-  const HEALTH_RANK = { r: 0, a: 1, g: 2 };
-  function renderTeamsView(teams) {
-    teamsGridEl.innerHTML = '';
-    const sorted = [...teams].sort((a, b) => HEALTH_RANK[a.health] - HEALTH_RANK[b.health]);
-    let improved = 0, worsened = 0;
-    sorted.forEach(t => {
-      const prev = t.lastWeekHealth || t.health;
-      if (HEALTH_RANK[t.health] > HEALTH_RANK[prev]) improved += 1;
-      else if (HEALTH_RANK[t.health] < HEALTH_RANK[prev]) worsened += 1;
-      const tile = document.createElement('button');
-      tile.type = 'button';
-      tile.className = `team-tile ${t.health}`;
-      tile.title = `${t.name} · ${HEALTH_DESC[t.health]} · ${STAGES[t.stageIdx]} · Last week: ${HEALTH_LABEL[prev]}`;
-      tile.innerHTML = `
-        <span class="tile-dot"></span>
-        <span class="tile-name">${t.name}</span>
-        <span class="tile-prev ${prev}"></span>
-      `;
-      tile.onclick = () => openDrawer(t.name);
-      teamsGridEl.appendChild(tile);
-    });
-    const impEl = document.getElementById('teamsImproved');
-    const worEl = document.getElementById('teamsWorsened');
-    if (impEl) impEl.textContent = String(improved);
-    if (worEl) worEl.textContent = String(worsened);
-  }
-
-  function renderMovers(teams) {
-    moversListEl.innerHTML = '';
-    const movers = teams
-      .filter(t => t.lastWeekHealth && t.lastWeekHealth !== t.health)
-      .map(t => Object.assign({}, t, {
-        dir: HEALTH_RANK[t.health] > HEALTH_RANK[t.lastWeekHealth] ? 'better' : 'worse',
-      }))
-      .sort((a, b) => {
-        if (a.dir !== b.dir) return a.dir === 'worse' ? -1 : 1;
-        return HEALTH_RANK[a.health] - HEALTH_RANK[b.health];
-      });
-    moversMetaEl.textContent = movers.length === 0
-      ? 'No changes'
-      : `${movers.length} ${movers.length === 1 ? 'team' : 'teams'} changed`;
-    const upArrow = '<svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24"><path d="M7 17 17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-    const downArrow = '<svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24"><path d="M7 7l10 10M9 17h8V9" stroke-linecap="round" stroke-linejoin="round"/></svg>';
-    movers.forEach(t => {
-      const item = document.createElement('div');
-      item.className = `movers-item ${t.dir}`;
-      item.title = `${t.name} · ${HEALTH_LABEL[t.lastWeekHealth]} → ${HEALTH_LABEL[t.health]}`;
-      item.innerHTML = `
-        <span class="arrow">${t.dir === 'worse' ? upArrow : downArrow}</span>
-        <span class="name">${t.name}</span>
-        <span class="change">
-          <span class="swatch ${t.lastWeekHealth}"></span>
-          <span class="arr">→</span>
-          <span class="swatch ${t.health}"></span>
-        </span>
-      `;
-      item.onclick = () => openDrawer(t.name);
-      moversListEl.appendChild(item);
-    });
-  }
-
-  function renderStatusList(teams) {
-    statusListEl.innerHTML = '';
-    const sorted = [...teams].sort((a, b) => {
-      const p = { r: 0, a: 1, g: 2 };
-      if (p[a.health] !== p[b.health]) return p[a.health] - p[b.health];
-      return b.risk - a.risk;
-    });
-    sorted.forEach(t => {
-      const item = document.createElement('div');
-      item.className = `status-list-item ${t.health}`;
-      item.title = HEALTH_DESC[t.health];
-      item.innerHTML = `
-        <span class="dot ${t.health}"></span>
-        <span class="name">${t.name}</span>
-        <span class="stage">${STAGES[t.stageIdx]}</span>
-        <span class="days">${t.days}d</span>
-      `;
-      item.onclick = () => openDrawer(t.name);
-      statusListEl.appendChild(item);
-    });
-  }
-
   function renderMatrix(teams) {
     const root = document.getElementById('matrix-rows');
     if (!root) return;
@@ -2204,62 +1752,6 @@
     }).join('');
   }
   renderMatrix(HYPERCARE_TEAMS);
-
-  function renderHeader(config) {
-    document.getElementById('clientSelectLabel').textContent = config.name;
-    document.getElementById('dashLede').innerHTML = config.lede;
-    document.getElementById('dashSublede').textContent = config.sublede;
-    const chip = document.getElementById('statusChip');
-    chip.dataset.status = config.statusKey;
-    document.getElementById('statusChipLabel').textContent = config.statusLabel;
-  }
-
-  function renderKpis(teams, config) {
-    const completed = teams.filter(t => t.stageIdx === 4).length;
-    const offtrack = teams.filter(t => t.health === 'r').length;
-    const pending = teams.filter(t => t.health === 'a').length;
-    const ontrack = teams.filter(t => t.health === 'g').length;
-
-    document.getElementById('kpiCompletionValue').textContent = String(Math.round(completed / teams.length * 100));
-    document.getElementById('kpiCompletionDeltaText').textContent = `${completed} of ${teams.length} complete`;
-
-    document.getElementById('kpiOffTrackValue').textContent = String(offtrack);
-    const otWrap = document.getElementById('kpiOffTrackValueWrap');
-    otWrap.style.color = offtrack > 7 ? 'var(--red-ink)' : offtrack > 0 ? 'var(--amber-ink)' : 'var(--green-ink)';
-    const otDelta = config.archetype === 'ontrack' ? 'No teams blocked'
-                  : config.archetype === 'behind'  ? '+1 since last week'
-                  : '+5 since last week';
-    document.getElementById('kpiOffTrackDelta').textContent = otDelta;
-
-    const slaCount = config.archetype === 'ontrack' ? 0 : config.archetype === 'behind' ? 3 : 12;
-    const slaTeams = config.archetype === 'ontrack' ? 0 : config.archetype === 'behind' ? 2 : 7;
-    document.getElementById('kpiSlaValue').textContent = String(slaCount);
-    document.getElementById('kpiSlaValueWrap').style.color = slaCount === 0 ? 'var(--green-ink)' : slaCount > 5 ? 'var(--red-ink)' : 'var(--amber-ink)';
-    document.getElementById('kpiSlaDelta').textContent = slaCount === 0 ? 'None this period' : `Across ${slaTeams} teams`;
-
-    const goLive = parseGoLive(config.goLive);
-    const today = new Date(); today.setHours(0,0,0,0);
-    const days = Math.max(0, Math.round((goLive.getTime() - today.getTime()) / 86400000));
-    document.getElementById('daysRemainingValue').textContent = String(days);
-    document.getElementById('daysRemainingDelta').textContent = days === 0
-      ? 'Past due · 0d'
-      : `Until projected go-live · ${config.goLive}`;
-
-    document.getElementById('kpiGoLiveValue').textContent = config.goLive;
-    const slipText = config.daysSlip > 0 ? `+${config.daysSlip}d vs plan`
-                   : config.daysSlip < 0 ? `${config.daysSlip}d vs plan`
-                   : 'On plan';
-    document.getElementById('kpiGoLiveDelta').textContent = slipText;
-
-    document.getElementById('chipCountAll').textContent = String(teams.length);
-    document.getElementById('chipCountR').textContent = String(offtrack);
-    document.getElementById('chipCountA').textContent = String(pending);
-    document.getElementById('chipCountG').textContent = String(ontrack);
-
-    document.getElementById('matrixTeamCount').textContent = String(teams.length);
-  }
-
-  // renderClient removed — single fixed dataset HYPERCARE_TEAMS, no per-client switching needed.
 
   // ========== TOAST ==========
   const toastStack = document.createElement('div');
@@ -2298,138 +1790,10 @@
   const drawerOverlay = document.getElementById('drawerOverlay');
   const drawerContent = document.getElementById('drawerContent');
 
-  function teamByName(name) {
-    return currentTeams.find(t => t.name === name);
-  }
-
-  function openDrawer(name) {
-    const t = teamByName(name);
-    if (!t) return;
-
-    const activity = buildActivity(t);
-    const deps = (t.deps || []).map(d => {
-      const dep = currentTeams.find(x => x.name === d);
-      const h = dep ? dep.health : 'a';
-      return `<span class="dep-pill"><span class="dot ${h}"></span>${d}</span>`;
-    }).join('');
-    const blocks = (t.blocks || []).map(b => {
-      const bt = currentTeams.find(x => x.name === b);
-      const h = bt ? bt.health : 'r';
-      return `<span class="dep-pill"><span class="dot ${h}"></span>${b}</span>`;
-    }).join('');
-
-    drawerContent.innerHTML = `
-      <div class="drawer-head">
-        <button class="icon-btn close" onclick="closeDrawer()">
-          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" stroke-linecap="round"/></svg>
-        </button>
-        <div class="eyebrow" style="margin-bottom: 8px;">${HEALTH_LABEL[t.health]} · Day ${t.days} of 30</div>
-        <div class="team-label serif">${t.name}</div>
-        <div class="lead">
-          <span class="av" style="width:18px; height:18px; font-size: 9px; margin-right: 2px;">${t.leadInit}</span>
-          ${t.lead} · Lead
-        </div>
-      </div>
-
-      <div class="drawer-body">
-
-        <div class="drawer-status">
-          <div class="drawer-stat">
-            <div class="k">Stage</div>
-            <div class="v">${STAGES[t.stageIdx]}</div>
-          </div>
-          <div class="drawer-stat">
-            <div class="k">Health</div>
-            <div class="v ${t.health}">${HEALTH_LABEL[t.health]}</div>
-          </div>
-          <div class="drawer-stat">
-            <div class="k">Risk score</div>
-            <div class="v num">${t.risk}/12</div>
-          </div>
-        </div>
-
-        ${t.blocker ? `
-          <div class="drawer-section">
-            <h4>Current blocker</h4>
-            <div class="blocker-card">
-              <div class="who">Blocker · ${t.days}d</div>
-              ${t.blocker.replace(/Legal/g, '<em>Legal</em>').replace(/Master Data/g, '<em>Master Data</em>').replace(/Financial Reporting/g, '<em>Financial Reporting</em>').replace(/IT Cutover/g, '<em>IT Cutover</em>').replace(/Customer Migration/g, '<em>Customer Migration</em>')}
-            </div>
-          </div>
-        ` : ''}
-
-        ${blocks ? `
-          <div class="drawer-section">
-            <h4>Blocks ${t.blocks.length} downstream team${t.blocks.length > 1 ? 's' : ''}</h4>
-            <div class="dep-pill-row">${blocks}</div>
-          </div>
-        ` : ''}
-
-        ${deps ? `
-          <div class="drawer-section">
-            <h4>Waiting on</h4>
-            <div class="dep-pill-row">${deps}</div>
-          </div>
-        ` : ''}
-
-        <div class="drawer-section">
-          <h4>Activity</h4>
-          <div class="activity-list">${activity}</div>
-        </div>
-
-        <div class="drawer-actions">
-          <button class="btn">
-            <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M4 6l8 6 8-6M4 6v12l8-6M4 6h16v12H4" stroke-linejoin="round"/></svg>
-            Message ${t.lead.split(' ')[0]}
-          </button>
-          <button class="btn primary">
-            <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 6v6l4 2M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            Send reminder
-          </button>
-        </div>
-      </div>
-    `;
-
-    drawer.classList.add('open');
-    drawerOverlay.classList.add('open');
-    drawer.setAttribute('aria-hidden', 'false');
-  }
-
   function closeDrawer() {
     drawer.classList.remove('open');
     drawerOverlay.classList.remove('open');
     drawer.setAttribute('aria-hidden', 'true');
-  }
-
-  function buildActivity(t) {
-    const items = [];
-    items.push({ when: `${t.days}d ago`, detail: `<strong>Onboarding requested</strong>`, sub: 'Submitted by Norbert Pap', kind: 'key' });
-
-    if (t.health === 'r' && t.blocker) {
-      items.push({ when: `${Math.max(1, t.days - 3)}d ago`, detail: `<strong>Reached ${STAGES[t.stageIdx]}</strong>`, sub: 'Stage entry logged', kind: '' });
-      items.push({ when: '5d ago', detail: `<strong>Blocker raised</strong>`, sub: t.blocker.length > 80 ? t.blocker.slice(0, 80) + '…' : t.blocker, kind: 'bad' });
-      items.push({ when: '2d ago', detail: `<strong>Reminder sent</strong>`, sub: 'Auto-notification to upstream team', kind: '' });
-      items.push({ when: 'Today', detail: `<strong>SLA breached</strong>`, sub: 'Team marked off track', kind: 'bad' });
-    } else if (t.health === 'a') {
-      items.push({ when: `${Math.max(1, t.days - 5)}d ago`, detail: `<strong>Reached ${STAGES[t.stageIdx]}</strong>`, sub: '', kind: '' });
-      items.push({ when: '3d ago', detail: `<strong>Information requested</strong>`, sub: 'Awaiting response from upstream', kind: '' });
-      items.push({ when: 'Yesterday', detail: `<strong>Follow-up sent</strong>`, sub: '', kind: '' });
-    } else {
-      items.push({ when: `${Math.max(1, t.days - 10)}d ago`, detail: `<strong>Discovery complete</strong>`, sub: '', kind: 'key' });
-      items.push({ when: `${Math.max(1, t.days - 6)}d ago`, detail: `<strong>Scope signed off</strong>`, sub: '', kind: '' });
-      items.push({ when: `${Math.max(1, t.days - 3)}d ago`, detail: `<strong>Reached ${STAGES[t.stageIdx]}</strong>`, sub: '', kind: '' });
-      if (t.stageIdx === 4) {
-        items.push({ when: 'Today', detail: `<strong>Workstream live</strong>`, sub: 'Ready for Apex Ventures cutover', kind: 'key' });
-      }
-    }
-
-    return items.map(i => `
-      <div class="activity-item ${i.kind}">
-        <div class="node"></div>
-        <div class="detail">${i.detail}${i.sub ? `<div class="sub">${i.sub}</div>` : ''}</div>
-        <div class="when">${i.when}</div>
-      </div>
-    `).join('');
   }
 
   // Keyboard
@@ -2455,47 +1819,6 @@
       const next = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
       document.documentElement.setAttribute('data-theme', next);
       try { localStorage.setItem('apollo-hypercare-theme', next); } catch (e) {}
-    });
-  })();
-
-  // ========== CLIENT FILTER DROPDOWN ==========
-  (function clientDropdown() {
-    const btn = document.getElementById('clientSelectBtn');
-    const menu = document.getElementById('clientMenu');
-    if (!btn || !menu) return;
-
-    function open() {
-      menu.hidden = false;
-      btn.setAttribute('aria-expanded', 'true');
-    }
-    function close() {
-      menu.hidden = true;
-      btn.setAttribute('aria-expanded', 'false');
-    }
-    btn.addEventListener('click', e => {
-      e.stopPropagation();
-      menu.hidden ? open() : close();
-    });
-    // view-select click is wired by wireViewSelect() below
-    document.addEventListener('click', e => {
-      if (!btn.contains(e.target) && !menu.contains(e.target)) close();
-    });
-    document.addEventListener('keydown', e => {
-      if (e.key === 'Escape') close();
-    });
-  })();
-
-  // ========== STATUS GRID/LIST TOGGLE ==========
-  (function statusToggle() {
-    const toggle = document.getElementById('statusToggle');
-    if (!toggle) return;
-    toggle.addEventListener('click', e => {
-      const btn = e.target.closest('button[data-view]');
-      if (!btn) return;
-      toggle.querySelectorAll('button').forEach(b => b.classList.toggle('active', b === btn));
-      const view = btn.dataset.view;
-      waffleEl.hidden = view !== 'grid';
-      statusListEl.hidden = view !== 'list';
     });
   })();
 
