@@ -621,9 +621,9 @@
   }
   .matrix-head-row {
     display: grid;
-    grid-template-columns: 64px 220px 1fr 130px 110px 50px 18px;
-    gap: 18px;
-    padding: 12px 20px;
+    grid-template-columns: 1.4fr 1fr 1.3fr 0.8fr 0.8fr 0.9fr 0.9fr 0.7fr;
+    gap: 14px;
+    padding: 12px 18px;
     font-size: 10.5px; font-weight: 600;
     color: var(--ink-3);
     letter-spacing: 0.08em; text-transform: uppercase;
@@ -632,21 +632,12 @@
     align-items: center;
   }
   #matrix-rows > .matrix-row:last-child { border-bottom-left-radius: 7px; border-bottom-right-radius: 7px; }
-  .matrix-head-row .stage-labels {
-    display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px;
-  }
-  .matrix-head-row .stage-labels > div {
-    font-size: 10px;
-    letter-spacing: 0.04em;
-    line-height: 1.3;
-  }
   .matrix-row {
     display: grid;
-    grid-template-columns: 64px 220px 1fr 130px 110px 50px 18px;
-    gap: 18px;
-    padding: 13px 20px;
+    grid-template-columns: 1.4fr 1fr 1.3fr 0.8fr 0.8fr 0.9fr 0.9fr 0.7fr;
+    gap: 14px;
+    padding: 10px 18px;
     align-items: center;
-    cursor: pointer;
     border-bottom: 1px solid var(--border);
     transition: background 0.12s;
     position: relative;
@@ -1730,38 +1721,27 @@
       <section class="matrix-section" id="matrix-section">
         <div class="matrix-head">
           <div class="title-group">
-            <h2><span id="matrixTeamCount">23</span> workstreams</h2>
-            <span class="count">Sorted by risk · most urgent first</span>
+            <h2><span id="matrixTeamCount">9</span> teams</h2>
+            <span class="count">Sorted by status · attention-first</span>
           </div>
           <div class="filter-bar" id="filters">
-            <button class="chip active" data-filter="all">All<span class="ct" id="chipCountAll">23</span></button>
-            <button class="chip" data-filter="r" title="Workstream is off track and not meeting stage-time SLAs"><span class="dot r"></span>Off track<span class="ct" id="chipCountR">5</span></button>
-            <button class="chip" data-filter="a" title="Workstream is pending input from another team or the acquired entity"><span class="dot a"></span>Pending<span class="ct" id="chipCountA">5</span></button>
-            <button class="chip" data-filter="g" title="On track"><span class="dot g"></span>On track<span class="ct" id="chipCountG">13</span></button>
-            <span class="stage-filter-banner" id="stageBanner">
-              <span>Stage: <strong id="stageBannerName"></strong></span>
-              <span class="x" id="stageBannerClear" title="Clear stage filter">
-                <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" stroke-linecap="round"/></svg>
-              </span>
-            </span>
+            <button class="chip active" data-filter="all">All<span class="ct" id="chipCountAll">9</span></button>
+            <button class="chip" data-filter="r" title="Lagging adoption or open P1 tickets"><span class="dot r"></span>At risk<span class="ct" id="chipCountR">1</span></button>
+            <button class="chip" data-filter="a" title="Adoption below 75% or stale logins"><span class="dot a"></span>Lagging<span class="ct" id="chipCountA">2</span></button>
+            <button class="chip" data-filter="g" title="On track"><span class="dot g"></span>On track<span class="ct" id="chipCountG">6</span></button>
           </div>
         </div>
 
         <div class="matrix">
           <div class="matrix-head-row">
-            <div>Ref #</div>
             <div>Team</div>
-            <div class="stage-labels">
-              <div><span class="tip tip-wide" data-tip="Initial scope assessment of this workstream's role in the integration. SLA: 24 hours.">Discovery</span></div>
-              <div><span class="tip tip-wide" data-tip="Tasks chosen, owners assigned, and integration plan locked. SLA: 24 hours.">Plan &amp;<br>Assign</span></div>
-              <div><span class="tip tip-wide" data-tip="Workstream is executing assigned tasks. Duration varies by scope.">Build</span></div>
-              <div><span class="tip tip-wide" data-tip="Workstream is in user-acceptance testing and gathering stakeholder sign-off.">UAT &amp;<br>Sign-off</span></div>
-              <div><span class="tip tip-wide" data-tip="Workstream is live in the combined operating model. Hypercare runs for 30 days post-cutover.">Live</span></div>
-            </div>
-            <div>Dependency</div>
             <div>Lead</div>
-            <div style="text-align:right"><span class="tip" data-tip="Elapsed time in the current stage.">Days</span></div>
-            <div></div>
+            <div><span class="tip" data-tip="Share of target users active in the last 7 days. Bar color: green ≥90%, amber 75–89%, red &lt;75%.">Adoption</span></div>
+            <div style="text-align:right">Open tickets</div>
+            <div style="text-align:right"><span class="tip tip-wide" data-tip="% of users in the team who completed all required Kissflow training modules.">Training</span></div>
+            <div>Last login</div>
+            <div>Status</div>
+            <div style="text-align:right"><span class="tip" data-tip="Days since this team's go-live. Wave 1: May 30. Wave 2: June 5.">Days</span></div>
           </div>
 
           <div id="matrix-rows"></div>
@@ -1789,113 +1769,19 @@
 
 <script>
   // ========== DATA ==========
-  const STAGES = ['Discovery', 'Plan & Assign', 'Build', 'UAT & Sign-off', 'Live'];
-
-  // Fixed metadata for each integration workstream (consistent across every entity)
-  const TEAM_META = [
-    { name: 'Financial Reporting', ref: 'HX-2401', lead: 'Sarah Chen',     leadInit: 'SC', blocks: ['HRIS Migration', 'Risk & Audit', 'Finance Close'], deps: ['CIO Office'] },
-    { name: 'Risk & Audit',        ref: 'HX-2402', lead: 'Michael Patel',  leadInit: 'MP', blocks: ['Compliance'], deps: ['Financial Reporting'] },
-    { name: 'Customer Success',    ref: 'HX-2403', lead: 'John Loh',       leadInit: 'JL', blocks: [], deps: ['CIO Office'] },
-    { name: 'Customer Migration',  ref: 'HX-2404', lead: 'Roberto Romano', leadInit: 'RR', blocks: ['Invoice Migration', 'SOX Controls', 'HRIS Migration', 'Vendor Mgmt'], deps: ['Master Data'] },
-    { name: 'Tax Harmonization',   ref: 'HX-2405', lead: 'Michael Patel',  leadInit: 'MP', blocks: ['Finance Close'], deps: ['Legal'] },
-    { name: 'Corporate Comms',     ref: 'HX-2406', lead: 'Alexander Black',leadInit: 'AB', blocks: [], deps: ['Master Data'] },
-    { name: 'IT Cutover',          ref: 'HX-2407', lead: 'John Loh',       leadInit: 'JL', blocks: ['Asset Mgmt', 'CRM Integration', 'Treasury Ops'], deps: ['Legal'] },
-    { name: 'HRIS Migration',      ref: 'HX-2408', lead: 'Alexander Black',leadInit: 'AB', blocks: ['Customer Migration'], deps: ['Customer Migration'] },
-    { name: 'Sales Enablement',    ref: 'HX-2409', lead: 'John Loh',       leadInit: 'JL', blocks: ['Customer Success'], deps: ['CIO Office'] },
-    { name: 'CRM Integration',     ref: 'HX-2410', lead: 'Roberto Romano', leadInit: 'RR', blocks: [], deps: ['Customer Migration'] },
-    { name: 'Treasury Ops',        ref: 'HX-2411', lead: 'Karthik Dasari', leadInit: 'KD', blocks: [], deps: ['IT Cutover'] },
-    { name: 'Invoice Migration',   ref: 'HX-2412', lead: 'Karthik Dasari', leadInit: 'KD', blocks: [], deps: ['Customer Migration'] },
-    { name: 'Asset Mgmt',          ref: 'HX-2413', lead: 'Roberto Romano', leadInit: 'RR', blocks: [], deps: ['IT Cutover'] },
-    { name: 'Treasury Strategy',   ref: 'HX-2414', lead: 'Michael Patel',  leadInit: 'MP', blocks: [], deps: ['CIO Office'] },
-    { name: 'Compliance',          ref: 'HX-2415', lead: 'Michael Patel',  leadInit: 'MP', blocks: [], deps: ['Risk & Audit'] },
-    { name: 'SOX Controls',        ref: 'HX-2416', lead: 'Roberto Romano', leadInit: 'RR', blocks: [], deps: [] },
-    { name: 'PMO',                 ref: 'HX-2417', lead: 'Alexander Black',leadInit: 'AB', blocks: [], deps: [] },
-    { name: 'Vendor Mgmt',         ref: 'HX-2418', lead: 'John Loh',       leadInit: 'JL', blocks: [], deps: [] },
-    { name: 'Finance Close',       ref: 'HX-2419', lead: 'Karthik Dasari', leadInit: 'KD', blocks: [], deps: [] },
-    { name: 'Master Data',         ref: 'HX-2420', lead: 'John Loh',       leadInit: 'JL', blocks: [], deps: [] },
-    { name: 'Legal',               ref: 'HX-2421', lead: 'Roberto Romano', leadInit: 'RR', blocks: [], deps: [] },
-    { name: 'Portfolio Mgmt',      ref: 'HX-2422', lead: 'John Loh',       leadInit: 'JL', blocks: [], deps: [] },
-    { name: 'Engineering Ops',     ref: 'HX-2423', lead: 'Alexander Black',leadInit: 'AB', blocks: [], deps: [] },
+  // Single fixed dataset: 9 teams. Wave 1 went live May 30 (day 12 today). Wave 2 went live June 5 (day 7 today).
+  // status: 'g' on-track, 'a' lagging, 'r' at-risk.
+  const HYPERCARE_TEAMS = [
+    { name: 'Onboarding Program',    region: 'NY',      lead: 'Jordan Reyes',   leadInit: 'JR', avatarUrl: 'https://randomuser.me/api/portraits/women/44.jpg', wave: 1, days: 12, adoption: 96, openTickets: 0, training: 100, lastLogin: 'Today', status: 'g', role: 'Primary user' },
+    { name: 'Performance Reporting', region: 'NY',      lead: 'Sarah Chen',     leadInit: 'SC', avatarUrl: 'https://randomuser.me/api/portraits/women/68.jpg', wave: 1, days: 12, adoption: 92, openTickets: 1, training: 100, lastLogin: 'Today', status: 'g', role: 'Contributor' },
+    { name: 'Performance Reporting', region: 'Chicago', lead: 'Daniel Okafor',  leadInit: 'DO', avatarUrl: 'https://randomuser.me/api/portraits/men/22.jpg',   wave: 1, days: 12, adoption: 71, openTickets: 3, training: 88,  lastLogin: '1–3d', status: 'a', role: 'Contributor' },
+    { name: 'Operations',            region: 'NY',      lead: 'Aiko Tanaka',    leadInit: 'AT', avatarUrl: 'https://randomuser.me/api/portraits/women/30.jpg', wave: 1, days: 12, adoption: 90, openTickets: 1, training: 96,  lastLogin: 'Today', status: 'g', role: 'Power user' },
+    { name: 'Operations',            region: 'Mumbai',  lead: 'Priya Shah',     leadInit: 'PS', avatarUrl: 'https://randomuser.me/api/portraits/women/79.jpg', wave: 2, days: 7,  adoption: 64, openTickets: 5, training: 92,  lastLogin: '4–7d', status: 'r', role: 'Power user' },
+    { name: 'Client Service',        region: 'NY',      lead: 'Marcus Bell',    leadInit: 'MB', avatarUrl: 'https://randomuser.me/api/portraits/men/35.jpg',   wave: 1, days: 12, adoption: 88, openTickets: 0, training: 100, lastLogin: 'Today', status: 'g', role: 'Contributor' },
+    { name: 'Client Service',        region: 'London',  lead: 'Hannah Green',   leadInit: 'HG', avatarUrl: 'https://randomuser.me/api/portraits/women/52.jpg', wave: 2, days: 7,  adoption: 82, openTickets: 1, training: 95,  lastLogin: '1–3d', status: 'a', role: 'Contributor' },
+    { name: 'Trade Ops',             region: 'NY',      lead: 'Liam Park',      leadInit: 'LP', avatarUrl: 'https://randomuser.me/api/portraits/men/48.jpg',   wave: 1, days: 12, adoption: 91, openTickets: 1, training: 100, lastLogin: 'Today', status: 'g', role: 'Contributor' },
+    { name: 'Compliance',            region: 'NY',      lead: 'Rachel Stone',   leadInit: 'RS', avatarUrl: 'https://randomuser.me/api/portraits/women/12.jpg', wave: 1, days: 12, adoption: 89, openTickets: 0, training: 100, lastLogin: 'Today', status: 'g', role: 'Glance-only' },
   ];
-
-  // 3 archetypes -each parallel-indexed to TEAM_META (23 entries each)
-  const ARCHETYPES = {
-    behind: [
-      { stageIdx: 1, health: 'r', days: 14, risk: 12, blocker: "Acquired CFO hasn't returned chart-of-accounts mapping after 6 reminders.", depTag: 'Pending CFO' },
-      { stageIdx: 1, health: 'a', days: 14, risk: 7,  blocker: 'Waiting on Financial Reporting baseline before audit scope can be locked.', depTag: 'Pending Fin. Reporting' },
-      { stageIdx: 1, health: 'a', days: 14, risk: 6,  blocker: 'Pending acquired-side stakeholder contact list.', depTag: 'Pending CIO Office' },
-      { stageIdx: 1, health: 'r', days: 14, risk: 11, blocker: 'Customer record schema differs from Helix master, waiting on Master Data mapping.', depTag: 'Pending Master Data' },
-      { stageIdx: 1, health: 'r', days: 14, risk: 10, blocker: 'Tax residency documents missing for 2 of 4 sub-entities.', depTag: 'Pending Tax Lead' },
-      { stageIdx: 2, health: 'a', days: 14, risk: 6,  blocker: 'Comms cascade plan pending finalisation.', depTag: 'Pending Master Data' },
-      { stageIdx: 2, health: 'r', days: 14, risk: 10, blocker: 'Legal contract harmonization just cleared. IT cutover dry-run restarting.', depTag: 'Pending Legal' },
-      { stageIdx: 2, health: 'r', days: 14, risk: 9,  blocker: 'Test HRIS load failing schema validation, fix in progress.', depTag: 'Pending Cust. Migration' },
-      { stageIdx: 2, health: 'a', days: 14, risk: 5,  blocker: 'Acquired-side IT configuring SSO IdP endpoint.', depTag: 'Pending CIO Office' },
-      { stageIdx: 2, health: 'g', days: 14, risk: 3,  blocker: null },
-      { stageIdx: 2, health: 'a', days: 14, risk: 5,  blocker: 'Awaiting IT Cutover bank routing template before treasury accounts open.', depTag: 'Pending IT Cutover' },
-      { stageIdx: 2, health: 'g', days: 14, risk: 3,  blocker: null },
-      { stageIdx: 3, health: 'g', days: 14, risk: 2,  blocker: null },
-      { stageIdx: 3, health: 'g', days: 14, risk: 2,  blocker: null },
-      { stageIdx: 3, health: 'g', days: 17, risk: 2,  blocker: null },
-      { stageIdx: 3, health: 'g', days: 14, risk: 1,  blocker: null },
-      { stageIdx: 3, health: 'g', days: 13, risk: 1,  blocker: null },
-      { stageIdx: 3, health: 'g', days: 12, risk: 1,  blocker: null },
-      { stageIdx: 3, health: 'g', days: 11, risk: 1,  blocker: null },
-      { stageIdx: 4, health: 'g', days: 16, risk: 0,  blocker: null },
-      { stageIdx: 4, health: 'g', days: 15, risk: 0,  blocker: null },
-      { stageIdx: 4, health: 'g', days: 18, risk: 0,  blocker: null },
-      { stageIdx: 4, health: 'g', days: 19, risk: 0,  blocker: null },
-    ],
-    ontrack: [
-      { stageIdx: 4, health: 'g', days: 18, risk: 0, blocker: null }, // Financial Reporting -live
-      { stageIdx: 3, health: 'g', days: 14, risk: 0, blocker: null }, // Risk & Audit -UAT
-      { stageIdx: 4, health: 'g', days: 16, risk: 0, blocker: null }, // Customer Success -live
-      { stageIdx: 3, health: 'g', days: 14, risk: 0, blocker: null }, // Customer Migration -UAT
-      { stageIdx: 3, health: 'g', days: 14, risk: 0, blocker: null }, // Tax Harmonization -UAT
-      { stageIdx: 3, health: 'g', days: 14, risk: 0, blocker: null }, // Corporate Comms -UAT
-      { stageIdx: 4, health: 'g', days: 16, risk: 0, blocker: null }, // IT Cutover -live
-      { stageIdx: 3, health: 'g', days: 14, risk: 0, blocker: null }, // HRIS Migration -UAT
-      { stageIdx: 3, health: 'a', days: 14, risk: 2, blocker: 'Final SSO IdP cutover scheduled for Friday.', depTag: 'Pending CIO Office' }, // Sales Enablement
-      { stageIdx: 4, health: 'g', days: 16, risk: 0, blocker: null }, // CRM Integration -live
-      { stageIdx: 4, health: 'g', days: 14, risk: 0, blocker: null }, // Treasury Ops -live
-      { stageIdx: 3, health: 'g', days: 14, risk: 0, blocker: null }, // Invoice Migration -UAT
-      { stageIdx: 4, health: 'g', days: 14, risk: 0, blocker: null }, // Asset Mgmt -live
-      { stageIdx: 3, health: 'a', days: 14, risk: 2, blocker: 'Final banking authorisation pending, last signature.', depTag: 'Pending CFO' }, // Treasury Strategy
-      { stageIdx: 4, health: 'g', days: 14, risk: 0, blocker: null }, // Compliance -live
-      { stageIdx: 4, health: 'g', days: 14, risk: 0, blocker: null }, // SOX Controls -live
-      { stageIdx: 4, health: 'g', days: 13, risk: 0, blocker: null }, // PMO -live
-      { stageIdx: 3, health: 'g', days: 12, risk: 0, blocker: null }, // Vendor Mgmt -UAT
-      { stageIdx: 3, health: 'g', days: 11, risk: 0, blocker: null }, // Finance Close -UAT
-      { stageIdx: 4, health: 'g', days: 16, risk: 0, blocker: null }, // Master Data -live
-      { stageIdx: 4, health: 'g', days: 15, risk: 0, blocker: null }, // Legal -live
-      { stageIdx: 4, health: 'g', days: 18, risk: 0, blocker: null }, // Portfolio Mgmt -live
-      { stageIdx: 4, health: 'g', days: 19, risk: 0, blocker: null }, // Engineering Ops -live
-    ],
-    offtrack: [
-      { stageIdx: 0, health: 'r', days: 14, risk: 14, blocker: 'Acquired CFO unresponsive on chart-of-accounts mapping, 11 reminders sent.', depTag: 'Pending CFO' },
-      { stageIdx: 0, health: 'r', days: 14, risk: 13, blocker: 'Cannot start audit scoping without Financial Reporting baseline.', depTag: 'Pending Fin. Reporting' },
-      { stageIdx: 0, health: 'r', days: 14, risk: 13, blocker: 'Acquired-side stakeholder list still missing.', depTag: 'Pending CIO Office' },
-      { stageIdx: 0, health: 'r', days: 14, risk: 13, blocker: 'Customer record schema conflict unresolved.', depTag: 'Pending Master Data' },
-      { stageIdx: 1, health: 'r', days: 14, risk: 12, blocker: 'Tax residency documents missing for all 4 sub-entities.', depTag: 'Pending Tax Lead' },
-      { stageIdx: 0, health: 'r', days: 14, risk: 12, blocker: 'Comms cascade plan not yet selected.', depTag: 'Pending Master Data' },
-      { stageIdx: 0, health: 'r', days: 14, risk: 14, blocker: 'Legal contract harmonization at 18 days outstanding.', depTag: 'Pending Legal' },
-      { stageIdx: 1, health: 'r', days: 14, risk: 11, blocker: 'HRIS schema validation failing, 7 stage-time breaches.', depTag: 'Pending Cust. Migration' },
-      { stageIdx: 0, health: 'r', days: 14, risk: 11, blocker: 'Acquired-side IT not yet engaged on SSO setup.', depTag: 'Pending CIO Office' },
-      { stageIdx: 1, health: 'r', days: 14, risk: 10, blocker: 'Customer file mismatch with Customer Migration, pending fix.', depTag: 'Pending Cust. Migration' },
-      { stageIdx: 0, health: 'r', days: 14, risk: 9,  blocker: 'Awaiting IT Cutover bank routing template.', depTag: 'Pending IT Cutover' },
-      { stageIdx: 1, health: 'r', days: 14, risk: 8,  blocker: 'Awaiting reconciled customer-balance file.', depTag: 'Pending Cust. Migration' },
-      { stageIdx: 1, health: 'r', days: 14, risk: 8,  blocker: 'Awaiting IT Cutover network plan.', depTag: 'Pending IT Cutover' },
-      { stageIdx: 0, health: 'a', days: 14, risk: 6,  blocker: 'Awaiting acquired-side banking authorisations.', depTag: 'Pending CFO' },
-      { stageIdx: 0, health: 'a', days: 14, risk: 6,  blocker: 'Waiting on Risk &amp; Audit sign-off.', depTag: 'Pending Risk' },
-      { stageIdx: 1, health: 'a', days: 14, risk: 5,  blocker: null },
-      { stageIdx: 1, health: 'a', days: 13, risk: 5,  blocker: null },
-      { stageIdx: 1, health: 'a', days: 12, risk: 5,  blocker: null },
-      { stageIdx: 0, health: 'a', days: 11, risk: 4,  blocker: null },
-      { stageIdx: 2, health: 'g', days: 16, risk: 1,  blocker: null },
-      { stageIdx: 1, health: 'g', days: 15, risk: 1,  blocker: null },
-      { stageIdx: 2, health: 'g', days: 18, risk: 1,  blocker: null },
-      { stageIdx: 1, health: 'g', days: 19, risk: 1,  blocker: null },
-    ],
-  };
 
   // 9 entities (incl. All) -each points to an archetype + per-entity metadata
   const CLIENTS = {
