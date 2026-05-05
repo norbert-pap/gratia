@@ -2466,6 +2466,70 @@
     target.style.boxShadow = '0 0 0 2px var(--gold-line)';
     setTimeout(() => { target.style.boxShadow = ''; }, 1400);
   });
+
+  // ===== Filter chips =====
+  document.querySelectorAll('#filters .chip').forEach(chip => {
+    chip.addEventListener('click', () => {
+      const filter = chip.dataset.filter;
+      document.querySelectorAll('#filters .chip').forEach(c => c.classList.toggle('active', c === chip));
+      document.querySelectorAll('.matrix-row').forEach(row => {
+        const show = filter === 'all' || row.dataset.status === filter;
+        row.classList.toggle('hidden', !show);
+      });
+    });
+  });
+
+  // ===== View-select dropdown (group by team / region / role) =====
+  (function wireViewSelect() {
+    const btn = document.getElementById('viewSelectBtn');
+    const menu = document.getElementById('viewMenu');
+    const label = document.getElementById('viewSelectLabel');
+    if (!btn || !menu || !label) return;
+
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const open = menu.hidden;
+      menu.hidden = !open;
+      btn.setAttribute('aria-expanded', String(open));
+    });
+    document.addEventListener('click', () => { menu.hidden = true; btn.setAttribute('aria-expanded', 'false'); });
+
+    menu.addEventListener('click', (e) => {
+      const item = e.target.closest('.client-menu-item');
+      if (!item) return;
+      menu.querySelectorAll('.client-menu-item').forEach(i => i.classList.toggle('active', i === item));
+      label.textContent = item.textContent.trim();
+      const view = item.dataset.view;
+      applyView(view);
+      menu.hidden = true;
+      btn.setAttribute('aria-expanded', 'false');
+    });
+
+    function applyView(view) {
+      // For v1: re-sort the existing rows. No row-collapse aggregation.
+      const sorted = [...HYPERCARE_TEAMS];
+      if (view === 'region') {
+        const order = { 'NY': 0, 'Chicago': 1, 'London': 2, 'Mumbai': 3 };
+        sorted.sort((a, b) => (order[a.region] ?? 99) - (order[b.region] ?? 99) || a.name.localeCompare(b.name));
+      } else if (view === 'role') {
+        const order = { 'Power user': 0, 'Primary user': 1, 'Contributor': 2, 'Glance-only': 3 };
+        sorted.sort((a, b) => (order[a.role] ?? 99) - (order[b.role] ?? 99) || a.name.localeCompare(b.name));
+      } else {
+        // 'team' default — original spec order, status-attention first
+        sorted.sort((a, b) => {
+          const statusOrder = { 'r': 0, 'a': 1, 'g': 2 };
+          return statusOrder[a.status] - statusOrder[b.status];
+        });
+      }
+      renderMatrix(sorted);
+      // Reapply current filter
+      const activeFilter = document.querySelector('#filters .chip.active')?.dataset.filter || 'all';
+      document.querySelectorAll('.matrix-row').forEach(row => {
+        const show = activeFilter === 'all' || row.dataset.status === activeFilter;
+        row.classList.toggle('hidden', !show);
+      });
+    }
+  })();
 </script>
 
 </div><!-- /#deck-content -->
