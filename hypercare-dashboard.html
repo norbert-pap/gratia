@@ -1376,6 +1376,28 @@
   .pacing-svg .red-text    { fill: var(--red-ink); }
   .pacing-svg .callout-bg  { fill: var(--bg-2); stroke: var(--border-2); }
 
+  /* Stabilization chart */
+  #stabChart .ax       { stroke: var(--border-2); }
+  #stabChart .ax-grid  { stroke: var(--border); }
+  #stabChart .label    { fill: var(--ink-3); font-size: 10.5px; font-family: 'Inter', sans-serif; }
+  #stabChart .today-line { stroke: var(--ink-2); }
+  .line-tickets           { stroke: var(--red-ink); }
+  .line-tickets-projected { stroke: var(--red-ink); }
+  .line-adopt             { stroke: var(--gold-ink); }
+  .line-adopt-projected   { stroke: var(--gold-ink); }
+  .dot-tickets            { fill: var(--red-ink); stroke: var(--bg-1); stroke-width: 2; }
+  .dot-adopt              { fill: var(--gold-ink); stroke: var(--bg-1); stroke-width: 2; }
+  .target-line            { stroke: var(--ink-3); opacity: 0.45; }
+  .target-line.target-adopt   { stroke: var(--gold-ink); opacity: 0.35; }
+  .target-line.target-tickets { stroke: var(--red-ink); opacity: 0.30; }
+  .scrubber-line          { stroke: var(--ink-2); }
+  .scrubber-dot-tickets   { fill: var(--red-ink); stroke: var(--bg-1); stroke-width: 1.5; }
+  .scrubber-dot-adopt     { fill: var(--gold-ink); stroke: var(--bg-1); stroke-width: 1.5; }
+  .label-y                { fill: var(--ink-3); font-size: 9.5px; font-family: 'JetBrains Mono', monospace; }
+  .legend-inline .lg-dot.lg-tickets { background: var(--red-ink); }
+  .legend-inline .lg-dot.lg-adopt   { background: var(--gold-ink); }
+  .legend-inline .lg-dot.lg-target  { background: var(--ink-3); opacity: 0.5; }
+
   /* Stage backlog clickable */
   .bullet-row {
     cursor: pointer;
@@ -1559,100 +1581,82 @@
       <!-- ===== HERO: PACING + WAFFLE ===== -->
       <section class="hero-grid">
 
-        <!-- Pacing vs target / Teams (toggle) -->
+        <!-- Stabilization chart (two-series) -->
         <div class="card">
           <div class="card-head">
-            <div style="display: flex; align-items: center; gap: 12px;">
-              <h3 id="leftCardTitle">Team status</h3>
-              <div class="waffle-head-toggle" id="pacingToggle">
-                <button data-view="pacing">Pacing</button>
-                <button class="active" data-view="teams">Teams</button>
-              </div>
+            <div>
+              <h3>Stabilization</h3>
+              <p class="sub">Tickets declining · adoption climbing · 30-day window</p>
             </div>
             <div class="meta">
-              <div class="legend-inline" id="pacingLegend" hidden>
-                <div class="it"><span class="bar" style="background: transparent; border-top: 1px dashed var(--ink-3); height: 0; width: 18px;"></span>Plan</div>
-                <div class="it"><span class="bar" style="background: var(--red); height: 2px; width: 18px;"></span>Actual</div>
-                <div class="it"><span class="bar" style="border-top: 1.5px dashed var(--red); opacity: 0.6; height: 0; width: 18px;"></span>Projected</div>
+              <div class="legend-inline" id="stabLegend">
+                <span class="lg"><span class="lg-dot lg-tickets"></span>Tickets open</span>
+                <span class="lg"><span class="lg-dot lg-adopt"></span>Adoption %</span>
+                <span class="lg"><span class="lg-dot lg-target"></span>Target band</span>
               </div>
             </div>
           </div>
           <div class="card-body">
-            <svg class="pacing-svg" id="pacingSvg" viewBox="0 0 720 320" preserveAspectRatio="xMidYMid meet" style="display:none">
-              <defs>
-                <linearGradient id="gapGrad" x1="0" y1="0" x2="0" y2="1">
-                  <stop offset="0" stop-color="var(--red)" stop-opacity="0.14"/>
-                  <stop offset="1" stop-color="var(--red)" stop-opacity="0.02"/>
-                </linearGradient>
-              </defs>
+            <svg id="stabChart" viewBox="0 0 720 290" preserveAspectRatio="none">
+              <!-- Left axis (tickets, 0–35) -->
+              <line class="ax" x1="60"  y1="30"  x2="60"  y2="250" stroke-width="1"/>
+              <!-- Right axis (adoption %, 0–100) -->
+              <line class="ax" x1="690" y1="30"  x2="690" y2="250" stroke-width="1"/>
+              <!-- X axis -->
+              <line class="ax" x1="60"  y1="250" x2="690" y2="250" stroke-width="1"/>
 
-              <!-- y mapping: 0 teams → y=250 ; 23 teams → y=30 ; 1 team ≈ 9.57 px -->
-              <!-- 4 done at today: y = 250 - 4*9.57 ≈ 212 -->
-              <!-- 18 projected at day 30 (recovering toward plan after Settlements unblock): y ≈ 78 -->
+              <!-- Gridlines (4 horizontal) -->
+              <line class="ax-grid" x1="60" y1="30"  x2="690" y2="30"  stroke-dasharray="2 4" stroke-width="1"/>
+              <line class="ax-grid" x1="60" y1="85"  x2="690" y2="85"  stroke-dasharray="2 4" stroke-width="1"/>
+              <line class="ax-grid" x1="60" y1="140" x2="690" y2="140" stroke-dasharray="2 4" stroke-width="1"/>
+              <line class="ax-grid" x1="60" y1="195" x2="690" y2="195" stroke-dasharray="2 4" stroke-width="1"/>
 
-              <!-- Gap fill (between plan and actual/projected) -->
-              <path id="pacingGap" d="M 60 250 L 370 212 L 690 78 L 690 30 Z" fill="url(#gapGrad)"/>
+              <!-- Target band: adoption ≥90% (top), tickets ≤5/day (bottom) -->
+              <line class="target-line target-adopt"   x1="60" y1="55"  x2="690" y2="55"  stroke-dasharray="3 5" stroke-width="1.2"/>
+              <line class="target-line target-tickets" x1="60" y1="222" x2="690" y2="222" stroke-dasharray="3 5" stroke-width="1.2"/>
 
-              <!-- Axes -->
-              <line class="ax" x1="60" y1="30" x2="60" y2="250" stroke-width="1"/>
-              <line class="ax" x1="60" y1="250" x2="690" y2="250" stroke-width="1"/>
-              <line class="ax-grid" x1="60" y1="30" x2="690" y2="30" stroke-dasharray="2 4" stroke-width="1"/>
+              <!-- Today marker at Day 12 (x = 60 + (12/30)*630 = 312) -->
+              <line class="today-line" x1="312" y1="22" x2="312" y2="262" stroke-width="0.9" stroke-dasharray="2 3"/>
 
-              <!-- Y-axis ticks -->
-              <g class="label" font-size="10.5" text-anchor="end" font-family="Inter">
-                <text x="52" y="35">23</text>
-                <text x="52" y="142">12</text>
-                <text x="52" y="254">0</text>
-              </g>
-              <line class="ax-grid" x1="58" y1="142" x2="690" y2="142" stroke-dasharray="2 4" stroke-width="1"/>
+              <!-- TICKETS series (red ink). Days 0–12 actual, 12–30 projected dashed. -->
+              <polyline class="line-tickets" fill="none" stroke-width="2.4"
+                        points="81,49 144,49 186,74 228,112 270,143 312,162"/>
+              <polyline class="line-tickets-projected" fill="none" stroke-width="2" stroke-dasharray="3 4" opacity="0.65"
+                        points="312,162 690,231"/>
 
-              <!-- Plan diagonal (0 → 23 over 30 days) -->
-              <line class="plan-line" x1="60" y1="250" x2="690" y2="30" stroke-dasharray="3 3" stroke-width="1.4"/>
+              <!-- ADOPTION series (gold/green ink). -->
+              <polyline class="line-adopt" fill="none" stroke-width="2.4"
+                        points="81,184 144,151 186,122 228,96 270,78 312,65"/>
+              <polyline class="line-adopt-projected" fill="none" stroke-width="2" stroke-dasharray="3 4" opacity="0.65"
+                        points="312,65 690,43"/>
 
-              <!-- Actual line: 0 at day 0 → 4 of 23 at day 14 (today) -->
-              <line id="pacingActual" class="actual-line" x1="60" y1="250" x2="370" y2="212" stroke-width="2.4"/>
+              <!-- Today dots -->
+              <circle class="dot-tickets" cx="312" cy="162" r="4.5"/>
+              <circle class="dot-adopt"   cx="312" cy="65"  r="4.5"/>
 
-              <!-- Projection: extends from today, recovering toward plan (~18 by day 30) -->
-              <line id="pacingProjected" class="projected" x1="370" y1="212" x2="690" y2="78" stroke-width="2" stroke-dasharray="3 4" opacity="0.65"/>
-
-              <!-- Today vertical -->
-              <line class="today-line" x1="370" y1="22" x2="370" y2="262" stroke-width="0.9" stroke-dasharray="2 3"/>
-
-              <!-- Endpoint dot at today -->
-              <circle id="pacingDot1" class="actual-dot-out" cx="370" cy="212" r="5"/>
-              <circle id="pacingDot2" class="actual-dot-in" cx="370" cy="212" r="2.2"/>
-
-              <!-- End of projection -->
-              <circle id="pacingEndDot" class="end-dot" cx="690" cy="78" r="3.5" fill="none" stroke-width="1.6" opacity="0.7"/>
-
-              <!-- X-axis labels -->
-              <g font-size="10.5" font-family="Inter">
-                <text class="label" x="60" y="272" text-anchor="middle">Day 0</text>
-                <text class="label-bright" x="370" y="272" text-anchor="middle" font-weight="500">Today · Day 14</text>
-                <text class="label" x="690" y="272" text-anchor="end">Due · Day 30</text>
+              <!-- Axis labels -->
+              <g class="axis-labels">
+                <text class="label" x="60"  y="272" text-anchor="middle">Day 0</text>
+                <text class="label" x="312" y="272" text-anchor="middle">Today · Day 12</text>
+                <text class="label" x="690" y="272" text-anchor="end">Day 30</text>
+                <text class="label-y" x="52" y="34"  text-anchor="end">35</text>
+                <text class="label-y" x="52" y="143" text-anchor="end">17</text>
+                <text class="label-y" x="52" y="253" text-anchor="end">0</text>
+                <text class="label-y" x="698" y="34"  text-anchor="start">100%</text>
+                <text class="label-y" x="698" y="143" text-anchor="start">50%</text>
+                <text class="label-y" x="698" y="253" text-anchor="start">0%</text>
               </g>
 
-              <!-- Today callout -->
-              <rect id="pacingCalloutBg" class="callout-bg" x="380" y="188" width="116" height="38" rx="4" stroke-width="1"/>
-              <text id="pacingCalloutDone" class="red-text" x="388" y="203" font-size="12" font-weight="600" font-family="Inter">4 of 23 done</text>
-              <text id="pacingCalloutPlan" class="label-mid" x="388" y="218" font-size="10.5" font-family="Inter">Plan: 11 by today</text>
+              <!-- Hover scrubber group (populated by JS) -->
+              <g id="stabScrubber" style="display:none">
+                <line class="scrubber-line" x1="0" y1="22" x2="0" y2="262" stroke-width="1" stroke-dasharray="2 3"/>
+                <circle class="scrubber-dot-tickets" cx="0" cy="0" r="4"/>
+                <circle class="scrubber-dot-adopt"   cx="0" cy="0" r="4"/>
+              </g>
 
-              <!-- End-of-window labels -->
-              <text class="label" x="685" y="42" font-size="10.5" text-anchor="end" font-style="italic" font-family="Inter">Target · 23</text>
-              <text id="pacingProjectedLabel" class="red-text" x="685" y="72" font-size="10.5" text-anchor="end" font-family="Inter" font-weight="500">Projected: ~18</text>
-
-              <!-- Footer caption -->
-              <text class="label" x="60" y="298" font-size="10" letter-spacing="0.02em" font-family="Inter">Cumulative team completions · 23 teams · day 14 of 30</text>
-
-              <!-- Hover scrubber (hidden until mouseover) -->
-              <line id="pacingCursor" class="pacing-cursor" x1="60" y1="30" x2="60" y2="250" stroke-width="1" style="display:none"/>
-              <circle id="pacingCursorPlan" class="pacing-cursor-plan" cx="60" cy="250" r="3.5" style="display:none"/>
-              <circle id="pacingCursorActual" class="pacing-cursor-actual" cx="60" cy="250" r="3.5" style="display:none"/>
-
-              <!-- Mouse-tracking overlay -->
-              <rect id="pacingOverlay" x="60" y="22" width="630" height="240" fill="transparent" style="cursor: crosshair"/>
+              <!-- Hover capture overlay (transparent, full chart area) -->
+              <rect id="stabHoverArea" x="60" y="22" width="630" height="240" fill="transparent" style="cursor:crosshair"/>
             </svg>
-            <div id="pacingTooltip" class="pacing-tooltip" hidden></div>
             <div id="teams-grid" class="teams-grid"></div>
             <div id="teamsLegendRow" class="teams-legend-row">
               <span class="tip" data-tip="Tile color = this week. Trailing dot = last week.">
@@ -1869,17 +1873,6 @@
       { stageIdx: 1, health: 'g', days: 19, risk: 1,  blocker: null },
     ],
   };
-
-  // Per-archetype pacing chart geometry (y coords + callout text + numeric data for hover)
-  const PACING = {
-    behind:  { todayY: 212, endY: 78,  doneText: '4 of 23 done',  projectedText: 'Projected: ~18', calloutY: 188, doneToday: 4,  projectedEnd: 18 },
-    ontrack: { todayY: 126, endY: 30,  doneText: '13 of 23 done', projectedText: 'Projected: 23',  calloutY: 102, doneToday: 13, projectedEnd: 23 },
-    offtrack:{ todayY: 250, endY: 193, doneText: '0 of 23 done',  projectedText: 'Projected: ~6',  calloutY: 226, doneToday: 0,  projectedEnd: 6  },
-  };
-  const PACING_TOTAL = 23;
-  const PACING_DAYS = 30;
-  const PACING_TODAY = 14;
-  let currentPacingArchetype = 'behind';
 
   // 9 entities (incl. All) -each points to an archetype + per-entity metadata
   const CLIENTS = {
@@ -2165,29 +2158,6 @@
     document.getElementById('matrixTeamCount').textContent = String(teams.length);
   }
 
-  function renderPacingChart(archetypeKey) {
-    const p = PACING[archetypeKey];
-    if (!p) return;
-    currentPacingArchetype = archetypeKey;
-    document.getElementById('pacingGap').setAttribute('d', `M 60 250 L 370 ${p.todayY} L 690 ${p.endY} L 690 30 Z`);
-    document.getElementById('pacingActual').setAttribute('y2', String(p.todayY));
-    const proj = document.getElementById('pacingProjected');
-    proj.setAttribute('y1', String(p.todayY));
-    proj.setAttribute('y2', String(p.endY));
-    document.getElementById('pacingDot1').setAttribute('cy', String(p.todayY));
-    document.getElementById('pacingDot2').setAttribute('cy', String(p.todayY));
-    document.getElementById('pacingEndDot').setAttribute('cy', String(p.endY));
-    document.getElementById('pacingCalloutBg').setAttribute('y', String(p.calloutY));
-    const calloutDone = document.getElementById('pacingCalloutDone');
-    const calloutPlan = document.getElementById('pacingCalloutPlan');
-    calloutDone.setAttribute('y', String(p.calloutY + 15));
-    calloutPlan.setAttribute('y', String(p.calloutY + 30));
-    calloutDone.textContent = p.doneText;
-    const projLabel = document.getElementById('pacingProjectedLabel');
-    projLabel.setAttribute('y', String(p.endY - 6));
-    projLabel.textContent = p.projectedText;
-  }
-
   function renderClient(clientId) {
     const config = CLIENTS[clientId] || CLIENTS.all;
     currentClientId = clientId;
@@ -2199,7 +2169,6 @@
     renderTeamsView(currentTeams);
     renderMovers(currentTeams);
     renderMatrix(currentTeams);
-    renderPacingChart(config.archetype);
     // Reset filters on client change
     healthFilter = 'all';
     stageFilter = null;
@@ -2476,34 +2445,6 @@
     });
   })();
 
-  // ========== PACING/TEAMS TOGGLE (left hero card) ==========
-  (function pacingToggle() {
-    const toggle = document.getElementById('pacingToggle');
-    if (!toggle) return;
-    const svg = document.getElementById('pacingSvg');
-    const tooltip = document.getElementById('pacingTooltip');
-    const pacingLegend = document.getElementById('pacingLegend');
-    const teamsLegend = document.getElementById('teamsLegendRow');
-    const title = document.getElementById('leftCardTitle');
-    const statusCard = document.getElementById('statusCard');
-    const moversCard = document.getElementById('moversCard');
-    toggle.addEventListener('click', e => {
-      const btn = e.target.closest('button[data-view]');
-      if (!btn) return;
-      toggle.querySelectorAll('button').forEach(b => b.classList.toggle('active', b === btn));
-      const view = btn.dataset.view;
-      const showPacing = view === 'pacing';
-      svg.style.display = showPacing ? '' : 'none';
-      tooltip.hidden = true;
-      pacingLegend.hidden = !showPacing;
-      teamsGridEl.hidden = showPacing;
-      teamsLegend.hidden = showPacing;
-      title.textContent = showPacing ? 'Pacing vs target' : 'Team status';
-      statusCard.style.display = showPacing ? '' : 'none';
-      moversCard.style.display = showPacing ? 'none' : '';
-    });
-  })();
-
   // ========== STATUS GRID/LIST TOGGLE ==========
   (function statusToggle() {
     const toggle = document.getElementById('statusToggle');
@@ -2516,106 +2457,6 @@
       waffleEl.hidden = view !== 'grid';
       statusListEl.hidden = view !== 'list';
     });
-  })();
-
-  // ========== PACING CHART HOVER ==========
-  (function pacingHover() {
-    const svg = document.querySelector('.pacing-svg');
-    const overlay = document.getElementById('pacingOverlay');
-    const cursor = document.getElementById('pacingCursor');
-    const dotPlan = document.getElementById('pacingCursorPlan');
-    const dotActual = document.getElementById('pacingCursorActual');
-    const tooltip = document.getElementById('pacingTooltip');
-    const cardBody = svg.parentElement;
-    if (!overlay || !cursor || !tooltip) return;
-
-    // Plot bounds: x [60, 690], y [30, 250], 30 days, 23 teams max
-    const X0 = 60, X1 = 690, Y0 = 30, Y1 = 250;
-    const xPerDay = (X1 - X0) / PACING_DAYS;
-    const yPerTeam = (Y1 - Y0) / PACING_TOTAL;
-
-    function dayToX(day) { return X0 + day * xPerDay; }
-    function teamsToY(n) { return Y1 - n * yPerTeam; }
-
-    function planAt(day) { return (day / PACING_DAYS) * PACING_TOTAL; }
-    function actualAt(day, p) {
-      if (day <= PACING_TODAY) return (day / PACING_TODAY) * p.doneToday;
-      return null;
-    }
-    function projectedAt(day, p) {
-      if (day < PACING_TODAY) return null;
-      return p.doneToday + ((day - PACING_TODAY) / (PACING_DAYS - PACING_TODAY)) * (p.projectedEnd - p.doneToday);
-    }
-
-    function show() {
-      cursor.style.display = 'block';
-      dotPlan.style.display = 'block';
-      dotActual.style.display = 'block';
-      tooltip.hidden = false;
-    }
-    function hide() {
-      cursor.style.display = 'none';
-      dotPlan.style.display = 'none';
-      dotActual.style.display = 'none';
-      tooltip.hidden = true;
-    }
-
-    overlay.addEventListener('mousemove', (e) => {
-      const p = PACING[currentPacingArchetype];
-      if (!p) return;
-
-      // Map screen → SVG coords
-      const pt = svg.createSVGPoint();
-      pt.x = e.clientX; pt.y = e.clientY;
-      const ctm = svg.getScreenCTM();
-      if (!ctm) return;
-      const svgPt = pt.matrixTransform(ctm.inverse());
-
-      // Snap to nearest day (0..30)
-      let day = Math.round((svgPt.x - X0) / xPerDay);
-      day = Math.max(0, Math.min(PACING_DAYS, day));
-      const x = dayToX(day);
-
-      const plan = planAt(day);
-      const actual = actualAt(day, p);
-      const proj = projectedAt(day, p);
-
-      // Update cursor line + dots
-      cursor.setAttribute('x1', String(x));
-      cursor.setAttribute('x2', String(x));
-      dotPlan.setAttribute('cx', String(x));
-      dotPlan.setAttribute('cy', String(teamsToY(plan)));
-      const actualValue = actual !== null ? actual : proj;
-      dotActual.setAttribute('cx', String(x));
-      dotActual.setAttribute('cy', String(teamsToY(actualValue)));
-      dotActual.style.opacity = actual !== null ? '1' : '0.7';
-
-      // Build tooltip
-      const dayLabel = day === PACING_TODAY ? `Today · Day ${day}` : `Day ${day}`;
-      const planRow = `<div class="row"><span class="swatch plan"></span><span class="k">Plan</span><span class="v">${Math.round(plan)} teams</span></div>`;
-      let liveRow = '';
-      if (actual !== null) {
-        liveRow = `<div class="row"><span class="swatch actual"></span><span class="k">Actual</span><span class="v">${Math.round(actual)} teams</span></div>`;
-      } else {
-        liveRow = `<div class="row"><span class="swatch proj"></span><span class="k">Projected</span><span class="v">${Math.round(proj)} teams</span></div>`;
-      }
-      tooltip.innerHTML = `<div class="day">${dayLabel}</div>${planRow}${liveRow}`;
-
-      // Position tooltip relative to card-body
-      const cbRect = cardBody.getBoundingClientRect();
-      const offsetLeft = e.clientX - cbRect.left + 14;
-      const offsetTop = e.clientY - cbRect.top - 8;
-      const tipWidth = tooltip.offsetWidth || 150;
-      const tipLeft = (offsetLeft + tipWidth + 10 > cbRect.width)
-        ? offsetLeft - tipWidth - 28
-        : offsetLeft;
-      tooltip.style.left = tipLeft + 'px';
-      tooltip.style.top = offsetTop + 'px';
-
-      show();
-    });
-
-    overlay.addEventListener('mouseleave', hide);
   })();
 
   // ========== INITIAL RENDER ==========
