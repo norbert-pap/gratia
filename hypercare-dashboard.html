@@ -1727,7 +1727,7 @@
       </section>
 
       <!-- ===== TEAM MATRIX ===== -->
-      <section class="matrix-section">
+      <section class="matrix-section" id="matrix-section">
         <div class="matrix-head">
           <div class="title-group">
             <h2><span id="matrixTeamCount">23</span> workstreams</h2>
@@ -2590,6 +2590,20 @@
 
   // ========== INITIAL RENDER ==========
   renderClient('all');
+
+  // ===== Exit-criteria failing-row jump =====
+  document.getElementById('exitList').addEventListener('click', (e) => {
+    const row = e.target.closest('.exit-row.failing');
+    if (!row) return;
+    const targetId = row.dataset.jumpTo;
+    if (!targetId) return;
+    const target = document.getElementById(targetId);
+    if (!target) return;
+    target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    target.style.transition = 'box-shadow 0.4s';
+    target.style.boxShadow = '0 0 0 2px var(--gold-line)';
+    setTimeout(() => { target.style.boxShadow = ''; }, 1400);
+  });
 </script>
 
 </div><!-- /#deck-content -->
