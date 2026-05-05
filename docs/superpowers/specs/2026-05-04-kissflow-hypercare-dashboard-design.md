@@ -129,7 +129,7 @@ Matrix columns:
 | Col | Label | Cell content |
 |---|---|---|
 | 1 | Team | Team name + region pill (e.g. `Operations · Mumbai`) |
-| 2 | Lead | Avatar + name (Jordan Reyes, Sarah Chen, Priya Shah, etc.) |
+| 2 | Lead | Avatar + name. Use the four named personas where they map (Jordan Reyes — Onboarding Program NY, Sarah Chen — Performance Reporting NY, Priya Shah — Operations Mumbai, Marcus Hart — referenced as MD-level oversight, not a row lead). Other rows use generic avatars + plausible names. |
 | 3 | Adoption | Bar cell: % adoption with a thin horizontal bar (replaces the stage-progression segments cell in exec-dashboard). Bar color follows adoption thresholds: ≥90% green, 75–89% amber, <75% red. |
 | 4 | Open tickets | Number cell, colored by P1/P2 weighting. |
 | 5 | Training | % completion with a tiny gauge / progress dot. |
@@ -219,11 +219,11 @@ In priority order:
 4. Reduce matrix from 9 teams to 5.
 5. Drop streak dots on exit-criteria card; show plain `met / in progress / failing` pills only.
 
-## Open questions
+## Decisions locked
 
-1. Should the matrix lead column show the actual personas-doc avatars (Jordan, Sarah, Marcus, Priya) where they map, or use generic avatars throughout? Default: use the four named personas where they map, generic for the rest.
-2. Hypercare window: 30 or 56 days? Spec assumes 30 (Day 12 of 30). If sponsor confirms 8-week window, swap to 56 — affects only the eyebrow text and chart x-axis. No structural change.
-3. Wave structure: is the rollout actually waved (May 30 + June 5), or all-at-once? Spec assumes 2 waves to give the matrix realistic variance. If single wave, drop the "Wave" data and compress the Days column.
+1. Persona avatars: use named personas (Jordan, Sarah, Priya) where they map; generic avatars for other rows.
+2. Hypercare window: **30 days**. Eyebrow `Day 12 of 30`; stabilization chart x-axis 0–30.
+3. Wave structure: **2 waves** (Wave 1 May 30, Wave 2 June 5). Days column shows 12 / 7 accordingly.
 
 ## File layout
 
