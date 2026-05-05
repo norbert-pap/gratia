@@ -350,6 +350,9 @@
   }
   .kpi .value .unit { font-size: 14px; color: var(--ink-2); font-weight: 500; }
   .kpi .delta { font-size: 11.5px; color: var(--ink-3); display: flex; align-items: center; gap: 6px; }
+  .kpi .delta.green { color: var(--green-ink); }
+  .kpi .delta.amber { color: var(--amber-ink); }
+  .kpi .delta.red   { color: var(--red-ink); }
   .kpi .delta.bad { color: var(--red-ink); }
   .kpi .delta.good { color: var(--green-ink); }
   .kpi .spark { margin-top: 6px; }
@@ -1527,32 +1530,29 @@
       <!-- ===== KPI ROW ===== -->
       <section class="kpi-row">
         <div class="kpi">
-          <div class="label">Completion</div>
-          <div class="value num"><span id="kpiCompletionValue">17</span><span class="unit">%</span></div>
-          <div class="delta" id="kpiCompletionDelta">
-            <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            <span id="kpiCompletionDeltaText">4 of 23 complete</span>
-          </div>
+          <div class="label">Adoption rate</div>
+          <div class="value num"><span id="kpiAdoptionValue">84</span><span class="unit">%</span></div>
+          <div class="delta amber" id="kpiAdoptionDelta">+6pp WoW · target 90%</div>
         </div>
         <div class="kpi">
-          <div class="label">Off-track workstreams</div>
-          <div class="value num" id="kpiOffTrackValueWrap"><span id="kpiOffTrackValue">5</span><span class="unit">/23</span></div>
-          <div class="delta" id="kpiOffTrackDelta">+1 since last week</div>
+          <div class="label">Open P1 / P2</div>
+          <div class="value num" id="kpiTicketsValue">6</div>
+          <div class="delta green" id="kpiTicketsDelta">−8 since last week</div>
         </div>
         <div class="kpi">
-          <div class="label">Days remaining</div>
-          <div class="value num" id="daysRemainingValue">15</div>
-          <div class="delta" id="daysRemainingDelta">Until projected go-live · May 13</div>
+          <div class="label">Repeat-issue rate</div>
+          <div class="value num"><span id="kpiRepeatValue">14</span><span class="unit">%</span></div>
+          <div class="delta amber" id="kpiRepeatDelta">−3pp WoW · target &lt;10%</div>
         </div>
         <div class="kpi">
-          <div class="label"><span class="tip tip-wide tip-below" data-tip="A workstream is in breach if it has spent >24h in Discovery, >24h in Plan &amp; Assign, or is past the due date without reaching UAT &amp; Sign-off.">Stage-time breaches</span></div>
-          <div class="value num" id="kpiSlaValueWrap"><span id="kpiSlaValue">3</span></div>
-          <div class="delta" id="kpiSlaDelta">Across 2 teams</div>
+          <div class="label">MTTR (P2)</div>
+          <div class="value num"><span id="kpiMttrValue">18</span><span class="unit">h</span></div>
+          <div class="delta green" id="kpiMttrDelta">Within 24h target</div>
         </div>
         <div class="kpi">
-          <div class="label">Projected go-live</div>
-          <div class="value num" id="kpiGoLiveValue" style="font-size:26px;">May 13</div>
-          <div class="delta" id="kpiGoLiveDelta">+8d vs plan</div>
+          <div class="label"><span class="tip tip-wide tip-below" data-tip="Hypercare exits when all 6 criteria are met for 5 consecutive days. Today: 3 of 6 met.">Days to exit</span></div>
+          <div class="value num" id="kpiDaysValue">18</div>
+          <div class="delta" id="kpiDaysDelta">3 of 6 criteria met</div>
         </div>
       </section>
 
