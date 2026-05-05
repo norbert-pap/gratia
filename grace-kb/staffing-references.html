@@ -458,8 +458,8 @@
       <div class="section-head">
         <div>
           <div class="section-num">11.2 &middot; INDUSTRIES</div>
-          <div class="section-title">Industry references &middot; 3 drafted (open-ended set)</div>
-          <div class="section-sub">One file per industry. Industries are open-ended, so v0 prioritizes the live failure modes (private credit, insurance regulatory) plus their canonical disambiguator (investment banking).</div>
+          <div class="section-title">Industry references &middot; 8 drafted (open-ended set)</div>
+          <div class="section-sub">One file per industry. Industries are open-ended; v0 covers Gratia's most common request domains: financial services (4 entries: private credit, insurance regulatory, investment banking, asset management) plus technology &amp; SaaS, healthcare &amp; life sciences, consumer &amp; retail, real estate.</div>
         </div>
       </div>
 
@@ -514,6 +514,91 @@
             <p><strong>Levels.</strong> A3+ for support on IB-flavored work; A4 / M1 for ownership; lead-level for client-facing on deal-flavored projects.</p>
           </div>
         </details>
+
+        <details class="spec-item">
+          <summary class="spec-summary">
+            <span class="spec-num">11.2.4</span>
+            <span class="spec-name">Asset management</span>
+            <span class="spec-meta"><span>Public &middot; private &middot; alternatives</span><svg class="spec-chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
+          </summary>
+          <div class="spec-body" style="grid-template-columns: 1fr; gap: 12px;">
+            <p style="color: var(--ink-1);"><strong>Definition.</strong> The buy-side of institutional finance. Public-market asset managers (mutual funds, ETFs, hedge funds, equity / fixed-income managers) and private-markets asset managers (PE, VC, growth equity, real assets, infrastructure). Distinct from private credit and IB.</p>
+            <p><strong>Not to be confused with.</strong> Private credit (see 11.2.1 &mdash; a slice of private-markets AM, but distinct enough to warrant its own entry); investment banking (sell-side advisory, not buy-side investing); wealth management / private banking (services to HNW individuals, not institutional); insurance asset management (bridges insurance balance sheets with public-markets investing &mdash; flag if request involves both); asset administration / custodianship (operational service to AMs).</p>
+            <p><strong>CV signals &middot; positive.</strong> Public-market AMs: BlackRock, Vanguard, Fidelity, T. Rowe Price, Capital Group, SSGA, PIMCO, Wellington, AllianceBernstein, Invesco, Franklin Templeton. Hedge funds: Citadel, Two Sigma, Renaissance, Bridgewater, D.E. Shaw, Millennium, Point72, Balyasny, AQR. Private equity: Blackstone, Apollo, KKR, Carlyle, TPG, Bain Capital, Vista, Thoma Bravo, Silver Lake. Venture / growth: Sequoia, a16z, Benchmark, Accel, NEA, Insight, General Atlantic, Tiger Global. Real assets: Brookfield, GIP, Stonepeak, EQT Infrastructure. Concepts: AUM, performance fee, mgmt fee, IRR / MOIC / DPI / TVPI; alpha, beta, tracking error, Sharpe, info ratio; J-curve, capital call, vintage year, SMA, LP / GP, GIPS reporting.</p>
+            <p><strong>CV signals &middot; false positive.</strong> "Asset management" used by IT-asset or facilities-asset roles; "investment management" at junior research at non-institutional shops; wealth advisor at retail brokerage (Edward Jones, MSWM, Merrill) claimed as institutional AM; corporate-treasury buy-side claimed as AM.</p>
+            <p><strong>Adjacent / transferable from.</strong> IB analysts post-banking moving to investing roles; equity research analysts (sell-side ER moving buy-side); Big 4 financial services audit / advisory (strong on accounting); fund administrators (Citco, SS&amp;C, Northern Trust &mdash; ops side); investment consultants (Mercer, Cambridge Associates, Russell &mdash; manager-selection muscle).</p>
+            <p><strong>Common ask wedge.</strong> Four buckets &mdash; clarify which: (1) investing reps (analyst, associate, PM); (2) operations / fund admin; (3) distribution / IR (fundraising from LPs); (4) compliance / risk / valuation. Different jobs with overlapping vocabulary.</p>
+            <p><strong>Levels.</strong> A3+ for analytical support; A4 / M1 for client-facing engagements; lead-level for senior IR or investment-team adjacent work.</p>
+          </div>
+        </details>
+
+        <details class="spec-item">
+          <summary class="spec-summary">
+            <span class="spec-num">11.2.5</span>
+            <span class="spec-name">Technology &amp; SaaS</span>
+            <span class="spec-meta"><span>B2B SaaS &middot; consumer apps &middot; marketplaces</span><svg class="spec-chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
+          </summary>
+          <div class="spec-body" style="grid-template-columns: 1fr; gap: 12px;">
+            <p style="color: var(--ink-1);"><strong>Definition.</strong> Software companies &mdash; B2B SaaS (enterprise vs. SMB / mid-market), consumer apps, dev tools, infrastructure / cloud, AI / ML tools, cybersecurity, marketplaces, platforms. "Tech experience" is overclaimed; sub-segment matters. A B2B-SaaS RevOps analyst is not interchangeable with a consumer-app growth analyst.</p>
+            <p><strong>Not to be confused with.</strong> Tech-enabled services (Uber, DoorDash, Airbnb &mdash; use software but aren't software companies; different KPIs); IT consulting (Accenture, Deloitte Tech, Capgemini &mdash; services, not products); hardware / consumer electronics (different mechanics); fintech (financial services with software flavor &mdash; treat as financial services for matching).</p>
+            <p><strong>CV signals &middot; positive.</strong> Recognizable employers: Google, Meta, Netflix, Microsoft, AWS, Apple, Stripe, Notion, Figma, Atlassian, Okta, Datadog, Snowflake, Databricks, Salesforce, HubSpot, ServiceNow, Workday, Zoom, Slack, Twilio, Cloudflare. Concepts: NRR / GRR / DRR / NDR, ACV, ARR, CAC, LTV, payback period, magic number, Rule of 40, gross margin, expansion vs. new logo, PLG vs. SLG vs. hybrid motion. Roles: PMM, growth analyst, RevOps, BizOps / strategy, customer success ops, product analyst, founders / first hires at growth-stage cos.</p>
+            <p><strong>CV signals &middot; false positive.</strong> "Tech-savvy" listed as a skill (means uses tech, not works in tech); "worked at a tech company" when it turns out to be a corporate IT department; tech-enabled marketplace experience (Uber, DoorDash) claimed as SaaS; "digital transformation" consulting (typically enterprise-IT modernization, not SaaS-native).</p>
+            <p><strong>Adjacent / transferable from.</strong> BCG / Bain / McKinsey TMT or Tech practices (industry coverage, lighter on operating reps); IB tech coverage (deep on financials, lighter on operating); Big 4 tech advisory (modernization-flavored); tech-enabled services operators (mechanics partially transfer); late-stage VC / growth equity associates.</p>
+            <p><strong>Common ask wedge.</strong> Three buckets &mdash; clarify which: (1) operating reps at a SaaS company; (2) strategy / consulting work for a SaaS company; (3) investing in tech (VC, growth, public equity tech analyst). Ideal candidate differs significantly.</p>
+            <p><strong>Levels.</strong> A2 supports SaaS analysis if comfortable with the metrics; A3+ owns workstreams; A4 / M1 for client-facing or strategic engagements.</p>
+          </div>
+        </details>
+
+        <details class="spec-item">
+          <summary class="spec-summary">
+            <span class="spec-num">11.2.6</span>
+            <span class="spec-name">Healthcare &amp; life sciences</span>
+            <span class="spec-meta"><span>Provider &middot; payer &middot; pharma &middot; medtech &middot; digital health</span><svg class="spec-chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
+          </summary>
+          <div class="spec-body" style="grid-template-columns: 1fr; gap: 12px;">
+            <p style="color: var(--ink-1);"><strong>Definition.</strong> Healthcare and life sciences sector. Major sub-segments: providers (hospitals, health systems, physician groups), payers (insurers, PBMs, government payers), pharma / biotech, medical devices, healthcare IT / digital health, life sciences services. One of the most segmented industries on the staffing menu &mdash; sub-domain expertise rarely transfers freely.</p>
+            <p><strong>Not to be confused with.</strong> Health-insurance regulatory / stat accounting (see 11.2.2 &mdash; overlap exists for health-plan NAIC reporting); wellness / consumer health (D2C wellness products are consumer); pharma / med-device sales reps (territory work, not strategy); healthcare administration at non-clinical orgs without clinical / commercial scope; health-tech / digital health (often more like SaaS than healthcare &mdash; flag if deep clinical / regulatory exposure expected).</p>
+            <p><strong>CV signals &middot; positive.</strong> <em>Provider:</em> HCA, CommonSpirit, Cleveland Clinic, Mayo, Kaiser, Ascension; roles: clinical operations, RCM, CMO / COO offices, value-based care. <em>Payer:</em> UnitedHealthcare / Optum, Anthem / Elevance, Aetna / CVS, Humana, BCBS, government (Medicare / Medicaid); roles: actuarial, network management, plan operations. <em>Pharma:</em> Pfizer, Merck, J&amp;J, Roche, Novartis, AstraZeneca, BMS, Lilly, AbbVie; roles: commercial strategy, medical affairs, market access, HEOR. <em>Medical devices:</em> Medtronic, Abbott, Boston Scientific, Stryker, BD, GE Healthcare. <em>Health IT:</em> Epic, Cerner / Oracle Health, Veeva, athenahealth; modern startups: Hims, Ro, Headway, Oscar, Cedar, Devoted Health. Concepts: HIPAA, value-based care (VBC), capitation, ACO, MLR, formulary, prior authorization, payer mix, RWE, HEOR, 340B, DRG, ICD-10, claims data, EHR / EMR.</p>
+            <p><strong>CV signals &middot; false positive.</strong> "Healthcare consulting" used loosely without sub-segment specificity; "medical" experience that's clinical practice without commercial / strategic / operational reps; "wellness" experience claimed as healthcare; pharma "experience" that's only sales-rep work without commercial reps.</p>
+            <p><strong>Adjacent / transferable from.</strong> Specialist healthcare consulting: ZS Associates, IQVIA, L.E.K. healthcare, BCG / Bain / McKinsey healthcare practices; Big 4 health (Deloitte LSHC, EY Health, PwC Health Industries &mdash; compliance and transformation, lighter on commercial); IB healthcare coverage; healthcare PE associates.</p>
+            <p><strong>Common ask wedge.</strong> Five buckets &mdash; clarify sub-segment: (1) provider, (2) payer, (3) pharma / biotech, (4) medical devices, (5) health IT / digital health. A pharma commercial strategist usually can't credibly do payer network design, and vice versa. <code style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--amber-ink);">[NEEDS_EXPERT_REVIEW: a healthcare practitioner to validate sub-segment definitions, named firm lists, and the five-way ask wedge]</code></p>
+            <p><strong>Levels.</strong> A2 supports research and analysis; A3+ owns sub-segment workstreams; A4 / M1 for client-facing engagements.</p>
+          </div>
+        </details>
+
+        <details class="spec-item">
+          <summary class="spec-summary">
+            <span class="spec-num">11.2.7</span>
+            <span class="spec-name">Consumer &amp; retail</span>
+            <span class="spec-meta"><span>CPG &middot; DTC &middot; retail &middot; marketplaces &middot; hospitality</span><svg class="spec-chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
+          </summary>
+          <div class="spec-body" style="grid-template-columns: 1fr; gap: 12px;">
+            <p style="color: var(--ink-1);"><strong>Definition.</strong> Consumer-facing businesses. Sub-segments: CPG / FMCG, DTC (direct-to-consumer brands), traditional / omnichannel retail, e-commerce, marketplaces, restaurants and hospitality, consumer services. CPG, DTC, and marketplace operators all sit under "consumer" but require very different muscles.</p>
+            <p><strong>Not to be confused with.</strong> B2C SaaS (Spotify, Netflix &mdash; treat as tech); industrial sold to consumers (HVAC, security &mdash; typically B2B-flavored); pharma OTC / wellness (sometimes blurry &mdash; depends on whether it's regulated as healthcare or just a brand).</p>
+            <p><strong>CV signals &middot; positive.</strong> <em>CPG / FMCG:</em> P&amp;G, Unilever, Nestl&eacute;, Coca-Cola, PepsiCo, J&amp;J Consumer (Kenvue), Kraft Heinz, General Mills, Mars, Mondelez, Colgate-Palmolive, L'Or&eacute;al, Est&eacute;e Lauder; roles: brand mgmt, category mgmt, sales ops, trade marketing, route-to-market. <em>DTC:</em> Allbirds, Warby Parker, Casper, Glossier, Harry's, Native, Hims, Away, Brooklinen; roles: growth / performance marketing, e-comm ops, supply chain, retention. <em>Retail:</em> Walmart, Target, Costco, Best Buy, TJX, Home Depot, Lowe's; roles: merchandising, category mgmt, store ops. <em>Marketplaces:</em> Amazon, Etsy, eBay, Shopify, Wayfair, Faire; roles: category lead, marketplace ops, two-sided economics. <em>Hospitality:</em> Marriott, Hilton, Hyatt, McDonald's, Starbucks, Chipotle. Concepts: SKU rationalization, gross margin (% and $), trade spend, slotting fees, ACV / TDP, basket size, AOV, planogram, vel / velocity.</p>
+            <p><strong>CV signals &middot; false positive.</strong> "Consumer experience" generic claim (push for sub-segment); "worked in retail" listed as a part-time job during school; DTC brands listed without operating / strategic role context; "e-commerce" without specifying marketplace / DTC / retail-omnichannel.</p>
+            <p><strong>Adjacent / transferable from.</strong> MBB consumer practices (BCG Consumer &amp; Retail, Bain Consumer Products, McKinsey C&amp;R); specialist consumer-retail consulting (Kearney, A&amp;M Consumer &amp; Retail, OC&amp;C, L.E.K.); IB consumer / retail coverage; PE consumer / retail teams (L Catterton, TSG, Berkshire Partners consumer).</p>
+            <p><strong>Common ask wedge.</strong> Five buckets &mdash; clarify which: (1) CPG / FMCG; (2) DTC operations / growth; (3) traditional / omnichannel retail; (4) marketplaces (two-sided economics); (5) hospitality / restaurants. CPG and DTC look similar from outside but require very different muscles.</p>
+            <p><strong>Levels.</strong> A2 supports analysis; A3+ owns sub-segment work; A4 / M1 for client-facing engagements.</p>
+          </div>
+        </details>
+
+        <details class="spec-item">
+          <summary class="spec-summary">
+            <span class="spec-num">11.2.8</span>
+            <span class="spec-name">Real estate</span>
+            <span class="spec-meta"><span>CRE &middot; REPE &middot; REITs &middot; development &middot; brokerage</span><svg class="spec-chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
+          </summary>
+          <div class="spec-body" style="grid-template-columns: 1fr; gap: 12px;">
+            <p style="color: var(--ink-1);"><strong>Definition.</strong> Commercial real estate (CRE) and adjacent. Sub-segments: CRE (office, retail, industrial / logistics, multifamily, hospitality); REITs (publicly traded and non-traded); proptech; real estate private equity (REPE); real estate development. Excludes residential brokerage as a primary domain.</p>
+            <p><strong>Not to be confused with.</strong> Residential real estate brokerage (agent / broker work, very different from CRE); construction project management (see services/project-management.md &mdash; overlaps with development but distinct); mortgage origination (financial services with RE as collateral); property insurance; personal real estate investing as a hobby vs. institutional CRE.</p>
+            <p><strong>CV signals &middot; positive.</strong> <em>REPE / RE funds:</em> Blackstone Real Estate, Brookfield RE, KKR RE, Starwood Capital, BentallGreenOak, Hines, AEW, Carlyle RE, Oaktree RE. <em>REITs:</em> Prologis, Equinix, Public Storage, Realty Income, Simon, AvalonBay, Equity Residential, Boston Properties, American Tower, Welltower. <em>Brokerage / advisory:</em> CBRE, JLL, Cushman &amp; Wakefield, Colliers, Newmark, Eastdil Secured. Concepts: cap rate, NOI, DSCR, LTV, GAV / NAV, cash-on-cash return, IRR (RE context), value-add vs. core vs. core-plus vs. opportunistic; "stabilized," "lease-up," "trophy asset," "TI / LC," in-place vs. market rents. Roles: acquisitions analyst, asset management associate, REIT financial analyst, RE IB analyst, development associate. Tools: Argus (specifically &mdash; major signal), Yardi, MRI, RealPage, CoStar.</p>
+            <p><strong>CV signals &middot; false positive.</strong> Residential agents / brokers claimed as commercial RE; "real estate investing" as a personal hobby (rental properties) vs. institutional CRE; "property management" without scope (could be a single small portfolio); CMBS trading claimed as RE asset / acquisition work (markets, not deals).</p>
+            <p><strong>Adjacent / transferable from.</strong> IB real estate / lodging coverage (RE M&amp;A, REIT IPOs); development consulting (urban planning, site selection); PE associates with REPE deal exposure; hospitality strategy (asset side); Big 4 real estate advisory (valuation, audit, structuring).</p>
+            <p><strong>Common ask wedge.</strong> Five buckets &mdash; clarify which: (1) acquisitions / underwriting; (2) asset management (post-purchase); (3) development; (4) REIT / public-markets; (5) brokerage / leasing. A CRE acquisitions analyst can't credibly do leasing brokerage and vice versa. <code style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--amber-ink);">[NEEDS_EXPERT_REVIEW: a CRE practitioner to validate sub-segment definitions, the firm list (especially mid-market REPE), and the five-way ask wedge]</code></p>
+            <p><strong>Levels.</strong> A3+ for support work; A4 / M1 for ownership of underwriting or asset management workstreams; lead-level for client-facing CRE engagements.</p>
+          </div>
+        </details>
       </div>
     </section>
 
@@ -521,8 +606,8 @@
       <strong>Gaps to fill in &middot; staffing references</strong>
       <ul>
         <li><strong>Service references complete: 9 of 9 clusters drafted (27 categories total).</strong> Each follows the same six-field format and is open to a domain-practitioner pass for tightening.</li>
-        <li><strong>Industries are open-ended.</strong> Done: private credit, insurance regulatory, investment banking. Likely next based on demand: real estate, healthcare, technology, asset management.</li>
-        <li><strong>Three [NEEDS_EXPERT_REVIEW] markers.</strong> CFA weighting in valuation; private-credit firm list and ask-wedge framing; NAIC concept list and adjacent-skill weighting in insurance. These need a domain practitioner to validate &mdash; concrete asks instead of "send us material."</li>
+        <li><strong>Industries: 8 of Gratia's most common request domains drafted.</strong> Financial services (private credit, insurance regulatory, investment banking, asset management) plus technology &amp; SaaS, healthcare &amp; life sciences, consumer &amp; retail, real estate. Open-ended &mdash; add by demand (energy / utilities, industrial / manufacturing, public sector, professional services likely next).</li>
+        <li><strong>[NEEDS_EXPERT_REVIEW] markers across 5 entries.</strong> CFA weighting in valuation; private-credit firm list and ask-wedge; NAIC concept list and adjacent-skill weighting in insurance; healthcare sub-segment definitions and five-way ask wedge; CRE firm list and five-way ask wedge. These need domain-practitioner validation &mdash; concrete asks instead of "send us material."</li>
         <li><strong>Loading logic not yet wired.</strong> Once the format is signed off, the staffing skill needs to read the right reference files when entering specialty staffing match mode.</li>
       </ul>
     </div>
