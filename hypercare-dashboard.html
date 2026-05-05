@@ -1409,6 +1409,46 @@
   .bullet-row:hover { background: rgba(255, 255, 255, 0.022); }
   .bullet-row.active { background: var(--gold-dim); }
 
+  /* Exit-criteria card */
+  .exit-card .card-body { padding: 0; }
+  .exit-list { display: flex; flex-direction: column; }
+  .exit-row {
+    display: grid;
+    grid-template-columns: 88px 1fr auto;
+    gap: 14px;
+    align-items: center;
+    padding: 12px 18px;
+    border-top: 1px solid var(--border);
+    font-size: 13px;
+  }
+  .exit-row:first-child { border-top: none; }
+  .exit-row.failing { cursor: pointer; }
+  .exit-row.failing:hover { background: var(--row-hover); }
+  .exit-row .exit-pill {
+    display: inline-flex; align-items: center; gap: 5px;
+    padding: 3px 8px;
+    border-radius: 999px;
+    font-size: 10.5px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    white-space: nowrap;
+  }
+  .exit-row .exit-pill.met       { color: var(--green-ink); background: var(--green-dim); border: 1px solid var(--green-line); }
+  .exit-row .exit-pill.progress  { color: var(--amber-ink); background: var(--amber-dim); border: 1px solid var(--amber-line); }
+  .exit-row .exit-pill.failing   { color: var(--red-ink);   background: var(--red-dim);   border: 1px solid var(--red-line); }
+  .exit-row .exit-text { display: flex; flex-direction: column; gap: 2px; }
+  .exit-row .exit-label { color: var(--ink-0); font-weight: 500; }
+  .exit-row .exit-detail { color: var(--ink-2); font-size: 11.5px; font-family: 'JetBrains Mono', monospace; }
+  .exit-row .exit-streak { display: inline-flex; gap: 3px; }
+  .exit-row .streak-dot {
+    width: 7px; height: 7px; border-radius: 50%;
+    background: var(--bg-4);
+    border: 1px solid var(--border-2);
+  }
+  .exit-row .streak-dot.filled { background: var(--amber-ink); border-color: var(--amber-ink); }
+  .exit-row .streak-dot.filled.met { background: var(--green-ink); border-color: var(--green-ink); }
+
   /* KPI hover polish */
   .kpi { transition: background 0.15s; }
   .kpi:hover { background: var(--bg-2); }
@@ -1672,33 +1712,16 @@
           </div>
         </div>
 
-        <!-- Right card: Status (Pacing view) -->
-        <div class="card" id="statusCard" style="display:none">
+        <div class="card exit-card">
           <div class="card-head">
-            <h3>Status</h3>
-            <div class="waffle-head-toggle" id="statusToggle">
-              <button class="active" data-view="grid">Grid</button>
-              <button data-view="list">List</button>
+            <div>
+              <h3>Hypercare exit criteria</h3>
+              <p class="sub"><span id="exitMetCount">3</span> of 6 met</p>
             </div>
           </div>
-          <div class="card-body">
-            <div id="waffle" class="waffle-grid"></div>
-            <div id="status-list" class="status-list" hidden></div>
-            <div style="display: flex; justify-content: space-between; padding-top: 14px; margin-top: 14px; border-top: 1px solid var(--border); font-size: 11.5px;" class="num">
-              <span class="tip" data-tip="Team is off track and not meeting SLAs" style="display: flex; align-items: center; gap: 6px; color: var(--red-ink);"><span style="width:6px; height:6px; background: var(--red); border-radius:50%;"></span><span id="waffleCountR">5</span> off track</span>
-              <span class="tip" data-tip="Team is pending information from other internal teams or client" style="display: flex; align-items: center; gap: 6px; color: var(--amber-ink);"><span style="width:6px; height:6px; background: var(--amber); border-radius:50%;"></span><span id="waffleCountA">5</span> pending</span>
-              <span class="tip" data-tip="On track" style="display: flex; align-items: center; gap: 6px; color: var(--green-ink);"><span style="width:6px; height:6px; background: var(--green); border-radius:50%;"></span><span id="waffleCountG">13</span> on track</span>
-            </div>
+          <div class="card-body exit-body">
+            <ul class="exit-list" id="exitList"></ul>
           </div>
-        </div>
-
-        <!-- Right card: Movers (Teams view) -->
-        <div class="card" id="moversCard">
-          <div class="card-head">
-            <h3>Movers</h3>
-            <div class="meta" id="moversMeta">0 teams changed</div>
-          </div>
-          <div id="moversList" class="movers-list"></div>
         </div>
 
       </section>
@@ -1922,6 +1945,52 @@
     totalDays: 30,
     ticketsMax: 35,
   };
+
+  // Exit criteria. state: 'met' | 'progress' | 'failing'.
+  // streak: { current, target } if applicable, else null.
+  // jumpTo: anchor id to scroll to when row is clicked (failing rows only).
+  const EXIT_CRITERIA = [
+    { label: 'Open P1 incidents',          target: '0 for 5 consecutive days', current: '0 · day 2 of 5', state: 'progress', streak: { current: 2, target: 5 }, jumpTo: null },
+    { label: 'Adoption rate (all teams)',  target: '≥ 90%',                    current: '84% · 7 of 9 teams pass', state: 'failing',  streak: null, jumpTo: 'matrix-section' },
+    { label: 'Repeat-issue rate',          target: '< 10%',                    current: '14%',                      state: 'failing',  streak: null, jumpTo: 'repeat-issues' },
+    { label: 'MTTR (P2)',                  target: '≤ 24h sustained',          current: '18h · day 5 of 5',         state: 'met',      streak: { current: 5, target: 5 }, jumpTo: null },
+    { label: 'Old SMA process retirement', target: '100% on Kissflow',         current: '100%',                     state: 'met',      streak: null, jumpTo: null },
+    { label: 'Training completion',        target: '≥ 95%',                    current: '96%',                      state: 'met',      streak: null, jumpTo: null },
+  ];
+
+  function renderExitCriteria(list) {
+    const root = document.getElementById('exitList');
+    if (!root) return;
+    const pillLabel = { met: 'Met', progress: 'In progress', failing: 'Failing' };
+    root.innerHTML = list.map(c => {
+      let streakHtml = '';
+      if (c.streak) {
+        const dots = [];
+        for (let i = 0; i < c.streak.target; i++) {
+          const filled = i < c.streak.current;
+          const cls = `streak-dot${filled ? ' filled' : ''}${filled && c.state === 'met' ? ' met' : ''}`;
+          dots.push(`<span class="${cls}"></span>`);
+        }
+        streakHtml = `<span class="exit-streak">${dots.join('')}</span>`;
+      }
+      const rowCls = c.state === 'failing' ? 'exit-row failing' : 'exit-row';
+      const dataJump = c.jumpTo ? ` data-jump-to="${c.jumpTo}"` : '';
+      return `
+        <li class="${rowCls}"${dataJump}>
+          <span class="exit-pill ${c.state}">${pillLabel[c.state]}</span>
+          <span class="exit-text">
+            <span class="exit-label">${c.label}</span>
+            <span class="exit-detail">${c.target} · ${c.current}</span>
+          </span>
+          ${streakHtml}
+        </li>
+      `;
+    }).join('');
+
+    document.getElementById('exitMetCount').textContent = list.filter(c => c.state === 'met').length;
+  }
+
+  renderExitCriteria(EXIT_CRITERIA);
 
   function deriveLastWeekHealth(team) {
     // Deterministic 60% same / 20% improved (was worse) / 20% worsened (was better) split
@@ -2156,10 +2225,6 @@
                    : 'On plan';
     document.getElementById('kpiGoLiveDelta').textContent = slipText;
 
-    document.getElementById('waffleCountR').textContent = String(offtrack);
-    document.getElementById('waffleCountA').textContent = String(pending);
-    document.getElementById('waffleCountG').textContent = String(ontrack);
-
     document.getElementById('chipCountAll').textContent = String(teams.length);
     document.getElementById('chipCountR').textContent = String(offtrack);
     document.getElementById('chipCountA').textContent = String(pending);
@@ -2174,10 +2239,6 @@
     currentTeams = buildTeams(config.archetype);
     renderHeader(config);
     renderKpis(currentTeams, config);
-    renderWaffle(currentTeams);
-    renderStatusList(currentTeams);
-    renderTeamsView(currentTeams);
-    renderMovers(currentTeams);
     renderMatrix(currentTeams);
     // Reset filters on client change
     healthFilter = 'all';
