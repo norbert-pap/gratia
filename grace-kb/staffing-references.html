@@ -458,8 +458,8 @@
       <div class="section-head">
         <div>
           <div class="section-num">11.2 &middot; INDUSTRIES</div>
-          <div class="section-title">Industry references &middot; 8 drafted (open-ended set)</div>
-          <div class="section-sub">One file per industry. Industries are open-ended; v0 covers Gratia's most common request domains: financial services (4 entries: private credit, insurance regulatory, investment banking, asset management) plus technology &amp; SaaS, healthcare &amp; life sciences, consumer &amp; retail, real estate.</div>
+          <div class="section-title">Industry references &middot; 12 reference files covering all 10 canonical Gratia industries</div>
+          <div class="section-sub">One reference file per industry, aligned to the canonical industry tags in <code style="font-family: 'JetBrains Mono', monospace; font-size: 11px;">app/.server/seed/seed.data.ts</code>. Financial Services is split into 4 sub-files (private credit, insurance regulatory, IB, asset management) because the sub-segments are routinely confused. The other 9 canonical industries map 1:1 to a reference file, with sub-segments documented inside each.</div>
         </div>
       </div>
 
@@ -535,8 +535,8 @@
         <details class="spec-item">
           <summary class="spec-summary">
             <span class="spec-num">11.2.5</span>
-            <span class="spec-name">Technology &amp; SaaS</span>
-            <span class="spec-meta"><span>B2B SaaS &middot; consumer apps &middot; marketplaces</span><svg class="spec-chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
+            <span class="spec-name">Technology</span>
+            <span class="spec-meta"><span>B2B SaaS &middot; consumer apps &middot; dev tools &middot; marketplaces</span><svg class="spec-chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
           </summary>
           <div class="spec-body" style="grid-template-columns: 1fr; gap: 12px;">
             <p style="color: var(--ink-1);"><strong>Definition.</strong> Software companies &mdash; B2B SaaS (enterprise vs. SMB / mid-market), consumer apps, dev tools, infrastructure / cloud, AI / ML tools, cybersecurity, marketplaces, platforms. "Tech experience" is overclaimed; sub-segment matters. A B2B-SaaS RevOps analyst is not interchangeable with a consumer-app growth analyst.</p>
@@ -552,7 +552,7 @@
         <details class="spec-item">
           <summary class="spec-summary">
             <span class="spec-num">11.2.6</span>
-            <span class="spec-name">Healthcare &amp; life sciences</span>
+            <span class="spec-name">Healthcare</span>
             <span class="spec-meta"><span>Provider &middot; payer &middot; pharma &middot; medtech &middot; digital health</span><svg class="spec-chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
           </summary>
           <div class="spec-body" style="grid-template-columns: 1fr; gap: 12px;">
@@ -569,7 +569,7 @@
         <details class="spec-item">
           <summary class="spec-summary">
             <span class="spec-num">11.2.7</span>
-            <span class="spec-name">Consumer &amp; retail</span>
+            <span class="spec-name">Retail</span>
             <span class="spec-meta"><span>CPG &middot; DTC &middot; retail &middot; marketplaces &middot; hospitality</span><svg class="spec-chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
           </summary>
           <div class="spec-body" style="grid-template-columns: 1fr; gap: 12px;">
@@ -599,6 +599,91 @@
             <p><strong>Levels.</strong> A3+ for support work; A4 / M1 for ownership of underwriting or asset management workstreams; lead-level for client-facing CRE engagements.</p>
           </div>
         </details>
+
+        <details class="spec-item">
+          <summary class="spec-summary">
+            <span class="spec-num">11.2.9</span>
+            <span class="spec-name">Energy</span>
+            <span class="spec-meta"><span>Oil &amp; gas &middot; utilities &middot; renewables &middot; EPC</span><svg class="spec-chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
+          </summary>
+          <div class="spec-body" style="grid-template-columns: 1fr; gap: 12px;">
+            <p style="color: var(--ink-1);"><strong>Definition.</strong> Energy sector. Sub-segments: traditional energy (oil &amp; gas &mdash; upstream / midstream / downstream), regulated utilities, renewables (solar, wind, storage, hydrogen), and energy services / EPC. Sub-segment matters substantially &mdash; operating reps and vocabulary differ.</p>
+            <p><strong>Not to be confused with.</strong> Cleantech / climate tech as software (often closer to tech / SaaS than to operational energy); utilities customer-service / billing operations; energy trading (markets-flavored); MBB ESG / sustainability work claimed as operational energy.</p>
+            <p><strong>CV signals &middot; positive.</strong> <em>Oil &amp; gas:</em> ExxonMobil, Chevron, Shell, BP, TotalEnergies, ConocoPhillips, EOG; oilfield services: SLB, Halliburton, Baker Hughes; concepts: upstream / midstream / downstream, E&amp;P, OFS, LNG, FPSO, refining margin, crack spread. <em>Utilities:</em> Duke, Southern, NextEra, Dominion, Exelon, AEP, PG&amp;E, Edison; concepts: rate cases, IRP, FERC, state PUCs, capex programs. <em>Renewables:</em> NextEra Energy Resources, Brookfield Renewable, &Oslash;rsted, EDP Renewables, Pattern, Invenergy; equipment: First Solar, Enphase, Vestas, GE Vernova, Siemens Energy. <em>EPC:</em> Bechtel, Fluor, McDermott, KBR, Wood, Worley. Concepts: PPA, capacity factor, LCOE, interconnection queue, ISO / RTO, ITC / PTC, IRA.</p>
+            <p><strong>CV signals &middot; false positive.</strong> "Energy industry experience" without a sub-segment named; "sustainability" listed as energy experience (often ESG advisory, not operational); "worked at a power company" without role specificity (could be IT or finance, not operations).</p>
+            <p><strong>Adjacent / transferable from.</strong> MBB energy practices; specialist consulting (ICF, Wood Mackenzie consulting, ERM); IB energy / power coverage; energy PE (Riverstone, Energy Capital Partners, Quantum).</p>
+            <p><strong>Common ask wedge.</strong> Four buckets &mdash; clarify which: (1) oil &amp; gas, (2) regulated utilities, (3) renewables, (4) energy trading. Little shared vocabulary in practice.</p>
+            <p><strong>Levels.</strong> A3+ for analytical support; A4 / M1 for sub-segment workstreams; lead-level for client-facing engagements.</p>
+          </div>
+        </details>
+
+        <details class="spec-item">
+          <summary class="spec-summary">
+            <span class="spec-num">11.2.10</span>
+            <span class="spec-name">Manufacturing</span>
+            <span class="spec-meta"><span>Discrete &middot; process &middot; automotive &middot; capital goods</span><svg class="spec-chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
+          </summary>
+          <div class="spec-body" style="grid-template-columns: 1fr; gap: 12px;">
+            <p style="color: var(--ink-1);"><strong>Definition.</strong> The manufacturing sector. Sub-segments: discrete manufacturing (autos, aerospace, electronics, machinery), process manufacturing (chemicals, food / beverage, materials), industrial / capital goods (industrial automation, heavy equipment), automotive (OEMs, tier-1 / tier-2 suppliers, EVs).</p>
+            <p><strong>Not to be confused with.</strong> Manufacturing tech / industrial software (PTC, Siemens Digital Industries Software &mdash; tech-flavored); aerospace &amp; defense (large enough for its own pass &mdash; flag separately); construction / infrastructure (project-based vs. plant-based); industrial PE financial roles claimed as operations.</p>
+            <p><strong>CV signals &middot; positive.</strong> <em>Discrete:</em> Boeing, Lockheed Martin, GE / GE Vernova, Honeywell, Siemens, ABB, Schneider Electric, Caterpillar, Deere, 3M, Illinois Tool Works. <em>Process:</em> Dow, DuPont, BASF, LyondellBasell, Linde, Air Products, Praxair, Air Liquide. <em>Automotive:</em> Ford, GM, Stellantis, Toyota, VW, BMW, Tesla, Rivian, Lucid; suppliers: Bosch, Magna, Aptiv, BorgWarner, Lear, Adient. Concepts: Lean manufacturing, Six Sigma, OEE, MTBF / MTTR, PFEP, kanban, takt time, kaizen, TPS; supply chain: VMI, JIT, S&amp;OP. Roles: plant manager, manufacturing engineer, supply chain ops, operations strategy.</p>
+            <p><strong>CV signals &middot; false positive.</strong> "Operations" experience that's services / not production-flavored; procurement experience claimed as manufacturing operations; "industrial" PE roles claimed as operating reps.</p>
+            <p><strong>Adjacent / transferable from.</strong> MBB industrials practices (BCG Industrial Goods, McKinsey Advanced Industries, Bain Industrial Goods); specialist consulting (Kearney Operations, Accenture Industry X, EY-Parthenon Industrials); Big 4 manufacturing advisory; industrial PE (Vista, Cerberus, KKR Industrial; American Industrial Partners).</p>
+            <p><strong>Common ask wedge.</strong> Four buckets &mdash; clarify which: (1) discrete vs. process; (2) plant-level operations vs. corporate-level strategy; (3) automotive vs. general industrial; (4) operating / engineering vs. supply-chain / planning.</p>
+            <p><strong>Levels.</strong> A3+ for analytical support; A4 / M1 for workstreams; lead-level for plant-level or transformation engagements.</p>
+          </div>
+        </details>
+
+        <details class="spec-item">
+          <summary class="spec-summary">
+            <span class="spec-num">11.2.11</span>
+            <span class="spec-name">Media &amp; entertainment</span>
+            <span class="spec-meta"><span>Studios &middot; streaming &middot; sports &middot; gaming &middot; advertising</span><svg class="spec-chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
+          </summary>
+          <div class="spec-body" style="grid-template-columns: 1fr; gap: 12px;">
+            <p style="color: var(--ink-1);"><strong>Definition.</strong> Media and entertainment sector. Sub-segments: studios (film, TV, streaming originals), publishing, music (labels, live, streaming), sports (leagues, teams, sports media), gaming (publishers, studios, platforms), advertising / agency holding companies.</p>
+            <p><strong>Not to be confused with.</strong> Tech / streaming platforms as tech companies (Netflix, Spotify can be treated as tech for engineering / product / growth roles vs. media for content / studio); D2C content brands (closer to consumer); martech (software for advertisers, treat as tech); PR / corporate comms claimed as M&amp;E.</p>
+            <p><strong>CV signals &middot; positive.</strong> <em>Studios:</em> Disney, Warner Bros. Discovery, Paramount, NBCUniversal, Sony Pictures, Lionsgate, Netflix Studios, Amazon MGM, A24, Apple TV+. <em>Streaming / digital:</em> Netflix, Disney+, Hulu, Max, Spotify, YouTube, Pandora, Roku. <em>Sports:</em> ESPN, Fox Sports, Amazon Prime Sports; leagues (NFL, NBA, MLB, NHL, NCAA, F1); agencies (CAA, WME / Endeavor, UTA). <em>Music:</em> UMG, Warner Music, Sony Music; live: Live Nation, AEG. <em>Gaming:</em> Activision Blizzard, EA, Take-Two, Ubisoft, Epic, Microsoft Gaming, Sony Interactive, Riot. <em>Ad holdcos:</em> WPP, Omnicom, Publicis, IPG, Dentsu, Havas. Concepts: windowing, residuals, P&amp;A, DAU / MAU, ARPU, content amortization, library value, talent / output deals, syndication, RSN.</p>
+            <p><strong>CV signals &middot; false positive.</strong> "Media experience" as PR / corporate comms; marketing roles at non-media companies; junior production / craft roles claimed as strategic; influencer / creator-economy roles (often closer to consumer / DTC).</p>
+            <p><strong>Adjacent / transferable from.</strong> MBB M&amp;E practices; IB M&amp;E coverage (LionTree, Centerview Tech / Media, GS / MS / JPM); Big 4 entertainment advisory; M&amp;E-focused PE (Providence Equity, BC Partners, KKR M&amp;E).</p>
+            <p><strong>Common ask wedge.</strong> Five buckets &mdash; clarify which: (1) studios / content, (2) digital / streaming (closer to tech metrics), (3) sports, (4) gaming, (5) advertising / agency holding. Different muscles, different vocabulary.</p>
+            <p><strong>Levels.</strong> A3+ for analytical support; A4 / M1 for sub-segment workstreams; lead-level for client-facing engagements.</p>
+          </div>
+        </details>
+
+        <details class="spec-item">
+          <summary class="spec-summary">
+            <span class="spec-num">11.2.12</span>
+            <span class="spec-name">Telecommunications</span>
+            <span class="spec-meta"><span>Carriers &middot; cable &middot; tower &middot; equipment</span><svg class="spec-chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
+          </summary>
+          <div class="spec-body" style="grid-template-columns: 1fr; gap: 12px;">
+            <p style="color: var(--ink-1);"><strong>Definition.</strong> The telecom sector. Sub-segments: carriers (wireless and wireline), cable / MSO, tower / infrastructure, satellite / fixed wireless, telecom equipment vendors, MVNOs.</p>
+            <p><strong>Not to be confused with.</strong> Tech infrastructure / cloud (AWS, Azure, GCP &mdash; tech, not telecom); networking software vendors (Cisco software, Arista &mdash; tech-adjacent); streaming services (content delivery is media); network engineering at non-telecom companies (internal IT, not telecom industry).</p>
+            <p><strong>CV signals &middot; positive.</strong> <em>Carriers:</em> AT&amp;T, Verizon, T-Mobile US; international: Vodafone, Deutsche Telekom, Orange, BT Group, Telef&oacute;nica, Reliance Jio, NTT, Singtel. <em>Cable / MSO:</em> Comcast, Charter, Cox, Altice. <em>Tower / infrastructure:</em> American Tower, Crown Castle, SBA Communications, Cellnex, Vantage Towers. <em>Equipment:</em> Ericsson, Nokia, Huawei, Ciena, ZTE. <em>Satellite / fixed wireless:</em> SES, Viasat (Inmarsat), Iridium, EchoStar; emerging: Starlink. Concepts: ARPU, churn, MNO / MVNO, spectrum auctions, capex intensity, pole-rental, fiber overbuild, 5G, FWA, MOFN, BSS / OSS.</p>
+            <p><strong>CV signals &middot; false positive.</strong> "Telecom" used loosely by network-engineering roles at non-telecom companies; MVNO experience claimed as full carrier experience; telecom IT / billing-system experience claimed as strategic telecom work.</p>
+            <p><strong>Adjacent / transferable from.</strong> MBB TMT / Telecom practices; specialist telecom consulting (Altman Solon, Analysys Mason, BearingPoint); IB TMT coverage (Lazard TMT, Evercore TMT, GS / MS coverage); telecom PE / infrastructure investors (Apollo telecom, KKR Infra, Brookfield Infra, IFM, GIP for tower / fiber).</p>
+            <p><strong>Common ask wedge.</strong> Five buckets &mdash; clarify which: (1) wireless carrier, (2) wireline / fiber, (3) tower / infrastructure (REIT-flavored), (4) equipment vendor side, (5) satellite / fixed wireless.</p>
+            <p><strong>Levels.</strong> A3+ for analytical support; A4 / M1 for sub-segment workstreams; lead-level for client-facing engagements.</p>
+          </div>
+        </details>
+
+        <details class="spec-item">
+          <summary class="spec-summary">
+            <span class="spec-num">11.2.13</span>
+            <span class="spec-name">Education</span>
+            <span class="spec-meta"><span>K-12 &middot; higher ed &middot; edtech &middot; corporate L&amp;D</span><svg class="spec-chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
+          </summary>
+          <div class="spec-body" style="grid-template-columns: 1fr; gap: 12px;">
+            <p style="color: var(--ink-1);"><strong>Definition.</strong> The education sector. Sub-segments: K-12 (public, charter, independent / private), higher education (universities, community colleges, online programs), edtech (software-focused), corporate learning / L&amp;D (workforce upskilling).</p>
+            <p><strong>Not to be confused with.</strong> Edtech as tech / SaaS (software-focused players like Coursera, Duolingo, Canvas often closer to tech &mdash; flag the lens); workforce / HR consulting (adjacent for corporate L&amp;D, but not education-industry); government education policy (public-sector flavor); tutoring / classroom teaching claimed as education-industry strategic work.</p>
+            <p><strong>CV signals &middot; positive.</strong> <em>K-12:</em> state DOE / district roles, charter networks (KIPP, Success Academy, Uncommon Schools, Achievement First, IDEA), independent school strategy. <em>Higher ed:</em> universities, community colleges, online program managers (OPMs: 2U, Wiley Education Services, Pearson Online, Noodle). <em>Edtech:</em> Coursera, Duolingo, Canvas / Instructure, Khan Academy, Quizlet, Chegg, Discovery Education, Newsela; tutoring marketplaces (Wyzant, Varsity Tutors). <em>Corporate L&amp;D:</em> Cornerstone OnDemand, LinkedIn Learning, Pluralsight, Udemy Business, Degreed, Skillsoft. Concepts: enrollment, retention / persistence, completion rates, accreditation, Title IV / FAFSA, learning analytics, LMS, instructional design, ADDIE, 90/10 rule, gainful employment.</p>
+            <p><strong>CV signals &middot; false positive.</strong> Adjacent ed-policy roles at think tanks claimed as operational education; tutoring / teaching listed as education-industry strategic work; "trainer" role at non-education companies claimed as education-industry experience.</p>
+            <p><strong>Adjacent / transferable from.</strong> Specialist education consulting (Tyton Partners, EAB, Education Pioneers, Whiteboard Advisors); Big 4 education advisory (Deloitte Higher Ed, EY Education); IB education coverage (rare; usually rolled into TMT); education PE (Sterling Capital, Leeds Equity, Quad Partners, GSV).</p>
+            <p><strong>Common ask wedge.</strong> Four buckets &mdash; clarify which: (1) K-12; (2) higher ed (4-year vs. 2-year, for-profit vs. nonprofit); (3) edtech (often tech-flavored); (4) corporate L&amp;D.</p>
+            <p><strong>Levels.</strong> A3+ for analytical support; A4 / M1 for sub-segment workstreams; lead-level for client-facing engagements.</p>
+          </div>
+        </details>
       </div>
     </section>
 
@@ -606,7 +691,7 @@
       <strong>Gaps to fill in &middot; staffing references</strong>
       <ul>
         <li><strong>Service references complete: 9 of 9 clusters drafted (27 categories total).</strong> Each follows the same six-field format and is open to a domain-practitioner pass for tightening.</li>
-        <li><strong>Industries: 8 of Gratia's most common request domains drafted.</strong> Financial services (private credit, insurance regulatory, investment banking, asset management) plus technology &amp; SaaS, healthcare &amp; life sciences, consumer &amp; retail, real estate. Open-ended &mdash; add by demand (energy / utilities, industrial / manufacturing, public sector, professional services likely next).</li>
+        <li><strong>Industries: complete coverage of all 10 canonical Gratia industry tags.</strong> 12 reference files in total &mdash; Financial Services is split into 4 (private credit, insurance regulatory, IB, asset management); the other 9 canonical industries (Technology, Healthcare, Energy, Retail, Manufacturing, Real Estate, Media &amp; Entertainment, Telecommunications, Education) map 1:1 to a reference file. Sub-domain reference files can be added if specific segments warrant their own disambiguator (e.g., aerospace &amp; defense, fintech).</li>
         <li><strong>[NEEDS_EXPERT_REVIEW] markers across 5 entries.</strong> CFA weighting in valuation; private-credit firm list and ask-wedge; NAIC concept list and adjacent-skill weighting in insurance; healthcare sub-segment definitions and five-way ask wedge; CRE firm list and five-way ask wedge. These need domain-practitioner validation &mdash; concrete asks instead of "send us material."</li>
         <li><strong>Loading logic not yet wired.</strong> Once the format is signed off, the staffing skill needs to read the right reference files when entering specialty staffing match mode.</li>
       </ul>
