@@ -1,0 +1,500 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gratia — Series A Internal Playbook</title>
+<style>
+  :root {
+    --dark: #032729;
+    --green: #1BB882;
+    --green-light: #23DD9C;
+    --green-bg: #E8FBF3;
+    --mid: #4A6B6D;
+    --light: #8AACAE;
+    --light-bg: #F7FAF9;
+    --red: #CC3333;
+    --red-bg: #FFEBEE;
+    --warn-bg: #FFF3E0;
+    --warn: #E65100;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+    color: var(--dark);
+    background: #fff;
+    line-height: 1.6;
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 40px 24px 80px;
+  }
+  @media print {
+    body { max-width: 100%; padding: 20px; font-size: 11px; }
+    .no-print { display: none; }
+    h1 { page-break-before: always; }
+    h1:first-of-type { page-break-before: avoid; }
+    .playbook-entry { page-break-inside: avoid; }
+  }
+
+  /* Cover */
+  .cover { padding: 60px 0 40px; border-bottom: 4px solid var(--green); margin-bottom: 48px; }
+  .cover .logo { font-size: 14px; font-weight: 700; color: var(--green); letter-spacing: 2px; margin-bottom: 12px; }
+  .cover h1 { font-size: 36px; line-height: 1.2; color: var(--dark); margin-bottom: 16px; }
+  .cover .meta { font-size: 14px; color: var(--light); }
+
+  /* Navigation */
+  .toc { background: var(--light-bg); border-radius: 8px; padding: 24px 28px; margin-bottom: 48px; }
+  .toc h2 { font-size: 14px; color: var(--green); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 12px; }
+  .toc ol { padding-left: 20px; }
+  .toc li { margin-bottom: 6px; }
+  .toc a { color: var(--dark); text-decoration: none; font-size: 15px; }
+  .toc a:hover { color: var(--green); }
+
+  /* Headings */
+  h1 { font-size: 28px; color: var(--dark); margin: 48px 0 20px; padding-bottom: 8px; border-bottom: 2px solid var(--green); }
+  h2 { font-size: 20px; color: var(--green); margin: 32px 0 14px; }
+  h3 { font-size: 16px; color: var(--dark); margin: 24px 0 10px; }
+  p { color: var(--mid); margin-bottom: 14px; font-size: 15px; }
+  strong { color: var(--dark); }
+
+  /* Tables */
+  table { width: 100%; border-collapse: collapse; margin: 16px 0 24px; font-size: 14px; }
+  th { background: var(--dark); color: #fff; text-align: left; padding: 10px 14px; font-weight: 600; }
+  td { padding: 10px 14px; border-bottom: 1px solid #e0e8e6; color: var(--mid); vertical-align: top; }
+  tr:hover td { background: var(--light-bg); }
+  td:first-child { color: var(--dark); font-weight: 600; }
+  .status-cell { background: var(--warn-bg); color: var(--warn); font-weight: 600; font-size: 13px; }
+
+  /* Do / Don't table */
+  .dont-say { background: var(--red-bg); color: var(--red); }
+  .say-instead { background: #E8F5E9; color: var(--dark); }
+
+  /* Threat severity */
+  .sev-high { background: var(--red-bg); }
+  .sev-medium { background: var(--warn-bg); }
+  .sev-low { background: #E8F5E9; }
+
+  /* Lists */
+  ul, ol { padding-left: 24px; margin-bottom: 14px; }
+  li { color: var(--mid); margin-bottom: 6px; font-size: 15px; }
+
+  /* Playbook entries */
+  .playbook-entry { background: var(--light-bg); border-left: 4px solid var(--green); border-radius: 0 8px 8px 0; padding: 20px 24px; margin-bottom: 16px; }
+  .playbook-entry .question { font-size: 16px; font-weight: 700; color: var(--dark); margin-bottom: 10px; }
+  .playbook-entry .answer { font-size: 14px; color: var(--mid); line-height: 1.65; }
+  .playbook-entry .answer strong { color: var(--dark); }
+
+  /* Callout boxes */
+  .callout { background: var(--green-bg); border-radius: 8px; padding: 16px 20px; margin: 16px 0; }
+  .callout.warn { background: var(--warn-bg); }
+  .callout p { margin-bottom: 0; }
+
+  /* Divider */
+  hr { border: none; border-top: 1px solid #e0e8e6; margin: 40px 0; }
+
+  /* Section counter badge */
+  .section-badge { display: inline-block; background: var(--dark); color: var(--green-light); font-size: 12px; font-weight: 700; padding: 2px 10px; border-radius: 10px; margin-right: 8px; vertical-align: middle; }
+</style>
+</head>
+<body>
+
+<!-- COVER -->
+<div class="cover">
+  <div class="logo">GRATIA</div>
+  <h1>Series A Internal Playbook</h1>
+  <p style="font-size:17px; color:var(--dark); margin-bottom:8px;">Objection Playbook + Operational & Technical Readiness</p>
+  <div class="meta">February 2026 &nbsp;|&nbsp; Internal document &nbsp;|&nbsp; Not for distribution</div>
+</div>
+
+<!-- TOC -->
+<nav class="toc no-print">
+  <h2>Contents</h2>
+  <ol>
+    <li><a href="#playbook">27-Answer Objection Playbook</a></li>
+    <li><a href="#metrics">Metrics to Pull Before Any Partner Meeting</a></li>
+    <li><a href="#architecture">Technical Architecture Decisions</a></li>
+    <li><a href="#northstar">North Star Metric</a></li>
+    <li><a href="#positioning">Strategic Positioning Decisions</a></li>
+    <li><a href="#supply">Supply Defensibility</a></li>
+    <li><a href="#threats">Competitive Threat Model</a></li>
+    <li><a href="#checklist">Pre-Meeting Checklist</a></li>
+  </ol>
+</nav>
+
+<!-- ============================================================ -->
+<!-- PART 1: OBJECTION PLAYBOOK -->
+<!-- ============================================================ -->
+
+<h1 id="playbook"><span class="section-badge">1</span> 27-Answer Objection Playbook</h1>
+<p>Expect these in the partner meeting. Have answers ready, not slides.</p>
+
+<div class="playbook-entry">
+  <div class="question">"Are you a marketplace or an agency?"</div>
+  <div class="answer">Today we're a marketplace with high ops involvement — about [X]% of projects require human intervention. That number is dropping quarter over quarter as we automate scoping, matching, and QA. Our 18-month target is under 15%. The milestone that proves the marketplace thesis isn't revenue — it's <strong>ops touch per project trending toward zero</strong>.</div>
+</div>
+
+<div class="playbook-entry">
+  <div class="question">"What stops Upwork + OpenAI from killing you?"</div>
+  <div class="answer">They'd need to solve three problems simultaneously: build a vetted, credentialed supply base — that took us two years and two thousand projects. Earn enterprise trust for decision-grade work, not gig work. And build the AI training loop that makes supply quality compound. Upwork has distribution but zero quality signal for analytical work. OpenAI has the AI but no supply and no delivery infrastructure. We're the only team that's built all three and has the revenue to prove it works.</div>
+</div>
+
+<div class="playbook-entry">
+  <div class="question">"Your moat is thin — any of those layers is replicable."</div>
+  <div class="answer">Correct. Individually, each layer is buildable. The moat isn't the tech. It's the <strong>two thousand projects of outcome data</strong> feeding those layers, plus a hundred fifty analysts with Gratia-built credentials, plus enterprise relationships that deepen with every engagement. You don't fork a data advantage.</div>
+</div>
+
+<div class="playbook-entry">
+  <div class="question">"Supply you can't poach — really?"</div>
+  <div class="answer">An analyst who leaves Gratia loses four things: their verified outcome-based track record, their matching priority in our algorithm, their AI coaching access, and their project pipeline. On Upwork they'd be starting from zero with no credentials and no inbound. The lock-in is structural, not emotional. Our top analysts earn 3–5x local wages with consistent deal flow — the rational move is to stay.</div>
+</div>
+
+<div class="playbook-entry">
+  <div class="question">"But your best analysts will churn fastest."</div>
+  <div class="answer">That's a US tech labor assumption. Our supply isn't competing in the SF job market. An analyst in Nairobi earning 3–5x local wages with consistent inbound projects isn't getting recruited away by Upwork — Upwork pays less and offers zero pipeline. The real churn risk is direct client hiring, and we contract against that. Our top-quartile retention at twelve months is [X]% — <strong>know this number cold and share it</strong>. The dynamics of emerging market talent retention are fundamentally different from US SaaS engineer retention.</div>
+</div>
+
+<div class="playbook-entry">
+  <div class="question">"What if AI eliminates the need for junior analysts?"</div>
+  <div class="answer">AI doesn't reduce demand for analytical judgment — it increases the volume of decisions companies can make, which increases demand for people who own the answer. The junior analyst doesn't disappear. They become AI-augmented and 3x more productive. We're not selling labor hours — we're selling <strong>decision throughput</strong>. If anything, AI compressing the cost of draft-grade work expands our addressable market because more companies can now afford data-driven decisions.</div>
+</div>
+
+<div class="playbook-entry">
+  <div class="question">"Revenue concentration risk — what if Apollo walks?"</div>
+  <div class="answer">[Share actual % — be precise.] We're actively diversifying. The Apollo playbook is being replicated across [X] PE/VC firms in pipeline. Our SMB base provides [Y]% of revenue independent of any single enterprise logo. The 85% repeat rate across all clients — not just Apollo — proves the model works broadly.</div>
+</div>
+
+<div class="playbook-entry">
+  <div class="question">"Your TAM math is convenient."</div>
+  <div class="answer">Fair. The $85B is the total market. Our real near-term market is narrower: companies culturally ready to outsource core finance thinking to a managed marketplace. That's a subset. But it's growing fast — knowledge work outsourcing tripled since 2020, and every CFO who sees AI eat junior capacity becomes more open to this model. The TAM isn't static. It's expanding as the buying behavior shifts.</div>
+</div>
+
+<div class="playbook-entry">
+  <div class="question">"2,000 projects isn't that much data."</div>
+  <div class="answer">You're right in absolute terms. But the question isn't volume — it's <strong>signal density</strong>. Each project generates structured outcome data: analyst skill performance on specific task types, client acceptance rates by deliverable category, time-to-delivery by complexity tier, and quality scores with root cause tags. That's not ratings and reviews — it's a task-skill-outcome ontology that improves match success rate quarter over quarter. [Share the curve: match acceptance rate Q1 vs. Q4.] Two thousand projects feeding a structured ontology is materially different from two million Upwork reviews.</div>
+</div>
+
+<div class="playbook-entry">
+  <div class="question">"What prevents a well-funded competitor from compressing your take rate to 15%?"</div>
+  <div class="answer">To compress take rate to 15%, you'd have to cut something. Training — then quality drops and enterprise clients leave. Coaching — then analyst performance variance increases and repeat rate drops. QA — then deliverable rejection rate climbs. Our 30–40% take funds the full stack: supply creation, credentialing, matching, delivery coaching, and quality assurance. A 15%-take competitor is offering a matching layer without quality infrastructure — that's Upwork. Enterprise clients don't buy matching. They buy <strong>trusted delivery</strong>.</div>
+</div>
+
+<div class="playbook-entry">
+  <div class="question">"What if Apollo builds this internally?"</div>
+  <div class="answer">PE firms outsource analytical staffing for the same reason they outsource legal counsel — it's not core to their value creation thesis, and the build-vs-buy math doesn't pencil. Apollo would need to hire recruiters, build a vetting pipeline, develop an AI coaching system, and manage a global analyst workforce. That's a full operating company. They chose exclusivity with us precisely because they don't want to build that. The more entrenched we get, the worse the internal build case becomes.</div>
+</div>
+
+<div class="playbook-entry">
+  <div class="question">"Prove the data advantage — does match success improve over time?"</div>
+  <div class="answer"><strong>[This is the single most important chart you can show.]</strong> Pull match acceptance rate by quarter, analyst performance variance by cohort, and margin per project over time. If all three curves trend the right direction, the data moat is provable. If they're flat, concede and reframe around operational moat instead. Do not bluff — a sharp partner will ask for raw data in diligence.</div>
+</div>
+
+<div class="playbook-entry">
+  <div class="question">"The adjacent vertical is a hypothesis, not proof."</div>
+  <div class="answer">Correct. We're not claiming it's proven. The milestone is "first adjacent vertical scoped," not "launched." What we can show is that the infrastructure — scoping engine, credentialing, matching, delivery workbench, learning loop — is category-agnostic in design. The question is whether demand exists in adjacent categories with similar properties: structured deliverables, auditable outputs, measurable quality. We'll pilot before we commit capital.</div>
+</div>
+
+<div class="playbook-entry">
+  <div class="question">"Are you building a marketplace or a platform? Pick one."</div>
+  <div class="answer">We're building the marketplace. If the marketplace works — and at $2M in revenue, 85% repeat, and an exclusive Apollo deal, the evidence says it does — the platform becomes inevitable because the infrastructure transfers. Every great platform started as a focused marketplace. Amazon was books. Uber was black cars. We're analytics. We're not spending a dollar on category expansion until analytics is proven at scale. <strong>The vision slide isn't the plan — it's what happens when the plan works.</strong></div>
+</div>
+
+<div class="playbook-entry">
+  <div class="question">"What about vertical specialization attacks — someone who only does FP&A for PE-backed SaaS?"</div>
+  <div class="answer">That's a real risk at $50M in revenue. At $12M, we are the vertical specialist — finance and analytics for PE/VC-backed companies is our wedge. The question is whether a narrower player can out-execute us on supply quality within that wedge. Our advantage: the same infrastructure that serves PE-backed SaaS also serves Series A startups, mid-market CFOs, and strategy teams. A narrower player has to build the same supply pipeline for a smaller addressable market. The unit economics don't pencil for a pure FP&A-for-PE niche.</div>
+</div>
+
+<div class="playbook-entry">
+  <div class="question">"Your switching costs are shallow — you're storing preferences, not workflow."</div>
+  <div class="answer">Today, partly true. Our roadmap directly addresses this. We're building toward storing not just analyst-client preferences but <strong>historical model templates, scenario assumptions, CFO-specific formatting standards, and audit trails of past decisions</strong>. At that depth, replacing Gratia means rebuilding decision memory — not just finding a new vendor. That's the difference between preference memory and workflow gravity. We're early on this curve, but the architecture is designed for it.</div>
+</div>
+
+<div class="playbook-entry">
+  <div class="question">"If AI compresses junior billable hours by 40%, your volume model breaks."</div>
+  <div class="answer">If AI compresses hours, our model actually gets better. We don't sell hours. We sell outcomes. If an AI-augmented analyst delivers a board-ready model in three days instead of five, the client still pays for the deliverable, the analyst earns the same project fee, and our margin improves because the analyst can take on more projects. AI compression of junior work isn't a threat — it's the tailwind that makes our analysts 3x more productive while per-project costs drop.</div>
+</div>
+
+<div class="playbook-entry">
+  <div class="question">"At what project count does the system become self-reinforcing?"</div>
+  <div class="answer">We're not claiming a precise inflection point. We're looking for <strong>diminishing marginal gains in predictive lift within analytics</strong>. When additional data stops materially improving match confidence — when another hundred projects doesn't meaningfully change match accuracy — that's density maturity. That's when we test portability. We'll share the raw curves in diligence. If I gave you a specific number, I'd be performing, not measuring.</div>
+</div>
+
+<div class="playbook-entry">
+  <div class="question">"Is your credentialing system domain-agnostic or secretly finance-specific?"</div>
+  <div class="answer">Today, partly finance-specific. Our task ontology, quality rubrics, and skill graphs are built around analytical deliverables. That's honest. The question is whether the architecture generalizes. We believe the structure does — task decomposition, outcome-based scoring, skill-graph matching — even if the specific nodes change per category. But we haven't proven it. That's why the milestone is "first adjacent vertical scoped," not "launched." <strong>If the credentialing doesn't transfer, we stay in analytics. That's still a very good business.</strong></div>
+</div>
+
+<div class="playbook-entry">
+  <div class="question">"What's the north star metric that tells you B is inevitable?"</div>
+  <div class="answer"><strong>Cross-task-type match accuracy convergence.</strong> When we encounter a task type with relatively few examples — say regulatory analysis when we've mostly done financial modeling — does match accuracy converge faster than it did for early task types? If financial modeling required 50 projects to hit 85% match acceptance, but market research only needed 20 because the skill graph transferred — that's the system genuinely abstracting, not just memorizing. If that convergence doesn't happen, we're a strong vertical marketplace. Still a good business. But not a platform.</div>
+</div>
+
+<div class="playbook-entry">
+  <div class="question">"Are you instrumented to see the curves clearly?"</div>
+  <div class="answer">Yes. We track four things in isolation: (1) match accuracy as a predictive model over time, (2) performance variance per task type — is the spread shrinking? (3) calibration depth per client — how many engagements before we consistently hit their quality bar? (4) AI contribution vs. human ops contribution — can we isolate what the system does versus what a human had to fix? That last one is how we measure the agency-to-marketplace transition. <strong>If we can't isolate those four, we won't know why curves move, and expansion becomes guesswork.</strong></div>
+</div>
+
+<div class="playbook-entry">
+  <div class="question">"You need to design for abstraction without spending on it."</div>
+  <div class="answer">Agreed. This is an architecture decision, not a capital allocation decision. Our ontology needs to be structured as <strong>"quantitative reasoning → structured output → client-specific calibration"</strong> — not "DCF model → cohort analysis → scenario planning." The first generalizes. The second is hard-coded to finance. We're flagging this to engineering now. The cost of getting this right at 2,000 projects is minimal. The cost of discovering it's wrong at 20,000 is a rebuild.</div>
+</div>
+
+<div class="playbook-entry">
+  <div class="question">"Most companies that say A then B never earn the right to B."</div>
+  <div class="answer">Correct. And we might not either. But the bet is rational: at $2M in revenue, the question isn't whether to build A or B. It's whether A compounds. If the six curves move right — match success up, rework down, margin up, ops touch down, analyst earnings up, retention up — then B becomes a capital allocation decision, not a strategy pivot. If they plateau, we're a strong vertical marketplace. <strong>We're not betting on B. We're betting on A, with the option on B if A proves the infrastructure generalizes.</strong></div>
+</div>
+
+<div class="playbook-entry">
+  <div class="question">"If the data never abstracts — $50M vertical but no platform — do you accept that?"</div>
+  <div class="answer">Yes. A dominant vertical marketplace in decision-grade analytics with 60%+ gross margins, strong enterprise lock-in, and a compounding data advantage is an exceptional business. If the curves say the system doesn't generalize, we don't force expansion. We compound in the vertical. <strong>The worst version of this company is one that forces horizontal expansion because the pitch deck said "platform" and the founders couldn't walk it back.</strong> We follow the data. Either outcome is a strong business. Only one of them is a platform.</div>
+</div>
+
+<div class="playbook-entry">
+  <div class="question">"Does Enterprise Client A actually make you better for Enterprise Client B? Or does density just fragment the ontology?"</div>
+  <div class="answer">That's the right question — and the answer determines whether enterprise density is a compounding asset or just revenue concentration risk. If Apollo's engagement data improves our match accuracy for a new PE client — because PE-backed analytical work shares structural properties across firms — then density compounds. If each enterprise requires so much bespoke calibration that the data doesn't transfer, density fragments the ontology. <strong>The guardrail metric is cross-client predictive lift</strong>: does our match confidence for Client B improve after serving Client A? We'll measure this explicitly before assuming density equals defensibility.</div>
+</div>
+
+<div class="playbook-entry">
+  <div class="question">"What's your strategy — go broader into new categories, or go deeper into CFO tooling?"</div>
+  <div class="answer">Deeper first, broader second — but only if deeper means increasing <strong>workflow gravity</strong>, not just building more product. The expansion path that compounds: store model templates, scenario assumptions, decision audit trails per client. That's structural switching cost. CFO tooling and benchmark datasets are tempting, but only if they feed back into matching and delivery. If they're standalone products, they're distractions. The test: does going deeper improve match accuracy, first-attempt acceptance, repeat rate? If curves flatten — that's density maturity. That's when we test a new category. Not before.</div>
+</div>
+
+<div class="playbook-entry">
+  <div class="question">"Should you compress take rate on enterprise to accelerate density?"</div>
+  <div class="answer">Selectively, yes. Enterprise clients are density drivers — they generate the highest-signal data and the deepest calibration loops. If compressing from 35% to 25% doubles engagement velocity and triples structured outcome data, margin recovery comes from the compounding loop: better matching, lower ops touch, higher automation. <strong>Defend margin on SMB — that's not strategic density. Compress on enterprise where the data compounds.</strong> But the guardrail holds: enterprise density must improve cross-client predictive lift. If it just fragments into isolated bespoke accounts, compression is buying revenue, not building a moat.</div>
+</div>
+
+<hr>
+
+<!-- ============================================================ -->
+<!-- PART 2: OPERATIONAL & TECHNICAL PLAYBOOK -->
+<!-- ============================================================ -->
+
+<h1 id="metrics"><span class="section-badge">2</span> Metrics to Pull Before Any Partner Meeting</h1>
+<p>These numbers will be asked. Not having them is worse than having bad ones.</p>
+
+<h2>2.1 Must-Have Numbers (Fill Immediately)</h2>
+
+<table>
+  <thead>
+    <tr><th>Metric</th><th>Why It Matters</th><th>Status</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Current ops touch % per project</td><td>Proves marketplace vs. agency. Goes on slide 19.</td><td class="status-cell">Fill in: [X]%</td></tr>
+    <tr><td>Top-quartile analyst retention at 12mo</td><td>Proves supply lock-in is structural, not theoretical.</td><td class="status-cell">Fill in: [X]%</td></tr>
+    <tr><td>Apollo as % of total revenue</td><td>Concentration risk. Partners will calculate this themselves.</td><td class="status-cell">Fill in: [X]%</td></tr>
+    <tr><td>SMB base as % of revenue (ex-Apollo)</td><td>Proves model works broadly, not just one whale.</td><td class="status-cell">Fill in: [X]%</td></tr>
+    <tr><td>Match acceptance rate by quarter</td><td>The single most important curve. Proves data flywheel.</td><td class="status-cell">Pull from data</td></tr>
+    <tr><td>Rework rate by quarter</td><td>Proves quality is improving, not just volume.</td><td class="status-cell">Pull from data</td></tr>
+    <tr><td>Gross margin per project over time</td><td>Proves AI is driving efficiency, not just revenue.</td><td class="status-cell">Pull from data</td></tr>
+    <tr><td>CAC by channel</td><td>Table stakes for any $15M raise.</td><td class="status-cell">Pull from data</td></tr>
+    <tr><td>LTV per client (not just repeat rate)</td><td>85% repeat is promising. Actual $ per client lifetime is proof.</td><td class="status-cell">Pull from data</td></tr>
+    <tr><td>Analyst performance variance by cohort</td><td>Proves coaching is working. Variance should shrink.</td><td class="status-cell">Pull from data</td></tr>
+  </tbody>
+</table>
+
+<h2>2.2 Three Curves to Show in Q&A</h2>
+<p>VCs fund curves, not snapshots. Have these charts ready on a backup slide or iPad.</p>
+<ul>
+  <li><strong>Match acceptance rate by quarter</strong> — proves the data flywheel is real. If this line slopes up, the moat argument holds.</li>
+  <li><strong>Analyst performance variance by cohort</strong> — proves coaching works. If new cohorts converge to quality faster, the training infrastructure compounds.</li>
+  <li><strong>Gross margin per project over time</strong> — proves AI is driving efficiency. If margin expands with volume, the unit economics improve at scale.</li>
+</ul>
+<div class="callout warn">
+  <p>If any curve is flat, <strong>do not show it</strong>. Reframe around the ones that trend. Do not bluff — a sharp partner will ask for raw data in diligence.</p>
+</div>
+
+<hr>
+
+<h1 id="architecture"><span class="section-badge">3</span> Technical Architecture Decisions</h1>
+<p>These are not product features. They are structural decisions that determine whether the platform thesis is achievable.</p>
+
+<h2>3.1 Ontology Architecture <span style="color:var(--red); font-size:14px; font-weight:700; margin-left:8px;">FLAG TO SOMA</span></h2>
+<p>The current skill graph may be hard-coded around FP&A primitives. If the ontology is structured as <strong>"DCF model → cohort analysis → scenario planning"</strong>, expansion to adjacent categories will require a rebuild at $20M. If it's structured as <strong>"Problem → Task → Skill → Evidence → Outcome → Feedback"</strong>, the architecture generalizes.</p>
+
+<h3>Decision required</h3>
+<p>Audit the current ontology. Determine whether task decomposition, outcome-based scoring, and skill-graph matching are category-agnostic in structure, even if the current nodes are finance-specific. The cost of getting this right at 2,000 projects is minimal. The cost of discovering it's wrong at 20,000 is a complete rebuild.</p>
+
+<h3>Concrete checks</h3>
+<ul>
+  <li>Can a new task type (e.g., regulatory analysis) be added without modifying the core matching algorithm?</li>
+  <li>Are quality rubrics parameterized by category, or hard-coded to financial modeling heuristics?</li>
+  <li>Does the credential schema store domain-specific achievements or abstract skill-evidence pairs?</li>
+</ul>
+
+<h2>3.2 Instrumentation for the Four Isolated Measurements</h2>
+<p>If you can't isolate these four signals, you won't know why curves move, and expansion becomes guesswork.</p>
+
+<table>
+  <thead>
+    <tr><th>Measurement</th><th>What It Proves</th><th>How to Instrument</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Predictive match accuracy</td><td>Algorithm gets better at predicting analyst-project fit over time</td><td>Log predicted vs. actual acceptance rate per match. Track precision/recall by quarter.</td></tr>
+    <tr><td>Performance variance per task type</td><td>Coaching is working; spread between best/worst outcomes shrinks</td><td>Standard deviation of quality scores per task category, grouped by quarter.</td></tr>
+    <tr><td>Calibration depth per client</td><td>Fewer engagements needed to consistently hit quality bar</td><td>Track first-attempt acceptance rate by client, indexed by engagement count.</td></tr>
+    <tr><td>AI vs. human ops contribution</td><td>The system is doing more; humans are intervening less</td><td>Tag every project touchpoint as AI-initiated or human-initiated. Ratio over time = agency-to-marketplace litmus test.</td></tr>
+  </tbody>
+</table>
+
+<h2>3.3 Workflow Gravity Roadmap</h2>
+<p>Current enterprise switching costs are "soft lock-in" (analyst preferences, institutional memory). To make switching costs structural, the platform needs to accumulate:</p>
+<ul>
+  <li>Historical model templates per client</li>
+  <li>Scenario assumptions and decision frameworks</li>
+  <li>CFO-specific formatting standards and board presentation preferences</li>
+  <li>Audit trails of past analytical decisions</li>
+  <li>Industry benchmarks calibrated to client context</li>
+</ul>
+<p>At this depth, replacing Gratia means rebuilding <strong>decision memory</strong> — not just finding a new vendor. This is a core use-of-funds item under Platform & AI (35% allocation).</p>
+
+<hr>
+
+<h1 id="northstar"><span class="section-badge">4</span> North Star Metric</h1>
+
+<h2>4.1 Cross-Task-Type Match Accuracy Convergence</h2>
+<p>This is the single metric that determines whether the platform thesis is real or aspirational.</p>
+
+<h3>Definition</h3>
+<p>When the system encounters a task type with relatively few examples (e.g., regulatory analysis when it's mostly seen financial modeling), does match accuracy converge <strong>faster</strong> than it did for early task types?</p>
+
+<h3>The test</h3>
+<ul>
+  <li>If financial modeling required 50 projects to hit 85% first-match acceptance...</li>
+  <li>And market research only needs 20 projects to reach 85%...</li>
+  <li>That's the system genuinely abstracting, not just memorizing.</li>
+  <li>If every new category restarts the learning curve from zero, the system is vertical, not a platform.</li>
+</ul>
+
+<h3>When to measure</h3>
+<p>Track convergence speed per task type as you add new service categories. The signal that B (multi-category expansion) is inevitable vs. optional is when this convergence delta <strong>shrinks consistently</strong>. When it stops shrinking, you've found your category boundary.</p>
+
+<h3>Density maturity signal</h3>
+<div class="callout">
+  <p>Within analytics specifically: when the slope of improvement flattens — when another hundred projects doesn't meaningfully change match accuracy — that's signal density maturity. <strong>That's when you test portability to adjacent categories. Not before.</strong></p>
+</div>
+
+<hr>
+
+<h1 id="positioning"><span class="section-badge">5</span> Strategic Positioning Decisions</h1>
+
+<h2>5.1 Marketplace vs. Agency: The Litmus Test</h2>
+<p>The &lt;15% ops touch milestone on the ask slide is the single most important proof point. It must be shown as a <strong>trajectory</strong> (current % → target %), not just a target. Without the baseline, it's aspirational. With the baseline and a quarterly trendline, it's evidence of marketplace transition.</p>
+
+<h3>Measurement definition</h3>
+<ul>
+  <li>Include ALL human touchpoints: sales, scoping, matching overrides, QA reviews, dispute resolution</li>
+  <li>Denominator: total project touchpoints (AI + human)</li>
+  <li>Track quarterly. The slope matters more than the absolute number.</li>
+</ul>
+
+<h2>5.2 The A → B Sequencing</h2>
+<p><strong>A =</strong> Win analytics. Prove the data compounds. Build the most defensible vertical marketplace.</p>
+<p><strong>B =</strong> Multi-category expert infrastructure. Only pursue when convergence data proves the system generalizes.</p>
+
+<h3>Key principles</h3>
+<ul>
+  <li>Do not allocate dollars to abstraction at this stage.</li>
+  <li>Do design architecture so that abstraction is possible later (see Section 3.1).</li>
+  <li>Do not pitch "OS for Expert Capacity" — pitch "decision-grade analytics infrastructure that earns the right to expand."</li>
+  <li><strong>Discipline test:</strong> If analytics becomes a highly profitable $50M vertical but the data never meaningfully abstracts, accept being the dominant vertical player. The worst outcome is forcing horizontal expansion because the pitch deck said "platform" and the founders couldn't walk it back.</li>
+</ul>
+
+<h2>5.3 Moat Framing (What to Say, What Not to Say)</h2>
+
+<table>
+  <thead>
+    <tr><th>Don't Say</th><th>Say Instead</th></tr>
+  </thead>
+  <tbody>
+    <tr><td class="dont-say">"Five proprietary tech layers"</td><td class="say-instead">"Five operational layers, 2,000+ projects of compounding data"</td></tr>
+    <tr><td class="dont-say">"Supply you can't poach"</td><td class="say-instead">"Credential lock-in on supply — leaving means restarting from zero"</td></tr>
+    <tr><td class="dont-say">"Enterprise lock-in"</td><td class="say-instead">"Enterprise switching costs — replacing us means rebuilding decision memory"</td></tr>
+    <tr><td class="dont-say">"The OS for Expert Capacity"</td><td class="say-instead">"Multi-category expert infrastructure — earned when data proves it"</td></tr>
+    <tr><td class="dont-say">"We know inflection hits at X projects"</td><td class="say-instead">"We're looking for diminishing marginal gains in predictive lift"</td></tr>
+    <tr><td class="dont-say">"Our moat is the tech"</td><td class="say-instead">"The tech is replicable. The data advantage is not."</td></tr>
+  </tbody>
+</table>
+
+<hr>
+
+<h1 id="supply"><span class="section-badge">6</span> Supply Defensibility</h1>
+
+<h2>6.1 Why Emerging Market Dynamics Differ</h2>
+<p>Standard VC analysis of supply churn applies US tech labor assumptions. Gratia's supply operates under fundamentally different dynamics:</p>
+<ul>
+  <li>Analysts earn 3–5x local wages with consistent deal flow — the rational move is to stay.</li>
+  <li>Upwork pays less and offers zero pipeline — it's not a viable alternative.</li>
+  <li>The real churn risk is direct client hiring, which can be contracted against.</li>
+  <li>LinkedIn recruiter pressure that drives SF engineer churn does not exist for Nairobi analysts.</li>
+</ul>
+
+<h2>6.2 Structural Lock-In Mechanisms</h2>
+
+<table>
+  <thead>
+    <tr><th>Lock-In Mechanism</th><th>Current State</th><th>Target State</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Verified track record</td><td>Outcome-based credentials from 2,000+ projects</td><td>Portable credential recognized by enterprise clients</td></tr>
+    <tr><td>Matching priority</td><td>Algorithm ranks by proven delivery history</td><td>Progressive tiers with earnings acceleration</td></tr>
+    <tr><td>AI coaching access</td><td>GraceAI active during project execution</td><td>Personalized skill development paths</td></tr>
+    <tr><td>Project pipeline</td><td>Consistent inbound from enterprise + SMB</td><td>Enterprise access gated by internal reputation graph</td></tr>
+    <tr><td>Earnings acceleration</td><td>3–5x local wages</td><td>30%+ earnings premium for platform-tenured analysts</td></tr>
+  </tbody>
+</table>
+
+<hr>
+
+<h1 id="threats"><span class="section-badge">7</span> Competitive Threat Model</h1>
+
+<h2>7.1 Threat Ranking</h2>
+
+<table>
+  <thead>
+    <tr><th>Threat</th><th>Severity</th><th>Timeline</th><th>Defensive Response</th></tr>
+  </thead>
+  <tbody>
+    <tr><td>Niche vertical AI-native (FP&A for PE-SaaS)</td><td class="sev-high">High</td><td>12–18 months</td><td>Win density faster. Same infra serves broader market; pure niche can't justify the infrastructure cost.</td></tr>
+    <tr><td>PE/VC firm builds internal analyst pods</td><td class="sev-medium">Medium</td><td>18–24 months</td><td>Build-vs-buy math favors buy. Deepen switching costs. Apollo chose exclusivity for a reason.</td></tr>
+    <tr><td>Upwork + OpenAI partnership</td><td class="sev-medium">Low–Med</td><td>12–18 months</td><td>Zero quality signal for analytical work. Zero enterprise trust. Three cold-start problems.</td></tr>
+    <tr><td>Accenture + OpenAI "Global Analyst Cloud"</td><td class="sev-medium">Medium</td><td>24–36 months</td><td>Can build tech but starts with zero outcome data, zero credentialed supply. Speed/cost advantage erodes their model.</td></tr>
+    <tr><td>AI eliminates junior analyst demand</td><td class="sev-low">Low (tailwind)</td><td>Ongoing</td><td>AI compresses hours, not judgment. Gratia sells outcomes, not hours. AI-augmented analysts = margin expansion.</td></tr>
+  </tbody>
+</table>
+
+<h2>7.2 Take-Rate Defensibility</h2>
+<p>The 30–40% take rate is defensible because the value stack is deep. To compress to 15%, a competitor must cut training, coaching, or QA. Cutting any of these degrades quality → degrades enterprise trust → degrades repeat rate. A 15%-take competitor is offering a matching layer without quality infrastructure — that's Upwork. Enterprise clients don't buy matching. They buy <strong>trusted delivery</strong>.</p>
+
+<hr>
+
+<h1 id="checklist"><span class="section-badge">8</span> Pre-Meeting Checklist</h1>
+
+<h2>Data pulls</h2>
+<ol>
+  <li>Fill all [X]% placeholders in deck and narration script</li>
+  <li>Generate the three Q&A curves (match acceptance, performance variance, margin)</li>
+  <li>Calculate CAC by channel and LTV per client</li>
+  <li>Confirm Apollo revenue concentration % and diversification pipeline count</li>
+</ol>
+
+<h2>Architecture</h2>
+<ol>
+  <li>Audit ontology structure with Soma (category-agnostic vs. FP&A-specific)</li>
+  <li>Confirm the four measurements are instrumented and producing data</li>
+  <li>Tag all project touchpoints as AI-initiated vs. human-initiated (for ops touch tracking)</li>
+</ol>
+
+<h2>Rehearsal</h2>
+<ul>
+  <li>Practice explaining "cross-task-type match accuracy convergence" in 15 seconds without notes.</li>
+  <li>Practice the $50M vertical acceptance answer until it sounds natural, not rehearsed.</li>
+  <li>Practice the take-rate compression answer — this is the final boss question.</li>
+  <li>Run through the full 27-answer objection playbook with a sparring partner.</li>
+</ul>
+
+<div class="callout" style="margin-top:40px;">
+  <p><strong>Last updated:</strong> February 2026 &nbsp;|&nbsp; Extracted from investor pitch stress-test simulation &nbsp;|&nbsp; 27 objection answers</p>
+</div>
+
+</body>
+</html>

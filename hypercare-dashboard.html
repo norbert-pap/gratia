@@ -389,12 +389,6 @@
   .card-body { padding: 18px 20px 20px; }
 
   /* Teams view (left-card alternative to pacing chart) */
-  .teams-grid[hidden] { display: none; }
-  .teams-grid {
-    display: grid;
-    grid-template-columns: repeat(5, 1fr);
-    gap: 6px;
-  }
   .team-tile {
     display: grid;
     grid-template-columns: auto 1fr auto;
@@ -432,20 +426,6 @@
   .team-tile .tile-prev.a { background: var(--amber); }
   .team-tile .tile-prev.g { background: var(--green); }
 
-  .teams-legend-row {
-    display: flex; justify-content: space-between; align-items: center;
-    padding-top: 14px; margin-top: 14px;
-    border-top: 1px solid var(--border);
-    font-size: 11.5px;
-  }
-  .teams-legend-row .prev-key {
-    display: inline-flex; align-items: center; gap: 6px;
-    color: var(--ink-3);
-  }
-  .teams-legend-row .prev-key .prev-key-dot {
-    width: 6px; height: 6px; border-radius: 50%;
-    background: var(--ink-3); opacity: 0.55;
-  }
 
 
   /* ========== MATRIX ========== */
@@ -1403,13 +1383,13 @@
 </div>
             <span class="status-chip" id="statusChip" data-status="amber"><span class="dot-pulse"></span><span id="statusChipLabel">Stabilizing on track</span></span>
           </div>
-          <h1 class="lede" id="dashLede">3 of 6 exit criteria met. <em>Tickets down 38% week-over-week</em>. Hypercare on track for June 30 exit.</h1>
+          <h1 class="lede" id="dashLede">3 of 6 exit criteria met. <em>Tickets down 38% week-over-week</em>.</h1>
           <p class="sublede" id="dashSublede">Adoption lagging in Mumbai Ops and Chicago Reporting. Repeat-issue rate still above threshold — workflow stage-transition bug accounts for the largest share.</p>
         </div>
         <div class="head-actions">
           <button class="btn primary">
             <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 6v6l4 2M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round"/></svg>
-            Send reminder
+            Export weekly summary
           </button>
         </div>
       </section>
@@ -1522,18 +1502,6 @@
               <!-- Hover capture overlay (transparent, full chart area) -->
               <rect id="stabHoverArea" x="60" y="22" width="630" height="240" fill="transparent" style="cursor:crosshair"/>
             </svg>
-            <div id="teams-grid" class="teams-grid"></div>
-            <div id="teamsLegendRow" class="teams-legend-row">
-              <span class="tip" data-tip="Tile color = this week. Trailing dot = last week.">
-                <span class="prev-key">
-                  <span class="prev-key-dot"></span>
-                  <span>vs last week</span>
-                </span>
-              </span>
-              <span class="num" style="color: var(--ink-3);">
-                <span id="teamsImproved">0</span> improved · <span id="teamsWorsened">0</span> worsened
-              </span>
-            </div>
           </div>
         </div>
 
@@ -1777,9 +1745,9 @@
     const btn = e.target.closest('.btn');
     if (!btn) return;
     const label = btn.textContent.trim();
-    if (label === 'Send reminder') {
+    if (label === 'Export weekly summary') {
       const targetTeam = drawer.classList.contains('open') ? (drawer.querySelector('.team-label')?.textContent || 'team leads') : 'all team leads';
-      showToast('Reminder sent', `Notified ${targetTeam} via Teams and email`);
+      showToast('Export weekly summary', `Notified ${targetTeam} via Teams and email`);
     } else if (label.startsWith('Message ')) {
       showToast(`Message draft opened`, `${label.replace('Message ', '')} · Teams`);
     }
@@ -1964,8 +1932,8 @@
   // ===== REPEAT ISSUES =====
   const REPEAT_ISSUES = [
     { issue: 'Stage transition stuck on Tasks Selection',     category: 'Workflow logic', open: 8, firstSeen: 'Day 2', owner: 'Eng',      severity: 'p1' },
-    { issue: 'Client field validation error on rare chars',   category: 'Data',           open: 5, firstSeen: 'Day 4', owner: 'Eng',      severity: 'p2' },
-    { issue: 'Trade Ready notification missing for Wave-2',   category: 'Workflow logic', open: 4, firstSeen: 'Day 6', owner: 'Eng',      severity: 'p2' },
+    { issue: 'Client field validation error on rare characters',   category: 'Data',           open: 5, firstSeen: 'Day 4', owner: 'Eng',      severity: 'p2' },
+    { issue: 'Trade Ready notification missing for Wave-2 teams',   category: 'Workflow logic', open: 4, firstSeen: 'Day 6', owner: 'Eng',      severity: 'p2' },
     { issue: 'Re-onboarding flow unclear when client returns', category: 'Training gap',  open: 3, firstSeen: 'Day 5', owner: 'Training', severity: 'p3' },
     { issue: 'Audit log missing fields on bulk import',       category: 'Data',           open: 2, firstSeen: 'Day 8', owner: 'Eng',      severity: 'p3' },
   ];
