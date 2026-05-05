@@ -1,0 +1,3370 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Gratia — Apollo Kissflow Hypercare · Day 12 of 30</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<script src="auth.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>
+  // Apply saved theme before paint to avoid flash
+  (function () {
+    try {
+      const saved = localStorage.getItem('apollo-hypercare-theme');
+      if (saved === 'light' || saved === 'dark') {
+        document.documentElement.setAttribute('data-theme', saved);
+      }
+    } catch (e) {}
+  })();
+</script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body, h1, h2, h3, h4, p, ul, li, figure, div, section, nav, aside, header, main, button, blockquote { margin: 0; padding: 0; }
+  button { background: none; border: none; color: inherit; cursor: pointer; font: inherit; }
+  ul { list-style: none; }
+
+  :root, [data-theme="dark"] {
+    --bg: #0b0c0e;
+    --bg-1: #111214;
+    --bg-2: #17181b;
+    --bg-3: #1e1f22;
+    --bg-4: #27282c;
+    --border: #232428;
+    --border-2: #33353b;
+    --ink-0: #edeef1;
+    --ink-1: #d4d6db;
+    --ink-2: #8f9198;
+    --ink-3: #5c5e65;
+    --ink-4: #36383d;
+
+    --gold: #16a38a;
+    --gold-bright: #2cc2a5;
+    --gold-ink: #5ad9bc;
+    --gold-dim: rgba(22, 163, 138, 0.13);
+    --gold-line: rgba(22, 163, 138, 0.30);
+
+    --green: #16a38a;
+    --green-ink: #5ad9bc;
+    --green-dim: rgba(22, 163, 138, 0.14);
+    --green-line: rgba(22, 163, 138, 0.32);
+
+    --amber: #e6b259;
+    --amber-ink: #f2ca85;
+    --amber-dim: rgba(230, 178, 89, 0.14);
+    --amber-line: rgba(230, 178, 89, 0.32);
+
+    --red: #e06f64;
+    --red-ink: #f0928a;
+    --red-dim: rgba(224, 111, 100, 0.14);
+    --red-line: rgba(224, 111, 100, 0.32);
+
+    --shadow: 0 1px 1px rgba(0,0,0,0.3), 0 10px 32px rgba(0,0,0,0.4);
+    --shadow-drawer: -12px 0 48px rgba(0,0,0,0.55);
+
+    --nav-bg: rgba(11, 12, 14, 0.85);
+    --glow: radial-gradient(ellipse at top right, rgba(22, 163, 138, 0.08), transparent 65%);
+    --kf-subtab-bg: rgba(0, 0, 0, 0.2);
+    --avatar-grad: linear-gradient(135deg, #0d6b5a, #16a38a);
+    --row-hover: rgba(255, 255, 255, 0.013);
+    --kf-blue: #87b3ec;
+    --kf-blue-line: rgba(74, 141, 224, 0.4);
+    --kf-blue-dim: rgba(74, 141, 224, 0.18);
+  }
+
+  [data-theme="light"] {
+    --bg: #fafaf8;
+    --bg-1: #ffffff;
+    --bg-2: #f4f4f1;
+    --bg-3: #ebebe7;
+    --bg-4: #d8d8d3;
+    --border: #e6e6e1;
+    --border-2: #d2d2cc;
+    --ink-0: #1a1a1c;
+    --ink-1: #3a3b3e;
+    --ink-2: #65676c;
+    --ink-3: #93959a;
+    --ink-4: #c2c3c7;
+
+    --gold: #0e8a73;
+    --gold-bright: #16a38a;
+    --gold-ink: #0e8a73;
+    --gold-dim: rgba(22, 163, 138, 0.10);
+    --gold-line: rgba(22, 163, 138, 0.32);
+
+    --green: #0e8a73;
+    --green-ink: #0e8a73;
+    --green-dim: rgba(22, 163, 138, 0.10);
+    --green-line: rgba(22, 163, 138, 0.32);
+
+    --amber: #c98a2b;
+    --amber-ink: #a8721d;
+    --amber-dim: rgba(230, 178, 89, 0.16);
+    --amber-line: rgba(201, 138, 43, 0.32);
+
+    --red: #d04a3d;
+    --red-ink: #b53a2e;
+    --red-dim: rgba(208, 74, 61, 0.10);
+    --red-line: rgba(208, 74, 61, 0.32);
+
+    --shadow: 0 1px 2px rgba(20, 22, 30, 0.04), 0 8px 24px rgba(20, 22, 30, 0.06);
+    --shadow-drawer: -8px 0 32px rgba(20, 22, 30, 0.12);
+
+    --nav-bg: rgba(255, 255, 255, 0.88);
+    --glow: radial-gradient(ellipse at top right, rgba(22, 163, 138, 0.06), transparent 65%);
+    --kf-subtab-bg: rgba(0, 0, 0, 0.025);
+    --avatar-grad: linear-gradient(135deg, #16a38a, #0e8a73);
+    --row-hover: rgba(0, 0, 0, 0.025);
+    --kf-blue: #1f6cd9;
+    --kf-blue-line: rgba(31, 108, 217, 0.35);
+    --kf-blue-dim: rgba(31, 108, 217, 0.10);
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--ink-0);
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    letter-spacing: -0.005em;
+    font-feature-settings: 'cv11', 'ss01', 'ss03';
+    overflow-x: hidden;
+  }
+
+  .serif { font-family: 'Inter', system-ui, sans-serif; font-weight: 600; letter-spacing: -0.015em; }
+  .mono { font-family: 'JetBrains Mono', monospace; font-feature-settings: 'ss02'; }
+  .num { font-variant-numeric: tabular-nums; }
+  .eyebrow {
+    font-size: 10.5px; font-weight: 600; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--ink-3);
+  }
+
+  /* ========== APP LAYOUT ========== */
+  .app {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+  }
+
+  /* ========== MAIN NAV ========== */
+  .mainnav {
+    height: 58px;
+    display: flex;
+    align-items: stretch;
+    padding: 0 28px;
+    border-bottom: 1px solid var(--border);
+    background: var(--nav-bg);
+    backdrop-filter: blur(14px);
+    -webkit-backdrop-filter: blur(14px);
+    position: sticky; top: 0; z-index: 20;
+  }
+
+  .nav-brand {
+    display: flex; align-items: center;
+    padding-right: 20px; margin-right: 16px;
+    border-right: 1px solid var(--border);
+    transition: opacity 0.15s;
+    cursor: pointer;
+  }
+  .nav-brand:hover { opacity: 0.8; }
+  .nav-brand img {
+    width: 28px; height: 28px;
+    object-fit: contain; display: block;
+    border-radius: 4px;
+  }
+  .nav-brand-fallback {
+    font-family: 'Inter', sans-serif;
+    font-size: 17px; font-weight: 700;
+    color: var(--gold-ink);
+    letter-spacing: -0.02em;
+    width: 28px; height: 28px;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--gold-dim);
+    border: 1px solid var(--gold-line);
+    border-radius: 4px;
+  }
+
+  .nav-right {
+    margin-left: auto;
+    display: flex; align-items: center;
+    gap: 6px;
+  }
+
+  .avatar-btn {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s;
+  }
+  .avatar-btn:hover { transform: scale(1.04); }
+  .avatar {
+    width: 28px; height: 28px; border-radius: 50%;
+    background: var(--avatar-grad);
+    color: white; font-weight: 600; font-size: 11px;
+    display: flex; align-items: center; justify-content: center;
+    letter-spacing: 0;
+  }
+
+  .icon-btn {
+    width: 32px; height: 32px; border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--ink-2); transition: all 0.15s;
+    position: relative;
+  }
+  .icon-btn:hover { background: var(--bg-2); color: var(--ink-0); }
+  .icon-btn svg { width: 15px; height: 15px; }
+  .icon-btn .badge {
+    position: absolute; top: 7px; right: 7px;
+    width: 6px; height: 6px; background: var(--red); border-radius: 50%;
+    border: 2px solid var(--bg);
+  }
+
+  /* Theme toggle: show the icon for the OPPOSITE theme (what clicking switches to) */
+  .theme-toggle .ti-sun { display: block; }
+  .theme-toggle .ti-moon { display: none; }
+  [data-theme="light"] .theme-toggle .ti-sun { display: none; }
+  [data-theme="light"] .theme-toggle .ti-moon { display: block; }
+
+  /* ========== CONTENT ========== */
+  .content {
+    max-width: 1360px;
+    margin: 0 auto;
+    padding: 36px 40px 80px;
+    animation: fadeUp 0.5s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(8px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* ========== PAGE HEADER ========== */
+  .page-head {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 32px; align-items: end;
+    padding-bottom: 28px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 28px;
+  }
+  .eyebrow-row {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 14px;
+  }
+  .eyebrow-row .status-chip {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 3px 8px 3px 7px; border-radius: 3px;
+    font-size: 10.5px; font-weight: 600;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    background: var(--red-dim); color: var(--red-ink);
+    border: 1px solid var(--red-line);
+  }
+  .eyebrow-row .status-chip[data-status="amber"] {
+    background: var(--amber-dim); color: var(--amber-ink);
+    border-color: var(--amber-line);
+  }
+  .eyebrow-row .status-chip[data-status="green"] {
+    background: var(--green-dim); color: var(--green-ink);
+    border-color: var(--green-line);
+  }
+  .status-chip .dot-pulse {
+    width: 5px; height: 5px; border-radius: 50%;
+    background: var(--red);
+    animation: pulse 1.8s ease-in-out infinite;
+  }
+  .status-chip[data-status="amber"] .dot-pulse { background: var(--amber); }
+  .status-chip[data-status="green"] .dot-pulse { background: var(--green); }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; box-shadow: 0 0 0 0 currentColor; }
+    50% { opacity: 0.6; box-shadow: 0 0 0 4px rgba(0, 0, 0, 0); }
+  }
+  h1.lede {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 26px;
+    font-weight: 600;
+    line-height: 1.22;
+    letter-spacing: -0.018em;
+    color: var(--ink-0);
+    max-width: 680px;
+  }
+  h1.lede em { color: var(--gold-ink); font-style: normal; font-weight: 600; }
+  .sublede {
+    margin-top: 14px;
+    color: var(--ink-2);
+    font-size: 14.5px;
+    max-width: 620px;
+    line-height: 1.55;
+  }
+  .head-actions {
+    display: flex; gap: 8px; align-items: center;
+  }
+  .btn {
+    height: 34px;
+    padding: 0 14px;
+    border-radius: 6px;
+    font-size: 13px; font-weight: 500;
+    display: inline-flex; align-items: center; gap: 8px;
+    transition: all 0.15s;
+    border: 1px solid var(--border-2);
+    color: var(--ink-0);
+    background: var(--bg-2);
+  }
+  .btn:hover { background: var(--bg-3); border-color: var(--ink-4); }
+  .btn.primary {
+    background: var(--gold);
+    color: #ffffff;
+    border-color: var(--gold);
+    font-weight: 600;
+  }
+  .btn.primary:hover { background: var(--gold-bright); border-color: var(--gold-bright); }
+  .btn svg { width: 13px; height: 13px; }
+
+  /* ========== KPI ROW ========== */
+  .kpi-row {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin-bottom: 28px;
+  }
+  .kpi {
+    background: var(--bg-1);
+    padding: 18px 20px 20px;
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .kpi:first-child { border-top-left-radius: 7px; border-bottom-left-radius: 7px; }
+  .kpi:last-child { border-top-right-radius: 7px; border-bottom-right-radius: 7px; }
+  .kpi .label { font-size: 11px; font-weight: 500; color: var(--ink-2); letter-spacing: 0.03em; text-transform: uppercase; }
+  .kpi .value {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 26px; font-weight: 600; line-height: 1;
+    letter-spacing: -0.018em;
+    color: var(--ink-0);
+    display: flex; align-items: baseline; gap: 3px;
+    font-variant-numeric: tabular-nums;
+  }
+  .kpi .value .unit { font-size: 14px; color: var(--ink-2); font-weight: 500; }
+  .kpi .delta { font-size: 11.5px; color: var(--ink-3); display: flex; align-items: center; gap: 6px; }
+  .kpi .delta.bad { color: var(--red-ink); }
+  .kpi .delta.good { color: var(--green-ink); }
+  .kpi .spark { margin-top: 6px; }
+
+  /* ========== HERO GRID ========== */
+  .hero-grid {
+    display: grid;
+    grid-template-columns: 2.2fr 1fr;
+    gap: 16px;
+    margin-bottom: 16px;
+  }
+  .hero-grid > .card { display: flex; flex-direction: column; }
+  .hero-grid > .card > .card-body { flex: 1; display: flex; flex-direction: column; justify-content: flex-start; }
+  .card {
+    background: var(--bg-1);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    box-shadow: var(--shadow);
+  }
+  .card-head {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 16px 20px 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  .card-head h3 {
+    font-size: 13.5px; font-weight: 600; letter-spacing: -0.005em;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .card-head .meta {
+    font-size: 11px; color: var(--ink-3);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .card-body { padding: 18px 20px 20px; }
+
+  /* Pacing SVG */
+  .pacing-svg { width: 100%; height: auto; display: block; }
+  .pacing-svg text { font-family: 'Inter', sans-serif; }
+
+  /* Waffle -named */
+  .waffle-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 3px;
+  }
+  .waffle-grid[hidden] { display: none; }
+  .waffle-cell {
+    padding: 5px 8px;
+    border-radius: 3px;
+    font-size: 10.5px; font-weight: 500;
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    display: flex; align-items: center; gap: 6px;
+    cursor: pointer;
+    transition: all 0.14s;
+    border: 1px solid transparent;
+  }
+  .waffle-cell:hover { transform: translateY(-1px); }
+  .waffle-cell .dot { width: 5px; height: 5px; border-radius: 50%; flex-shrink: 0; }
+  .waffle-cell.r { background: var(--red-dim); color: var(--red-ink); border-color: var(--red-line); }
+  .waffle-cell.a { background: var(--amber-dim); color: var(--amber-ink); border-color: var(--amber-line); }
+  .waffle-cell.g { background: var(--green-dim); color: var(--green-ink); border-color: var(--green-line); }
+  .waffle-cell.r .dot { background: var(--red); }
+  .waffle-cell.a .dot { background: var(--amber); }
+  .waffle-cell.g .dot { background: var(--green); }
+
+  .waffle-head-toggle {
+    display: flex; gap: 4px;
+  }
+  .waffle-head-toggle button {
+    font-size: 11px; color: var(--ink-3);
+    padding: 3px 7px; border-radius: 4px;
+    transition: all 0.12s;
+  }
+  .waffle-head-toggle button:hover { color: var(--ink-1); }
+  .waffle-head-toggle button.active { background: var(--bg-3); color: var(--ink-0); }
+
+  /* Teams view (left-card alternative to pacing chart) */
+  .teams-grid[hidden] { display: none; }
+  .teams-grid {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 6px;
+  }
+  .team-tile {
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    align-items: center;
+    gap: 9px;
+    padding: 10px 11px;
+    min-height: 44px;
+    font-size: 12px; font-weight: 500;
+    border-radius: 6px;
+    border: 1px solid transparent;
+    background: var(--bg-2);
+    text-align: left;
+    cursor: pointer;
+    transition: transform 0.14s, border-color 0.14s;
+  }
+  .team-tile:hover { transform: translateY(-1px); border-color: var(--border-2); }
+  .team-tile .tile-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+  .team-tile .tile-name {
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+    color: inherit;
+  }
+  .team-tile .tile-prev {
+    width: 6px; height: 6px; border-radius: 50%;
+    opacity: 0.55;
+    flex-shrink: 0;
+    box-shadow: 0 0 0 2px var(--bg-1);
+  }
+  .team-tile.r { background: var(--red-dim); color: var(--red-ink); border-color: var(--red-line); }
+  .team-tile.a { background: var(--amber-dim); color: var(--amber-ink); border-color: var(--amber-line); }
+  .team-tile.g { background: var(--green-dim); color: var(--green-ink); border-color: var(--green-line); }
+  .team-tile.r .tile-dot { background: var(--red); }
+  .team-tile.a .tile-dot { background: var(--amber); }
+  .team-tile.g .tile-dot { background: var(--green); }
+  .team-tile .tile-prev.r { background: var(--red); }
+  .team-tile .tile-prev.a { background: var(--amber); }
+  .team-tile .tile-prev.g { background: var(--green); }
+
+  .teams-legend-row {
+    display: flex; justify-content: space-between; align-items: center;
+    padding-top: 14px; margin-top: 14px;
+    border-top: 1px solid var(--border);
+    font-size: 11.5px;
+  }
+  .teams-legend-row .prev-key {
+    display: inline-flex; align-items: center; gap: 6px;
+    color: var(--ink-3);
+  }
+  .teams-legend-row .prev-key .prev-key-dot {
+    width: 6px; height: 6px; border-radius: 50%;
+    background: var(--ink-3); opacity: 0.55;
+  }
+
+  /* Status list view */
+  .status-list[hidden] { display: none; }
+  .status-list {
+    display: flex; flex-direction: column;
+    max-height: 300px; overflow-y: auto;
+    margin: -2px -8px 0;
+  }
+  .status-list-item {
+    display: grid;
+    grid-template-columns: 8px 1fr auto auto;
+    gap: 10px;
+    padding: 7px 8px;
+    align-items: center;
+    cursor: pointer;
+    border-bottom: 1px solid var(--border);
+    transition: background 0.12s;
+    font-size: 12px;
+  }
+  .status-list-item:last-child { border-bottom: none; }
+  .status-list-item:hover { background: var(--row-hover); }
+  .status-list-item .dot {
+    width: 6px; height: 6px; border-radius: 50%;
+  }
+  .status-list-item .dot.r { background: var(--red); box-shadow: 0 0 0 2px var(--red-dim); }
+  .status-list-item .dot.a { background: var(--amber); box-shadow: 0 0 0 2px var(--amber-dim); }
+  .status-list-item .dot.g { background: var(--green); box-shadow: 0 0 0 2px var(--green-dim); }
+  .status-list-item .name { color: var(--ink-0); font-weight: 500; }
+  .status-list-item .stage {
+    color: var(--ink-2); font-size: 11px;
+    letter-spacing: 0.01em;
+    font-weight: 500;
+  }
+  .status-list-item .days {
+    color: var(--ink-2); font-size: 11px;
+    font-variant-numeric: tabular-nums;
+    min-width: 28px; text-align: right;
+  }
+
+  /* Movers list (Teams-view companion in right card) */
+  .movers-list {
+    padding: 4px 0;
+    max-height: 300px;
+    overflow-y: auto;
+  }
+  .movers-list:empty::after {
+    content: 'No status changes since last week';
+    display: block;
+    padding: 18px 20px;
+    color: var(--ink-3);
+    font-size: 12px;
+  }
+  .movers-item {
+    display: grid;
+    grid-template-columns: 16px 1fr auto;
+    gap: 10px;
+    padding: 9px 20px;
+    align-items: center;
+    cursor: pointer;
+    border-bottom: 1px solid var(--border);
+    transition: background 0.12s;
+    font-size: 12px;
+  }
+  .movers-item:hover { background: var(--row-hover); }
+  .movers-item:last-child { border-bottom: none; }
+  .movers-item .arrow {
+    display: inline-flex; align-items: center; justify-content: center;
+  }
+  .movers-item.worse .arrow { color: var(--red-ink); }
+  .movers-item.better .arrow { color: var(--green-ink); }
+  .movers-item .name { color: var(--ink-0); font-weight: 500; }
+  .movers-item .change {
+    display: inline-flex; align-items: center; gap: 5px;
+    color: var(--ink-3);
+    font-size: 10.5px;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .movers-item .change .swatch {
+    width: 7px; height: 7px; border-radius: 50%;
+  }
+  .movers-item .change .swatch.r { background: var(--red); }
+  .movers-item .change .swatch.a { background: var(--amber); }
+  .movers-item .change .swatch.g { background: var(--green); }
+  .movers-item .change .arr { color: var(--ink-3); font-size: 11px; }
+
+  /* ========== MATRIX ========== */
+  .matrix-section { margin-bottom: 28px; }
+  .matrix-head {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 14px;
+  }
+  .matrix-head .title-group {
+    display: flex; align-items: baseline; gap: 14px;
+  }
+  .matrix-head h2 {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 17px; font-weight: 600; letter-spacing: -0.014em;
+  }
+  .matrix-head .count { color: var(--ink-3); font-size: 12px; }
+
+  .filter-bar {
+    display: flex; align-items: center; gap: 6px;
+  }
+  .chip {
+    height: 28px; padding: 0 11px;
+    display: inline-flex; align-items: center; gap: 7px;
+    font-size: 12px; font-weight: 500;
+    border-radius: 6px;
+    color: var(--ink-2);
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: all 0.14s;
+  }
+  .chip:hover { color: var(--ink-0); border-color: var(--border-2); }
+  .chip.active {
+    color: var(--ink-0);
+    background: var(--bg-3);
+    border-color: var(--ink-4);
+  }
+  .chip .ct { color: var(--ink-3); font-weight: 500; font-variant-numeric: tabular-nums; }
+  .chip.active .ct { color: var(--ink-2); }
+  .chip .dot { width: 6px; height: 6px; border-radius: 50%; }
+  .chip .dot.r { background: var(--red); }
+  .chip .dot.a { background: var(--amber); }
+  .chip .dot.g { background: var(--green); }
+
+  .matrix {
+    background: var(--bg-1);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+  }
+  .matrix-head-row {
+    display: grid;
+    grid-template-columns: 64px 220px 1fr 130px 110px 50px 18px;
+    gap: 18px;
+    padding: 12px 20px;
+    font-size: 10.5px; font-weight: 600;
+    color: var(--ink-3);
+    letter-spacing: 0.08em; text-transform: uppercase;
+    border-bottom: 1px solid var(--border);
+    border-top-left-radius: 7px; border-top-right-radius: 7px;
+    align-items: center;
+  }
+  #matrix-rows > .matrix-row:last-child { border-bottom-left-radius: 7px; border-bottom-right-radius: 7px; }
+  .matrix-head-row .stage-labels {
+    display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px;
+  }
+  .matrix-head-row .stage-labels > div {
+    font-size: 10px;
+    letter-spacing: 0.04em;
+    line-height: 1.3;
+  }
+  .matrix-row {
+    display: grid;
+    grid-template-columns: 64px 220px 1fr 130px 110px 50px 18px;
+    gap: 18px;
+    padding: 13px 20px;
+    align-items: center;
+    cursor: pointer;
+    border-bottom: 1px solid var(--border);
+    transition: background 0.12s;
+    position: relative;
+  }
+  .matrix-row .dep-cell {
+    display: flex; align-items: center;
+    min-width: 0;
+  }
+  .matrix-row .dep-tag {
+    display: inline-flex; align-items: center;
+    font-size: 10.5px; font-weight: 600;
+    padding: 2px 7px;
+    border-radius: 3px;
+    background: var(--amber-dim);
+    color: var(--amber-ink);
+    border: 1px solid var(--amber-line);
+    letter-spacing: 0.02em;
+    white-space: nowrap;
+    overflow: hidden; text-overflow: ellipsis;
+    max-width: 100%;
+  }
+  .matrix-row .dep-empty {
+    color: var(--ink-4);
+    font-size: 12px;
+  }
+  .matrix-row:last-child { border-bottom: none; }
+  .matrix-row:hover { background: var(--row-hover); }
+  .matrix-row:hover .chev { color: var(--gold-bright); transform: translateX(2px); }
+  .matrix-row.hidden { display: none; }
+  .matrix-row .rank {
+    font-size: 11px; color: var(--ink-3);
+    font-variant-numeric: tabular-nums;
+  }
+  .matrix-row .team {
+    font-size: 13.5px; font-weight: 500; color: var(--ink-0);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .matrix-row .team .health {
+    width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0;
+  }
+  .matrix-row .team .health.r { background: var(--red); box-shadow: 0 0 0 3px var(--red-dim); }
+  .matrix-row .team .health.a { background: var(--amber); box-shadow: 0 0 0 3px var(--amber-dim); }
+  .matrix-row .team .health.g { background: var(--green); box-shadow: 0 0 0 3px var(--green-dim); }
+  .matrix-row .stages {
+    display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px;
+    align-items: center;
+  }
+  .matrix-row .seg { height: 4px; border-radius: 1.5px; position: relative; }
+  .matrix-row .seg.done { background: var(--ink-2); }
+  .matrix-row .seg.future { background: var(--bg-4); }
+  .matrix-row .seg.cur-r { background: var(--red); }
+  .matrix-row .seg.cur-a { background: var(--amber); }
+  .matrix-row .seg.cur-g { background: var(--green); }
+  .matrix-row .stage-label {
+    font-size: 12px; color: var(--ink-2);
+    display: flex; align-items: center; gap: 7px; justify-content: flex-end;
+  }
+  .matrix-row .assignee {
+    font-size: 12px; color: var(--ink-2);
+    display: flex; align-items: center; gap: 8px;
+  }
+  .matrix-row .av {
+    width: 22px; height: 22px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 9.5px; font-weight: 600;
+    color: var(--ink-1);
+    background: var(--bg-3);
+    border: 1px solid var(--border-2);
+    letter-spacing: 0;
+  }
+  .matrix-row .days {
+    font-size: 12px; text-align: right;
+    font-variant-numeric: tabular-nums;
+  }
+  .matrix-row .days.bad { color: var(--red-ink); font-weight: 500; }
+  .matrix-row .days.warn { color: var(--amber-ink); }
+  .matrix-row .chev {
+    color: var(--ink-4); transition: all 0.15s;
+    display: flex; justify-content: flex-end;
+  }
+
+  /* Bottom cards */
+  .bottom-grid {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  .bottom-grid.single { grid-template-columns: 1fr; }
+  /* Action list */
+  .action-list { padding: 4px 0 10px; }
+  .action-item {
+    display: grid; grid-template-columns: 28px 1fr auto;
+    gap: 12px; padding: 12px 20px;
+    border-bottom: 1px solid var(--border);
+    align-items: flex-start;
+    cursor: pointer;
+    transition: background 0.12s;
+  }
+  .action-item:hover { background: var(--row-hover); }
+  .action-item:last-child { border-bottom: none; }
+  .action-item .num-circle {
+    width: 22px; height: 22px;
+    border-radius: 50%;
+    background: var(--red-dim); color: var(--red-ink);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 600;
+    border: 1px solid var(--red-line);
+    font-variant-numeric: tabular-nums;
+  }
+  .action-item .body { font-size: 13px; color: var(--ink-0); line-height: 1.45; }
+  .action-item .body .sub { font-size: 12px; color: var(--ink-2); margin-top: 3px; }
+  .action-item .body em { color: var(--gold-bright); font-style: normal; font-weight: 500; }
+  .action-item .cta {
+    font-size: 11.5px;
+    color: var(--ink-3);
+    padding: 3px 8px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    transition: all 0.15s;
+  }
+  .action-item:hover .cta { color: var(--gold-bright); border-color: var(--gold-line); background: var(--gold-dim); }
+
+  /* Bullets */
+  .bullet-list { padding: 4px 20px 20px; }
+  .bullet-row {
+    display: grid;
+    grid-template-columns: 120px 1fr 40px 56px;
+    gap: 14px;
+    align-items: center;
+    padding: 9px 0;
+  }
+  .bullet-row .stage-name { font-size: 12.5px; color: var(--ink-0); font-weight: 500; }
+  .bullet-row .bar-wrap {
+    height: 6px; background: var(--bg-4); border-radius: 3px;
+    position: relative;
+  }
+  .bullet-row .bar-fill {
+    height: 100%; border-radius: 3px;
+    position: absolute; left: 0; top: 0;
+  }
+  .bullet-row .bar-fill.r { background: var(--red); }
+  .bullet-row .bar-fill.a { background: var(--amber); }
+  .bullet-row .bar-fill.g { background: var(--green); }
+  .bullet-row .target-mark {
+    position: absolute; top: -4px; bottom: -4px; width: 2px;
+    background: var(--ink-0);
+    border-radius: 1px;
+  }
+  .bullet-row .count {
+    font-variant-numeric: tabular-nums;
+    font-size: 13px;
+    font-weight: 500;
+    text-align: right;
+  }
+  .bullet-row .delta {
+    font-size: 10.5px; font-weight: 600;
+    padding: 2px 5px;
+    border-radius: 3px;
+    text-align: center;
+    font-variant-numeric: tabular-nums;
+    border: 1px solid transparent;
+  }
+  .delta.bad { background: var(--red-dim); color: var(--red-ink); border-color: var(--red-line); }
+  .delta.warn { background: var(--amber-dim); color: var(--amber-ink); border-color: var(--amber-line); }
+  .delta.good { background: var(--green-dim); color: var(--green-ink); border-color: var(--green-line); }
+
+  /* ========== DRAWER ========== */
+  .drawer-overlay {
+    position: fixed; inset: 0;
+    background: rgba(5, 3, 1, 0.55);
+    opacity: 0; pointer-events: none;
+    transition: opacity 0.25s;
+    z-index: 50;
+    backdrop-filter: blur(4px);
+    -webkit-backdrop-filter: blur(4px);
+  }
+  .drawer-overlay.open { opacity: 1; pointer-events: auto; }
+  .drawer {
+    position: fixed; top: 0; right: 0;
+    width: 480px; max-width: 100vw;
+    height: 100vh;
+    background: var(--bg-1);
+    border-left: 1px solid var(--border);
+    box-shadow: var(--shadow-drawer);
+    transform: translateX(100%);
+    transition: transform 0.32s cubic-bezier(0.22, 0.61, 0.36, 1);
+    z-index: 51;
+    overflow-y: auto;
+  }
+  .drawer.open { transform: translateX(0); }
+  .drawer-head {
+    padding: 22px 28px 20px;
+    border-bottom: 1px solid var(--border);
+    position: sticky; top: 0; background: var(--bg-1);
+    z-index: 2;
+  }
+  .drawer-head .close {
+    position: absolute; top: 16px; right: 18px;
+  }
+  .drawer-head .team-label {
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 20px; font-weight: 600; line-height: 1.2;
+    letter-spacing: -0.018em;
+    margin-bottom: 6px;
+  }
+  .drawer-head .lead {
+    font-size: 12.5px; color: var(--ink-2);
+    display: flex; align-items: center; gap: 6px;
+  }
+  .drawer-body {
+    padding: 20px 28px 40px;
+    display: flex; flex-direction: column; gap: 26px;
+  }
+  .drawer-status {
+    display: grid; grid-template-columns: 1fr 1fr 1fr;
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 6px; overflow: hidden;
+  }
+  .drawer-stat {
+    padding: 12px 14px;
+    background: var(--bg-2);
+  }
+  .drawer-stat .k { font-size: 10px; font-weight: 600; color: var(--ink-3); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 6px; }
+  .drawer-stat .v { font-size: 15px; font-weight: 500; color: var(--ink-0); }
+  .drawer-stat .v.r { color: var(--red-ink); }
+  .drawer-stat .v.a { color: var(--amber-ink); }
+  .drawer-stat .v.g { color: var(--green-ink); }
+
+  .drawer-section h4 {
+    font-size: 11px; font-weight: 600; color: var(--ink-3);
+    text-transform: uppercase; letter-spacing: 0.1em;
+    margin-bottom: 10px;
+  }
+  .blocker-card {
+    background: var(--red-dim);
+    border: 1px solid var(--red-line);
+    border-radius: 6px;
+    padding: 14px 16px;
+    color: var(--ink-0);
+    font-size: 13.5px; line-height: 1.55;
+  }
+  .blocker-card .who {
+    font-size: 11.5px; color: var(--red-ink); font-weight: 600;
+    letter-spacing: 0.04em; text-transform: uppercase;
+    margin-bottom: 5px;
+  }
+  .blocker-card em { color: var(--gold-bright); font-style: normal; font-weight: 500; }
+
+  .dep-pill-row {
+    display: flex; flex-wrap: wrap; gap: 6px;
+  }
+  .dep-pill {
+    padding: 4px 9px;
+    font-size: 12px;
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--ink-1);
+    display: flex; align-items: center; gap: 6px;
+  }
+  .dep-pill .dot { width: 5px; height: 5px; border-radius: 50%; }
+  .dep-pill .dot.r { background: var(--red); }
+  .dep-pill .dot.a { background: var(--amber); }
+  .dep-pill .dot.g { background: var(--green); }
+
+  .activity-list { display: flex; flex-direction: column; position: relative; }
+  .activity-list::before {
+    content: ''; position: absolute;
+    left: 5px; top: 12px; bottom: 12px; width: 1px;
+    background: var(--border-2);
+  }
+  .activity-item {
+    display: grid; grid-template-columns: 12px 1fr auto;
+    gap: 14px;
+    padding: 10px 0;
+    align-items: flex-start;
+    position: relative;
+  }
+  .activity-item .node {
+    width: 11px; height: 11px; border-radius: 50%;
+    background: var(--bg-2);
+    border: 2px solid var(--border-2);
+    margin-top: 3px;
+    position: relative; z-index: 1;
+  }
+  .activity-item.key .node {
+    background: var(--gold);
+    border-color: var(--gold);
+  }
+  .activity-item.bad .node {
+    background: var(--red);
+    border-color: var(--red);
+  }
+  .activity-item .detail {
+    font-size: 13px; color: var(--ink-1); line-height: 1.45;
+  }
+  .activity-item .detail .sub {
+    font-size: 11.5px; color: var(--ink-3); margin-top: 2px;
+  }
+  .activity-item .when {
+    font-size: 11px; color: var(--ink-3);
+    font-variant-numeric: tabular-nums;
+    white-space: nowrap;
+  }
+
+  .drawer-actions {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 8px;
+  }
+
+  /* ========== FOOTER ========== */
+  .foot {
+    padding: 24px 0 0;
+    border-top: 1px solid var(--border);
+    color: var(--ink-3);
+    font-size: 11.5px;
+    display: flex; justify-content: space-between;
+    font-family: 'JetBrains Mono', monospace;
+  }
+
+  /* ========== HELPERS ========== */
+  .legend-inline {
+    display: flex; align-items: center; gap: 16px;
+    font-size: 11px; color: var(--ink-3);
+  }
+  .legend-inline .it { display: flex; align-items: center; gap: 5px; }
+  .legend-inline .bar {
+    width: 14px; height: 4px; border-radius: 1.5px;
+  }
+
+  .glow {
+    position: absolute; pointer-events: none;
+    top: 0; right: 0; width: 620px; height: 380px;
+    background: var(--glow);
+    z-index: 0;
+  }
+
+  /* ========== KISSFLOW SHELL (mock chrome -dark) ========== */
+  .kf-frame {
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    margin: -8px 0 28px;
+    background: var(--bg);
+  }
+  .kf-shell {
+    background: var(--bg-1);
+    color: var(--ink-1);
+    border-bottom: 1px solid var(--border);
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+  .kf-body {
+    padding: 28px;
+  }
+  .kf-title-row {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 11px 16px 11px 18px;
+    border-bottom: 1px solid var(--border);
+    background: var(--bg-2);
+  }
+  .kf-title {
+    display: flex; align-items: center; gap: 9px;
+    font-size: 14px; font-weight: 600;
+    color: var(--ink-0);
+    letter-spacing: -0.01em;
+  }
+  .kf-title svg { color: var(--ink-2); }
+  .kf-edit {
+    padding: 3px;
+    border-radius: 3px;
+    color: var(--ink-3);
+    transition: all 0.12s;
+  }
+  .kf-edit:hover { background: var(--bg-3); color: var(--ink-0); }
+
+  .kf-title-actions {
+    display: flex; align-items: center; gap: 6px;
+  }
+  .kf-pill {
+    height: 28px;
+    padding: 0 8px 0 10px;
+    border: 1px solid var(--border-2);
+    border-radius: 4px;
+    background: var(--bg-2);
+    color: var(--ink-1);
+    font-size: 12px;
+    display: inline-flex; align-items: center; gap: 6px;
+    transition: all 0.12s;
+  }
+  .kf-pill:hover { border-color: var(--ink-4); background: var(--bg-3); }
+  .kf-pill .kf-pill-k { color: var(--ink-3); font-weight: 500; }
+  .kf-pill .kf-pill-v { color: var(--ink-0); font-weight: 500; margin-right: 2px; }
+  .kf-pill svg { color: var(--ink-3); }
+
+  .kf-btn {
+    height: 28px;
+    padding: 0 11px;
+    border: 1px solid var(--border-2);
+    border-radius: 4px;
+    background: var(--bg-2);
+    color: var(--ink-0);
+    font-size: 12px; font-weight: 500;
+    display: inline-flex; align-items: center;
+    transition: all 0.12s;
+  }
+  .kf-btn:hover { background: var(--bg-3); border-color: var(--ink-4); }
+  .kf-btn.primary {
+    background: var(--kf-blue-dim);
+    color: var(--kf-blue);
+    border-color: var(--kf-blue-line);
+  }
+  .kf-btn.primary:hover { filter: brightness(1.08); }
+
+  .kf-icon {
+    width: 28px; height: 28px;
+    border: 1px solid var(--border-2);
+    border-radius: 4px;
+    background: var(--bg-2);
+    color: var(--ink-2);
+    display: inline-flex; align-items: center; justify-content: center;
+    transition: all 0.12s;
+  }
+  .kf-icon:hover { background: var(--bg-3); color: var(--ink-0); }
+
+  .kf-tabs {
+    display: flex; align-items: stretch;
+    padding: 0 12px;
+    background: var(--bg-1);
+    border-bottom: 1px solid var(--border);
+    overflow-x: auto;
+  }
+  .kf-tab {
+    height: 38px;
+    padding: 0 14px;
+    font-size: 13px; font-weight: 500;
+    color: var(--ink-2);
+    position: relative;
+    white-space: nowrap;
+    transition: color 0.12s;
+  }
+  .kf-tab:hover { color: var(--ink-0); }
+  .kf-tab.active { color: var(--kf-blue); }
+  .kf-tab.active::after {
+    content: ''; position: absolute;
+    left: 12px; right: 12px; bottom: -1px;
+    height: 2px; background: var(--kf-blue);
+    border-radius: 1px;
+  }
+
+  .kf-subtabs {
+    display: flex; align-items: stretch;
+    padding: 0 12px;
+    background: var(--kf-subtab-bg);
+    overflow-x: auto;
+    scrollbar-width: thin;
+  }
+  .kf-subtab {
+    height: 32px;
+    padding: 0 12px;
+    font-size: 12px; font-weight: 500;
+    color: var(--ink-2);
+    border-right: 1px solid var(--border);
+    white-space: nowrap;
+    transition: all 0.12s;
+  }
+  .kf-subtab:first-child { border-left: 1px solid var(--border); }
+  .kf-subtab:hover { background: var(--bg-2); color: var(--ink-0); }
+  .kf-subtab.active {
+    background: var(--bg-1);
+    color: var(--kf-blue);
+    font-weight: 600;
+    box-shadow: inset 0 -2px 0 var(--kf-blue);
+  }
+  .kf-subtab.kf-more {
+    color: var(--ink-3);
+    padding: 0 10px;
+  }
+
+  /* ========== TABS (in main nav) ========== */
+  .tabs {
+    display: flex;
+    align-items: stretch;
+    gap: 0;
+    margin: 0;
+    padding: 0;
+    border: none;
+    height: 100%;
+  }
+  .tab-btn {
+    height: 100%;
+    padding: 0 16px;
+    font-size: 13.5px;
+    font-weight: 500;
+    color: var(--ink-2);
+    position: relative;
+    transition: color 0.15s;
+    display: inline-flex; align-items: center; gap: 7px;
+  }
+  .tab-btn:hover { color: var(--ink-0); }
+  .tab-btn.active { color: var(--ink-0); }
+  .tab-btn.active::after {
+    content: ''; position: absolute;
+    left: 14px; right: 14px;
+    bottom: -1px;
+    height: 2px; background: var(--gold);
+    border-radius: 1px;
+  }
+  .tab-btn .ct {
+    color: var(--ink-3);
+    font-variant-numeric: tabular-nums;
+    font-size: 11.5px;
+  }
+  .tab-btn.active .ct { color: var(--ink-2); }
+
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; animation: fadeUp 0.4s cubic-bezier(0.22, 0.61, 0.36, 1) both; }
+
+  /* ========== PERSONAS ========== */
+  .personas-intro { margin-bottom: 28px; }
+  .personas-intro .eyebrow { margin-bottom: 12px; }
+  .personas-intro h1 {
+    font-size: 28px; font-weight: 600;
+    letter-spacing: -0.02em;
+    margin-bottom: 10px;
+    color: var(--ink-0);
+  }
+  .personas-intro p {
+    font-size: 14.5px; color: var(--ink-2);
+    max-width: 640px; line-height: 1.55;
+  }
+
+  .personas-grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+
+  .persona-card {
+    background: var(--bg-1);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 24px 26px 22px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.2s;
+    box-shadow: var(--shadow);
+  }
+  .persona-card:hover { border-color: var(--border-2); transform: translateY(-1px); }
+  .persona-card::before {
+    content: ''; position: absolute;
+    top: 0; left: 0; right: 0; height: 3px;
+    background: var(--persona-accent);
+  }
+  .persona-card[data-accent="green"] {
+    --persona-accent: #16a38a;
+    --persona-dim: rgba(22, 163, 138, 0.13);
+    --persona-line: rgba(22, 163, 138, 0.30);
+  }
+  .persona-card[data-accent="blue"] {
+    --persona-accent: #4a8de0;
+    --persona-dim: rgba(74, 141, 224, 0.12);
+    --persona-line: rgba(74, 141, 224, 0.28);
+  }
+  .persona-card[data-accent="amber"] {
+    --persona-accent: #e6b259;
+    --persona-dim: rgba(230, 178, 89, 0.13);
+    --persona-line: rgba(230, 178, 89, 0.30);
+  }
+  .persona-card[data-accent="purple"] {
+    --persona-accent: #b07ce0;
+    --persona-dim: rgba(176, 124, 224, 0.12);
+    --persona-line: rgba(176, 124, 224, 0.28);
+  }
+  .persona-card[data-accent="teal"] {
+    --persona-accent: #2ab5a8;
+    --persona-dim: rgba(42, 181, 168, 0.12);
+    --persona-line: rgba(42, 181, 168, 0.28);
+  }
+  .persona-card[data-accent="rose"] {
+    --persona-accent: #e06a8d;
+    --persona-dim: rgba(224, 106, 141, 0.12);
+    --persona-line: rgba(224, 106, 141, 0.28);
+  }
+
+  .persona-badge {
+    display: inline-block;
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--persona-accent);
+    background: var(--persona-dim);
+    border: 1px solid var(--persona-line);
+    padding: 3px 8px;
+    border-radius: 3px;
+    margin-bottom: 18px;
+  }
+
+  .persona-head {
+    display: flex; gap: 16px;
+    align-items: center;
+    margin-bottom: 22px;
+  }
+  .persona-avatar {
+    width: 60px; height: 60px;
+    border-radius: 50%;
+    overflow: hidden;
+    flex-shrink: 0;
+    position: relative;
+    background: var(--persona-dim);
+    box-shadow: 0 0 0 3px var(--persona-line), 0 0 0 1px var(--persona-accent);
+  }
+  .persona-avatar img {
+    width: 100%; height: 100%;
+    object-fit: cover;
+    display: block;
+    filter: saturate(1.02);
+  }
+  .persona-avatar .initials {
+    position: absolute; inset: 0;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--persona-accent);
+    font-weight: 600; font-size: 17px;
+    letter-spacing: -0.005em;
+  }
+  .persona-info h3 {
+    font-size: 16px; font-weight: 600;
+    letter-spacing: -0.018em;
+    margin-bottom: 3px;
+    color: var(--ink-0);
+  }
+  .persona-role {
+    font-size: 12.5px;
+    color: var(--ink-1);
+    margin-bottom: 2px;
+  }
+  .persona-meta {
+    font-size: 11px;
+    color: var(--ink-3);
+    font-variant-numeric: tabular-nums;
+  }
+
+  .persona-quote {
+    font-size: 14px;
+    line-height: 1.55;
+    color: var(--ink-0);
+    padding: 14px 16px;
+    background: var(--persona-dim);
+    border-left: 2px solid var(--persona-accent);
+    border-radius: 0 4px 4px 0;
+    margin-bottom: 22px;
+    font-style: normal;
+  }
+  .persona-quote em {
+    color: var(--persona-accent);
+    font-style: italic;
+    font-weight: 500;
+  }
+
+  .persona-sections {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 24px;
+    margin-bottom: 22px;
+  }
+  .persona-section h4 {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin-bottom: 10px;
+  }
+  .persona-section ul {
+    font-size: 12.5px;
+    color: var(--ink-1);
+    line-height: 1.55;
+  }
+  .persona-section li {
+    padding-left: 13px;
+    position: relative;
+    margin-bottom: 6px;
+  }
+  .persona-section li::before {
+    content: '';
+    position: absolute;
+    left: 0; top: 9px;
+    width: 6px; height: 1px;
+    background: var(--ink-3);
+  }
+
+  .persona-stats {
+    display: grid;
+    grid-template-columns: auto auto 1fr;
+    gap: 22px;
+    padding-top: 18px;
+    border-top: 1px solid var(--border);
+    align-items: flex-start;
+  }
+  .persona-stat .value {
+    font-size: 18px;
+    font-weight: 600;
+    letter-spacing: -0.018em;
+    color: var(--ink-0);
+    font-variant-numeric: tabular-nums;
+    line-height: 1;
+    margin-bottom: 5px;
+  }
+  .persona-stat .value .unit {
+    font-size: 11px;
+    font-weight: 500;
+    color: var(--ink-2);
+    margin-left: 2px;
+  }
+  .persona-stat .label {
+    font-size: 9.5px;
+    font-weight: 600;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
+  .persona-stat-tools .label { margin-bottom: 7px; }
+  .persona-tags {
+    display: flex; flex-wrap: wrap; gap: 4px;
+  }
+  .persona-tag {
+    font-size: 10.5px;
+    padding: 2.5px 7px;
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: 3px;
+    color: var(--ink-1);
+    font-weight: 500;
+    white-space: nowrap;
+  }
+
+  /* Pain → Feature mapping */
+  .pain-map {
+    padding: 14px 16px;
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    margin-bottom: 22px;
+  }
+  .pain-map h4 {
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    margin-bottom: 10px;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .pain-map h4::after {
+    content: ''; height: 1px;
+    background: var(--border); flex: 1;
+  }
+  .pain-row {
+    display: grid;
+    grid-template-columns: 1fr 20px 1.2fr;
+    gap: 10px;
+    align-items: flex-start;
+    padding: 8px 0;
+    border-bottom: 1px dashed var(--border);
+    font-size: 12px;
+    line-height: 1.45;
+  }
+  .pain-row:last-child { border-bottom: none; padding-bottom: 2px; }
+  .pain-row:first-of-type { padding-top: 2px; }
+  .pain-row .pain {
+    color: var(--ink-2);
+    font-style: italic;
+  }
+  .pain-row .arrow {
+    color: var(--persona-accent);
+    font-size: 14px;
+    text-align: center;
+    padding-top: 0;
+    font-weight: 600;
+    line-height: 1.3;
+  }
+  .pain-row .feature {
+    color: var(--ink-0);
+    font-weight: 500;
+  }
+
+  /* ========== CLIENT SELECTOR ========== */
+  .client-filter { position: relative; }
+  .client-select {
+    height: 26px;
+    padding: 0 9px 0 11px;
+    display: inline-flex; align-items: center; gap: 7px;
+    font-size: 11.5px; font-weight: 500;
+    border-radius: 5px;
+    color: var(--ink-1);
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: all 0.14s;
+    margin-left: 4px;
+    letter-spacing: 0;
+  }
+  .client-select:hover,
+  .client-select[aria-expanded="true"] { color: var(--ink-0); border-color: var(--border-2); background: var(--bg-3); }
+  .client-select svg { width: 10px; height: 10px; color: var(--ink-3); transition: transform 0.15s; }
+  .client-select[aria-expanded="true"] svg { transform: rotate(180deg); }
+
+  .client-menu {
+    position: absolute;
+    top: calc(100% + 6px); left: 4px;
+    min-width: 200px;
+    background: var(--bg-2);
+    border: 1px solid var(--border-2);
+    border-radius: 6px;
+    box-shadow: 0 8px 28px rgba(0,0,0,0.5);
+    padding: 4px 0;
+    z-index: 30;
+    list-style: none;
+    animation: fadeUp 0.18s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+  }
+  .client-menu[hidden] { display: none; }
+  .client-menu-label {
+    font-size: 9.5px; font-weight: 600;
+    letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--ink-3);
+    padding: 8px 12px 6px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 4px;
+  }
+  .client-menu-item {
+    padding: 7px 12px;
+    font-size: 12px; font-weight: 500;
+    color: var(--ink-1);
+    cursor: pointer;
+    transition: background 0.12s;
+    display: flex; align-items: center; gap: 8px;
+  }
+  .client-menu-item:hover { background: var(--bg-3); color: var(--ink-0); }
+  .client-menu-item.active {
+    background: var(--gold-dim); color: var(--gold-ink);
+  }
+  .client-menu-item.active::before {
+    content: ''; width: 4px; height: 4px; border-radius: 50%;
+    background: var(--gold-ink);
+  }
+
+  /* ========== TOOLTIP ========== */
+  .tip {
+    position: relative; display: inline-flex; cursor: help;
+  }
+  .tip[data-tip]:hover::after,
+  .tip[data-tip]:focus::after {
+    content: attr(data-tip);
+    position: absolute;
+    bottom: calc(100% + 8px); left: 50%;
+    transform: translateX(-50%);
+    background: var(--bg-3);
+    color: var(--ink-0);
+    border: 1px solid var(--border-2);
+    padding: 7px 10px;
+    border-radius: 5px;
+    font-size: 11.5px; font-weight: 500;
+    white-space: nowrap;
+    z-index: 50;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.45);
+    pointer-events: none;
+    letter-spacing: -0.002em;
+    text-transform: none;
+  }
+  .tip[data-tip]:hover::before {
+    content: '';
+    position: absolute;
+    bottom: calc(100% + 4px); left: 50%;
+    transform: translateX(-50%) rotate(45deg);
+    width: 6px; height: 6px;
+    background: var(--bg-3);
+    border-right: 1px solid var(--border-2);
+    border-bottom: 1px solid var(--border-2);
+    z-index: 30;
+    pointer-events: none;
+  }
+  /* Stage column headers wrap `Impact<br>Assessment` etc; .tip's inline-flex breaks that. */
+  .matrix-head-row .stage-labels .tip { display: inline-block; }
+  /* Wide variant: wrap multi-sentence copy. */
+  .tip.tip-wide[data-tip]:hover::after,
+  .tip.tip-wide[data-tip]:focus::after {
+    white-space: normal;
+    max-width: 260px;
+    width: max-content;
+    text-align: left;
+    line-height: 1.45;
+  }
+  /* Below variant: anchor tooltip under the trigger. */
+  .tip.tip-below[data-tip]:hover::after,
+  .tip.tip-below[data-tip]:focus::after {
+    bottom: auto;
+    top: calc(100% + 8px);
+  }
+  .tip.tip-below[data-tip]:hover::before {
+    bottom: auto;
+    top: calc(100% + 4px);
+    border-right: none;
+    border-bottom: none;
+    border-left: 1px solid var(--border-2);
+    border-top: 1px solid var(--border-2);
+  }
+
+  /* ========== REF NUM + PENDING BADGE ========== */
+  .matrix-row .ref {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px;
+    color: var(--ink-3);
+    font-weight: 500;
+    letter-spacing: 0.02em;
+  }
+  .matrix-row .team .pending-tag {
+    display: inline-flex; align-items: center;
+    font-size: 9.5px; font-weight: 600;
+    padding: 1.5px 5px;
+    border-radius: 3px;
+    background: var(--amber-dim);
+    color: var(--amber-ink);
+    border: 1px solid var(--amber-line);
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .matrix-row .team .pending-tag.client {
+    background: var(--kf-blue-dim);
+    color: var(--kf-blue);
+    border-color: var(--kf-blue-line);
+  }
+
+  /* ========== INTERACTIVE STAGE ROW (chart) ========== */
+  .pacing-svg .stage-row { cursor: pointer; }
+  .pacing-svg .stage-row .stage-row-bg { transition: fill 0.15s; }
+  .pacing-svg .stage-row:hover .stage-row-bg { fill: var(--row-hover); }
+  .pacing-svg .stage-row.active .stage-row-bg { fill: var(--gold-dim); }
+  .pacing-svg .stage-row.active text:first-of-type { fill: var(--gold-ink); }
+
+  /* Pacing chart hover scrubber */
+  .hero-grid .card-body { position: relative; }
+  .pacing-svg .pacing-cursor { stroke: var(--ink-2); stroke-dasharray: 2 3; opacity: 0.7; pointer-events: none; }
+  .pacing-svg .pacing-cursor-plan { fill: var(--ink-2); pointer-events: none; }
+  .pacing-svg .pacing-cursor-actual { fill: var(--red); pointer-events: none; }
+  .pacing-tooltip {
+    position: absolute;
+    background: var(--bg-2);
+    border: 1px solid var(--border-2);
+    border-radius: 5px;
+    padding: 8px 10px;
+    font-size: 11.5px;
+    line-height: 1.45;
+    color: var(--ink-0);
+    pointer-events: none;
+    z-index: 5;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.35);
+    min-width: 130px;
+    font-variant-numeric: tabular-nums;
+  }
+  .pacing-tooltip[hidden] { display: none; }
+  .pacing-tooltip .day {
+    font-size: 10px; font-weight: 600;
+    letter-spacing: 0.06em; text-transform: uppercase;
+    color: var(--ink-3);
+    margin-bottom: 4px;
+  }
+  .pacing-tooltip .row {
+    display: flex; align-items: center; gap: 6px;
+    margin-top: 2px;
+  }
+  .pacing-tooltip .row .swatch {
+    width: 10px; height: 2px; border-radius: 1px;
+    flex-shrink: 0;
+  }
+  .pacing-tooltip .row .swatch.plan { background: var(--ink-3); }
+  .pacing-tooltip .row .swatch.actual { background: var(--red); }
+  .pacing-tooltip .row .swatch.proj { background: var(--red); opacity: 0.65; }
+  .pacing-tooltip .row .k { color: var(--ink-2); width: 64px; }
+  .pacing-tooltip .row .v { color: var(--ink-0); font-weight: 500; }
+
+  /* Pacing chart -theme-aware fills/strokes */
+  .pacing-svg .ax       { stroke: var(--border-2); }
+  .pacing-svg .ax-grid  { stroke: var(--border); }
+  .pacing-svg .label    { fill: var(--ink-3); }
+  .pacing-svg .label-mid    { fill: var(--ink-2); }
+  .pacing-svg .label-bright { fill: var(--ink-1); }
+  .pacing-svg .plan-line   { stroke: var(--ink-3); }
+  .pacing-svg .today-line  { stroke: var(--ink-2); }
+  .pacing-svg .actual-line { stroke: var(--red); }
+  .pacing-svg .actual-dot-out { fill: var(--red); }
+  .pacing-svg .actual-dot-in  { fill: var(--bg); }
+  .pacing-svg .projected   { stroke: var(--red); }
+  .pacing-svg .end-dot     { stroke: var(--red); }
+  .pacing-svg .red-text    { fill: var(--red-ink); }
+  .pacing-svg .callout-bg  { fill: var(--bg-2); stroke: var(--border-2); }
+
+  /* Stage backlog clickable */
+  .bullet-row {
+    cursor: pointer;
+    border-radius: 4px;
+    padding: 9px 8px !important;
+    margin: 0 -8px;
+    transition: background 0.14s;
+  }
+  .bullet-row:hover { background: rgba(255, 255, 255, 0.022); }
+  .bullet-row.active { background: var(--gold-dim); }
+
+  /* KPI hover polish */
+  .kpi { transition: background 0.15s; }
+  .kpi:hover { background: var(--bg-2); }
+
+  /* Pulse on red health dots */
+  .matrix-row .team .health.r {
+    animation: redPulse 2.4s ease-in-out infinite;
+  }
+  @keyframes redPulse {
+    0%, 100% { box-shadow: 0 0 0 3px var(--red-dim); }
+    50% { box-shadow: 0 0 0 5px rgba(224, 111, 100, 0.10); }
+  }
+
+  /* ========== TOAST ========== */
+  .toast-stack {
+    position: fixed; bottom: 24px; right: 24px;
+    display: flex; flex-direction: column; gap: 10px;
+    z-index: 80; pointer-events: none;
+  }
+  .toast {
+    pointer-events: auto;
+    background: var(--bg-2);
+    border: 1px solid var(--border-2);
+    border-left: 3px solid var(--gold);
+    color: var(--ink-0);
+    padding: 12px 18px 12px 14px;
+    border-radius: 6px;
+    font-size: 13px; font-weight: 500;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.45);
+    display: flex; align-items: center; gap: 10px;
+    min-width: 260px;
+    animation: toastIn 0.32s cubic-bezier(0.22, 0.61, 0.36, 1) both;
+    letter-spacing: -0.005em;
+  }
+  .toast.leaving { animation: toastOut 0.28s cubic-bezier(0.4, 0, 1, 1) both; }
+  .toast svg { width: 16px; height: 16px; flex-shrink: 0; color: var(--gold-ink); }
+  .toast .sub { font-size: 11.5px; color: var(--ink-2); font-weight: 400; margin-top: 2px; }
+  @keyframes toastIn {
+    from { transform: translateX(8px); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+  }
+  @keyframes toastOut {
+    from { transform: translateX(0); opacity: 1; }
+    to { transform: translateX(20px); opacity: 0; }
+  }
+
+  /* Smooth hide/show on matrix rows */
+  .matrix-row { transition: opacity 0.18s, padding 0.18s; }
+  .matrix-row.hidden { display: none; }
+
+  /* Active stage filter banner */
+  .stage-filter-banner {
+    display: none;
+    align-items: center; gap: 8px;
+    font-size: 12px;
+    color: var(--ink-1);
+    background: var(--gold-dim);
+    border: 1px solid var(--gold-line);
+    padding: 4px 10px 4px 12px;
+    border-radius: 5px;
+  }
+  .stage-filter-banner.active { display: inline-flex; }
+  .stage-filter-banner .x {
+    color: var(--gold-ink); cursor: pointer; padding: 2px;
+    border-radius: 3px; transition: background 0.14s;
+    display: flex; align-items: center;
+  }
+  .stage-filter-banner .x:hover { background: var(--gold-line); }
+
+</style>
+</head>
+<body>
+
+<div id="deck-content">
+
+<div class="glow"></div>
+
+<div class="app">
+
+  <!-- ========== MAIN NAV ========== -->
+  <header class="mainnav">
+    <div class="nav-brand" title="Helix Industrial">
+      <span class="nav-brand-fallback">H</span>
+    </div>
+    <nav class="tabs">
+      <button class="tab-btn active" data-tab="dashboard">Hypercare</button>
+    </nav>
+    <div class="nav-right">
+      <button class="icon-btn theme-toggle" id="themeToggle" title="Toggle theme" aria-label="Toggle theme">
+        <svg class="ti-moon" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        <svg class="ti-sun" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" stroke-linecap="round"/></svg>
+      </button>
+      <button class="icon-btn" title="Notifications">
+        <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M18 16v-5a6 6 0 10-12 0v5l-2 2h16l-2-2z" stroke-linejoin="round"/><path d="M10 20a2 2 0 004 0" stroke-linecap="round"/></svg>
+        <span class="badge"></span>
+      </button>
+      <button class="avatar-btn" title="Norbert Pap">
+        <span class="avatar">NP</span>
+      </button>
+    </div>
+  </header>
+
+  <!-- ========== CONTENT ========== -->
+  <main class="content">
+
+      <div id="tab-dashboard" class="tab-panel active">
+
+      <div class="kf-body">
+
+      <!-- ===== PAGE HEAD ===== -->
+      <section class="page-head">
+        <div>
+          <div class="eyebrow-row">
+            <span class="eyebrow">Helix × Apex Integration · Day 14 of 30</span>
+            <div class="client-filter">
+              <button class="client-select" id="clientSelectBtn" title="Filter by acquired entity" aria-haspopup="listbox" aria-expanded="false">
+                <span id="clientSelectLabel">Apex Ventures</span>
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </button>
+              <ul class="client-menu" id="clientMenu" role="listbox" hidden>
+                <li class="client-menu-label">Acquired entity</li>
+                <li class="client-menu-item active" role="option" data-client="all">All entities</li>
+                <li class="client-menu-item" role="option" data-client="carina">Apex Ventures</li>
+                <li class="client-menu-item" role="option" data-client="nyl">Apex Logistics</li>
+                <li class="client-menu-item" role="option" data-client="athene">Apex Mfg</li>
+                <li class="client-menu-item" role="option" data-client="abc">Apex Asia</li>
+                <li class="client-menu-item" role="option" data-client="def">Apex EU</li>
+                <li class="client-menu-item" role="option" data-client="ghi">Apex Foods</li>
+                <li class="client-menu-item" role="option" data-client="jkl">Apex Beverage</li>
+                <li class="client-menu-item" role="option" data-client="mno">Apex Retail</li>
+              </ul>
+            </div>
+            <span class="status-chip" id="statusChip" data-status="amber"><span class="dot-pulse"></span><span id="statusChipLabel">Slightly behind</span></span>
+          </div>
+          <h1 class="lede" id="dashLede">5 workstreams off-track. <em>4 workstreams cleared sign-off</em>. On pace for May 13 cutover.</h1>
+          <p class="sublede" id="dashSublede">IT Cutover and Customer Migration remain the bottlenecks. Legal contract harmonization cleared this week, IT Cutover dry-run restarting now.</p>
+        </div>
+        <div class="head-actions">
+          <button class="btn primary">
+            <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 6v6l4 2M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Send reminder
+          </button>
+        </div>
+      </section>
+
+      <!-- ===== KPI ROW ===== -->
+      <section class="kpi-row">
+        <div class="kpi">
+          <div class="label">Completion</div>
+          <div class="value num"><span id="kpiCompletionValue">17</span><span class="unit">%</span></div>
+          <div class="delta" id="kpiCompletionDelta">
+            <svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.5" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            <span id="kpiCompletionDeltaText">4 of 23 complete</span>
+          </div>
+        </div>
+        <div class="kpi">
+          <div class="label">Off-track workstreams</div>
+          <div class="value num" id="kpiOffTrackValueWrap"><span id="kpiOffTrackValue">5</span><span class="unit">/23</span></div>
+          <div class="delta" id="kpiOffTrackDelta">+1 since last week</div>
+        </div>
+        <div class="kpi">
+          <div class="label">Days remaining</div>
+          <div class="value num" id="daysRemainingValue">15</div>
+          <div class="delta" id="daysRemainingDelta">Until projected go-live · May 13</div>
+        </div>
+        <div class="kpi">
+          <div class="label"><span class="tip tip-wide tip-below" data-tip="A workstream is in breach if it has spent >24h in Discovery, >24h in Plan &amp; Assign, or is past the due date without reaching UAT &amp; Sign-off.">Stage-time breaches</span></div>
+          <div class="value num" id="kpiSlaValueWrap"><span id="kpiSlaValue">3</span></div>
+          <div class="delta" id="kpiSlaDelta">Across 2 teams</div>
+        </div>
+        <div class="kpi">
+          <div class="label">Projected go-live</div>
+          <div class="value num" id="kpiGoLiveValue" style="font-size:26px;">May 13</div>
+          <div class="delta" id="kpiGoLiveDelta">+8d vs plan</div>
+        </div>
+      </section>
+
+      <!-- ===== HERO: PACING + WAFFLE ===== -->
+      <section class="hero-grid">
+
+        <!-- Pacing vs target / Teams (toggle) -->
+        <div class="card">
+          <div class="card-head">
+            <div style="display: flex; align-items: center; gap: 12px;">
+              <h3 id="leftCardTitle">Team status</h3>
+              <div class="waffle-head-toggle" id="pacingToggle">
+                <button data-view="pacing">Pacing</button>
+                <button class="active" data-view="teams">Teams</button>
+              </div>
+            </div>
+            <div class="meta">
+              <div class="legend-inline" id="pacingLegend" hidden>
+                <div class="it"><span class="bar" style="background: transparent; border-top: 1px dashed var(--ink-3); height: 0; width: 18px;"></span>Plan</div>
+                <div class="it"><span class="bar" style="background: var(--red); height: 2px; width: 18px;"></span>Actual</div>
+                <div class="it"><span class="bar" style="border-top: 1.5px dashed var(--red); opacity: 0.6; height: 0; width: 18px;"></span>Projected</div>
+              </div>
+            </div>
+          </div>
+          <div class="card-body">
+            <svg class="pacing-svg" id="pacingSvg" viewBox="0 0 720 320" preserveAspectRatio="xMidYMid meet" style="display:none">
+              <defs>
+                <linearGradient id="gapGrad" x1="0" y1="0" x2="0" y2="1">
+                  <stop offset="0" stop-color="var(--red)" stop-opacity="0.14"/>
+                  <stop offset="1" stop-color="var(--red)" stop-opacity="0.02"/>
+                </linearGradient>
+              </defs>
+
+              <!-- y mapping: 0 teams → y=250 ; 23 teams → y=30 ; 1 team ≈ 9.57 px -->
+              <!-- 4 done at today: y = 250 - 4*9.57 ≈ 212 -->
+              <!-- 18 projected at day 30 (recovering toward plan after Settlements unblock): y ≈ 78 -->
+
+              <!-- Gap fill (between plan and actual/projected) -->
+              <path id="pacingGap" d="M 60 250 L 370 212 L 690 78 L 690 30 Z" fill="url(#gapGrad)"/>
+
+              <!-- Axes -->
+              <line class="ax" x1="60" y1="30" x2="60" y2="250" stroke-width="1"/>
+              <line class="ax" x1="60" y1="250" x2="690" y2="250" stroke-width="1"/>
+              <line class="ax-grid" x1="60" y1="30" x2="690" y2="30" stroke-dasharray="2 4" stroke-width="1"/>
+
+              <!-- Y-axis ticks -->
+              <g class="label" font-size="10.5" text-anchor="end" font-family="Inter">
+                <text x="52" y="35">23</text>
+                <text x="52" y="142">12</text>
+                <text x="52" y="254">0</text>
+              </g>
+              <line class="ax-grid" x1="58" y1="142" x2="690" y2="142" stroke-dasharray="2 4" stroke-width="1"/>
+
+              <!-- Plan diagonal (0 → 23 over 30 days) -->
+              <line class="plan-line" x1="60" y1="250" x2="690" y2="30" stroke-dasharray="3 3" stroke-width="1.4"/>
+
+              <!-- Actual line: 0 at day 0 → 4 of 23 at day 14 (today) -->
+              <line id="pacingActual" class="actual-line" x1="60" y1="250" x2="370" y2="212" stroke-width="2.4"/>
+
+              <!-- Projection: extends from today, recovering toward plan (~18 by day 30) -->
+              <line id="pacingProjected" class="projected" x1="370" y1="212" x2="690" y2="78" stroke-width="2" stroke-dasharray="3 4" opacity="0.65"/>
+
+              <!-- Today vertical -->
+              <line class="today-line" x1="370" y1="22" x2="370" y2="262" stroke-width="0.9" stroke-dasharray="2 3"/>
+
+              <!-- Endpoint dot at today -->
+              <circle id="pacingDot1" class="actual-dot-out" cx="370" cy="212" r="5"/>
+              <circle id="pacingDot2" class="actual-dot-in" cx="370" cy="212" r="2.2"/>
+
+              <!-- End of projection -->
+              <circle id="pacingEndDot" class="end-dot" cx="690" cy="78" r="3.5" fill="none" stroke-width="1.6" opacity="0.7"/>
+
+              <!-- X-axis labels -->
+              <g font-size="10.5" font-family="Inter">
+                <text class="label" x="60" y="272" text-anchor="middle">Day 0</text>
+                <text class="label-bright" x="370" y="272" text-anchor="middle" font-weight="500">Today · Day 14</text>
+                <text class="label" x="690" y="272" text-anchor="end">Due · Day 30</text>
+              </g>
+
+              <!-- Today callout -->
+              <rect id="pacingCalloutBg" class="callout-bg" x="380" y="188" width="116" height="38" rx="4" stroke-width="1"/>
+              <text id="pacingCalloutDone" class="red-text" x="388" y="203" font-size="12" font-weight="600" font-family="Inter">4 of 23 done</text>
+              <text id="pacingCalloutPlan" class="label-mid" x="388" y="218" font-size="10.5" font-family="Inter">Plan: 11 by today</text>
+
+              <!-- End-of-window labels -->
+              <text class="label" x="685" y="42" font-size="10.5" text-anchor="end" font-style="italic" font-family="Inter">Target · 23</text>
+              <text id="pacingProjectedLabel" class="red-text" x="685" y="72" font-size="10.5" text-anchor="end" font-family="Inter" font-weight="500">Projected: ~18</text>
+
+              <!-- Footer caption -->
+              <text class="label" x="60" y="298" font-size="10" letter-spacing="0.02em" font-family="Inter">Cumulative team completions · 23 teams · day 14 of 30</text>
+
+              <!-- Hover scrubber (hidden until mouseover) -->
+              <line id="pacingCursor" class="pacing-cursor" x1="60" y1="30" x2="60" y2="250" stroke-width="1" style="display:none"/>
+              <circle id="pacingCursorPlan" class="pacing-cursor-plan" cx="60" cy="250" r="3.5" style="display:none"/>
+              <circle id="pacingCursorActual" class="pacing-cursor-actual" cx="60" cy="250" r="3.5" style="display:none"/>
+
+              <!-- Mouse-tracking overlay -->
+              <rect id="pacingOverlay" x="60" y="22" width="630" height="240" fill="transparent" style="cursor: crosshair"/>
+            </svg>
+            <div id="pacingTooltip" class="pacing-tooltip" hidden></div>
+            <div id="teams-grid" class="teams-grid"></div>
+            <div id="teamsLegendRow" class="teams-legend-row">
+              <span class="tip" data-tip="Tile color = this week. Trailing dot = last week.">
+                <span class="prev-key">
+                  <span class="prev-key-dot"></span>
+                  <span>vs last week</span>
+                </span>
+              </span>
+              <span class="num" style="color: var(--ink-3);">
+                <span id="teamsImproved">0</span> improved · <span id="teamsWorsened">0</span> worsened
+              </span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right card: Status (Pacing view) -->
+        <div class="card" id="statusCard" style="display:none">
+          <div class="card-head">
+            <h3>Status</h3>
+            <div class="waffle-head-toggle" id="statusToggle">
+              <button class="active" data-view="grid">Grid</button>
+              <button data-view="list">List</button>
+            </div>
+          </div>
+          <div class="card-body">
+            <div id="waffle" class="waffle-grid"></div>
+            <div id="status-list" class="status-list" hidden></div>
+            <div style="display: flex; justify-content: space-between; padding-top: 14px; margin-top: 14px; border-top: 1px solid var(--border); font-size: 11.5px;" class="num">
+              <span class="tip" data-tip="Team is off track and not meeting SLAs" style="display: flex; align-items: center; gap: 6px; color: var(--red-ink);"><span style="width:6px; height:6px; background: var(--red); border-radius:50%;"></span><span id="waffleCountR">5</span> off track</span>
+              <span class="tip" data-tip="Team is pending information from other internal teams or client" style="display: flex; align-items: center; gap: 6px; color: var(--amber-ink);"><span style="width:6px; height:6px; background: var(--amber); border-radius:50%;"></span><span id="waffleCountA">5</span> pending</span>
+              <span class="tip" data-tip="On track" style="display: flex; align-items: center; gap: 6px; color: var(--green-ink);"><span style="width:6px; height:6px; background: var(--green); border-radius:50%;"></span><span id="waffleCountG">13</span> on track</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- Right card: Movers (Teams view) -->
+        <div class="card" id="moversCard">
+          <div class="card-head">
+            <h3>Movers</h3>
+            <div class="meta" id="moversMeta">0 teams changed</div>
+          </div>
+          <div id="moversList" class="movers-list"></div>
+        </div>
+
+      </section>
+
+      <!-- ===== TEAM MATRIX ===== -->
+      <section class="matrix-section">
+        <div class="matrix-head">
+          <div class="title-group">
+            <h2><span id="matrixTeamCount">23</span> workstreams</h2>
+            <span class="count">Sorted by risk · most urgent first</span>
+          </div>
+          <div class="filter-bar" id="filters">
+            <button class="chip active" data-filter="all">All<span class="ct" id="chipCountAll">23</span></button>
+            <button class="chip" data-filter="r" title="Workstream is off track and not meeting stage-time SLAs"><span class="dot r"></span>Off track<span class="ct" id="chipCountR">5</span></button>
+            <button class="chip" data-filter="a" title="Workstream is pending input from another team or the acquired entity"><span class="dot a"></span>Pending<span class="ct" id="chipCountA">5</span></button>
+            <button class="chip" data-filter="g" title="On track"><span class="dot g"></span>On track<span class="ct" id="chipCountG">13</span></button>
+            <span class="stage-filter-banner" id="stageBanner">
+              <span>Stage: <strong id="stageBannerName"></strong></span>
+              <span class="x" id="stageBannerClear" title="Clear stage filter">
+                <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" stroke-linecap="round"/></svg>
+              </span>
+            </span>
+          </div>
+        </div>
+
+        <div class="matrix">
+          <div class="matrix-head-row">
+            <div>Ref #</div>
+            <div>Team</div>
+            <div class="stage-labels">
+              <div><span class="tip tip-wide" data-tip="Initial scope assessment of this workstream's role in the integration. SLA: 24 hours.">Discovery</span></div>
+              <div><span class="tip tip-wide" data-tip="Tasks chosen, owners assigned, and integration plan locked. SLA: 24 hours.">Plan &amp;<br>Assign</span></div>
+              <div><span class="tip tip-wide" data-tip="Workstream is executing assigned tasks. Duration varies by scope.">Build</span></div>
+              <div><span class="tip tip-wide" data-tip="Workstream is in user-acceptance testing and gathering stakeholder sign-off.">UAT &amp;<br>Sign-off</span></div>
+              <div><span class="tip tip-wide" data-tip="Workstream is live in the combined operating model. Hypercare runs for 30 days post-cutover.">Live</span></div>
+            </div>
+            <div>Dependency</div>
+            <div>Lead</div>
+            <div style="text-align:right"><span class="tip" data-tip="Elapsed time in the current stage.">Days</span></div>
+            <div></div>
+          </div>
+
+          <div id="matrix-rows"></div>
+        </div>
+      </section>
+
+      </div> <!-- /.kf-body -->
+
+      </div> <!-- /#tab-dashboard -->
+
+      <!-- ==================================================== -->
+      <!-- ============ PERSONAS TAB ============ -->
+      <!-- ==================================================== -->
+      <div id="tab-personas" class="tab-panel">
+
+        <section class="personas-intro">
+          <div class="eyebrow">Product · Users</div>
+          <h1>Six archetypes interact with the Kissflow SMA Onboarding Tool.</h1>
+          <p>The system is designed to support multiple users with different needs (Transitions, Client Solutions, Leadership) and enables both high-level tracking (overall onboarding status, progress) and detailed views (team-level tasks, blockers).</p>
+        </section>
+
+        <div class="personas-grid">
+
+          <!-- ===== Roxanne Bunnel · Transitions ===== -->
+          <article class="persona-card" data-accent="green">
+            <div class="persona-badge">Primary user</div>
+            <div class="persona-head">
+              <div class="persona-avatar">
+                <span class="initials">RB</span>
+              </div>
+              <div class="persona-info">
+                <h3>Roxanne Bunnel</h3>
+                <div class="persona-role">Transitions Lead</div>
+                <div class="persona-meta">ISG SMA · owns <strong>Point</strong> system</div>
+              </div>
+            </div>
+            <blockquote class="persona-quote">
+              Every team's inputs eventually land in Point. I need to see <em>whose</em> are late before downstream breaks.
+            </blockquote>
+            <div class="persona-sections">
+              <div class="persona-section">
+                <h4>Jobs to be done</h4>
+                <ul>
+                  <li>Monitor onboarding progress across all teams</li>
+                  <li>Track which teams have completed required inputs</li>
+                  <li>Identify dependencies and data gaps</li>
+                  <li>Step in to unblock teams or supply info</li>
+                  <li>Receive all Point data fields cleanly</li>
+                </ul>
+              </div>
+              <div class="persona-section">
+                <h4>Frustrations</h4>
+                <ul>
+                  <li>Lack of visibility into team-level SLAs</li>
+                  <li>Input quality varies by team</li>
+                  <li>Late inputs cascade into Point delays</li>
+                  <li>Chases teams for missing fields manually</li>
+                </ul>
+              </div>
+            </div>
+            <div class="pain-map">
+              <h4>Pain → Apollo feature</h4>
+              <div class="pain-row">
+                <div class="pain">Lack of SLA visibility</div>
+                <div class="arrow">→</div>
+                <div class="feature">Dashboards for tracking SLAs across teams</div>
+              </div>
+              <div class="pain-row">
+                <div class="pain">Late inputs cascade into Point</div>
+                <div class="arrow">→</div>
+                <div class="feature">Required-field tracking per team · SLA alerts</div>
+              </div>
+              <div class="pain-row">
+                <div class="pain">Data quality varies by team</div>
+                <div class="arrow">→</div>
+                <div class="feature">Schema-validated inputs with error surfacing</div>
+              </div>
+              <div class="pain-row">
+                <div class="pain">Manual chasing</div>
+                <div class="arrow">→</div>
+                <div class="feature">In-system team reminders · auto-nudge upstream leads</div>
+              </div>
+            </div>
+            <div class="persona-stats">
+              <div class="persona-stat">
+                <div class="value num">1<span class="unit">×/day</span></div>
+                <div class="label">Opens Kissflow SMA Tool</div>
+              </div>
+              <div class="persona-stat">
+                <div class="value num">23</div>
+                <div class="label">Teams monitored</div>
+              </div>
+              <div class="persona-stat-tools persona-stat">
+                <div class="label">Lives alongside</div>
+                <div class="persona-tags">
+                  <span class="persona-tag">Aladdin</span>
+                  <span class="persona-tag">Thinkfolio</span>
+                  <span class="persona-tag">PAM</span>
+                  <span class="persona-tag">Point</span>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <!-- ===== Lidiya Shutaya · Client Solutions ===== -->
+          <article class="persona-card" data-accent="rose">
+            <div class="persona-badge">Primary user</div>
+            <div class="persona-head">
+              <div class="persona-avatar">
+                <span class="initials">LS</span>
+              </div>
+              <div class="persona-info">
+                <h3>Lidiya Shutaya</h3>
+                <div class="persona-role">Client Solutions</div>
+                <div class="persona-meta">ISG SMA · cross-team tracker</div>
+              </div>
+            </div>
+            <blockquote class="persona-quote">
+              I need to track <em>all teams</em> and ensure onboarding is progressing as expected.
+            </blockquote>
+            <div class="persona-sections">
+              <div class="persona-section">
+                <h4>Jobs to be done</h4>
+                <ul>
+                  <li>Track every team's onboarding progress</li>
+                  <li>Confirm onboarding is progressing as expected</li>
+                  <li>Coordinate across teams where needed</li>
+                  <li>Maintain dependency &amp; blocker visibility</li>
+                </ul>
+              </div>
+              <div class="persona-section">
+                <h4>Frustrations</h4>
+                <ul>
+                  <li>No other tool currently used for tracking</li>
+                  <li>No centralized tool for visibility across teams</li>
+                  <li>Cross-team dependencies unclear day-to-day</li>
+                </ul>
+              </div>
+            </div>
+            <div class="pain-map">
+              <h4>Pain → Tool feature</h4>
+              <div class="pain-row">
+                <div class="pain">No centralized tracking tool</div>
+                <div class="arrow">→</div>
+                <div class="feature">Single pane: every team, every stage</div>
+              </div>
+              <div class="pain-row">
+                <div class="pain">Is onboarding progressing as expected?</div>
+                <div class="arrow">→</div>
+                <div class="feature">Pacing-vs-plan + early slip alerts</div>
+              </div>
+              <div class="pain-row">
+                <div class="pain">Cross-team deps unclear</div>
+                <div class="arrow">→</div>
+                <div class="feature">Dependency tracking within the dashboards</div>
+              </div>
+            </div>
+            <div class="persona-stats">
+              <div class="persona-stat">
+                <div class="value num">1<span class="unit">×/day</span></div>
+                <div class="label">Opens Kissflow SMA Tool</div>
+              </div>
+              <div class="persona-stat">
+                <div class="value num">23</div>
+                <div class="label">Teams tracked</div>
+              </div>
+              <div class="persona-stat-tools persona-stat">
+                <div class="label">Lives alongside</div>
+                <div class="persona-tags">
+                  <span class="persona-tag">Kissflow</span>
+                  <span class="persona-tag">Teams</span>
+                  <span class="persona-tag">Excel</span>
+                  <span class="persona-tag">Outlook</span>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <!-- ===== John Loh · Leadership ===== -->
+          <article class="persona-card" data-accent="amber">
+            <div class="persona-badge">Glance-only</div>
+            <div class="persona-head">
+              <div class="persona-avatar">
+                <span class="initials">JL</span>
+              </div>
+              <div class="persona-info">
+                <h3>John Loh</h3>
+                <div class="persona-role">Leadership · Managing Director</div>
+                <div class="persona-meta">ISG SMA · portfolio-level oversight</div>
+              </div>
+            </div>
+            <blockquote class="persona-quote">
+              I don't need the details. Tell me which client is going to miss, and who I need to call.
+            </blockquote>
+            <div class="persona-sections">
+              <div class="persona-section">
+                <h4>Jobs to be done</h4>
+                <ul>
+                  <li>Track client-level onboarding status (on / off track)</li>
+                  <li>Monitor proximity to trading readiness dates</li>
+                  <li>Identify bottlenecks across teams</li>
+                  <li>Flag delays early and step in where needed</li>
+                </ul>
+              </div>
+              <div class="persona-section">
+                <h4>Frustrations</h4>
+                <ul>
+                  <li>No centralized tool for tracking, all in emails and spreadsheets</li>
+                  <li>Lack of visibility into team-level progress</li>
+                  <li>Learns about slips too late in the week</li>
+                </ul>
+              </div>
+            </div>
+            <div class="pain-map">
+              <h4>Pain → Tool feature</h4>
+              <div class="pain-row">
+                <div class="pain">Tracking lives in emails &amp; spreadsheets</div>
+                <div class="arrow">→</div>
+                <div class="feature">Single source of truth: portfolio view</div>
+              </div>
+              <div class="pain-row">
+                <div class="pain">Where's the bottleneck?</div>
+                <div class="arrow">→</div>
+                <div class="feature">Stage bottleneck view across all clients</div>
+              </div>
+              <div class="pain-row">
+                <div class="pain">Wants "why", not numbers</div>
+                <div class="arrow">→</div>
+                <div class="feature">Auto-narrated root-cause per red client</div>
+              </div>
+            </div>
+            <div class="persona-stats">
+              <div class="persona-stat">
+                <div class="value num">1<span class="unit">×/wk</span></div>
+                <div class="label">Opens Kissflow SMA Tool</div>
+              </div>
+              <div class="persona-stat">
+                <div class="value num">12</div>
+                <div class="label">Active clients</div>
+              </div>
+              <div class="persona-stat-tools persona-stat">
+                <div class="label">Lives alongside</div>
+                <div class="persona-tags">
+                  <span class="persona-tag">Outlook</span>
+                  <span class="persona-tag">Teams</span>
+                  <span class="persona-tag">PowerPoint</span>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <!-- ===== Team Leads (Jon Acenas) ===== -->
+          <article class="persona-card" data-accent="blue">
+            <div class="persona-badge">Team lead</div>
+            <div class="persona-head">
+              <div class="persona-avatar">
+                <span class="initials">JA</span>
+              </div>
+              <div class="persona-info">
+                <h3>Jon Acenas</h3>
+                <div class="persona-role">Team Lead · representative</div>
+                <div class="persona-meta">ISG SMA · scope varies by team</div>
+              </div>
+            </div>
+            <blockquote class="persona-quote">
+              Give me the information I need to decide if my team is impacted. Keep it simple. <em>I do not want extra tasks.</em>
+            </blockquote>
+            <div class="persona-sections">
+              <div class="persona-section">
+                <h4>Jobs to be done</h4>
+                <ul>
+                  <li>Decide quickly whether his team is impacted</li>
+                  <li>Select &amp; assign tasks from onboarding inputs</li>
+                  <li>Track team progress at the task level</li>
+                  <li>Provide formal sign-off once tasks complete</li>
+                </ul>
+              </div>
+              <div class="persona-section">
+                <h4>Frustrations</h4>
+                <ul>
+                  <li>Not enough context to make a quick decision</li>
+                  <li>Asked to dig through unnecessary details</li>
+                  <li>Too many clicks for a simple yes/no</li>
+                  <li>Low visibility into the team's work</li>
+                </ul>
+              </div>
+            </div>
+            <div class="pain-map">
+              <h4>Pain → Apollo feature</h4>
+              <div class="pain-row">
+                <div class="pain">Not enough context to decide</div>
+                <div class="arrow">→</div>
+                <div class="feature">Easy access to client questionnaire info at every step</div>
+              </div>
+              <div class="pain-row">
+                <div class="pain">Too many clicks for yes/no</div>
+                <div class="arrow">→</div>
+                <div class="feature">Customized workflows for some teams</div>
+              </div>
+              <div class="pain-row">
+                <div class="pain">Low visibility into team's work</div>
+                <div class="arrow">→</div>
+                <div class="feature">Team-level dashboards for task-level tracking</div>
+              </div>
+            </div>
+            <div class="persona-stats">
+              <div class="persona-stat">
+                <div class="value">Ad hoc</div>
+                <div class="label">Opens Kissflow SMA Tool</div>
+              </div>
+              <div class="persona-stat">
+                <div class="value num">5</div>
+                <div class="label">Direct reports</div>
+              </div>
+              <div class="persona-stat-tools persona-stat">
+                <div class="label">Variations</div>
+                <div class="persona-tags">
+                  <span class="persona-tag">Pre-trading</span>
+                  <span class="persona-tag">Post-event</span>
+                  <span class="persona-tag">Both</span>
+                  <span class="persona-tag">Lead=Doer</span>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <!-- ===== Client Services (Jen Basow) ===== -->
+          <article class="persona-card" data-accent="teal">
+            <div class="persona-badge">Client services · upstream</div>
+            <div class="persona-head">
+              <div class="persona-avatar">
+                <span class="initials">JB</span>
+              </div>
+              <div class="persona-info">
+                <h3>Jen Basow</h3>
+                <div class="persona-role">Client Services · representative</div>
+                <div class="persona-meta">ISG SMA · owns client questionnaire</div>
+              </div>
+            </div>
+            <blockquote class="persona-quote">
+              I send <em>one</em> consolidated questionnaire to the client. Once it comes back, I input everything the teams need.
+            </blockquote>
+            <div class="persona-sections">
+              <div class="persona-section">
+                <h4>Jobs to be done</h4>
+                <ul>
+                  <li>Send the consolidated client questionnaire</li>
+                  <li>Collect responses outside the system</li>
+                  <li>Input the answers into the tool for downstream teams</li>
+                  <li>Ensure all teams have the data they need</li>
+                </ul>
+              </div>
+              <div class="persona-section">
+                <h4>Frustrations</h4>
+                <ul>
+                  <li>Client requests happen outside the system</li>
+                  <li>Re-keying answers into the tool after the fact</li>
+                  <li>Late client responses delay every downstream team</li>
+                </ul>
+              </div>
+            </div>
+            <div class="pain-map">
+              <h4>Pain → Tool feature</h4>
+              <div class="pain-row">
+                <div class="pain">Client requests outside the system</div>
+                <div class="arrow">→</div>
+                <div class="feature">Consolidated questionnaire, single source of truth</div>
+              </div>
+              <div class="pain-row">
+                <div class="pain">Teams need different cuts of the same info</div>
+                <div class="arrow">→</div>
+                <div class="feature">Per-team views into the same questionnaire</div>
+              </div>
+              <div class="pain-row">
+                <div class="pain">Manual re-keying after collection</div>
+                <div class="arrow">→</div>
+                <div class="feature">Inputs cascade once entered, no duplication</div>
+              </div>
+            </div>
+            <div class="persona-stats">
+              <div class="persona-stat">
+                <div class="value">Ad hoc</div>
+                <div class="label">Opens Kissflow SMA Tool</div>
+              </div>
+              <div class="persona-stat">
+                <div class="value num">1</div>
+                <div class="label">Questionnaire / client</div>
+              </div>
+              <div class="persona-stat-tools persona-stat">
+                <div class="label">Lives alongside</div>
+                <div class="persona-tags">
+                  <span class="persona-tag">Outlook</span>
+                  <span class="persona-tag">Excel</span>
+                  <span class="persona-tag">Teams</span>
+                  <span class="persona-tag">CRM</span>
+                </div>
+              </div>
+            </div>
+          </article>
+
+          <!-- ===== Team Members (execution) ===== -->
+          <article class="persona-card" data-accent="purple">
+            <div class="persona-badge">Execution</div>
+            <div class="persona-head">
+              <div class="persona-avatar">
+                <span class="initials">PS</span>
+              </div>
+              <div class="persona-info">
+                <h3>Priya Shah</h3>
+                <div class="persona-role">Team Member · representative</div>
+                <div class="persona-meta">ISG SMA · not expected in dashboards</div>
+              </div>
+            </div>
+            <blockquote class="persona-quote">
+              Just tell me what's on my plate. <em>Don't add</em> extra work to my day.
+            </blockquote>
+            <div class="persona-sections">
+              <div class="persona-section">
+                <h4>Jobs to be done</h4>
+                <ul>
+                  <li>Know which tasks are assigned to her</li>
+                  <li>Complete tasks without leaving her main tools</li>
+                  <li>Mark tasks done with minimal effort</li>
+                  <li>Avoid additional admin or duplicate updates</li>
+                </ul>
+              </div>
+              <div class="persona-section">
+                <h4>Frustrations</h4>
+                <ul>
+                  <li>Doesn't want extra work on top of the day job</li>
+                  <li>Tracking lives in too many places</li>
+                  <li>Status updates feel like duplicate effort</li>
+                </ul>
+              </div>
+            </div>
+            <div class="pain-map">
+              <h4>Pain → Tool feature</h4>
+              <div class="pain-row">
+                <div class="pain">"Just tell me what to do"</div>
+                <div class="arrow">→</div>
+                <div class="feature">Simple task list, pre-assigned, ready to action</div>
+              </div>
+              <div class="pain-row">
+                <div class="pain">Doesn't want extra work</div>
+                <div class="arrow">→</div>
+                <div class="feature">Email / Teams notification, no dashboard required</div>
+              </div>
+              <div class="pain-row">
+                <div class="pain">Tracking effort</div>
+                <div class="arrow">→</div>
+                <div class="feature">One-click complete, status auto-updates everywhere</div>
+              </div>
+            </div>
+            <div class="persona-stats">
+              <div class="persona-stat">
+                <div class="value">Ad hoc</div>
+                <div class="label">Opens Kissflow SMA Tool</div>
+              </div>
+              <div class="persona-stat">
+                <div class="value num">6</div>
+                <div class="label">Active tasks</div>
+              </div>
+              <div class="persona-stat-tools persona-stat">
+                <div class="label">Lives alongside</div>
+                <div class="persona-tags">
+                  <span class="persona-tag">Outlook</span>
+                  <span class="persona-tag">Teams</span>
+                  <span class="persona-tag">Excel</span>
+                  <span class="persona-tag">Bloomberg</span>
+                </div>
+              </div>
+            </div>
+          </article>
+
+        </div>
+
+      </div>
+
+      <!-- ===== FOOTER ===== -->
+      <footer class="foot">
+        <div>helix · apex-integration · cutover · v2.4.1</div>
+        <div>updated 2 min ago</div>
+      </footer>
+
+    </main>
+</div>
+
+<!-- ========== DRAWER ========== -->
+<div class="drawer-overlay" id="drawerOverlay" onclick="closeDrawer()"></div>
+<aside class="drawer" id="drawer" role="dialog" aria-hidden="true">
+  <div id="drawerContent"></div>
+</aside>
+
+
+<script>
+  // ========== DATA ==========
+  const STAGES = ['Discovery', 'Plan & Assign', 'Build', 'UAT & Sign-off', 'Live'];
+
+  // Fixed metadata for each integration workstream (consistent across every entity)
+  const TEAM_META = [
+    { name: 'Financial Reporting', ref: 'HX-2401', lead: 'Sarah Chen',     leadInit: 'SC', blocks: ['HRIS Migration', 'Risk & Audit', 'Finance Close'], deps: ['CIO Office'] },
+    { name: 'Risk & Audit',        ref: 'HX-2402', lead: 'Michael Patel',  leadInit: 'MP', blocks: ['Compliance'], deps: ['Financial Reporting'] },
+    { name: 'Customer Success',    ref: 'HX-2403', lead: 'John Loh',       leadInit: 'JL', blocks: [], deps: ['CIO Office'] },
+    { name: 'Customer Migration',  ref: 'HX-2404', lead: 'Roberto Romano', leadInit: 'RR', blocks: ['Invoice Migration', 'SOX Controls', 'HRIS Migration', 'Vendor Mgmt'], deps: ['Master Data'] },
+    { name: 'Tax Harmonization',   ref: 'HX-2405', lead: 'Michael Patel',  leadInit: 'MP', blocks: ['Finance Close'], deps: ['Legal'] },
+    { name: 'Corporate Comms',     ref: 'HX-2406', lead: 'Alexander Black',leadInit: 'AB', blocks: [], deps: ['Master Data'] },
+    { name: 'IT Cutover',          ref: 'HX-2407', lead: 'John Loh',       leadInit: 'JL', blocks: ['Asset Mgmt', 'CRM Integration', 'Treasury Ops'], deps: ['Legal'] },
+    { name: 'HRIS Migration',      ref: 'HX-2408', lead: 'Alexander Black',leadInit: 'AB', blocks: ['Customer Migration'], deps: ['Customer Migration'] },
+    { name: 'Sales Enablement',    ref: 'HX-2409', lead: 'John Loh',       leadInit: 'JL', blocks: ['Customer Success'], deps: ['CIO Office'] },
+    { name: 'CRM Integration',     ref: 'HX-2410', lead: 'Roberto Romano', leadInit: 'RR', blocks: [], deps: ['Customer Migration'] },
+    { name: 'Treasury Ops',        ref: 'HX-2411', lead: 'Karthik Dasari', leadInit: 'KD', blocks: [], deps: ['IT Cutover'] },
+    { name: 'Invoice Migration',   ref: 'HX-2412', lead: 'Karthik Dasari', leadInit: 'KD', blocks: [], deps: ['Customer Migration'] },
+    { name: 'Asset Mgmt',          ref: 'HX-2413', lead: 'Roberto Romano', leadInit: 'RR', blocks: [], deps: ['IT Cutover'] },
+    { name: 'Treasury Strategy',   ref: 'HX-2414', lead: 'Michael Patel',  leadInit: 'MP', blocks: [], deps: ['CIO Office'] },
+    { name: 'Compliance',          ref: 'HX-2415', lead: 'Michael Patel',  leadInit: 'MP', blocks: [], deps: ['Risk & Audit'] },
+    { name: 'SOX Controls',        ref: 'HX-2416', lead: 'Roberto Romano', leadInit: 'RR', blocks: [], deps: [] },
+    { name: 'PMO',                 ref: 'HX-2417', lead: 'Alexander Black',leadInit: 'AB', blocks: [], deps: [] },
+    { name: 'Vendor Mgmt',         ref: 'HX-2418', lead: 'John Loh',       leadInit: 'JL', blocks: [], deps: [] },
+    { name: 'Finance Close',       ref: 'HX-2419', lead: 'Karthik Dasari', leadInit: 'KD', blocks: [], deps: [] },
+    { name: 'Master Data',         ref: 'HX-2420', lead: 'John Loh',       leadInit: 'JL', blocks: [], deps: [] },
+    { name: 'Legal',               ref: 'HX-2421', lead: 'Roberto Romano', leadInit: 'RR', blocks: [], deps: [] },
+    { name: 'Portfolio Mgmt',      ref: 'HX-2422', lead: 'John Loh',       leadInit: 'JL', blocks: [], deps: [] },
+    { name: 'Engineering Ops',     ref: 'HX-2423', lead: 'Alexander Black',leadInit: 'AB', blocks: [], deps: [] },
+  ];
+
+  // 3 archetypes -each parallel-indexed to TEAM_META (23 entries each)
+  const ARCHETYPES = {
+    behind: [
+      { stageIdx: 1, health: 'r', days: 14, risk: 12, blocker: "Acquired CFO hasn't returned chart-of-accounts mapping after 6 reminders.", depTag: 'Pending CFO' },
+      { stageIdx: 1, health: 'a', days: 14, risk: 7,  blocker: 'Waiting on Financial Reporting baseline before audit scope can be locked.', depTag: 'Pending Fin. Reporting' },
+      { stageIdx: 1, health: 'a', days: 14, risk: 6,  blocker: 'Pending acquired-side stakeholder contact list.', depTag: 'Pending CIO Office' },
+      { stageIdx: 1, health: 'r', days: 14, risk: 11, blocker: 'Customer record schema differs from Helix master, waiting on Master Data mapping.', depTag: 'Pending Master Data' },
+      { stageIdx: 1, health: 'r', days: 14, risk: 10, blocker: 'Tax residency documents missing for 2 of 4 sub-entities.', depTag: 'Pending Tax Lead' },
+      { stageIdx: 2, health: 'a', days: 14, risk: 6,  blocker: 'Comms cascade plan pending finalisation.', depTag: 'Pending Master Data' },
+      { stageIdx: 2, health: 'r', days: 14, risk: 10, blocker: 'Legal contract harmonization just cleared. IT cutover dry-run restarting.', depTag: 'Pending Legal' },
+      { stageIdx: 2, health: 'r', days: 14, risk: 9,  blocker: 'Test HRIS load failing schema validation, fix in progress.', depTag: 'Pending Cust. Migration' },
+      { stageIdx: 2, health: 'a', days: 14, risk: 5,  blocker: 'Acquired-side IT configuring SSO IdP endpoint.', depTag: 'Pending CIO Office' },
+      { stageIdx: 2, health: 'g', days: 14, risk: 3,  blocker: null },
+      { stageIdx: 2, health: 'a', days: 14, risk: 5,  blocker: 'Awaiting IT Cutover bank routing template before treasury accounts open.', depTag: 'Pending IT Cutover' },
+      { stageIdx: 2, health: 'g', days: 14, risk: 3,  blocker: null },
+      { stageIdx: 3, health: 'g', days: 14, risk: 2,  blocker: null },
+      { stageIdx: 3, health: 'g', days: 14, risk: 2,  blocker: null },
+      { stageIdx: 3, health: 'g', days: 17, risk: 2,  blocker: null },
+      { stageIdx: 3, health: 'g', days: 14, risk: 1,  blocker: null },
+      { stageIdx: 3, health: 'g', days: 13, risk: 1,  blocker: null },
+      { stageIdx: 3, health: 'g', days: 12, risk: 1,  blocker: null },
+      { stageIdx: 3, health: 'g', days: 11, risk: 1,  blocker: null },
+      { stageIdx: 4, health: 'g', days: 16, risk: 0,  blocker: null },
+      { stageIdx: 4, health: 'g', days: 15, risk: 0,  blocker: null },
+      { stageIdx: 4, health: 'g', days: 18, risk: 0,  blocker: null },
+      { stageIdx: 4, health: 'g', days: 19, risk: 0,  blocker: null },
+    ],
+    ontrack: [
+      { stageIdx: 4, health: 'g', days: 18, risk: 0, blocker: null }, // Financial Reporting -live
+      { stageIdx: 3, health: 'g', days: 14, risk: 0, blocker: null }, // Risk & Audit -UAT
+      { stageIdx: 4, health: 'g', days: 16, risk: 0, blocker: null }, // Customer Success -live
+      { stageIdx: 3, health: 'g', days: 14, risk: 0, blocker: null }, // Customer Migration -UAT
+      { stageIdx: 3, health: 'g', days: 14, risk: 0, blocker: null }, // Tax Harmonization -UAT
+      { stageIdx: 3, health: 'g', days: 14, risk: 0, blocker: null }, // Corporate Comms -UAT
+      { stageIdx: 4, health: 'g', days: 16, risk: 0, blocker: null }, // IT Cutover -live
+      { stageIdx: 3, health: 'g', days: 14, risk: 0, blocker: null }, // HRIS Migration -UAT
+      { stageIdx: 3, health: 'a', days: 14, risk: 2, blocker: 'Final SSO IdP cutover scheduled for Friday.', depTag: 'Pending CIO Office' }, // Sales Enablement
+      { stageIdx: 4, health: 'g', days: 16, risk: 0, blocker: null }, // CRM Integration -live
+      { stageIdx: 4, health: 'g', days: 14, risk: 0, blocker: null }, // Treasury Ops -live
+      { stageIdx: 3, health: 'g', days: 14, risk: 0, blocker: null }, // Invoice Migration -UAT
+      { stageIdx: 4, health: 'g', days: 14, risk: 0, blocker: null }, // Asset Mgmt -live
+      { stageIdx: 3, health: 'a', days: 14, risk: 2, blocker: 'Final banking authorisation pending, last signature.', depTag: 'Pending CFO' }, // Treasury Strategy
+      { stageIdx: 4, health: 'g', days: 14, risk: 0, blocker: null }, // Compliance -live
+      { stageIdx: 4, health: 'g', days: 14, risk: 0, blocker: null }, // SOX Controls -live
+      { stageIdx: 4, health: 'g', days: 13, risk: 0, blocker: null }, // PMO -live
+      { stageIdx: 3, health: 'g', days: 12, risk: 0, blocker: null }, // Vendor Mgmt -UAT
+      { stageIdx: 3, health: 'g', days: 11, risk: 0, blocker: null }, // Finance Close -UAT
+      { stageIdx: 4, health: 'g', days: 16, risk: 0, blocker: null }, // Master Data -live
+      { stageIdx: 4, health: 'g', days: 15, risk: 0, blocker: null }, // Legal -live
+      { stageIdx: 4, health: 'g', days: 18, risk: 0, blocker: null }, // Portfolio Mgmt -live
+      { stageIdx: 4, health: 'g', days: 19, risk: 0, blocker: null }, // Engineering Ops -live
+    ],
+    offtrack: [
+      { stageIdx: 0, health: 'r', days: 14, risk: 14, blocker: 'Acquired CFO unresponsive on chart-of-accounts mapping, 11 reminders sent.', depTag: 'Pending CFO' },
+      { stageIdx: 0, health: 'r', days: 14, risk: 13, blocker: 'Cannot start audit scoping without Financial Reporting baseline.', depTag: 'Pending Fin. Reporting' },
+      { stageIdx: 0, health: 'r', days: 14, risk: 13, blocker: 'Acquired-side stakeholder list still missing.', depTag: 'Pending CIO Office' },
+      { stageIdx: 0, health: 'r', days: 14, risk: 13, blocker: 'Customer record schema conflict unresolved.', depTag: 'Pending Master Data' },
+      { stageIdx: 1, health: 'r', days: 14, risk: 12, blocker: 'Tax residency documents missing for all 4 sub-entities.', depTag: 'Pending Tax Lead' },
+      { stageIdx: 0, health: 'r', days: 14, risk: 12, blocker: 'Comms cascade plan not yet selected.', depTag: 'Pending Master Data' },
+      { stageIdx: 0, health: 'r', days: 14, risk: 14, blocker: 'Legal contract harmonization at 18 days outstanding.', depTag: 'Pending Legal' },
+      { stageIdx: 1, health: 'r', days: 14, risk: 11, blocker: 'HRIS schema validation failing, 7 stage-time breaches.', depTag: 'Pending Cust. Migration' },
+      { stageIdx: 0, health: 'r', days: 14, risk: 11, blocker: 'Acquired-side IT not yet engaged on SSO setup.', depTag: 'Pending CIO Office' },
+      { stageIdx: 1, health: 'r', days: 14, risk: 10, blocker: 'Customer file mismatch with Customer Migration, pending fix.', depTag: 'Pending Cust. Migration' },
+      { stageIdx: 0, health: 'r', days: 14, risk: 9,  blocker: 'Awaiting IT Cutover bank routing template.', depTag: 'Pending IT Cutover' },
+      { stageIdx: 1, health: 'r', days: 14, risk: 8,  blocker: 'Awaiting reconciled customer-balance file.', depTag: 'Pending Cust. Migration' },
+      { stageIdx: 1, health: 'r', days: 14, risk: 8,  blocker: 'Awaiting IT Cutover network plan.', depTag: 'Pending IT Cutover' },
+      { stageIdx: 0, health: 'a', days: 14, risk: 6,  blocker: 'Awaiting acquired-side banking authorisations.', depTag: 'Pending CFO' },
+      { stageIdx: 0, health: 'a', days: 14, risk: 6,  blocker: 'Waiting on Risk &amp; Audit sign-off.', depTag: 'Pending Risk' },
+      { stageIdx: 1, health: 'a', days: 14, risk: 5,  blocker: null },
+      { stageIdx: 1, health: 'a', days: 13, risk: 5,  blocker: null },
+      { stageIdx: 1, health: 'a', days: 12, risk: 5,  blocker: null },
+      { stageIdx: 0, health: 'a', days: 11, risk: 4,  blocker: null },
+      { stageIdx: 2, health: 'g', days: 16, risk: 1,  blocker: null },
+      { stageIdx: 1, health: 'g', days: 15, risk: 1,  blocker: null },
+      { stageIdx: 2, health: 'g', days: 18, risk: 1,  blocker: null },
+      { stageIdx: 1, health: 'g', days: 19, risk: 1,  blocker: null },
+    ],
+  };
+
+  // Per-archetype pacing chart geometry (y coords + callout text + numeric data for hover)
+  const PACING = {
+    behind:  { todayY: 212, endY: 78,  doneText: '4 of 23 done',  projectedText: 'Projected: ~18', calloutY: 188, doneToday: 4,  projectedEnd: 18 },
+    ontrack: { todayY: 126, endY: 30,  doneText: '13 of 23 done', projectedText: 'Projected: 23',  calloutY: 102, doneToday: 13, projectedEnd: 23 },
+    offtrack:{ todayY: 250, endY: 193, doneText: '0 of 23 done',  projectedText: 'Projected: ~6',  calloutY: 226, doneToday: 0,  projectedEnd: 6  },
+  };
+  const PACING_TOTAL = 23;
+  const PACING_DAYS = 30;
+  const PACING_TODAY = 14;
+  let currentPacingArchetype = 'behind';
+
+  // 9 entities (incl. All) -each points to an archetype + per-entity metadata
+  const CLIENTS = {
+    all:    { name: 'All entities',     archetype: 'behind',   goLive: 'May 13', daysSlip: 8,   statusKey: 'amber', statusLabel: 'Slightly behind',
+              lede: '<em>8 entities in flight.</em> 3 on track, 3 slightly behind, 2 off-track.',
+              sublede: 'Aggregate view across the Apex acquisition portfolio. Filter by entity to drill in.' },
+    carina: { name: 'Apex Ventures',    archetype: 'behind',   goLive: 'May 13', daysSlip: 8,   statusKey: 'amber', statusLabel: 'Slightly behind',
+              lede: '5 workstreams off-track. <em>4 workstreams cleared sign-off</em>. On pace for May 13 cutover.',
+              sublede: 'IT Cutover and Customer Migration remain the bottlenecks. Legal contract harmonization cleared this week, IT Cutover dry-run restarting now.' },
+    nyl:    { name: 'Apex Logistics',   archetype: 'ontrack',  goLive: 'May 5',  daysSlip: -2,  statusKey: 'green', statusLabel: 'On track',
+              lede: '<em>13 workstreams already live</em>; 8 in final UAT. Ahead of plan.',
+              sublede: 'No active blockers. On pace for early cutover on May 5.' },
+    athene: { name: 'Apex Mfg',         archetype: 'offtrack', goLive: 'Jun 18', daysSlip: 35,  statusKey: 'red',   statusLabel: 'Off track',
+              lede: '<em>13 workstreams off-track.</em> Integration at risk. Projected cutover slipping to Jun 18.',
+              sublede: 'Legal contract harmonization at 18 days outstanding. Acquired-side leadership unresponsive on chart-of-accounts, SSO config, and stakeholder list.' },
+    abc:    { name: 'Apex Asia',        archetype: 'behind',   goLive: 'May 16', daysSlip: 11,  statusKey: 'amber', statusLabel: 'Slightly behind',
+              lede: '5 workstreams off-track. <em>4 workstreams cleared sign-off</em>. Projected May 16 cutover.',
+              sublede: 'Financial Reporting baseline received this week. IT Cutover still working through Legal contract markup.' },
+    def:    { name: 'Apex EU',          archetype: 'offtrack', goLive: 'Jun 11', daysSlip: 28,  statusKey: 'red',   statusLabel: 'Off track',
+              lede: '<em>13 workstreams off-track.</em> Integration stalled. Cutover slipped to Jun 11.',
+              sublede: 'Tax residency documentation still missing across sub-entities. Acquired-side engagement intermittent since week 1.' },
+    ghi:    { name: 'Apex Foods',       archetype: 'ontrack',  goLive: 'May 7',  daysSlip: 0,   statusKey: 'green', statusLabel: 'On track',
+              lede: '<em>13 workstreams live</em>; 8 in final UAT. Tracking exactly to plan.',
+              sublede: 'Two pending items in last-stage UAT. Cutover date held at May 7.' },
+    jkl:    { name: 'Apex Beverage',    archetype: 'behind',   goLive: 'May 18', daysSlip: 13,  statusKey: 'amber', statusLabel: 'Slightly behind',
+              lede: '5 workstreams off-track. <em>4 workstreams cleared sign-off</em>. Projected May 18 cutover.',
+              sublede: 'Customer record mapping in progress. IT Cutover bank routing template due back from Legal next week.' },
+    mno:    { name: 'Apex Retail',      archetype: 'ontrack',  goLive: 'May 9',  daysSlip: 2,   statusKey: 'green', statusLabel: 'On track',
+              lede: '<em>13 workstreams live</em>; 8 in final UAT. Two-day buffer over plan.',
+              sublede: 'No blockers. Final IT cutover dry-run scheduled for next week.' },
+  };
+
+  const HEALTH_LABEL = { r: 'Off track', a: 'Pending info', g: 'On track' };
+  const HEALTH_DESC = {
+    r: 'Workstream is off track and not meeting stage-time SLAs',
+    a: 'Workstream is pending input from another team or the acquired entity',
+    g: 'On track',
+  };
+  const HEALTH_VAR = { g: 'var(--green)', a: 'var(--amber)', r: 'var(--red)' };
+
+  function deriveLastWeekHealth(team) {
+    // Deterministic 60% same / 20% improved (was worse) / 20% worsened (was better) split
+    // keyed off ref so the story is stable across renders.
+    const ref = team.ref || '';
+    const seed = (ref.charCodeAt(ref.length - 1) || 0) + (ref.charCodeAt(ref.length - 2) || 0);
+    const roll = seed % 10;
+    if (roll < 6) return team.health;
+    if (roll < 8) {
+      if (team.health === 'g') return 'a';
+      if (team.health === 'a') return 'r';
+      return 'r';
+    }
+    if (team.health === 'r') return 'a';
+    if (team.health === 'a') return 'g';
+    return 'g';
+  }
+
+  function buildTeams(archetypeKey) {
+    const arch = ARCHETYPES[archetypeKey] || ARCHETYPES.behind;
+    return TEAM_META.map((meta, i) => {
+      const t = Object.assign({}, meta, arch[i]);
+      t.lastWeekHealth = deriveLastWeekHealth(t);
+      return t;
+    });
+  }
+
+  function parseGoLive(label) {
+    const months = { Jan:0, Feb:1, Mar:2, Apr:3, May:4, Jun:5, Jul:6, Aug:7, Sep:8, Oct:9, Nov:10, Dec:11 };
+    const [m, d] = label.split(' ');
+    return new Date(new Date().getFullYear(), months[m] || 0, parseInt(d, 10));
+  }
+
+  // ========== STATE ==========
+  let currentTeams = buildTeams('behind');
+  let currentClientId = 'all';
+
+  // ========== DOM REFS ==========
+  const waffleEl = document.getElementById('waffle');
+  const statusListEl = document.getElementById('status-list');
+  const matrixRows = document.getElementById('matrix-rows');
+  const teamsGridEl = document.getElementById('teams-grid');
+  const moversListEl = document.getElementById('moversList');
+  const moversMetaEl = document.getElementById('moversMeta');
+
+  // ========== RENDERERS ==========
+  function renderWaffle(teams) {
+    waffleEl.innerHTML = '';
+    const sorted = [...teams].sort((a, b) => {
+      const p = { r: 0, a: 1, g: 2 };
+      return p[a.health] - p[b.health];
+    });
+    sorted.forEach(t => {
+      const cell = document.createElement('div');
+      cell.className = `waffle-cell ${t.health}`;
+      cell.innerHTML = `<span class="dot"></span>${t.name}`;
+      cell.title = `${t.name} · ${HEALTH_DESC[t.health]} · ${STAGES[t.stageIdx]}`;
+      cell.onclick = () => openDrawer(t.name);
+      waffleEl.appendChild(cell);
+    });
+  }
+
+  const HEALTH_RANK = { r: 0, a: 1, g: 2 };
+  function renderTeamsView(teams) {
+    teamsGridEl.innerHTML = '';
+    const sorted = [...teams].sort((a, b) => HEALTH_RANK[a.health] - HEALTH_RANK[b.health]);
+    let improved = 0, worsened = 0;
+    sorted.forEach(t => {
+      const prev = t.lastWeekHealth || t.health;
+      if (HEALTH_RANK[t.health] > HEALTH_RANK[prev]) improved += 1;
+      else if (HEALTH_RANK[t.health] < HEALTH_RANK[prev]) worsened += 1;
+      const tile = document.createElement('button');
+      tile.type = 'button';
+      tile.className = `team-tile ${t.health}`;
+      tile.title = `${t.name} · ${HEALTH_DESC[t.health]} · ${STAGES[t.stageIdx]} · Last week: ${HEALTH_LABEL[prev]}`;
+      tile.innerHTML = `
+        <span class="tile-dot"></span>
+        <span class="tile-name">${t.name}</span>
+        <span class="tile-prev ${prev}"></span>
+      `;
+      tile.onclick = () => openDrawer(t.name);
+      teamsGridEl.appendChild(tile);
+    });
+    const impEl = document.getElementById('teamsImproved');
+    const worEl = document.getElementById('teamsWorsened');
+    if (impEl) impEl.textContent = String(improved);
+    if (worEl) worEl.textContent = String(worsened);
+  }
+
+  function renderMovers(teams) {
+    moversListEl.innerHTML = '';
+    const movers = teams
+      .filter(t => t.lastWeekHealth && t.lastWeekHealth !== t.health)
+      .map(t => Object.assign({}, t, {
+        dir: HEALTH_RANK[t.health] > HEALTH_RANK[t.lastWeekHealth] ? 'better' : 'worse',
+      }))
+      .sort((a, b) => {
+        if (a.dir !== b.dir) return a.dir === 'worse' ? -1 : 1;
+        return HEALTH_RANK[a.health] - HEALTH_RANK[b.health];
+      });
+    moversMetaEl.textContent = movers.length === 0
+      ? 'No changes'
+      : `${movers.length} ${movers.length === 1 ? 'team' : 'teams'} changed`;
+    const upArrow = '<svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24"><path d="M7 17 17 7M9 7h8v8" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    const downArrow = '<svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2.4" viewBox="0 0 24 24"><path d="M7 7l10 10M9 17h8V9" stroke-linecap="round" stroke-linejoin="round"/></svg>';
+    movers.forEach(t => {
+      const item = document.createElement('div');
+      item.className = `movers-item ${t.dir}`;
+      item.title = `${t.name} · ${HEALTH_LABEL[t.lastWeekHealth]} → ${HEALTH_LABEL[t.health]}`;
+      item.innerHTML = `
+        <span class="arrow">${t.dir === 'worse' ? upArrow : downArrow}</span>
+        <span class="name">${t.name}</span>
+        <span class="change">
+          <span class="swatch ${t.lastWeekHealth}"></span>
+          <span class="arr">→</span>
+          <span class="swatch ${t.health}"></span>
+        </span>
+      `;
+      item.onclick = () => openDrawer(t.name);
+      moversListEl.appendChild(item);
+    });
+  }
+
+  function renderStatusList(teams) {
+    statusListEl.innerHTML = '';
+    const sorted = [...teams].sort((a, b) => {
+      const p = { r: 0, a: 1, g: 2 };
+      if (p[a.health] !== p[b.health]) return p[a.health] - p[b.health];
+      return b.risk - a.risk;
+    });
+    sorted.forEach(t => {
+      const item = document.createElement('div');
+      item.className = `status-list-item ${t.health}`;
+      item.title = HEALTH_DESC[t.health];
+      item.innerHTML = `
+        <span class="dot ${t.health}"></span>
+        <span class="name">${t.name}</span>
+        <span class="stage">${STAGES[t.stageIdx]}</span>
+        <span class="days">${t.days}d</span>
+      `;
+      item.onclick = () => openDrawer(t.name);
+      statusListEl.appendChild(item);
+    });
+  }
+
+  function renderMatrix(teams) {
+    matrixRows.innerHTML = '';
+    const sorted = [...teams].sort((a, b) => b.risk - a.risk);
+    sorted.forEach(t => {
+      const segs = STAGES.map((_, idx) => {
+        if (idx < t.stageIdx) return '<div class="seg done"></div>';
+        if (idx === t.stageIdx) return `<div class="seg cur-${t.health}"></div>`;
+        return '<div class="seg future"></div>';
+      }).join('');
+
+      const row = document.createElement('div');
+      row.className = 'matrix-row';
+      row.dataset.health = t.health;
+      row.dataset.team = t.name;
+      row.dataset.stage = String(t.stageIdx);
+      row.onclick = () => openDrawer(t.name);
+
+      const daysClass = t.health === 'r' ? 'bad' : t.health === 'a' ? 'warn' : '';
+      const depCell = (t.health === 'a' && t.depTag)
+        ? `<span class="dep-tag">${t.depTag}</span>`
+        : '<span class="dep-empty">·</span>';
+
+      row.innerHTML = `
+        <div class="ref">${t.ref}</div>
+        <div class="team">
+          <span class="tip" data-tip="${HEALTH_DESC[t.health]}"><span class="health ${t.health}"></span></span>
+          <span>${t.name}</span>
+        </div>
+        <div class="stages">${segs}</div>
+        <div class="dep-cell">${depCell}</div>
+        <div class="assignee">
+          <span class="av">${t.leadInit}</span>
+          <span>${t.lead.split(' ').slice(-1)[0]}</span>
+        </div>
+        <div class="days ${daysClass}">${t.days}d</div>
+        <div class="chev">
+          <svg width="12" height="12" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+        </div>
+      `;
+      matrixRows.appendChild(row);
+    });
+  }
+
+  function renderHeader(config) {
+    document.getElementById('clientSelectLabel').textContent = config.name;
+    document.getElementById('dashLede').innerHTML = config.lede;
+    document.getElementById('dashSublede').textContent = config.sublede;
+    const chip = document.getElementById('statusChip');
+    chip.dataset.status = config.statusKey;
+    document.getElementById('statusChipLabel').textContent = config.statusLabel;
+  }
+
+  function renderKpis(teams, config) {
+    const completed = teams.filter(t => t.stageIdx === 4).length;
+    const offtrack = teams.filter(t => t.health === 'r').length;
+    const pending = teams.filter(t => t.health === 'a').length;
+    const ontrack = teams.filter(t => t.health === 'g').length;
+
+    document.getElementById('kpiCompletionValue').textContent = String(Math.round(completed / teams.length * 100));
+    document.getElementById('kpiCompletionDeltaText').textContent = `${completed} of ${teams.length} complete`;
+
+    document.getElementById('kpiOffTrackValue').textContent = String(offtrack);
+    const otWrap = document.getElementById('kpiOffTrackValueWrap');
+    otWrap.style.color = offtrack > 7 ? 'var(--red-ink)' : offtrack > 0 ? 'var(--amber-ink)' : 'var(--green-ink)';
+    const otDelta = config.archetype === 'ontrack' ? 'No teams blocked'
+                  : config.archetype === 'behind'  ? '+1 since last week'
+                  : '+5 since last week';
+    document.getElementById('kpiOffTrackDelta').textContent = otDelta;
+
+    const slaCount = config.archetype === 'ontrack' ? 0 : config.archetype === 'behind' ? 3 : 12;
+    const slaTeams = config.archetype === 'ontrack' ? 0 : config.archetype === 'behind' ? 2 : 7;
+    document.getElementById('kpiSlaValue').textContent = String(slaCount);
+    document.getElementById('kpiSlaValueWrap').style.color = slaCount === 0 ? 'var(--green-ink)' : slaCount > 5 ? 'var(--red-ink)' : 'var(--amber-ink)';
+    document.getElementById('kpiSlaDelta').textContent = slaCount === 0 ? 'None this period' : `Across ${slaTeams} teams`;
+
+    const goLive = parseGoLive(config.goLive);
+    const today = new Date(); today.setHours(0,0,0,0);
+    const days = Math.max(0, Math.round((goLive.getTime() - today.getTime()) / 86400000));
+    document.getElementById('daysRemainingValue').textContent = String(days);
+    document.getElementById('daysRemainingDelta').textContent = days === 0
+      ? 'Past due · 0d'
+      : `Until projected go-live · ${config.goLive}`;
+
+    document.getElementById('kpiGoLiveValue').textContent = config.goLive;
+    const slipText = config.daysSlip > 0 ? `+${config.daysSlip}d vs plan`
+                   : config.daysSlip < 0 ? `${config.daysSlip}d vs plan`
+                   : 'On plan';
+    document.getElementById('kpiGoLiveDelta').textContent = slipText;
+
+    document.getElementById('waffleCountR').textContent = String(offtrack);
+    document.getElementById('waffleCountA').textContent = String(pending);
+    document.getElementById('waffleCountG').textContent = String(ontrack);
+
+    document.getElementById('chipCountAll').textContent = String(teams.length);
+    document.getElementById('chipCountR').textContent = String(offtrack);
+    document.getElementById('chipCountA').textContent = String(pending);
+    document.getElementById('chipCountG').textContent = String(ontrack);
+
+    document.getElementById('matrixTeamCount').textContent = String(teams.length);
+  }
+
+  function renderPacingChart(archetypeKey) {
+    const p = PACING[archetypeKey];
+    if (!p) return;
+    currentPacingArchetype = archetypeKey;
+    document.getElementById('pacingGap').setAttribute('d', `M 60 250 L 370 ${p.todayY} L 690 ${p.endY} L 690 30 Z`);
+    document.getElementById('pacingActual').setAttribute('y2', String(p.todayY));
+    const proj = document.getElementById('pacingProjected');
+    proj.setAttribute('y1', String(p.todayY));
+    proj.setAttribute('y2', String(p.endY));
+    document.getElementById('pacingDot1').setAttribute('cy', String(p.todayY));
+    document.getElementById('pacingDot2').setAttribute('cy', String(p.todayY));
+    document.getElementById('pacingEndDot').setAttribute('cy', String(p.endY));
+    document.getElementById('pacingCalloutBg').setAttribute('y', String(p.calloutY));
+    const calloutDone = document.getElementById('pacingCalloutDone');
+    const calloutPlan = document.getElementById('pacingCalloutPlan');
+    calloutDone.setAttribute('y', String(p.calloutY + 15));
+    calloutPlan.setAttribute('y', String(p.calloutY + 30));
+    calloutDone.textContent = p.doneText;
+    const projLabel = document.getElementById('pacingProjectedLabel');
+    projLabel.setAttribute('y', String(p.endY - 6));
+    projLabel.textContent = p.projectedText;
+  }
+
+  function renderClient(clientId) {
+    const config = CLIENTS[clientId] || CLIENTS.all;
+    currentClientId = clientId;
+    currentTeams = buildTeams(config.archetype);
+    renderHeader(config);
+    renderKpis(currentTeams, config);
+    renderWaffle(currentTeams);
+    renderStatusList(currentTeams);
+    renderTeamsView(currentTeams);
+    renderMovers(currentTeams);
+    renderMatrix(currentTeams);
+    renderPacingChart(config.archetype);
+    // Reset filters on client change
+    healthFilter = 'all';
+    stageFilter = null;
+    document.querySelectorAll('#filters .chip').forEach(c => c.classList.toggle('active', c.dataset.filter === 'all'));
+    applyFilters();
+  }
+
+  // ========== FILTERS (health + stage, combined) ==========
+  let healthFilter = 'all';
+  let stageFilter = null;
+
+  function applyFilters() {
+    document.querySelectorAll('.matrix-row').forEach(r => {
+      const healthOk = (healthFilter === 'all') || r.dataset.health === healthFilter;
+      const stageOk = (stageFilter === null) || r.dataset.stage === String(stageFilter);
+      r.classList.toggle('hidden', !(healthOk && stageOk));
+    });
+    const banner = document.getElementById('stageBanner');
+    const bannerName = document.getElementById('stageBannerName');
+    if (stageFilter !== null) {
+      banner.classList.add('active');
+      bannerName.textContent = STAGES[stageFilter];
+    } else {
+      banner.classList.remove('active');
+    }
+  }
+
+  const filterChips = document.querySelectorAll('#filters .chip');
+  filterChips.forEach(chip => {
+    chip.onclick = () => {
+      filterChips.forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      healthFilter = chip.dataset.filter;
+      applyFilters();
+    };
+  });
+
+  document.getElementById('stageBannerClear').addEventListener('click', e => {
+    e.stopPropagation();
+    stageFilter = null;
+    applyFilters();
+  });
+
+  // ========== TOAST ==========
+  const toastStack = document.createElement('div');
+  toastStack.className = 'toast-stack';
+  document.body.appendChild(toastStack);
+
+  function showToast(title, sub) {
+    const t = document.createElement('div');
+    t.className = 'toast';
+    t.innerHTML = `
+      <svg fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M5 13l4 4L19 7" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <div><div>${title}</div>${sub ? `<div class="sub">${sub}</div>` : ''}</div>
+    `;
+    toastStack.appendChild(t);
+    setTimeout(() => {
+      t.classList.add('leaving');
+      t.addEventListener('animationend', () => t.remove(), { once: true });
+    }, 2600);
+  }
+
+  // Send reminder buttons (page-head + drawer)
+  document.addEventListener('click', e => {
+    const btn = e.target.closest('.btn');
+    if (!btn) return;
+    const label = btn.textContent.trim();
+    if (label === 'Send reminder') {
+      const targetTeam = drawer.classList.contains('open') ? (drawer.querySelector('.team-label')?.textContent || 'team leads') : 'all team leads';
+      showToast('Reminder sent', `Notified ${targetTeam} via Teams and email`);
+    } else if (label.startsWith('Message ')) {
+      showToast(`Message draft opened`, `${label.replace('Message ', '')} · Teams`);
+    }
+  });
+
+  // ========== DRAWER ==========
+  const drawer = document.getElementById('drawer');
+  const drawerOverlay = document.getElementById('drawerOverlay');
+  const drawerContent = document.getElementById('drawerContent');
+
+  function teamByName(name) {
+    return currentTeams.find(t => t.name === name);
+  }
+
+  function openDrawer(name) {
+    const t = teamByName(name);
+    if (!t) return;
+
+    const activity = buildActivity(t);
+    const deps = (t.deps || []).map(d => {
+      const dep = currentTeams.find(x => x.name === d);
+      const h = dep ? dep.health : 'a';
+      return `<span class="dep-pill"><span class="dot ${h}"></span>${d}</span>`;
+    }).join('');
+    const blocks = (t.blocks || []).map(b => {
+      const bt = currentTeams.find(x => x.name === b);
+      const h = bt ? bt.health : 'r';
+      return `<span class="dep-pill"><span class="dot ${h}"></span>${b}</span>`;
+    }).join('');
+
+    drawerContent.innerHTML = `
+      <div class="drawer-head">
+        <button class="icon-btn close" onclick="closeDrawer()">
+          <svg width="14" height="14" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" stroke-linecap="round"/></svg>
+        </button>
+        <div class="eyebrow" style="margin-bottom: 8px;">${HEALTH_LABEL[t.health]} · Day ${t.days} of 30</div>
+        <div class="team-label serif">${t.name}</div>
+        <div class="lead">
+          <span class="av" style="width:18px; height:18px; font-size: 9px; margin-right: 2px;">${t.leadInit}</span>
+          ${t.lead} · Lead
+        </div>
+      </div>
+
+      <div class="drawer-body">
+
+        <div class="drawer-status">
+          <div class="drawer-stat">
+            <div class="k">Stage</div>
+            <div class="v">${STAGES[t.stageIdx]}</div>
+          </div>
+          <div class="drawer-stat">
+            <div class="k">Health</div>
+            <div class="v ${t.health}">${HEALTH_LABEL[t.health]}</div>
+          </div>
+          <div class="drawer-stat">
+            <div class="k">Risk score</div>
+            <div class="v num">${t.risk}/12</div>
+          </div>
+        </div>
+
+        ${t.blocker ? `
+          <div class="drawer-section">
+            <h4>Current blocker</h4>
+            <div class="blocker-card">
+              <div class="who">Blocker · ${t.days}d</div>
+              ${t.blocker.replace(/Legal/g, '<em>Legal</em>').replace(/Master Data/g, '<em>Master Data</em>').replace(/Financial Reporting/g, '<em>Financial Reporting</em>').replace(/IT Cutover/g, '<em>IT Cutover</em>').replace(/Customer Migration/g, '<em>Customer Migration</em>')}
+            </div>
+          </div>
+        ` : ''}
+
+        ${blocks ? `
+          <div class="drawer-section">
+            <h4>Blocks ${t.blocks.length} downstream team${t.blocks.length > 1 ? 's' : ''}</h4>
+            <div class="dep-pill-row">${blocks}</div>
+          </div>
+        ` : ''}
+
+        ${deps ? `
+          <div class="drawer-section">
+            <h4>Waiting on</h4>
+            <div class="dep-pill-row">${deps}</div>
+          </div>
+        ` : ''}
+
+        <div class="drawer-section">
+          <h4>Activity</h4>
+          <div class="activity-list">${activity}</div>
+        </div>
+
+        <div class="drawer-actions">
+          <button class="btn">
+            <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M4 6l8 6 8-6M4 6v12l8-6M4 6h16v12H4" stroke-linejoin="round"/></svg>
+            Message ${t.lead.split(' ')[0]}
+          </button>
+          <button class="btn primary">
+            <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 6v6l4 2M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+            Send reminder
+          </button>
+        </div>
+      </div>
+    `;
+
+    drawer.classList.add('open');
+    drawerOverlay.classList.add('open');
+    drawer.setAttribute('aria-hidden', 'false');
+  }
+
+  function closeDrawer() {
+    drawer.classList.remove('open');
+    drawerOverlay.classList.remove('open');
+    drawer.setAttribute('aria-hidden', 'true');
+  }
+
+  function buildActivity(t) {
+    const items = [];
+    items.push({ when: `${t.days}d ago`, detail: `<strong>Onboarding requested</strong>`, sub: 'Submitted by Norbert Pap', kind: 'key' });
+
+    if (t.health === 'r' && t.blocker) {
+      items.push({ when: `${Math.max(1, t.days - 3)}d ago`, detail: `<strong>Reached ${STAGES[t.stageIdx]}</strong>`, sub: 'Stage entry logged', kind: '' });
+      items.push({ when: '5d ago', detail: `<strong>Blocker raised</strong>`, sub: t.blocker.length > 80 ? t.blocker.slice(0, 80) + '…' : t.blocker, kind: 'bad' });
+      items.push({ when: '2d ago', detail: `<strong>Reminder sent</strong>`, sub: 'Auto-notification to upstream team', kind: '' });
+      items.push({ when: 'Today', detail: `<strong>SLA breached</strong>`, sub: 'Team marked off track', kind: 'bad' });
+    } else if (t.health === 'a') {
+      items.push({ when: `${Math.max(1, t.days - 5)}d ago`, detail: `<strong>Reached ${STAGES[t.stageIdx]}</strong>`, sub: '', kind: '' });
+      items.push({ when: '3d ago', detail: `<strong>Information requested</strong>`, sub: 'Awaiting response from upstream', kind: '' });
+      items.push({ when: 'Yesterday', detail: `<strong>Follow-up sent</strong>`, sub: '', kind: '' });
+    } else {
+      items.push({ when: `${Math.max(1, t.days - 10)}d ago`, detail: `<strong>Discovery complete</strong>`, sub: '', kind: 'key' });
+      items.push({ when: `${Math.max(1, t.days - 6)}d ago`, detail: `<strong>Scope signed off</strong>`, sub: '', kind: '' });
+      items.push({ when: `${Math.max(1, t.days - 3)}d ago`, detail: `<strong>Reached ${STAGES[t.stageIdx]}</strong>`, sub: '', kind: '' });
+      if (t.stageIdx === 4) {
+        items.push({ when: 'Today', detail: `<strong>Workstream live</strong>`, sub: 'Ready for Apex Ventures cutover', kind: 'key' });
+      }
+    }
+
+    return items.map(i => `
+      <div class="activity-item ${i.kind}">
+        <div class="node"></div>
+        <div class="detail">${i.detail}${i.sub ? `<div class="sub">${i.sub}</div>` : ''}</div>
+        <div class="when">${i.when}</div>
+      </div>
+    `).join('');
+  }
+
+  // Keyboard
+  document.addEventListener('keydown', e => {
+    if (e.key === 'Escape') closeDrawer();
+  });
+
+  // ========== TABS ==========
+  document.querySelectorAll('.tab-btn').forEach(btn => {
+    btn.onclick = () => {
+      const tab = btn.dataset.tab;
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b === btn));
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.toggle('active', p.id === `tab-${tab}`));
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    };
+  });
+
+  // ========== THEME TOGGLE ==========
+  (function themeToggle() {
+    const btn = document.getElementById('themeToggle');
+    if (!btn) return;
+    btn.addEventListener('click', () => {
+      const next = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+      document.documentElement.setAttribute('data-theme', next);
+      try { localStorage.setItem('apollo-hypercare-theme', next); } catch (e) {}
+    });
+  })();
+
+  // ========== CLIENT FILTER DROPDOWN ==========
+  (function clientDropdown() {
+    const btn = document.getElementById('clientSelectBtn');
+    const menu = document.getElementById('clientMenu');
+    if (!btn || !menu) return;
+
+    function open() {
+      menu.hidden = false;
+      btn.setAttribute('aria-expanded', 'true');
+    }
+    function close() {
+      menu.hidden = true;
+      btn.setAttribute('aria-expanded', 'false');
+    }
+    btn.addEventListener('click', e => {
+      e.stopPropagation();
+      menu.hidden ? open() : close();
+    });
+    menu.addEventListener('click', e => {
+      const item = e.target.closest('.client-menu-item');
+      if (!item) return;
+      menu.querySelectorAll('.client-menu-item').forEach(i => i.classList.toggle('active', i === item));
+      const clientId = item.dataset.client;
+      if (clientId && CLIENTS[clientId]) {
+        renderClient(clientId);
+      }
+      close();
+    });
+    document.addEventListener('click', e => {
+      if (!btn.contains(e.target) && !menu.contains(e.target)) close();
+    });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') close();
+    });
+  })();
+
+  // ========== PACING/TEAMS TOGGLE (left hero card) ==========
+  (function pacingToggle() {
+    const toggle = document.getElementById('pacingToggle');
+    if (!toggle) return;
+    const svg = document.getElementById('pacingSvg');
+    const tooltip = document.getElementById('pacingTooltip');
+    const pacingLegend = document.getElementById('pacingLegend');
+    const teamsLegend = document.getElementById('teamsLegendRow');
+    const title = document.getElementById('leftCardTitle');
+    const statusCard = document.getElementById('statusCard');
+    const moversCard = document.getElementById('moversCard');
+    toggle.addEventListener('click', e => {
+      const btn = e.target.closest('button[data-view]');
+      if (!btn) return;
+      toggle.querySelectorAll('button').forEach(b => b.classList.toggle('active', b === btn));
+      const view = btn.dataset.view;
+      const showPacing = view === 'pacing';
+      svg.style.display = showPacing ? '' : 'none';
+      tooltip.hidden = true;
+      pacingLegend.hidden = !showPacing;
+      teamsGridEl.hidden = showPacing;
+      teamsLegend.hidden = showPacing;
+      title.textContent = showPacing ? 'Pacing vs target' : 'Team status';
+      statusCard.style.display = showPacing ? '' : 'none';
+      moversCard.style.display = showPacing ? 'none' : '';
+    });
+  })();
+
+  // ========== STATUS GRID/LIST TOGGLE ==========
+  (function statusToggle() {
+    const toggle = document.getElementById('statusToggle');
+    if (!toggle) return;
+    toggle.addEventListener('click', e => {
+      const btn = e.target.closest('button[data-view]');
+      if (!btn) return;
+      toggle.querySelectorAll('button').forEach(b => b.classList.toggle('active', b === btn));
+      const view = btn.dataset.view;
+      waffleEl.hidden = view !== 'grid';
+      statusListEl.hidden = view !== 'list';
+    });
+  })();
+
+  // ========== PACING CHART HOVER ==========
+  (function pacingHover() {
+    const svg = document.querySelector('.pacing-svg');
+    const overlay = document.getElementById('pacingOverlay');
+    const cursor = document.getElementById('pacingCursor');
+    const dotPlan = document.getElementById('pacingCursorPlan');
+    const dotActual = document.getElementById('pacingCursorActual');
+    const tooltip = document.getElementById('pacingTooltip');
+    const cardBody = svg.parentElement;
+    if (!overlay || !cursor || !tooltip) return;
+
+    // Plot bounds: x [60, 690], y [30, 250], 30 days, 23 teams max
+    const X0 = 60, X1 = 690, Y0 = 30, Y1 = 250;
+    const xPerDay = (X1 - X0) / PACING_DAYS;
+    const yPerTeam = (Y1 - Y0) / PACING_TOTAL;
+
+    function dayToX(day) { return X0 + day * xPerDay; }
+    function teamsToY(n) { return Y1 - n * yPerTeam; }
+
+    function planAt(day) { return (day / PACING_DAYS) * PACING_TOTAL; }
+    function actualAt(day, p) {
+      if (day <= PACING_TODAY) return (day / PACING_TODAY) * p.doneToday;
+      return null;
+    }
+    function projectedAt(day, p) {
+      if (day < PACING_TODAY) return null;
+      return p.doneToday + ((day - PACING_TODAY) / (PACING_DAYS - PACING_TODAY)) * (p.projectedEnd - p.doneToday);
+    }
+
+    function show() {
+      cursor.style.display = 'block';
+      dotPlan.style.display = 'block';
+      dotActual.style.display = 'block';
+      tooltip.hidden = false;
+    }
+    function hide() {
+      cursor.style.display = 'none';
+      dotPlan.style.display = 'none';
+      dotActual.style.display = 'none';
+      tooltip.hidden = true;
+    }
+
+    overlay.addEventListener('mousemove', (e) => {
+      const p = PACING[currentPacingArchetype];
+      if (!p) return;
+
+      // Map screen → SVG coords
+      const pt = svg.createSVGPoint();
+      pt.x = e.clientX; pt.y = e.clientY;
+      const ctm = svg.getScreenCTM();
+      if (!ctm) return;
+      const svgPt = pt.matrixTransform(ctm.inverse());
+
+      // Snap to nearest day (0..30)
+      let day = Math.round((svgPt.x - X0) / xPerDay);
+      day = Math.max(0, Math.min(PACING_DAYS, day));
+      const x = dayToX(day);
+
+      const plan = planAt(day);
+      const actual = actualAt(day, p);
+      const proj = projectedAt(day, p);
+
+      // Update cursor line + dots
+      cursor.setAttribute('x1', String(x));
+      cursor.setAttribute('x2', String(x));
+      dotPlan.setAttribute('cx', String(x));
+      dotPlan.setAttribute('cy', String(teamsToY(plan)));
+      const actualValue = actual !== null ? actual : proj;
+      dotActual.setAttribute('cx', String(x));
+      dotActual.setAttribute('cy', String(teamsToY(actualValue)));
+      dotActual.style.opacity = actual !== null ? '1' : '0.7';
+
+      // Build tooltip
+      const dayLabel = day === PACING_TODAY ? `Today · Day ${day}` : `Day ${day}`;
+      const planRow = `<div class="row"><span class="swatch plan"></span><span class="k">Plan</span><span class="v">${Math.round(plan)} teams</span></div>`;
+      let liveRow = '';
+      if (actual !== null) {
+        liveRow = `<div class="row"><span class="swatch actual"></span><span class="k">Actual</span><span class="v">${Math.round(actual)} teams</span></div>`;
+      } else {
+        liveRow = `<div class="row"><span class="swatch proj"></span><span class="k">Projected</span><span class="v">${Math.round(proj)} teams</span></div>`;
+      }
+      tooltip.innerHTML = `<div class="day">${dayLabel}</div>${planRow}${liveRow}`;
+
+      // Position tooltip relative to card-body
+      const cbRect = cardBody.getBoundingClientRect();
+      const offsetLeft = e.clientX - cbRect.left + 14;
+      const offsetTop = e.clientY - cbRect.top - 8;
+      const tipWidth = tooltip.offsetWidth || 150;
+      const tipLeft = (offsetLeft + tipWidth + 10 > cbRect.width)
+        ? offsetLeft - tipWidth - 28
+        : offsetLeft;
+      tooltip.style.left = tipLeft + 'px';
+      tooltip.style.top = offsetTop + 'px';
+
+      show();
+    });
+
+    overlay.addEventListener('mouseleave', hide);
+  })();
+
+  // ========== INITIAL RENDER ==========
+  renderClient('all');
+</script>
+
+</div><!-- /#deck-content -->
+</body>
+</html>
