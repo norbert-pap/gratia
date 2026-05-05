@@ -1548,6 +1548,70 @@
   }
   .stage-filter-banner .x:hover { background: var(--gold-line); }
 
+  /* ========== BOTTOM ROW ========== */
+  .bottom-row {
+    display: grid;
+    grid-template-columns: 1.3fr 1fr;
+    gap: 18px;
+    margin-top: 22px;
+  }
+  .ri-table { display: flex; flex-direction: column; }
+  .ri-head, .ri-row {
+    display: grid;
+    grid-template-columns: 2fr 1fr 0.55fr 0.7fr 0.9fr 0.7fr;
+    gap: 12px;
+    align-items: center;
+    padding: 10px 18px;
+    font-size: 12.5px;
+  }
+  .ri-head {
+    color: var(--ink-2);
+    font-size: 11.5px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+    border-bottom: 1px solid var(--border);
+  }
+  .ri-row { border-bottom: 1px solid var(--border); }
+  .ri-row:last-child { border-bottom: none; }
+  .ri-row:hover { background: var(--row-hover); }
+  .ri-row .ri-issue { color: var(--ink-0); font-weight: 500; }
+  .ri-row .ri-cat {
+    font-size: 11px;
+    padding: 2px 7px;
+    border-radius: 4px;
+    background: var(--bg-3);
+    border: 1px solid var(--border);
+    color: var(--ink-2);
+    width: fit-content;
+  }
+  .ri-row .ri-open { font-family: 'JetBrains Mono', monospace; text-align: right; color: var(--ink-1); }
+  .ri-row .ri-first, .ri-row .ri-owner { color: var(--ink-2); font-size: 12px; }
+  .ri-row .ri-sev {
+    display: inline-block;
+    width: fit-content;
+    margin: 0 auto;
+    padding: 2px 7px;
+    border-radius: 999px;
+    font-size: 10.5px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+  }
+  .ri-row .ri-sev.p1 { color: var(--red-ink);   background: var(--red-dim);   border: 1px solid var(--red-line); }
+  .ri-row .ri-sev.p2 { color: var(--amber-ink); background: var(--amber-dim); border: 1px solid var(--amber-line); }
+  .ri-row .ri-sev.p3 { color: var(--ink-2);     background: var(--bg-3);      border: 1px solid var(--border); }
+  .cat-legend {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    padding: 12px 18px 0;
+    font-size: 11.5px;
+    color: var(--ink-2);
+  }
+  .cat-legend .lg { display: inline-flex; align-items: center; gap: 6px; }
+  .cat-legend .lg-dot { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+
 </style>
 </head>
 <body>
@@ -1784,6 +1848,49 @@
           </div>
 
           <div id="matrix-rows"></div>
+        </div>
+      </section>
+
+      <!-- ===== BOTTOM ROW: REPEAT ISSUES + TICKETS BY CATEGORY ===== -->
+      <section class="bottom-row">
+        <div class="card" id="repeat-issues">
+          <div class="card-head">
+            <div>
+              <h3>Repeat issues</h3>
+              <p class="sub">Top recurring issues · sorted by open count</p>
+            </div>
+          </div>
+          <div class="card-body">
+            <div class="ri-table">
+              <div class="ri-head">
+                <div>Issue</div>
+                <div>Category</div>
+                <div style="text-align:right">Open</div>
+                <div>First seen</div>
+                <div>Owner</div>
+                <div style="text-align:center">Severity</div>
+              </div>
+              <div id="ri-rows"></div>
+            </div>
+          </div>
+        </div>
+        <div class="card" id="tickets-by-cat">
+          <div class="card-head">
+            <div>
+              <h3>Tickets by category</h3>
+              <p class="sub">Last 14 days · stacked daily counts</p>
+            </div>
+          </div>
+          <div class="card-body">
+            <svg id="catChart" viewBox="0 0 720 240" preserveAspectRatio="none"></svg>
+            <div class="cat-legend">
+              <span class="lg"><span class="lg-dot" style="background:var(--red-ink)"></span>Workflow logic</span>
+              <span class="lg"><span class="lg-dot" style="background:var(--amber-ink)"></span>Data</span>
+              <span class="lg"><span class="lg-dot" style="background:var(--gold-ink)"></span>Training gap</span>
+              <span class="lg"><span class="lg-dot" style="background:#87b3ec"></span>UX / usability</span>
+              <span class="lg"><span class="lg-dot" style="background:#b07ce0"></span>Integration</span>
+            </div>
+          </div>
         </div>
       </section>
 
@@ -2530,6 +2637,32 @@
       });
     }
   })();
+
+  // ===== REPEAT ISSUES =====
+  const REPEAT_ISSUES = [
+    { issue: 'Stage transition stuck on Tasks Selection',     category: 'Workflow logic', open: 8, firstSeen: 'Day 2', owner: 'Eng',      severity: 'p1' },
+    { issue: 'Client field validation error on rare chars',   category: 'Data',           open: 5, firstSeen: 'Day 4', owner: 'Eng',      severity: 'p2' },
+    { issue: 'Trade Ready notification missing for Wave-2',   category: 'Workflow logic', open: 4, firstSeen: 'Day 6', owner: 'Eng',      severity: 'p2' },
+    { issue: 'Re-onboarding flow unclear when client returns', category: 'Training gap',  open: 3, firstSeen: 'Day 5', owner: 'Training', severity: 'p3' },
+    { issue: 'Audit log missing fields on bulk import',       category: 'Data',           open: 2, firstSeen: 'Day 8', owner: 'Eng',      severity: 'p3' },
+  ];
+
+  function renderRepeatIssues(list) {
+    const root = document.getElementById('ri-rows');
+    if (!root) return;
+    const sevLabel = { p1: 'P1', p2: 'P2', p3: 'P3' };
+    root.innerHTML = list.map(r => `
+      <div class="ri-row">
+        <div class="ri-issue">${r.issue}</div>
+        <div><span class="ri-cat">${r.category}</span></div>
+        <div class="ri-open">${r.open}</div>
+        <div class="ri-first">${r.firstSeen}</div>
+        <div class="ri-owner">${r.owner}</div>
+        <div><span class="ri-sev ${r.severity}">${sevLabel[r.severity]}</span></div>
+      </div>
+    `).join('');
+  }
+  renderRepeatIssues(REPEAT_ISSUES);
 </script>
 
 </div><!-- /#deck-content -->
