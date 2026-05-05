@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Staffing references · Grace KB</title>
+<link rel="stylesheet" href="assets/style.css">
+</head>
+<body>
+<div class="glow"></div>
+
+<nav class="mainnav">
+  <a class="nav-brand" href="index.html" aria-label="Grace KB home">
+    <div class="nav-brand-fallback">G</div>
+  </a>
+  <div class="nav-crumb">
+    <a href="index.html">Grace KB</a>
+    <span class="crumb-sep">/</span>
+    <span class="crumb-current">Staffing references</span>
+  </div>
+  <div class="nav-jump">
+    <button class="nav-jump-btn" aria-haspopup="true" aria-expanded="false">
+      <span>Jump to section</span>
+      <svg class="nj-chev" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </button>
+    <div class="nav-jump-menu" role="menu">
+      <a href="../grace-kb-overview.html#specs"><span class="nj-num">01</span><span>Nine specializations</span><span class="nj-status gaps">gaps</span></a>
+      <a href="../grace-kb-overview.html#pricing"><span class="nj-num">02</span><span>Fixed pricing</span><span class="nj-status gaps">gaps</span></a>
+      <a href="../grace-kb-overview.html#levels"><span class="nj-num">03</span><span>Analyst levels</span><span class="nj-status complete">ok</span></a>
+      <a href="../grace-kb-overview.html#promotion"><span class="nj-num">04</span><span>Promotion criteria</span><span class="nj-status complete">ok</span></a>
+      <a href="../grace-kb-overview.html#scoring"><span class="nj-num">05</span><span>Scoring system</span><span class="nj-status complete">ok</span></a>
+      <a href="../grace-kb-overview.html#evidence"><span class="nj-num">06</span><span>Evidence sources</span><span class="nj-status complete">ok</span></a>
+      <a href="../grace-kb-overview.html#services"><span class="nj-num">07</span><span>Service types</span><span class="nj-status complete">ok</span></a>
+      <a href="../grace-kb-overview.html#vetting"><span class="nj-num">08</span><span>Vetting process</span><span class="nj-status complete">ok</span></a>
+      <a href="../grace-kb-overview.html#briefs"><span class="nj-num">09</span><span>Project briefs</span><span class="nj-status gaps">gaps</span></a>
+      <a href="../grace-kb-overview.html#assessments"><span class="nj-num">10</span><span>Assessments &amp; cases</span><span class="nj-status gaps">gaps</span></a>
+      <a href="staffing-references.html" class="current"><span class="nj-num">11</span><span>Staffing references</span><span class="nj-status draft">draft</span></a>
+    </div>
+  </div>
+  <div class="nav-right">
+    <button class="btn amber" onclick="document.getElementById('gap-staffing-refs').scrollIntoView({behavior:'smooth', block:'start'})"><span>Gaps</span></button>
+    <button class="icon-btn theme-toggle" id="themeToggle" aria-label="Toggle theme">
+      <svg class="ti-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      <svg class="ti-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M4.93 19.07l1.41-1.41M17.66 6.34l1.41-1.41"/></svg>
+    </button>
+  </div>
+</nav>
+
+<div class="layout no-toc" id="top">
+  <main class="main-pane">
+    <header class="page-head">
+      <div class="eyebrow-row">
+        <span class="eyebrow">Section 11</span>
+        <span class="status-chip" data-status="ink">v0 draft</span>
+        <span class="status-chip" data-status="violet">Added 2026-05-05</span>
+      </div>
+      <div class="lede">Staffing references &middot; <em>domain knowledge</em> for matching</div>
+      <p class="sublede">Reference material Grace can read when matching analysts to specialty client requests. Different from Section 1 (deliverables and QA rubrics): these entries describe <em>who can credibly do this work</em>, what to look for in a CV, and what to never confuse it with.</p>
+    </header>
+
+    <div class="callout" style="margin-bottom: 24px;">
+      <strong>Status &middot; v0 draft.</strong> Content lives in the website repo at <code style="font-family: 'JetBrains Mono', monospace; font-size: 11px;">app/.server/ai/prompts/staffing-references/</code> and is not yet wired into Grace's runtime context. The README in that folder documents the entry format and how the loading logic will work once the format is signed off.
+    </div>
+
+    <section class="doc-section" id="why">
+      <div class="section-head">
+        <div>
+          <div class="section-num">11.0</div>
+          <div class="section-title">Why this exists</div>
+        </div>
+      </div>
+      <p style="color: var(--ink-1); margin-bottom: 14px;">Without grounding material, Grace pattern-matches on broad terms ("finance," "investment") instead of specific sub-disciplines ("private credit," "State Street PAM"). Result: junior IB bankers recommended for private-credit roles, supply-chain "PAM" CV hits surfaced for State Street system requests. These references give Grace the disambiguators a finance professional carries in their head.</p>
+      <p style="color: var(--ink-1);">Every entry &mdash; whether a service category or an industry &mdash; uses the same six fields: <em>Definition</em>, <em>Not to be confused with</em>, <em>CV signals (positive)</em>, <em>CV signals (false positive)</em>, <em>Adjacent / transferable from</em>, and <em>Levels</em>. Where a domain practitioner is needed to validate, a <code style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--amber-ink);">[NEEDS_EXPERT_REVIEW]</code> marker is left in place &mdash; concrete asks for Jackie / domain experts instead of a vague "send us material."</p>
+    </section>
+
+    <section class="doc-section" id="services">
+      <div class="section-head">
+        <div>
+          <div class="section-num">11.1 &middot; SERVICES</div>
+          <div class="section-title">Service references &middot; 1 of 9 clusters drafted</div>
+          <div class="section-sub">One file per service cluster, with sections inside for the 3 categories. Matches the existing <code style="font-family: 'JetBrains Mono', monospace; font-size: 11px;">qa-review-references/</code> convention so disambiguators between sister categories live next to each other.</div>
+        </div>
+      </div>
+
+      <div class="spec-list">
+        <details class="spec-item" open>
+          <summary class="spec-summary">
+            <span class="spec-num">11.1.1</span>
+            <span class="spec-name">Financial modeling &amp; valuation</span>
+            <span class="spec-meta"><span>Forecasting &middot; scenarios &middot; valuation</span><svg class="spec-chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
+          </summary>
+          <div class="spec-body" style="grid-template-columns: 1fr; gap: 22px;">
+            <p style="color: var(--ink-1);"><strong>Cluster scope.</strong> Decision-ready financial models and planning frameworks that translate intent into defensible forecasts, quantified risk scenarios, and valuation-backed capital decisions. Three categories below &mdash; staff to the right one.</p>
+
+            <div>
+              <h5 style="color: var(--gold-ink); font-size: 14px; margin-bottom: 10px;">Forecasting &amp; Planning</h5>
+              <p style="margin-bottom: 8px;"><strong>Definition.</strong> Building integrated financial models (3-statement, driver-based, or operating models) that connect revenue drivers, cost structures, and cash flow dynamics &mdash; for planning, fundraising, or board decisions.</p>
+              <p style="margin-bottom: 8px;"><strong>Not to be confused with.</strong> Budgeting / FP&amp;A reporting (variance work, not model construction); scenario &amp; sensitivity analysis (testing existing models); dashboard / KPI reporting (visualization on top, not the underlying model).</p>
+              <p style="margin-bottom: 8px;"><strong>CV signals &middot; positive.</strong> 3-statement build experience; driver-based forecasting; advanced Excel (INDIRECT, OFFSET, INDEX/MATCH, dynamic arrays); Anaplan / Adaptive / Cube / Pigment / Vena; FP&amp;A or strategic finance roles; named deliverables ("Series B model," "5-year forecast," "operating plan").</p>
+              <p style="margin-bottom: 8px;"><strong>CV signals &middot; false positive.</strong> "Financial modeling" listed without a deliverable (often classroom exposure); "FP&amp;A" alone (could be reporting only); junior IB analysts who built valuation models, not operating ones.</p>
+              <p style="margin-bottom: 8px;"><strong>Adjacent / transferable from.</strong> Junior IB / MBB consulting (if they owned a build); corporate strategy with operating-plan exposure; founders who built their own model.</p>
+              <p><strong>Levels.</strong> A2 supports; A3+ owns; A4 / M1 leads complex builds.</p>
+            </div>
+
+            <div>
+              <h5 style="color: var(--gold-ink); font-size: 14px; margin-bottom: 10px;">Scenario &amp; Sensitivity Analysis</h5>
+              <p style="margin-bottom: 8px;"><strong>Definition.</strong> Structured scenario planning that quantifies upside, downside, and break-even outcomes on top of an existing model, to support decisions under uncertainty.</p>
+              <p style="margin-bottom: 8px;"><strong>Not to be confused with.</strong> Forecasting &amp; planning (the underlying model itself); operational risk management (different domain); Monte Carlo / quantitative simulation (a higher bar &mdash; flag if the request implies it).</p>
+              <p style="margin-bottom: 8px;"><strong>CV signals &middot; positive.</strong> Built sensitivity tables / data tables in Excel; scenario manager or named scenarios; tornado charts; break-even analysis; scenarios on revenue / margin / churn / unit economics with explicit assumption shifts.</p>
+              <p style="margin-bottom: 8px;"><strong>CV signals &middot; false positive.</strong> "Scenario planning" in a strategy-consulting context sometimes means qualitative futures planning, not financial sensitivity.</p>
+              <p style="margin-bottom: 8px;"><strong>Adjacent / transferable from.</strong> Corporate development (M&amp;A model sensitivities); equity research (bear / base / bull case); VC / PE associates (LBO sensitivities, multiple-on-money cases).</p>
+              <p><strong>Levels.</strong> A3+ owns; A2 with supervision.</p>
+            </div>
+
+            <div>
+              <h5 style="color: var(--gold-ink); font-size: 14px; margin-bottom: 10px;">Company &amp; Asset Valuation</h5>
+              <p style="margin-bottom: 8px;"><strong>Definition.</strong> Defensible valuation analysis using DCF, comparable companies / precedent transactions, LBO, or asset-based methods &mdash; for transactions, fundraising, or internal planning.</p>
+              <p style="margin-bottom: 8px;"><strong>Not to be confused with.</strong> Real estate appraisal (different methodology); insurance / actuarial valuation (reserving and pricing, not corporate); forecasting &amp; planning (forecast is an input to a DCF, but operating planning is a separate skill).</p>
+              <p style="margin-bottom: 8px;"><strong>CV signals &middot; positive.</strong> DCF / WACC build / terminal value; comparable companies; precedent transactions; LBO; IB analyst (M&amp;A or coverage); PE associate; VC investor; corp dev; CFA charter or progress &mdash; weight against deliverable evidence. <code style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--amber-ink);">[NEEDS_EXPERT_REVIEW: how heavily to weight CFA progress vs. real deliverables]</code></p>
+              <p style="margin-bottom: 8px;"><strong>CV signals &middot; false positive.</strong> "Valuation" listed without a deliverable (often a touched comps page, not a built valuation); equity research juniors with public-company exposure but limited private-company nuance.</p>
+              <p style="margin-bottom: 8px;"><strong>Adjacent / transferable from.</strong> Equity research (rigor transfers, private-company nuance may not); restructuring / TAS at Big 4; founders who raised institutional capital.</p>
+              <p><strong>Levels.</strong> A3+ owns; A4 / M1 for complex / multi-method valuations.</p>
+            </div>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <section class="doc-section" id="industries">
+      <div class="section-head">
+        <div>
+          <div class="section-num">11.2 &middot; INDUSTRIES</div>
+          <div class="section-title">Industry references &middot; 3 drafted (open-ended set)</div>
+          <div class="section-sub">One file per industry. Industries are open-ended, so v0 prioritizes the live failure modes (private credit, insurance regulatory) plus their canonical disambiguator (investment banking).</div>
+        </div>
+      </div>
+
+      <div class="spec-list">
+        <details class="spec-item">
+          <summary class="spec-summary">
+            <span class="spec-num">11.2.1</span>
+            <span class="spec-name">Private credit</span>
+            <span class="spec-meta"><span>Direct lending &middot; mezzanine &middot; distressed</span><svg class="spec-chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
+          </summary>
+          <div class="spec-body" style="grid-template-columns: 1fr; gap: 12px;">
+            <p style="color: var(--ink-1);"><strong>Definition.</strong> Non-bank lending to companies, typically by investment funds. Sub-segments: direct lending (senior secured loans to mid-market), mezzanine, distressed / special situations, venture debt. Borrowers are often PE-owned or pre-IPO. The fund <em>holds</em> the loan rather than syndicating it through a public market.</p>
+            <p><strong>Not to be confused with.</strong> M&amp;A advisory / general IB (advises on equity transactions, not lending &mdash; the most common false positive); public credit / fixed income trading (markets-driven on listed paper); commercial banking (different regulatory framework, different risk tolerance); actuarial / insurance underwriting (same word, different domain).</p>
+            <p><strong>CV signals &middot; positive.</strong> Firms: Apollo, Ares, Golub, Blackstone Credit (formerly GSO), KKR Credit, Owl Rock / Blue Owl, Sixth Street, Oaktree, Antares, Monroe, Audax, BlackRock Private Credit, Fortress. Functions: origination, credit underwriting, portfolio monitoring, restructuring / workouts. Concepts in CV: unitranche, first lien / second lien, PIK toggle, revolver, DDTL, ABL, covenant-lite, EBITDA add-backs, OID. Loan servicing / fund admin for direct lending vehicles (operations angle).</p>
+            <p><strong>CV signals &middot; false positive.</strong> "Worked on a credit deal at Goldman" &mdash; was the candidate <em>selling to</em> credit funds (advisory) or <em>buying for</em> a credit fund (investing)? Different jobs. M&amp;A bankers at firms with credit affiliates sometimes claim "credit experience" without underwriting reps.</p>
+            <p><strong>Adjacent / transferable from.</strong> Leveraged finance / LevFin at IB (same documents, transactional vs. holding mindset); restructuring / TAS at Big 4 (strong on distressed, lighter on origination); corporate or middle-market banking (close, different risk tolerance and structures); PE deal-team analysts (debt understood from the equity-sponsor seat).</p>
+            <p><strong>Common ask wedge.</strong> "Private credit experience" is usually one of three things &mdash; clarify before searching: (1) credit underwriting rigor, (2) document fluency (credit agreements, term sheets, amendments), (3) operations / middle-office for a credit fund. The ideal candidate differs significantly across the three. <code style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--amber-ink);">[NEEDS_EXPERT_REVIEW: validate firm list, sub-segment definitions, and the three-way ask-wedge framing]</code></p>
+            <p><strong>Levels.</strong> A3+ for credit analysis support; A4 / M1 for memo or covenant ownership; lead-level for client-facing engagement on origination or portfolio work.</p>
+          </div>
+        </details>
+
+        <details class="spec-item">
+          <summary class="spec-summary">
+            <span class="spec-num">11.2.2</span>
+            <span class="spec-name">Insurance &middot; regulatory &amp; operations</span>
+            <span class="spec-meta"><span>NAIC &middot; stat accounting &middot; Solvency II</span><svg class="spec-chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
+          </summary>
+          <div class="spec-body" style="grid-template-columns: 1fr; gap: 12px;">
+            <p style="color: var(--ink-1);"><strong>Definition.</strong> The insurance sector, with emphasis on regulatory compliance, statutory accounting and reporting (NAIC in the US), and operations supporting insurance companies. Sub-segments: P&amp;C, Life, Health, Reinsurance. Scoped here to the regulatory / operations / advisory angle &mdash; actuarial pricing and reserving is a separate specialism.</p>
+            <p><strong>Not to be confused with.</strong> Actuarial science / pricing / reserving (mortality and claims modeling &mdash; usually requires FSA / FCAS / ACAS); insurance brokerage / sales (selling policies); insurtech (software for the industry); healthcare consulting (different domain &mdash; provider / payer ops); bank regulatory consulting (similar muscle, different rulebook).</p>
+            <p><strong>CV signals &middot; positive.</strong> Firms: AIG, MetLife, Prudential, Allianz, Zurich, Munich Re, Swiss Re, Hartford, Travelers, Chubb, Aon, Marsh, WTW, Big 4 insurance practices. Concepts: NAIC reporting, stat accounting (STAT vs. GAAP), Schedule D, RBC, ORSA, Solvency II, IFRS 17, ALM. Deliverables: annual / quarterly stat filings, RBC calculations, loss ratio analysis, stat-to-GAAP reconciliation.</p>
+            <p><strong>CV signals &middot; false positive.</strong> "Insurance" in the CV because the candidate had an insurance client at a strategy consulting firm but did generic strategy work. "Risk management" at non-insurance firms (different risk).</p>
+            <p><strong>Adjacent / transferable from.</strong> Big 4 audit (insurance practice); actuarial analysts without full credentials; bank regulatory consulting (Basel / CCAR); corporate accounting at an insurer.</p>
+            <p><strong>Common ask wedge.</strong> Three buckets &mdash; ask which: (1) regulatory project support (NAIC / state filings); (2) investment accounting for insurers (where State Street PAM-type system experience overlaps); (3) operational transformation (policy admin, claims, billing). The Venn of analysts who can credibly do all three is small. <code style="font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--amber-ink);">[NEEDS_EXPERT_REVIEW: insurance practitioner to validate concept list, ask-wedge, and adjacent-skill weighting]</code></p>
+            <p><strong>Levels.</strong> A3+ for stat reporting support; A4 / M1 for ownership of regulatory project workstreams.</p>
+          </div>
+        </details>
+
+        <details class="spec-item">
+          <summary class="spec-summary">
+            <span class="spec-num">11.2.3</span>
+            <span class="spec-name">Investment banking &middot; M&amp;A advisory</span>
+            <span class="spec-meta"><span>Sell-side / buy-side &middot; IPOs &middot; valuation</span><svg class="spec-chev" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span>
+          </summary>
+          <div class="spec-body" style="grid-template-columns: 1fr; gap: 12px;">
+            <p style="color: var(--ink-1);"><strong>Definition.</strong> Sell-side and buy-side advisory on equity transactions: M&amp;A, IPOs, strategic alternatives, fairness opinions, capital markets transactions. The bank advises and supports execution; it does not take principal risk on the transaction. Included here both as a real client request and as the canonical disambiguator for private-credit and other finance asks.</p>
+            <p><strong>Not to be confused with.</strong> Private credit / direct lending (see 11.2.1 &mdash; the most common false positive); equity research (same firms, no transactions); sales &amp; trading (markets, not advisory); corporate development (in-house M&amp;A, one client only); private equity (buys companies, uses IB); venture capital (early-stage investing).</p>
+            <p><strong>CV signals &middot; positive.</strong> Bulge bracket: GS, MS, JPM, BofA, Citi, Barclays, CS / UBS, DB. Elite boutiques: Evercore, Lazard, Centerview, Moelis, HL, Jefferies, PJT, Guggenheim. Middle market: Harris Williams, William Blair, Lincoln, Piper Sandler, Stifel, Raymond James. Concepts: pitched / ran diligence / managed data room / drafted CIM / executed deal / negotiated SPA / fairness opinion. Deliverables: pitch decks, IM, valuation models (DCF / comps / precedents / LBO), management presentations, board materials.</p>
+            <p><strong>CV signals &middot; false positive.</strong> "Investment banking" used loosely (could mean any function at a bank); SA / internship-only experience (pitchbook prep, not execution); "worked on M&amp;A" without a named transaction.</p>
+            <p><strong>Adjacent / transferable from.</strong> Big 4 transaction advisory (strong on diligence, lighter on execution); corp dev (buy-side perspective, fewer reps); PE associates (combine IB execution and investing); MBB on commercial-due-diligence projects (adjacent to IB diligence).</p>
+            <p><strong>Common pitfall.</strong> Recommending an IB analyst for a private-credit role is the canonical false positive. Same modeling rigor, fundamentally different job: IB is transactional / deal-by-deal; private credit is portfolio / hold-and-monitor. Likewise, IB analysts asked to do operating-plan / forecasting work often struggle &mdash; they have built valuation models, not operating ones. Confirm what the client actually needs.</p>
+            <p><strong>Levels.</strong> A3+ for support on IB-flavored work; A4 / M1 for ownership; lead-level for client-facing on deal-flavored projects.</p>
+          </div>
+        </details>
+      </div>
+    </section>
+
+    <div class="callout amber gap-card" id="gap-staffing-refs" style="margin-top: 22px;">
+      <strong>Gaps to fill in &middot; staffing references</strong>
+      <ul>
+        <li><strong>8 of 9 service clusters still to draft.</strong> Done: financial modeling &amp; valuation. Remaining: pitch decks, market research, data dashboards, process optimization, project management, GTM strategy, RevOps, business strategy &mdash; 24 categories total at 3 per cluster.</li>
+        <li><strong>Industries are open-ended.</strong> Done: private credit, insurance regulatory, investment banking. Likely next based on demand: real estate, healthcare, technology, asset management.</li>
+        <li><strong>Three [NEEDS_EXPERT_REVIEW] markers.</strong> CFA weighting in valuation; private-credit firm list and ask-wedge framing; NAIC concept list and adjacent-skill weighting in insurance. These need a domain practitioner to validate &mdash; concrete asks instead of "send us material."</li>
+        <li><strong>Loading logic not yet wired.</strong> Once the format is signed off, the staffing skill needs to read the right reference files when entering specialty staffing match mode.</li>
+      </ul>
+    </div>
+
+    <div class="footer">
+      <span>GRACE-KB · STAFFING REFERENCES · v1 · 2026-05-05</span>
+      <span><a href="index.html" style="color: var(--ink-2);">&larr; Back to dashboard</a></span>
+    </div>
+  </main>
+</div>
+
+<script src="assets/nav.js"></script>
+</body>
+</html>
