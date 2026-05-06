@@ -421,6 +421,604 @@
     color: rgba(255,255,255,0.5);
   }
   .deck.on-dark .footer-tag .ft-sep { background: rgba(255,255,255,0.2); }
+
+  /* ───────── OPPORTUNITY HERO SLIDE ───────── */
+  .slide.opp-slide {
+    background: linear-gradient(180deg, var(--light-bg) 0%, #ebede9 100%);
+    padding: 88px 80px 64px;
+    display: flex; flex-direction: column;
+  }
+  .opp-eyebrow {
+    font-size: 11px; font-weight: 700; color: var(--bg-dark);
+    text-transform: uppercase; letter-spacing: 1.6px;
+    display: inline-flex; align-items: center; gap: 8px;
+    margin-bottom: 18px;
+  }
+  .opp-eyebrow::before {
+    content: ''; width: 6px; height: 6px; border-radius: 50%;
+    background: var(--mint);
+  }
+  .opp-slide h1 {
+    font-size: 44px; font-weight: 700; color: var(--ink);
+    line-height: 1.1; letter-spacing: -1.2px;
+    max-width: 1080px; margin-bottom: 14px;
+  }
+  .opp-slide h1 .num { color: var(--bg-dark); }
+  .opp-slide h1 .accent { color: var(--mint); font-style: italic; font-weight: 700; }
+  .opp-sub {
+    font-size: 15px; font-weight: 300; color: var(--ink-3);
+    line-height: 1.55; max-width: 920px; margin-bottom: 36px;
+  }
+  .opp-stats {
+    display: grid; grid-template-columns: repeat(4, 1fr);
+    gap: 14px; margin-bottom: 28px;
+  }
+  .opp-stat {
+    background: var(--white); border: 1px solid var(--line);
+    border-radius: 14px; padding: 22px 22px 20px;
+    position: relative; overflow: hidden;
+  }
+  .opp-stat::before {
+    content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+    background: var(--mint);
+  }
+  .opp-stat-num {
+    font-size: 38px; font-weight: 700; color: var(--bg-dark);
+    line-height: 1; letter-spacing: -1px; margin-bottom: 10px;
+  }
+  .opp-stat-label {
+    font-size: 13px; font-weight: 600; color: var(--ink);
+    margin-bottom: 4px;
+  }
+  .opp-stat-sub {
+    font-size: 11.5px; color: var(--ink-4); line-height: 1.4;
+  }
+  .opp-spread {
+    background: var(--white); border: 1px solid var(--line);
+    border-radius: 14px; padding: 18px 22px;
+    flex: 1; min-height: 0;
+    display: flex; flex-direction: column; gap: 12px;
+  }
+  .opp-spread-head {
+    display: flex; justify-content: space-between; align-items: center;
+    font-size: 11px; color: var(--ink-4); font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.7px;
+  }
+  .opp-spread-bar {
+    display: flex; height: 28px; border-radius: 6px;
+    overflow: hidden;
+  }
+  .opp-spread-seg {
+    height: 100%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10.5px; font-weight: 600; color: var(--bg-dark);
+    transition: width 0.6s ease;
+    position: relative;
+  }
+  .opp-spread-seg.firm-mck { background: #23dd9c; }
+  .opp-spread-seg.firm-ey { background: #5ee8b8; }
+  .opp-spread-seg.firm-pwc { background: #9ef0d3; }
+  .opp-spread-seg.firm-kpmg { background: #c9f5e3; }
+  .opp-spread-seg.firm-other { background: #e8f5ee; color: var(--ink-3); }
+  .opp-spread-legend {
+    display: flex; gap: 16px; flex-wrap: wrap;
+    font-size: 11px; color: var(--ink-3);
+  }
+  .opp-spread-legend .lg {
+    display: flex; align-items: center; gap: 6px;
+  }
+  .opp-spread-legend .lg .dot {
+    width: 10px; height: 10px; border-radius: 2px;
+  }
+
+  /* ───────── REVISED CAPABILITY GRID (Apollo lens with $ pills) ───────── */
+  .cap-grid-slide.apollo-lens {
+    padding: 70px 64px 56px;
+    display: flex; flex-direction: column;
+  }
+  .cap-grid-slide.apollo-lens .cap-grid {
+    grid-template-columns: 1fr 1fr 1fr;
+    grid-auto-rows: 1fr;
+    gap: 8px;
+    flex: 1;
+    min-height: 0;
+  }
+  .cap-grid-slide.apollo-lens .cap-grid-card {
+    padding: 11px 14px;
+    display: flex; flex-direction: column;
+    min-height: 0;
+    border-radius: 12px;
+  }
+  .cap-grid-card .cgc-head {
+    margin-bottom: 5px;
+    align-items: flex-start;
+    gap: 8px;
+  }
+  .cap-grid-card .cgc-icon-sm {
+    width: 24px; height: 24px;
+  }
+  .cap-grid-card .cgc-icon-sm svg { width: 12px; height: 12px; }
+  .cap-grid-slide.apollo-lens .cap-grid-card h3 {
+    font-size: 12.5px; font-weight: 700; line-height: 1.2;
+    flex: 1; min-width: 0;
+  }
+  .cap-grid-card .cgc-pill {
+    background: #e8f5ee; color: var(--bg-dark);
+    border: 1px solid #c9eeda;
+    font-size: 10px; font-weight: 700;
+    padding: 2px 8px; border-radius: 999px;
+    white-space: nowrap;
+    align-self: flex-start;
+    line-height: 1.4;
+  }
+  .cap-grid-slide.apollo-lens .cap-grid-card ul li {
+    font-size: 10.5px; line-height: 1.45;
+  }
+  .cap-grid-slide.apollo-lens .cap-grid-card.highlight {
+    background: var(--bg-dark);
+    border-color: var(--bg-dark);
+  }
+  .cap-grid-slide.apollo-lens .cap-grid-card.highlight h3 { color: var(--white); }
+  .cap-grid-slide.apollo-lens .cap-grid-card.highlight .cgc-icon-sm {
+    background: var(--mint);
+  }
+  .cap-grid-slide.apollo-lens .cap-grid-card.highlight ul li { color: rgba(255,255,255,0.72); }
+  .cap-grid-slide.apollo-lens .cap-grid-card.highlight .cgc-pill {
+    background: rgba(35,221,156,0.18); color: var(--mint);
+    border-color: rgba(35,221,156,0.35);
+  }
+  .cap-grid-slide.apollo-lens h1 {
+    font-size: 24px; line-height: 1.2;
+    margin-bottom: 6px;
+    max-width: 1100px;
+  }
+  .cap-grid-slide.apollo-lens .ag-sub {
+    font-size: 12px; color: var(--ink-3); font-weight: 300;
+    margin-bottom: 12px; line-height: 1.4;
+    max-width: 1100px;
+    display: flex; align-items: center; gap: 14px; flex-wrap: wrap;
+  }
+  .cap-grid-slide.apollo-lens .ag-sub .total-pill {
+    background: var(--bg-dark); color: var(--mint);
+    font-size: 11px; font-weight: 700;
+    padding: 5px 12px; border-radius: 999px;
+    letter-spacing: 0.4px;
+  }
+  .cap-grid-slide.apollo-lens .ag-sub .directional-pill {
+    background: transparent; color: var(--ink-4);
+    font-size: 10px; font-weight: 700;
+    padding: 4px 10px; border-radius: 999px;
+    border: 1px solid var(--line);
+    letter-spacing: 1.2px;
+    text-transform: uppercase;
+  }
+  .cap-grid-slide.apollo-lens .ag-note {
+    display: none; /* overflow risk; figure/source line covered by sub */
+  }
+
+  /* ───────── ENGAGEMENT SHAPES (interactive scatter) ───────── */
+  .slide.engagement-slide {
+    background: var(--light-bg);
+    padding: 88px 80px 64px;
+    display: flex; flex-direction: column;
+  }
+  .engagement-slide h1 {
+    font-size: 28px; font-weight: 700; color: var(--ink);
+    line-height: 1.25; letter-spacing: -0.4px;
+    max-width: 1100px; margin-bottom: 8px;
+  }
+  .engagement-slide .es-sub {
+    font-size: 13.5px; color: var(--ink-3); font-weight: 300;
+    line-height: 1.5; max-width: 900px; margin-bottom: 18px;
+  }
+  .engagement-body {
+    flex: 1;
+    display: grid; grid-template-columns: minmax(0, 1fr) 320px;
+    gap: 20px; min-height: 0;
+  }
+  .es-chart {
+    background: var(--white); border: 1px solid var(--line);
+    border-radius: 14px; padding: 22px 24px 18px;
+    position: relative;
+    display: flex; flex-direction: column;
+  }
+  .es-chart-svg {
+    width: 100%; flex: 1;
+    display: block;
+  }
+  .es-quadrant-rect {
+    fill: rgba(35,221,156,0.07);
+    stroke: rgba(35,221,156,0.4);
+    stroke-width: 1;
+    stroke-dasharray: 4 4;
+  }
+  .es-quadrant-label {
+    fill: var(--bg-dark);
+    font-size: 9px; font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.8px;
+    font-family: var(--font);
+  }
+  .es-axis-line {
+    stroke: var(--line);
+    stroke-width: 1;
+  }
+  .es-axis-tick {
+    stroke: var(--line-2);
+    stroke-width: 1;
+  }
+  .es-axis-text {
+    fill: var(--ink-3); font-size: 11px; font-family: var(--font);
+    font-weight: 500;
+  }
+  .es-axis-title {
+    fill: var(--ink-2); font-size: 11.5px; font-family: var(--font);
+    font-weight: 600;
+  }
+  .es-bubble {
+    cursor: pointer;
+    transition: opacity 0.2s ease;
+  }
+  .es-bubble circle {
+    fill: var(--bg-dark);
+    fill-opacity: 0.16;
+    stroke: var(--bg-dark);
+    stroke-width: 1.5;
+    transition: all 0.25s ease;
+  }
+  .es-bubble.sweet circle {
+    fill: var(--mint);
+    fill-opacity: 0.35;
+    stroke: var(--bg-dark);
+  }
+  .es-bubble.outlier circle {
+    fill: #ffd17a;
+    fill-opacity: 0.4;
+    stroke: #c98c17;
+  }
+  .es-bubble.untapped circle {
+    fill: var(--white);
+    fill-opacity: 1;
+    stroke: var(--bg-dark);
+    stroke-dasharray: 3 3;
+  }
+  .es-bubble:hover circle {
+    fill-opacity: 0.7;
+    stroke-width: 2.5;
+  }
+  .es-bubble.dimmed { opacity: 0.25; }
+  .es-bubble-label {
+    fill: var(--bg-dark); font-size: 11px; font-weight: 700;
+    pointer-events: none;
+    font-family: var(--font);
+    text-anchor: middle;
+  }
+  .es-info {
+    background: var(--white); border: 1px solid var(--line);
+    border-radius: 14px; padding: 22px 22px;
+    display: flex; flex-direction: column; gap: 14px;
+    overflow: hidden;
+  }
+  .es-info-eyebrow {
+    font-size: 10.5px; font-weight: 700; color: var(--ink-4);
+    text-transform: uppercase; letter-spacing: 0.8px;
+  }
+  .es-info-cat {
+    font-size: 18px; font-weight: 700; color: var(--ink);
+    line-height: 1.2;
+    transition: color 0.2s ease;
+  }
+  .es-info-stats {
+    display: flex; gap: 16px;
+    padding: 12px 0;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+  .es-info-stats .es-stat { flex: 1; }
+  .es-info-stats .es-stat .es-stat-num {
+    font-size: 17px; font-weight: 700; color: var(--bg-dark);
+    line-height: 1.2;
+  }
+  .es-info-stats .es-stat .es-stat-label {
+    font-size: 9.5px; color: var(--ink-4); font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.6px;
+    margin-top: 3px;
+  }
+  .es-info-firm {
+    font-size: 12px; color: var(--ink-2); line-height: 1.5;
+  }
+  .es-info-firm strong { font-weight: 700; }
+  .es-info-takeaway {
+    background: #ecf9f3; border-radius: 10px;
+    padding: 12px 14px; margin-top: 4px;
+    border-left: 3px solid var(--mint);
+  }
+  .es-info-takeaway-label {
+    font-size: 9.5px; color: var(--bg-dark); font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.6px;
+    margin-bottom: 4px;
+  }
+  .es-info-takeaway-body {
+    font-size: 12.5px; color: var(--ink); line-height: 1.5;
+  }
+  .es-info-takeaway-body b { color: var(--bg-dark); }
+  .es-legend {
+    display: flex; gap: 14px; flex-wrap: wrap;
+    margin-top: 8px;
+    font-size: 10.5px; color: var(--ink-3);
+  }
+  .es-legend .lg {
+    display: flex; align-items: center; gap: 6px;
+  }
+  .es-legend .lg .swatch {
+    width: 12px; height: 12px; border-radius: 50%;
+    border: 1.5px solid var(--bg-dark);
+  }
+  .es-legend .lg .swatch.sweet { background: var(--mint); }
+  .es-legend .lg .swatch.outlier { background: #ffd17a; border-color: #c98c17; }
+  .es-legend .lg .swatch.untapped { background: var(--white); border-style: dashed; }
+  .es-legend .lg .swatch.fit { background: rgba(4,56,58,0.16); }
+
+  /* ───────── PILOT FOOTHOLDS BARS ───────── */
+  .slide.pilot-slide {
+    background: var(--light-bg);
+    padding: 88px 80px 56px;
+    display: flex; flex-direction: column;
+  }
+  .pilot-slide h1 {
+    font-size: 28px; font-weight: 700; color: var(--ink);
+    line-height: 1.25; letter-spacing: -0.4px;
+    max-width: 1100px; margin-bottom: 8px;
+  }
+  .pilot-slide .pl-sub {
+    font-size: 13.5px; color: var(--ink-3); font-weight: 300;
+    line-height: 1.5; max-width: 900px; margin-bottom: 22px;
+  }
+  .pilot-body {
+    flex: 1; display: grid;
+    grid-template-columns: minmax(0, 1fr) 280px;
+    gap: 18px; min-height: 0;
+  }
+  .pl-chart {
+    background: var(--white); border: 1px solid var(--line);
+    border-radius: 14px; padding: 18px 24px 16px;
+    display: flex; flex-direction: column; gap: 7px;
+    overflow: hidden;
+  }
+  .pl-row {
+    display: grid;
+    grid-template-columns: 168px 1fr 64px;
+    align-items: center; gap: 14px;
+    padding: 6px 0;
+    cursor: pointer;
+    transition: background 0.15s ease;
+  }
+  .pl-row.title-row {
+    cursor: default;
+    border-bottom: 1px solid var(--line);
+    padding-bottom: 8px; padding-top: 0;
+    margin-bottom: 4px;
+  }
+  .pl-row.title-row .pl-name,
+  .pl-row.title-row .pl-bar-wrap,
+  .pl-row.title-row .pl-val {
+    font-size: 9.5px; color: var(--ink-4); font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.7px;
+  }
+  .pl-row.title-row .pl-bar-wrap {
+    background: none; height: auto;
+  }
+  .pl-row:not(.title-row):hover { background: var(--soft); }
+  .pl-name {
+    font-size: 13px; font-weight: 600; color: var(--ink);
+    white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  }
+  .pl-bar-wrap {
+    height: 22px; background: #eef2ee;
+    border-radius: 5px; overflow: hidden;
+    position: relative;
+  }
+  .pl-bar {
+    height: 100%;
+    background: linear-gradient(90deg, var(--mint) 0%, var(--mint-light) 100%);
+    border-radius: 5px;
+    width: 0;
+    transition: width 1.1s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .slide.pilot-slide.active .pl-bar { width: var(--w, 0%); }
+  .pl-projects {
+    position: absolute; left: 10px; top: 50%; transform: translateY(-50%);
+    font-size: 10px; font-weight: 700; color: var(--bg-dark);
+    pointer-events: none;
+    opacity: 0; transition: opacity 0.4s ease 0.6s;
+    white-space: nowrap;
+  }
+  .slide.pilot-slide.active .pl-projects { opacity: 1; }
+  .pl-val {
+    font-size: 14px; font-weight: 700; color: var(--bg-dark);
+    text-align: right; letter-spacing: -0.2px;
+  }
+  .pl-row.highlighted {
+    background: var(--soft);
+  }
+  .pl-side {
+    display: flex; flex-direction: column; gap: 14px;
+    overflow: hidden;
+  }
+  .pl-callout {
+    background: var(--bg-dark); color: var(--white);
+    border-radius: 14px; padding: 22px 22px;
+    flex: 1; display: flex; flex-direction: column; gap: 10px;
+    min-height: 0; overflow: hidden;
+  }
+  .pl-callout-eyebrow {
+    font-size: 10px; color: var(--mint); font-weight: 700;
+    text-transform: uppercase; letter-spacing: 0.8px;
+  }
+  .pl-callout-title {
+    font-size: 16px; font-weight: 700; color: var(--white);
+    line-height: 1.3;
+  }
+  .pl-callout-portco {
+    font-size: 13px; color: rgba(255,255,255,0.72); font-weight: 400;
+    line-height: 1.5;
+  }
+  .pl-callout-firms {
+    background: rgba(255,255,255,0.06);
+    border-radius: 10px; padding: 12px 14px;
+    font-size: 11.5px; line-height: 1.55;
+    color: rgba(255,255,255,0.85);
+  }
+  .pl-callout-firms strong { color: var(--mint); font-weight: 700; }
+  .pl-totals {
+    display: flex; flex-direction: column; gap: 8px;
+  }
+  .pl-totals .pl-tot {
+    background: var(--white); border: 1px solid var(--line);
+    border-radius: 10px; padding: 12px 16px;
+    display: flex; justify-content: space-between; align-items: baseline;
+  }
+  .pl-tot-label {
+    font-size: 10px; color: var(--ink-4); font-weight: 600;
+    text-transform: uppercase; letter-spacing: 0.6px;
+  }
+  .pl-tot-val {
+    font-size: 16px; font-weight: 700; color: var(--bg-dark);
+    letter-spacing: -0.2px;
+  }
+  .pl-tot-val span { color: var(--mint); }
+
+  /* ───────── WHY GRATIA ───────── */
+  .slide.why-slide {
+    background: var(--light-bg);
+    padding: 88px 80px 64px;
+    display: flex; flex-direction: column;
+  }
+  .why-slide h1 {
+    font-size: 28px; font-weight: 700; color: var(--ink);
+    line-height: 1.25; letter-spacing: -0.4px;
+    max-width: 1100px; margin-bottom: 8px;
+  }
+  .why-slide .why-sub {
+    font-size: 13.5px; color: var(--ink-3); font-weight: 300;
+    line-height: 1.5; max-width: 900px; margin-bottom: 22px;
+  }
+  .why-grid {
+    flex: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    grid-template-rows: 1fr 1fr;
+    gap: 14px; min-height: 0;
+  }
+  .why-card {
+    background: var(--white); border: 1px solid var(--line);
+    border-radius: 14px; padding: 22px 26px;
+    display: flex; flex-direction: column; gap: 10px;
+    position: relative; overflow: hidden;
+  }
+  .why-card .why-num {
+    position: absolute; top: 18px; right: 22px;
+    font-size: 36px; font-weight: 700; color: rgba(4,56,58,0.06);
+    letter-spacing: -1px; line-height: 1;
+  }
+  .why-card .why-icon {
+    width: 36px; height: 36px;
+    background: var(--mint); border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--bg-dark);
+    flex-shrink: 0;
+  }
+  .why-card .why-icon svg { width: 18px; height: 18px; }
+  .why-card h3 {
+    font-size: 16.5px; font-weight: 700; color: var(--ink);
+    line-height: 1.3;
+  }
+  .why-card .why-body {
+    font-size: 12.5px; color: var(--ink-3); line-height: 1.6;
+    flex: 1;
+  }
+  .why-card .why-body b { color: var(--ink); }
+  .why-card .why-tags {
+    display: flex; flex-wrap: wrap; gap: 6px;
+    margin-top: 4px;
+  }
+  .why-card .why-tag {
+    font-size: 10.5px; font-weight: 600;
+    background: #f0f0ee; color: var(--ink-2);
+    padding: 4px 10px; border-radius: 999px;
+  }
+  .why-card .why-tag.apollo {
+    background: rgba(35,221,156,0.14);
+    color: var(--bg-dark);
+  }
+  .why-card.highlight {
+    background: var(--bg-dark); color: var(--white);
+  }
+  .why-card.highlight h3 { color: var(--white); }
+  .why-card.highlight .why-body { color: rgba(255,255,255,0.72); }
+  .why-card.highlight .why-body b { color: var(--mint); }
+  .why-card.highlight .why-num { color: rgba(255,255,255,0.08); }
+  .why-card.highlight .why-tag {
+    background: rgba(255,255,255,0.08);
+    color: rgba(255,255,255,0.85);
+  }
+
+  /* ───────── APPENDIX DIVIDER ───────── */
+  .slide.appendix-slide {
+    background: linear-gradient(180deg, var(--bg-dark) 0%, var(--bg-dark-deep) 100%);
+    color: var(--white);
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    padding: 80px;
+  }
+  .appendix-slide .ap-eyebrow {
+    font-size: 12px; color: var(--mint); font-weight: 700;
+    text-transform: uppercase; letter-spacing: 2.4px;
+    margin-bottom: 22px;
+  }
+  .appendix-slide h1 {
+    font-size: 84px; font-weight: 700; color: var(--white);
+    line-height: 1; letter-spacing: -2.4px;
+    margin-bottom: 22px;
+  }
+  .appendix-slide .ap-sub {
+    font-size: 16px; font-weight: 300; color: rgba(255,255,255,0.7);
+    text-align: center; max-width: 700px; line-height: 1.55;
+    margin-bottom: 36px;
+  }
+  .appendix-slide .ap-list {
+    display: flex; flex-wrap: wrap; gap: 10px; justify-content: center;
+    max-width: 920px;
+  }
+  .appendix-slide .ap-list-item {
+    font-size: 11.5px; color: rgba(255,255,255,0.6);
+    border: 1px solid rgba(255,255,255,0.14);
+    background: rgba(255,255,255,0.03);
+    padding: 7px 14px; border-radius: 999px;
+    letter-spacing: 0.2px;
+  }
+  .appendix-slide .ap-list-item.apollo-flag {
+    color: var(--bg-dark);
+    background: var(--mint);
+    border-color: var(--mint);
+    font-weight: 700;
+  }
+
+  /* Apollo case badge — small flag on case slides that are real Apollo work */
+  .apollo-badge {
+    position: absolute;
+    top: 28px; right: 56px;
+    background: var(--mint);
+    color: var(--bg-dark);
+    font-size: 10px; font-weight: 700;
+    padding: 5px 11px; border-radius: 999px;
+    letter-spacing: 0.6px;
+    text-transform: uppercase;
+    z-index: 40;
+    display: flex; align-items: center; gap: 5px;
+  }
+  .apollo-badge::before {
+    content: '★'; font-size: 9px;
+  }
 </style>
 </head>
 <body>
@@ -465,69 +1063,129 @@
     </div>
   </div>
 
-  <!-- ───────── SLIDE 1 — CAPABILITY GRID ───────── -->
-  <div class="slide cap-grid-slide" data-slide="1">
-    <h1 class="anim" data-d="1">A full suite of analyst and consulting services, powered by AI and designed for measurable outcomes across strategy, ops, and growth.</h1>
-    <div class="cap-grid anim" data-d="2">
+  <!-- ───────── SLIDE 1 — APOLLO OPPORTUNITY HERO ───────── -->
+  <div class="slide opp-slide" data-slide="1">
+    <div class="opp-eyebrow anim" data-d="1">The Apollo opportunity</div>
+    <h1 class="anim" data-d="1"><span class="num">$1B+</span> in identified Apollo consultant spend over <span class="accent">2024 – Q1 2026</span></h1>
+    <p class="opp-sub anim" data-d="2">Across ~387 third-party engagements mapped to Gratia&rsquo;s 11 service areas. Most of it concentrates in a small number of firms and PortCos &mdash; the natural footholds for Gratia to step in.</p>
+    <div class="opp-stats anim" data-d="3">
+      <div class="opp-stat">
+        <div class="opp-stat-num">$850M&ndash;1.2B</div>
+        <div class="opp-stat-label">Identified spend</div>
+        <div class="opp-stat-sub">2024 &ndash; Q1 2026, 11 service areas</div>
+      </div>
+      <div class="opp-stat">
+        <div class="opp-stat-num">~387</div>
+        <div class="opp-stat-label">Projects mapped</div>
+        <div class="opp-stat-sub">In Gratia&rsquo;s addressable scope</div>
+      </div>
+      <div class="opp-stat">
+        <div class="opp-stat-num">~93%</div>
+        <div class="opp-stat-label">Held by 4 firms</div>
+        <div class="opp-stat-sub">McKinsey, EY, PwC, KPMG</div>
+      </div>
+      <div class="opp-stat">
+        <div class="opp-stat-num">~56%</div>
+        <div class="opp-stat-label">Held by 10 PortCos</div>
+        <div class="opp-stat-sub">Top 5 = ~$635M / 44%</div>
+      </div>
+    </div>
+    <div class="opp-spread anim" data-d="4">
+      <div class="opp-spread-head">
+        <span>Spend share by firm</span>
+        <span>~$850M&ndash;1.2B identified</span>
+      </div>
+      <div class="opp-spread-bar">
+        <div class="opp-spread-seg firm-mck" style="width: 33%;">McKinsey ~$396M</div>
+        <div class="opp-spread-seg firm-ey" style="width: 26%;">EY ~$317M</div>
+        <div class="opp-spread-seg firm-pwc" style="width: 22%;">PwC ~$268M</div>
+        <div class="opp-spread-seg firm-kpmg" style="width: 12%;">KPMG ~$146M</div>
+        <div class="opp-spread-seg firm-other" style="width: 7%;">Other</div>
+      </div>
+      <div class="opp-spread-legend">
+        <div class="lg"><span class="dot" style="background:#23dd9c;"></span>McKinsey &amp; Company</div>
+        <div class="lg"><span class="dot" style="background:#5ee8b8;"></span>Ernst &amp; Young</div>
+        <div class="lg"><span class="dot" style="background:#9ef0d3;"></span>PwC</div>
+        <div class="lg"><span class="dot" style="background:#c9f5e3;"></span>KPMG</div>
+        <div class="lg"><span class="dot" style="background:#e8f5ee;"></span>Other (Bain, BCG, FTI, mid &amp; small)</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ───────── SLIDE 2 — CAPABILITY GRID (APOLLO LENS) ───────── -->
+  <div class="slide cap-grid-slide apollo-lens" data-slide="2">
+    <h1 class="anim" data-d="1">Gratia delivers across all 11 service areas where Apollo invests</h1>
+    <div class="ag-sub anim" data-d="2">
+      <span class="total-pill">~$850M&ndash;1.2B identified spend</span>
+      <span>Apollo 3rd-party engagements (2024&ndash;Q1 2026), mapped to Gratia&rsquo;s 11 service areas</span>
+      <span class="directional-pill">Directional</span>
+    </div>
+    <div class="cap-grid anim" data-d="3">
       <div class="cap-grid-card">
         <div class="cgc-head">
-          <div class="cgc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div>
-          <h3>Pitch Decks &amp; Proposals</h3>
+          <div class="cgc-icon cgc-icon-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="13" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div>
+          <h3>Pitch &amp; Consulting Decks</h3>
+          <span class="cgc-pill">$1&ndash;5M</span>
         </div>
         <ul>
           <li>Investor &amp; Fundraising Decks</li>
           <li>Board &amp; Exec Presentations</li>
-          <li>RFP &amp; Proposal Development</li>
+          <li>Executive Strategy Decks</li>
         </ul>
       </div>
       <div class="cap-grid-card">
         <div class="cgc-head">
-          <div class="cgc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 17V9M11 17v-5M15 17v-3M19 17v-7"/></svg></div>
+          <div class="cgc-icon cgc-icon-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M7 17V9M11 17v-5M15 17v-3M19 17v-7"/></svg></div>
           <h3>Financial Models &amp; Planning</h3>
+          <span class="cgc-pill">$65&ndash;95M</span>
         </div>
         <ul>
-          <li>Financial Modeling &amp; Forecasting</li>
-          <li>Scenario &amp; Sensitivity Analysis</li>
+          <li>Business Planning &amp; Financial Modeling</li>
+          <li>Scenario &amp; Forecasting Dashboards</li>
           <li>Company &amp; Asset Valuation</li>
         </ul>
       </div>
       <div class="cap-grid-card">
         <div class="cgc-head">
-          <div class="cgc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></div>
+          <div class="cgc-icon cgc-icon-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg></div>
           <h3>Market Research &amp; Intelligence</h3>
+          <span class="cgc-pill">$75&ndash;120M</span>
         </div>
         <ul>
           <li>Market Sizing &amp; Opportunity Assessment</li>
           <li>Competitor Analysis &amp; Benchmarking</li>
-          <li>Customer Research &amp; Segmentation</li>
+          <li>Customer Segmentation &amp; Analysis</li>
         </ul>
       </div>
       <div class="cap-grid-card">
         <div class="cgc-head">
-          <div class="cgc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21a9 9 0 1 0-9-9"/><path d="M12 12 18 6"/></svg></div>
-          <h3>Data Dashboards &amp; Analytics</h3>
+          <div class="cgc-icon cgc-icon-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21a9 9 0 1 0-9-9"/><path d="M12 12 18 6"/></svg></div>
+          <h3>Data Dashboards &amp; Reporting</h3>
+          <span class="cgc-pill">$20&ndash;40M</span>
         </div>
         <ul>
-          <li>Dashboard Development</li>
-          <li>KPI Reporting &amp; BI</li>
-          <li>Sales &amp; Performance Analytics</li>
+          <li>Financial Dashboard Development</li>
+          <li>KPI Reporting &amp; Business Intelligence</li>
+          <li>Sales Performance Analytics</li>
         </ul>
       </div>
       <div class="cap-grid-card">
         <div class="cgc-head">
-          <div class="cgc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/></svg></div>
+          <div class="cgc-icon cgc-icon-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 3v3M12 18v3M3 12h3M18 12h3M5.6 5.6l2.1 2.1M16.3 16.3l2.1 2.1M5.6 18.4l2.1-2.1M16.3 7.7l2.1-2.1"/></svg></div>
           <h3>Business Process Optimization</h3>
+          <span class="cgc-pill">$50&ndash;75M</span>
         </div>
         <ul>
           <li>Workflow Design &amp; Process Mapping</li>
           <li>Business Process Improvement</li>
-          <li>AI &amp; Automation Integration</li>
+          <li>AI Integration &amp; Digital Tools</li>
         </ul>
       </div>
       <div class="cap-grid-card">
         <div class="cgc-head">
-          <div class="cgc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="3"/><circle cx="18" cy="6" r="3"/><circle cx="12" cy="18" r="3"/><path d="M8.5 7.5l3 8M15.5 7.5l-3 8"/></svg></div>
-          <h3>Project Management</h3>
+          <div class="cgc-icon cgc-icon-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="6" r="3"/><circle cx="18" cy="6" r="3"/><circle cx="12" cy="18" r="3"/><path d="M8.5 7.5l3 8M15.5 7.5l-3 8"/></svg></div>
+          <h3>Strategic Project Management</h3>
+          <span class="cgc-pill">$190&ndash;235M</span>
         </div>
         <ul>
           <li>Project Planning &amp; Milestone Tracking</li>
@@ -537,37 +1195,343 @@
       </div>
       <div class="cap-grid-card">
         <div class="cgc-head">
-          <div class="cgc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20h18M6 20V10M11 20V6M16 20v-7M21 20V4"/></svg></div>
-          <h3>Growth &amp; GTM Strategy</h3>
+          <div class="cgc-icon cgc-icon-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6M9 13h6M9 17h4"/></svg></div>
+          <h3>Proposals &amp; Business Cases</h3>
+          <span class="cgc-pill">$1&ndash;5M</span>
         </div>
         <ul>
+          <li>RFP Response &amp; Strategy</li>
+          <li>Business Case Analysis</li>
+          <li>Investment &amp; Project Pitch Decks</li>
+        </ul>
+      </div>
+      <div class="cap-grid-card">
+        <div class="cgc-head">
+          <div class="cgc-icon cgc-icon-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 20h18M6 20V10M11 20V6M16 20v-7M21 20V4"/></svg></div>
+          <h3>RevOps &amp; GTM Enablement</h3>
+          <span class="cgc-pill">$30&ndash;55M</span>
+        </div>
+        <ul>
+          <li>Sales Process Optimization &amp; CRM Setup</li>
           <li>Go-to-Market Strategy &amp; Planning</li>
-          <li>Market Entry &amp; Expansion</li>
-          <li>Revenue Growth Strategy</li>
+          <li>Revenue Growth Planning &amp; Execution</li>
         </ul>
       </div>
       <div class="cap-grid-card">
         <div class="cgc-head">
-          <div class="cgc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 5h-9l-7 7 7 7h9a2 2 0 0 0 2-2V7a2 2 0 0 0-2-2Z"/><circle cx="14.5" cy="12" r="1.2" fill="currentColor"/></svg></div>
-          <h3>RevOps &amp; Sales Enablement</h3>
+          <div class="cgc-icon cgc-icon-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/></svg></div>
+          <h3>Business Strategy Consulting</h3>
+          <span class="cgc-pill">$400&ndash;480M</span>
         </div>
         <ul>
-          <li>Sales Process Optimization &amp; CRM</li>
-          <li>Revenue Operations Setup</li>
-          <li>Sales Enablement &amp; Tools</li>
+          <li>Corporate Strategy &amp; Planning</li>
+          <li>Organizational Change Management</li>
+          <li>Risk Assessment &amp; Mitigation Planning</li>
         </ul>
       </div>
-      <div class="cap-grid-card">
+      <div class="cap-grid-card highlight">
         <div class="cgc-head">
-          <div class="cgc-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M9 7V5a2 2 0 0 1 2-2h2a2 2 0 0 1 2 2v2"/></svg></div>
-          <h3>Business Strategy Services</h3>
+          <div class="cgc-icon cgc-icon-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/><circle cx="12" cy="12" r="3"/></svg></div>
+          <h3>Product Development Support</h3>
+          <span class="cgc-pill">$5&ndash;25M</span>
         </div>
         <ul>
-          <li>Corporate &amp; Growth Strategy</li>
-          <li>Strategic Planning &amp; Roadmapping</li>
-          <li>Business Model Design</li>
+          <li>AI-enabled MVPs &amp; &ldquo;Vibe Coding&rdquo;</li>
+          <li>AI-enhanced Process Automation</li>
+          <li>Product Development Coordination</li>
         </ul>
       </div>
+      <div class="cap-grid-card highlight">
+        <div class="cgc-head">
+          <div class="cgc-icon cgc-icon-sm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21V11a4 4 0 0 1 8 0v10"/><path d="M5 11h14"/><circle cx="13" cy="6" r="2"/></svg></div>
+          <h3>AI &amp; Automation Support</h3>
+          <span class="cgc-pill">$10&ndash;30M</span>
+        </div>
+        <ul>
+          <li>AI Workflow Automation &amp; Tool Integration</li>
+          <li>Low-Code / No-Code Solution Development</li>
+          <li>PMBA-style Project Coordination &amp; Execution</li>
+        </ul>
+      </div>
+    </div>
+    <div class="ag-note">
+      Figures are directional estimates based on Apollo&rsquo;s third-party consultant spend data (2024&ndash;Q1 2026); individual project categorizations were mapped to Gratia&rsquo;s 11 service areas based on project title, scope of work, and consultant type. Excludes projects out of Gratia&rsquo;s scope (Tax, Audit, SAP / Workday / SuccessFactors implementations).
+    </div>
+  </div>
+
+  <!-- ───────── SLIDE 3 — ENGAGEMENT SHAPES SCATTER ───────── -->
+  <div class="slide engagement-slide" data-slide="3">
+    <h1 class="anim" data-d="1">Apollo&rsquo;s engagement shapes &mdash; Gratia maps to the high-frequency, mid-fee work</h1>
+    <p class="es-sub anim" data-d="2">Each bubble is one of Apollo&rsquo;s 11 service areas. <b>Position</b> = project count &times; avg fee. <b>Size</b> = total identified spend. The mint zone marks the &ldquo;sweet spot&rdquo; where lean, AI-augmented teams replace high-cost consultant benches.</p>
+    <div class="engagement-body anim" data-d="3">
+      <div class="es-chart">
+        <svg class="es-chart-svg" viewBox="0 0 760 380" preserveAspectRatio="xMidYMid meet">
+          <!-- Sweet spot quadrant overlay -->
+          <rect class="es-quadrant-rect" x="220" y="200" width="500" height="160" rx="10"/>
+          <text class="es-quadrant-label" x="710" y="220" text-anchor="end">Gratia sweet spot</text>
+
+          <!-- Axes -->
+          <line class="es-axis-line" x1="60" y1="360" x2="720" y2="360"/>
+          <line class="es-axis-line" x1="60" y1="20" x2="60" y2="360"/>
+
+          <!-- X-axis ticks &amp; labels (project count) -->
+          <line class="es-axis-tick" x1="60"  y1="360" x2="60"  y2="365"/>
+          <line class="es-axis-tick" x1="192" y1="360" x2="192" y2="365"/>
+          <line class="es-axis-tick" x1="324" y1="360" x2="324" y2="365"/>
+          <line class="es-axis-tick" x1="456" y1="360" x2="456" y2="365"/>
+          <line class="es-axis-tick" x1="588" y1="360" x2="588" y2="365"/>
+          <line class="es-axis-tick" x1="720" y1="360" x2="720" y2="365"/>
+          <text class="es-axis-text" x="60"  y="376" text-anchor="middle">0</text>
+          <text class="es-axis-text" x="192" y="376" text-anchor="middle">20</text>
+          <text class="es-axis-text" x="324" y="376" text-anchor="middle">40</text>
+          <text class="es-axis-text" x="456" y="376" text-anchor="middle">60</text>
+          <text class="es-axis-text" x="588" y="376" text-anchor="middle">80</text>
+          <text class="es-axis-text" x="720" y="376" text-anchor="middle">100</text>
+          <text class="es-axis-title" x="390" y="395" text-anchor="middle">Project count (2024 – Q1 2026)</text>
+
+          <!-- Y-axis ticks &amp; labels (avg fee, log scale: 0.5 → 15) -->
+          <line class="es-axis-tick" x1="55" y1="360" x2="60" y2="360"/>
+          <line class="es-axis-tick" x1="55" y1="287" x2="60" y2="287"/>
+          <line class="es-axis-tick" x1="55" y1="200" x2="60" y2="200"/>
+          <line class="es-axis-tick" x1="55" y1="113" x2="60" y2="113"/>
+          <line class="es-axis-tick" x1="55" y1="40"  x2="60" y2="40"/>
+          <text class="es-axis-text" x="50" y="363" text-anchor="end">$0.5M</text>
+          <text class="es-axis-text" x="50" y="290" text-anchor="end">$1M</text>
+          <text class="es-axis-text" x="50" y="203" text-anchor="end">$3M</text>
+          <text class="es-axis-text" x="50" y="116" text-anchor="end">$6M</text>
+          <text class="es-axis-text" x="50" y="43"  text-anchor="end">$13M</text>
+          <text class="es-axis-title" x="20" y="190" text-anchor="middle" transform="rotate(-90 20 190)">Avg project fee (log scale)</text>
+
+          <!-- Bubbles (drawn back to front: largest first so they sit behind smaller) -->
+          <!-- Business Process Optimization: 38, $12.3M, $469M (outlier) -->
+          <g class="es-bubble outlier" data-id="bpo">
+            <circle cx="311" cy="50" r="34"/>
+            <text class="es-bubble-label" x="311" y="54">BPO</text>
+          </g>
+          <!-- Financial Models &amp; Planning: 88, $1.8M, $158M -->
+          <g class="es-bubble sweet" data-id="fmp">
+            <circle cx="641" cy="247" r="22"/>
+            <text class="es-bubble-label" x="641" y="251">FM&amp;P</text>
+          </g>
+          <!-- Market Research &amp; Intelligence: 83, $0.8M, $70M -->
+          <g class="es-bubble sweet" data-id="mri">
+            <circle cx="608" cy="333" r="16"/>
+            <text class="es-bubble-label" x="608" y="337">MR&amp;I</text>
+          </g>
+          <!-- Data Dashboards &amp; Reporting: 41, $1.6M, $65M -->
+          <g class="es-bubble sweet" data-id="ddr">
+            <circle cx="331" cy="263" r="15"/>
+            <text class="es-bubble-label" x="331" y="267">DD&amp;R</text>
+          </g>
+          <!-- Strategic Project Management: 27, $2.3M, $63M -->
+          <g class="es-bubble" data-id="spm">
+            <circle cx="238" cy="227" r="15"/>
+            <text class="es-bubble-label" x="238" y="231">SPM</text>
+          </g>
+          <!-- RevOps &amp; GTM Enablement: 32, $1.0M, $31M -->
+          <g class="es-bubble sweet" data-id="rev">
+            <circle cx="271" cy="291" r="11"/>
+            <text class="es-bubble-label" x="271" y="295">RevOps</text>
+          </g>
+          <!-- AI &amp; Automation Support: 31, $1.0M, $30M -->
+          <g class="es-bubble sweet" data-id="aia">
+            <circle cx="265" cy="291" r="11"/>
+            <text class="es-bubble-label" x="265" y="295" style="display:none;">AI</text>
+          </g>
+          <!-- Business Strategy Consulting: 29, $0.7M, $21M -->
+          <g class="es-bubble sweet" data-id="bsc">
+            <circle cx="252" cy="349" r="10"/>
+            <text class="es-bubble-label" x="252" y="352">BSC</text>
+          </g>
+          <!-- Proposals &amp; Business Cases: 7, $2.2M, $15M -->
+          <g class="es-bubble" data-id="pbc">
+            <circle cx="106" cy="231" r="9"/>
+            <text class="es-bubble-label" x="106" y="234">P&amp;BC</text>
+          </g>
+          <!-- Pitch &amp; Consulting Decks: 11, $0.5M, $5M -->
+          <g class="es-bubble" data-id="pcd">
+            <circle cx="133" cy="358" r="7"/>
+            <text class="es-bubble-label" x="133" y="361" style="display:none;">PCD</text>
+          </g>
+          <!-- Product Development Support: 0, untapped -->
+          <g class="es-bubble untapped" data-id="pds">
+            <circle cx="60" cy="360" r="8"/>
+          </g>
+        </svg>
+        <div class="es-legend">
+          <div class="lg"><span class="swatch sweet"></span>Sweet spot</div>
+          <div class="lg"><span class="swatch fit"></span>Fit</div>
+          <div class="lg"><span class="swatch outlier"></span>Mega-engagement skew</div>
+          <div class="lg"><span class="swatch untapped"></span>Untapped</div>
+        </div>
+      </div>
+      <div class="es-info" id="esInfo">
+        <div class="es-info-eyebrow">Hover any bubble for detail</div>
+        <div class="es-info-cat">All 11 service areas</div>
+        <div class="es-info-stats">
+          <div class="es-stat"><div class="es-stat-num">~387</div><div class="es-stat-label">Projects</div></div>
+          <div class="es-stat"><div class="es-stat-num">$850M&ndash;1.2B</div><div class="es-stat-label">Identified spend</div></div>
+        </div>
+        <div class="es-info-firm">Top firms: <strong>McKinsey</strong>, <strong>Ernst &amp; Young</strong>, <strong>PwC</strong>, <strong>KPMG</strong> &mdash; combined ~93% of spend.</div>
+        <div class="es-info-takeaway">
+          <div class="es-info-takeaway-label">Where Gratia wins</div>
+          <div class="es-info-takeaway-body"><b>High-frequency, mid-fee work</b> &mdash; the long tail of $0.5&ndash;3M projects across categories like Financial Models, Market Research, Data Dashboards, RevOps, and AI &amp; Automation. Lean teams replace heavy consultant benches.</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ───────── SLIDE 4 — PILOT FOOTHOLDS BARS ───────── -->
+  <div class="slide pilot-slide" data-slide="4">
+    <h1 class="anim" data-d="1">Top 10 PortCos hold ~56% of identified spend &mdash; the strongest pilot footholds</h1>
+    <p class="pl-sub anim" data-d="2">Identified consultant spend by Apollo PortCo, 2024&ndash;Q1 2026. Click or hover any row to see the firm breakdown.</p>
+    <div class="pilot-body anim" data-d="3">
+      <div class="pl-chart">
+        <div class="pl-row title-row">
+          <div class="pl-name">PortCo</div>
+          <div class="pl-bar-wrap">Identified consultant spend</div>
+          <div class="pl-val">Total</div>
+        </div>
+        <div class="pl-row" data-id="tenneco">
+          <div class="pl-name">Tenneco</div>
+          <div class="pl-bar-wrap"><div class="pl-bar" style="--w: 100%;"></div><span class="pl-projects">41 projects</span></div>
+          <div class="pl-val">$269M</div>
+        </div>
+        <div class="pl-row" data-id="igt">
+          <div class="pl-name">IGT / Everi</div>
+          <div class="pl-bar-wrap"><div class="pl-bar" style="--w: 47.6%;"></div><span class="pl-projects">11 projects</span></div>
+          <div class="pl-val">$128M</div>
+        </div>
+        <div class="pl-row" data-id="ti">
+          <div class="pl-name">TI Automotive</div>
+          <div class="pl-bar-wrap"><div class="pl-bar" style="--w: 33.1%;"></div><span class="pl-projects">6 projects</span></div>
+          <div class="pl-val">$89M</div>
+        </div>
+        <div class="pl-row" data-id="cengage">
+          <div class="pl-name">Cengage</div>
+          <div class="pl-bar-wrap"><div class="pl-bar" style="--w: 31.9%;"></div><span class="pl-projects">40 projects</span></div>
+          <div class="pl-val">$86M</div>
+        </div>
+        <div class="pl-row" data-id="novolex">
+          <div class="pl-name">Novolex</div>
+          <div class="pl-bar-wrap"><div class="pl-bar" style="--w: 23.4%;"></div><span class="pl-projects">14 projects</span></div>
+          <div class="pl-val">$63M</div>
+        </div>
+        <div class="pl-row" data-id="barnes">
+          <div class="pl-name">Barnes Group</div>
+          <div class="pl-bar-wrap"><div class="pl-bar" style="--w: 19.4%;"></div><span class="pl-projects">19 projects</span></div>
+          <div class="pl-val">$52M</div>
+        </div>
+        <div class="pl-row" data-id="employbridge">
+          <div class="pl-name">EmployBridge</div>
+          <div class="pl-bar-wrap"><div class="pl-bar" style="--w: 19.4%;"></div><span class="pl-projects">24 projects</span></div>
+          <div class="pl-val">$52M</div>
+        </div>
+        <div class="pl-row" data-id="agm">
+          <div class="pl-name">Apollo Global Management</div>
+          <div class="pl-bar-wrap"><div class="pl-bar" style="--w: 9.0%;"></div><span class="pl-projects">21 projects</span></div>
+          <div class="pl-val">$24M</div>
+        </div>
+        <div class="pl-row" data-id="avaya">
+          <div class="pl-name">Avaya Holdings</div>
+          <div class="pl-bar-wrap"><div class="pl-bar" style="--w: 8.8%;"></div><span class="pl-projects">13 projects</span></div>
+          <div class="pl-val">$24M</div>
+        </div>
+        <div class="pl-row" data-id="shutterfly">
+          <div class="pl-name">Shutterfly</div>
+          <div class="pl-bar-wrap"><div class="pl-bar" style="--w: 8.4%;"></div><span class="pl-projects">7 projects</span></div>
+          <div class="pl-val">$23M</div>
+        </div>
+      </div>
+      <div class="pl-side">
+        <div class="pl-callout" id="plCallout">
+          <div class="pl-callout-eyebrow">Pilot foothold</div>
+          <div class="pl-callout-title" id="plCalloutTitle">Tenneco</div>
+          <div class="pl-callout-portco" id="plCalloutDesc">$269M across 41 projects &mdash; Apollo&rsquo;s highest single-PortCo consultant spend, with strategy and ops engagements concentrated in McKinsey.</div>
+          <div class="pl-callout-firms" id="plCalloutFirms">
+            <strong>McKinsey &amp; Company</strong> ~$200M &middot; <strong>PwC</strong> ~$50M
+          </div>
+        </div>
+        <div class="pl-totals">
+          <div class="pl-tot">
+            <span class="pl-tot-label">Top 5 PortCos</span>
+            <span class="pl-tot-val">~$635M <span>(44%)</span></span>
+          </div>
+          <div class="pl-tot">
+            <span class="pl-tot-label">Top 10 PortCos</span>
+            <span class="pl-tot-val">~$810M <span>(56%)</span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ───────── SLIDE 5 — WHY GRATIA ───────── -->
+  <div class="slide why-slide" data-slide="5">
+    <h1 class="anim" data-d="1">Why Apollo wins with Gratia</h1>
+    <p class="why-sub anim" data-d="2">A vetted analyst bench, AI-augmented from the start, deployed in lean teams that match the engagement shape Apollo actually needs.</p>
+    <div class="why-grid anim" data-d="3">
+      <div class="why-card">
+        <div class="why-num">01</div>
+        <div class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 11a4 4 0 1 0 0-8 4 4 0 0 0 0 8Z"/><path d="M3 21a9 9 0 0 1 18 0"/></svg></div>
+        <h3>Vetted analyst bench, top-tier consulting DNA</h3>
+        <div class="why-body">Hand-picked analysts from <b>McKinsey, BCG, Bain, EY, PwC, Deloitte, KPMG</b> backgrounds. Deployed solo or in 2&ndash;4 person pods sized to the work &mdash; not the rate card.</div>
+        <div class="why-tags">
+          <span class="why-tag">Consulting alumni</span>
+          <span class="why-tag">Industry-vertical</span>
+          <span class="why-tag">Pre-vetted</span>
+        </div>
+      </div>
+      <div class="why-card highlight">
+        <div class="why-num">02</div>
+        <div class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 2a4 4 0 0 0-4 4v2a4 4 0 0 0 8 0V6a4 4 0 0 0-4-4Z"/><path d="M5 12h14M5 17h14M5 22h14"/></svg></div>
+        <h3>AI-augmented, end-to-end</h3>
+        <div class="why-body">Every engagement runs on <b>modern AI tooling for synthesis, modeling, research, and automation</b> &mdash; collapsing weeks of analyst work into days. Outputs feel like polished, vibe-coded artifacts, not consultant-deck templates.</div>
+        <div class="why-tags">
+          <span class="why-tag">AI-native delivery</span>
+          <span class="why-tag">AI workflows</span>
+          <span class="why-tag">Reusable templates</span>
+        </div>
+      </div>
+      <div class="why-card">
+        <div class="why-num">03</div>
+        <div class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 3"/></svg></div>
+        <h3>Lean teams, days-to-weeks turnaround</h3>
+        <div class="why-body">Most Gratia engagements ship in <b>2&ndash;6 weeks</b> with 1&ndash;3 people. We replace the long discovery / roadmap phases of Big 4 work with structured frameworks and live iteration.</div>
+        <div class="why-tags">
+          <span class="why-tag">Fixed-fee or T&amp;M</span>
+          <span class="why-tag">Weekly delivery rhythm</span>
+          <span class="why-tag">No bench markup</span>
+        </div>
+      </div>
+      <div class="why-card">
+        <div class="why-num">04</div>
+        <div class="why-icon"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M9 12l2 2 4-4"/><circle cx="12" cy="12" r="9"/></svg></div>
+        <h3>Already trusted by Apollo</h3>
+        <div class="why-body">Gratia is already delivering at Apollo &mdash; the <b>team-tracking platform</b> and <b>AI-assisted automation for a portfolio team</b> are live in-house projects. New service areas sit on a proven foundation.</div>
+        <div class="why-tags">
+          <span class="why-tag apollo">★ Apollo team tracking</span>
+          <span class="why-tag apollo">★ Portfolio AI automation</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ───────── SLIDE 6 — APPENDIX DIVIDER ───────── -->
+  <div class="slide appendix-slide" data-slide="6">
+    <div class="ap-eyebrow anim" data-d="1">Appendix</div>
+    <h1 class="anim" data-d="2">Sample case studies</h1>
+    <p class="ap-sub anim" data-d="3">Representative work across the 11 Gratia service areas, including two live engagements with Apollo.</p>
+    <div class="ap-list anim" data-d="4">
+      <span class="ap-list-item">Pitch Decks &amp; Proposals</span>
+      <span class="ap-list-item">Financial Models &amp; Planning</span>
+      <span class="ap-list-item">Market Research &amp; Intelligence</span>
+      <span class="ap-list-item apollo-flag">★ Data Dashboards &mdash; Apollo</span>
+      <span class="ap-list-item apollo-flag">★ Business Process Optimization &mdash; Apollo</span>
+      <span class="ap-list-item">Project Management</span>
+      <span class="ap-list-item">Growth &amp; GTM Strategy</span>
+      <span class="ap-list-item">RevOps &amp; Sales Enablement</span>
+      <span class="ap-list-item">Business Strategy Services</span>
     </div>
   </div>
 
@@ -724,8 +1688,9 @@
     </div>
   </div>
 
-  <!-- ───────── SLIDE 5 — DATA DASHBOARDS & ANALYTICS ───────── -->
+  <!-- ───────── SLIDE 5 — DATA DASHBOARDS & ANALYTICS (Apollo work) ───────── -->
   <div class="slide cap-slide" data-slide="5">
+    <div class="apollo-badge">Apollo work</div>
     <div class="cap-head">
       <h1 class="anim" data-d="1">Data Dashboards &amp; Analytics</h1>
       <p class="cap-sub anim" data-d="2">Standing dashboards and analytics built around the decisions teams need to make, with live data and self-serve filters.</p>
@@ -775,8 +1740,9 @@
     </div>
   </div>
 
-  <!-- ───────── SLIDE 6 — BUSINESS PROCESS OPTIMIZATION ───────── -->
+  <!-- ───────── SLIDE 6 — BUSINESS PROCESS OPTIMIZATION (Apollo work) ───────── -->
   <div class="slide cap-slide" data-slide="6">
+    <div class="apollo-badge">Apollo work</div>
     <div class="cap-head">
       <h1 class="anim" data-d="1">Business Process Optimization</h1>
       <p class="cap-sub anim" data-d="2">Process automation, smart analytics, and AI innovation, powered by digital consultants with practical, enterprise experience.</p>
@@ -1065,9 +2031,11 @@
     progress.style.width = ((current + 1) / total * 100) + '%';
     counter.textContent = String(current + 1).padStart(2, '0') + ' / ' + String(total).padStart(2, '0');
     const isCover = slides[current].classList.contains('cover');
-    brand.classList.toggle('hidden', isCover);
-    deck.classList.toggle('on-dark', isCover);
-    counter.classList.toggle('on-dark', isCover);
+    const isAppendix = slides[current].classList.contains('appendix-slide');
+    const isDark = isCover || isAppendix;
+    brand.classList.toggle('hidden', isDark);
+    deck.classList.toggle('on-dark', isDark);
+    counter.classList.toggle('on-dark', isDark);
     counter.classList.toggle('hidden', isCover);
     footerTag.classList.toggle('hidden', isCover);
   }
