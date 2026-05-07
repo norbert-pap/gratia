@@ -334,6 +334,9 @@
     overflow: hidden;
     box-shadow: var(--shadow);
   }
+  /* Hero-grid cards host tooltips that need to escape the card; clipping them off
+     looks worse than the rare corner-bleed from card-head's border-bottom. */
+  .hero-grid > .card { overflow: visible; }
   .card-head {
     display: flex; align-items: center; justify-content: space-between;
     padding: 16px 20px 14px;
