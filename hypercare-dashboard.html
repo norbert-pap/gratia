@@ -1344,190 +1344,182 @@
   }
   .training-section .section-head h2 { font-size: 18px; color: var(--ink-0); font-weight: 600; }
   .training-section .section-head .count { color: var(--ink-2); font-size: 12.5px; }
-  .docs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
-  .doc-tile {
-    display: grid; grid-template-columns: 56px 1fr auto; gap: 16px;
-    align-items: center;
-    padding: 18px;
+  /* Module picker */
+  .module-picker {
+    display: grid;
+    grid-template-columns: repeat(5, 1fr);
+    gap: 12px;
+  }
+  .module-card {
     background: var(--bg-1);
     border: 1px solid var(--border);
     border-radius: 8px;
-    text-decoration: none;
-    color: inherit;
-    transition: border-color 0.15s, background 0.15s;
+    padding: 14px 14px 16px;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s, transform 0.15s;
     position: relative;
-    overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    min-height: 132px;
   }
-  .doc-tile::before {
-    content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+  .module-card:hover { border-color: var(--border-2); background: var(--bg-2); }
+  .module-card.selected { border-color: var(--gold-line); background: var(--bg-2); box-shadow: 0 0 0 1px var(--gold-line); }
+  .module-card.locked { opacity: 0.55; cursor: not-allowed; }
+  .module-card.locked:hover { background: var(--bg-1); border-color: var(--border); }
+  .module-card .mc-num {
+    font-size: 10.5px;
+    font-family: 'JetBrains Mono', monospace;
+    color: var(--ink-3);
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
   }
-  .doc-tile.cyan::before { background: #6cb6e8; }
-  .doc-tile.gold::before { background: var(--gold); }
-  .doc-tile:hover { border-color: var(--border-2); background: var(--bg-2); }
-  .doc-icon {
-    width: 56px; height: 64px; border-radius: 6px;
-    background: var(--bg-3); border: 1px solid var(--border);
-    display: flex; align-items: center; justify-content: center;
-    font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--ink-2);
-    font-weight: 600; letter-spacing: 0.04em;
+  .module-card .mc-title { color: var(--ink-0); font-weight: 500; font-size: 13.5px; line-height: 1.35; }
+  .module-card .mc-desc { color: var(--ink-2); font-size: 11.5px; line-height: 1.4; flex: 1; }
+  .module-card .mc-meta { display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+  .module-card .mc-time { color: var(--ink-3); font-size: 11px; font-family: 'JetBrains Mono', monospace; }
+  .module-card .mc-status {
+    display: inline-flex; align-items: center; gap: 5px;
+    font-size: 10.5px; font-weight: 500;
+    padding: 2px 7px; border-radius: 999px;
+    text-transform: uppercase; letter-spacing: 0.04em;
+    white-space: nowrap;
   }
-  .doc-tile.cyan .doc-icon { color: #6cb6e8; border-color: rgba(108, 182, 232, 0.3); }
-  .doc-tile.gold .doc-icon { color: var(--gold-ink); border-color: var(--gold-line); }
-  .doc-title { color: var(--ink-0); font-weight: 500; font-size: 14px; }
-  .doc-sub { color: var(--ink-2); font-size: 12px; margin-top: 4px; font-family: 'JetBrains Mono', monospace; }
-  .doc-actions { display: flex; gap: 8px; }
-  .video-card {
-    display: grid; grid-template-columns: 1.4fr 1fr; gap: 24px;
-    background: var(--bg-1); border: 1px solid var(--border); border-radius: 8px;
-    overflow: hidden;
-  }
-  .video-thumb {
-    aspect-ratio: 16/9;
-    background: linear-gradient(135deg, #1e3a5f 0%, #2d5985 50%, #4a7ba9 100%);
-    position: relative; cursor: pointer;
-    display: flex; align-items: center; justify-content: center;
-  }
-  .video-play {
-    width: 64px; height: 64px; border-radius: 50%;
-    background: rgba(255,255,255,0.92);
-    color: #1a1a1c;
-    display: flex; align-items: center; justify-content: center;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
-    transition: transform 0.2s;
-  }
-  .video-thumb:hover .video-play { transform: scale(1.06); }
-  .video-status {
-    position: absolute; top: 12px; right: 12px;
-    background: rgba(0,0,0,0.5); color: var(--green-ink);
-    padding: 4px 10px; border-radius: 999px;
-    font-size: 11px; display: inline-flex; align-items: center; gap: 6px;
-    backdrop-filter: blur(4px);
-  }
-  .video-status .dot { width: 6px; height: 6px; border-radius: 50%; }
-  .video-status .dot.g { background: var(--green-ink); }
-  .video-duration {
-    position: absolute; bottom: 12px; right: 12px;
-    background: rgba(0,0,0,0.6); color: white;
-    padding: 3px 8px; border-radius: 4px;
-    font-size: 11px; font-family: 'JetBrains Mono', monospace;
-  }
-  .video-meta { padding: 24px; display: flex; flex-direction: column; justify-content: center; }
-  .video-meta h3 { font-size: 16px; color: var(--ink-0); margin-bottom: 8px; }
-  .video-meta .sub { color: var(--ink-2); font-size: 13px; line-height: 1.55; }
-  .walkthrough {
-    background: var(--bg-1); border: 1px solid var(--border); border-radius: 8px;
+  .module-card .mc-status.passed   { color: var(--green-ink); background: var(--green-dim); border: 1px solid var(--green-line); }
+  .module-card .mc-status.progress { color: var(--amber-ink); background: var(--amber-dim); border: 1px solid var(--amber-line); }
+  .module-card .mc-status.failed   { color: var(--red-ink); background: var(--red-dim); border: 1px solid var(--red-line); }
+  .module-card .mc-status.notstart { color: var(--ink-2); background: var(--bg-3); border: 1px solid var(--border); }
+  .module-card .mc-status.locked   { color: var(--ink-3); background: var(--bg-3); border: 1px solid var(--border); }
+
+  /* Module detail */
+  .module-detail {
+    background: var(--bg-1);
+    border: 1px solid var(--border);
+    border-radius: 8px;
     padding: 24px;
   }
-  .wk-stepper { display: flex; align-items: center; gap: 0; margin-bottom: 24px; }
-  .wk-step {
-    flex: 1; display: flex; align-items: center; gap: 10px;
-    padding: 8px 4px;
+  .md-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 18px; margin-bottom: 18px; padding-bottom: 18px; border-bottom: 1px solid var(--border); }
+  .md-head h3 { color: var(--ink-0); font-size: 18px; margin-bottom: 6px; }
+  .md-head .md-desc { color: var(--ink-2); font-size: 13px; line-height: 1.5; }
+  .md-head .md-meta { display: flex; align-items: center; gap: 12px; flex-shrink: 0; }
+  .md-head .md-time { color: var(--ink-3); font-size: 12px; font-family: 'JetBrains Mono', monospace; }
+
+  .md-step {
+    margin-top: 22px;
+    padding-top: 18px;
+    border-top: 1px solid var(--border);
+  }
+  .md-step:first-child { margin-top: 0; padding-top: 0; border-top: none; }
+  .md-step-head {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 14px;
+  }
+  .md-step-num {
+    width: 26px; height: 26px; border-radius: 50%;
+    background: var(--bg-3); color: var(--ink-1); border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 12px; font-family: 'JetBrains Mono', monospace; font-weight: 500;
+  }
+  .md-step-head h4 { color: var(--ink-0); font-size: 15px; font-weight: 500; }
+
+  /* Step 1 — materials */
+  .md-materials {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 12px;
+  }
+  .md-mat-tile {
+    display: flex; flex-direction: column; gap: 4px;
+    padding: 12px 14px;
+    background: var(--bg-2); border: 1px solid var(--border); border-radius: 6px;
+    cursor: pointer;
+    transition: border-color 0.15s;
+  }
+  .md-mat-tile:hover { border-color: var(--border-2); }
+  .md-mat-tile .mt-icon { color: var(--gold-ink); font-size: 11px; font-family: 'JetBrains Mono', monospace; font-weight: 600; letter-spacing: 0.04em; }
+  .md-mat-tile .mt-title { color: var(--ink-0); font-size: 13px; font-weight: 500; }
+  .md-mat-tile .mt-detail { color: var(--ink-2); font-size: 11.5px; font-family: 'JetBrains Mono', monospace; }
+
+  /* Step 2 — walkthrough */
+  .md-walk { background: var(--bg-2); border: 1px solid var(--border); border-radius: 6px; padding: 18px; }
+  .md-walk-stepper { display: flex; gap: 0; margin-bottom: 18px; }
+  .md-walk-step {
+    flex: 1; display: flex; align-items: center; gap: 8px;
+    padding: 6px 4px;
     color: var(--ink-3);
     border-bottom: 2px solid var(--border);
-    font-size: 12.5px;
+    font-size: 12px;
     cursor: pointer;
     transition: color 0.15s, border-color 0.15s;
+    min-width: 0;
   }
-  .wk-step.done { color: var(--green-ink); border-color: var(--green-line); }
-  .wk-step.active { color: var(--ink-0); border-color: var(--gold); font-weight: 500; }
-  .wk-step .wk-num {
-    width: 22px; height: 22px; border-radius: 50%;
+  .md-walk-step.active { color: var(--ink-0); border-color: var(--gold); font-weight: 500; }
+  .md-walk-step.done { color: var(--green-ink); border-color: var(--green-line); }
+  .md-walk-step .mws-num {
+    width: 20px; height: 20px; border-radius: 50%;
     background: var(--bg-3); color: inherit;
     display: flex; align-items: center; justify-content: center;
-    font-size: 11px; font-family: 'JetBrains Mono', monospace; font-weight: 500;
+    font-size: 10.5px; font-family: 'JetBrains Mono', monospace; font-weight: 500;
     border: 1px solid var(--border);
+    flex-shrink: 0;
   }
-  .wk-step.active .wk-num { background: var(--gold-dim); color: var(--gold-ink); border-color: var(--gold-line); }
-  .wk-step.done .wk-num { background: var(--green-dim); color: var(--green-ink); border-color: var(--green-line); }
-  .wk-body { display: grid; grid-template-columns: 1fr 1.3fr; gap: 28px; padding: 12px 0; }
-  .wk-body h3 { font-size: 17px; color: var(--ink-0); margin-bottom: 12px; }
-  .wk-body p { color: var(--ink-1); line-height: 1.55; font-size: 13.5px; }
-  .wk-screenshot {
+  .md-walk-step.active .mws-num { background: var(--gold-dim); color: var(--gold-ink); border-color: var(--gold-line); }
+  .md-walk-step.done .mws-num { background: var(--green-dim); color: var(--green-ink); border-color: var(--green-line); }
+  .md-walk-step span:not(.mws-num) { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .md-walk-body { display: grid; grid-template-columns: 1fr 1.3fr; gap: 22px; padding: 8px 0 14px; }
+  .md-walk-body h5 { color: var(--ink-0); font-size: 14.5px; margin-bottom: 8px; font-weight: 500; }
+  .md-walk-body p { color: var(--ink-1); line-height: 1.55; font-size: 13px; }
+  .md-walk-shot {
     aspect-ratio: 16/10;
-    background: var(--bg-2); border: 1px solid var(--border); border-radius: 6px;
+    background: var(--bg-3); border: 1px solid var(--border); border-radius: 6px;
     display: flex; align-items: center; justify-content: center;
-    color: var(--ink-3); font-size: 12.5px; font-family: 'JetBrains Mono', monospace;
+    color: var(--ink-3); font-size: 12px; font-family: 'JetBrains Mono', monospace;
     position: relative;
   }
-  .wk-screenshot::before {
-    content: ''; position: absolute; inset: 12px;
-    border: 1px dashed var(--border-2); border-radius: 4px;
-  }
-  .wk-pin {
+  .md-walk-shot::before { content: ''; position: absolute; inset: 12px; border: 1px dashed var(--border-2); border-radius: 4px; }
+  .md-walk-shot .mw-pin {
     position: absolute; width: 22px; height: 22px; border-radius: 50%;
     background: var(--gold); color: var(--bg);
     display: flex; align-items: center; justify-content: center;
     font-size: 11px; font-weight: 600; font-family: 'JetBrains Mono', monospace;
     box-shadow: 0 0 0 4px rgba(22, 163, 138, 0.25);
   }
-  .wk-nav { display: flex; justify-content: space-between; gap: 12px; margin-top: 18px; }
-  .wk-nav .btn[disabled] { opacity: 0.4; cursor: not-allowed; }
-  .quiz {
-    background: var(--bg-1); border: 1px solid var(--border); border-radius: 8px;
-    padding: 24px;
-  }
-  .quiz-question { padding: 16px 0; border-top: 1px solid var(--border); }
-  .quiz-question:first-child { border-top: none; padding-top: 0; }
-  .quiz-question .q-text { color: var(--ink-0); font-size: 14px; font-weight: 500; margin-bottom: 12px; }
-  .quiz-question .q-num { color: var(--ink-3); font-family: 'JetBrains Mono', monospace; margin-right: 8px; }
-  .quiz-options { display: flex; flex-direction: column; gap: 6px; }
-  .quiz-option {
+  .md-walk-nav { display: flex; justify-content: space-between; gap: 10px; }
+  .md-walk-nav .btn[disabled] { opacity: 0.4; cursor: not-allowed; }
+
+  /* Step 3 — quiz */
+  .md-quiz { background: var(--bg-2); border: 1px solid var(--border); border-radius: 6px; padding: 18px; }
+  .md-q { padding: 14px 0; border-top: 1px solid var(--border); }
+  .md-q:first-of-type { border-top: none; padding-top: 0; }
+  .md-q .mq-text { color: var(--ink-0); font-size: 13.5px; font-weight: 500; margin-bottom: 10px; }
+  .md-q .mq-num { color: var(--ink-3); font-family: 'JetBrains Mono', monospace; margin-right: 8px; }
+  .md-opts { display: flex; flex-direction: column; gap: 6px; }
+  .md-opt {
     display: flex; align-items: center; gap: 10px;
-    padding: 10px 14px;
-    background: var(--bg-2); border: 1px solid var(--border);
+    padding: 9px 13px;
+    background: var(--bg-1); border: 1px solid var(--border);
     border-radius: 6px;
     cursor: pointer;
     color: var(--ink-1);
-    font-size: 13px;
+    font-size: 12.5px;
     transition: background 0.12s, border-color 0.12s;
   }
-  .quiz-option:hover { background: var(--bg-3); }
-  .quiz-option input { accent-color: var(--gold); }
-  .quiz-option.correct  { background: var(--green-dim); border-color: var(--green-line); color: var(--green-ink); }
-  .quiz-option.incorrect { background: var(--red-dim);  border-color: var(--red-line);  color: var(--red-ink); }
-  .quiz-option.user-pick { font-weight: 500; }
-  .quiz-actions { display: flex; gap: 12px; margin-top: 18px; }
-  .quiz-score {
-    padding: 12px 18px;
+  .md-opt:hover { background: var(--bg-3); }
+  .md-opt input { accent-color: var(--gold); }
+  .md-opt.correct  { background: var(--green-dim); border-color: var(--green-line); color: var(--green-ink); }
+  .md-opt.incorrect { background: var(--red-dim);  border-color: var(--red-line);  color: var(--red-ink); }
+  .md-opt.user-pick { font-weight: 500; }
+  .md-quiz-result {
+    padding: 12px 16px;
     border-radius: 6px;
-    margin-bottom: 18px;
-    font-weight: 500;
+    margin-bottom: 14px;
+    font-size: 13px;
+    line-height: 1.5;
   }
-  .quiz-score.pass { background: var(--green-dim); border: 1px solid var(--green-line); color: var(--green-ink); }
-  .quiz-score.fail { background: var(--red-dim); border: 1px solid var(--red-line); color: var(--red-ink); }
-  .complete-card {
-    background: var(--bg-1); border: 1px solid var(--border); border-radius: 8px;
-    padding: 20px 24px;
-  }
-  .complete-locked, .complete-done { display: flex; align-items: center; justify-content: space-between; gap: 18px; }
-  .complete-done { color: var(--green-ink); }
-  .complete-check {
-    width: 36px; height: 36px; border-radius: 50%;
-    background: var(--green-dim); border: 1px solid var(--green-line);
-    display: flex; align-items: center; justify-content: center;
-    font-size: 18px; flex-shrink: 0;
-  }
-  .complete-title { font-weight: 500; color: var(--ink-0); font-size: 15px; }
-  .complete-done .complete-title { color: var(--green-ink); }
-  .complete-sub { color: var(--ink-2); font-size: 12.5px; margin-top: 4px; }
-  .complete-btn-enabled { animation: gentle-pulse 2s ease-in-out infinite; }
-  @keyframes gentle-pulse { 0%, 100% { box-shadow: 0 0 0 0 var(--gold-line); } 50% { box-shadow: 0 0 0 8px transparent; } }
-  .modal {
-    position: fixed; inset: 0;
-    background: rgba(0, 0, 0, 0.6);
-    display: flex; align-items: center; justify-content: center;
-    z-index: 200;
-    backdrop-filter: blur(2px);
-  }
-  .modal[hidden] { display: none !important; }
-  .modal-card {
-    background: var(--bg-1); border: 1px solid var(--border-2); border-radius: 10px;
-    padding: 24px; max-width: 440px; width: 90%;
-    box-shadow: var(--shadow);
-  }
-  .modal-card h3 { color: var(--ink-0); font-size: 17px; margin-bottom: 10px; }
-  .modal-card p { color: var(--ink-1); font-size: 13.5px; line-height: 1.55; margin-bottom: 18px; }
-  .modal-actions { display: flex; justify-content: flex-end; gap: 10px; }
+  .md-quiz-result.pass { background: var(--green-dim); border: 1px solid var(--green-line); color: var(--green-ink); }
+  .md-quiz-result.fail { background: var(--red-dim); border: 1px solid var(--red-line); color: var(--red-ink); }
+  .md-quiz-actions { display: flex; gap: 10px; margin-top: 16px; align-items: center; }
+  .md-quiz-actions .next-cta { color: var(--ink-2); font-size: 12.5px; }
   .footer-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
   .support-body { padding: 16px 20px; }
   .support-row {
@@ -1889,122 +1881,19 @@
             </div>
           </section>
 
-          <!-- Documents -->
+          <!-- Module picker -->
           <section class="training-section">
             <div class="section-head">
-              <h2>Reference materials</h2>
-              <span class="count">2 documents · download or view in browser</span>
+              <h2>Training modules</h2>
+              <span class="count">5 modules · pass each module's quiz to unlock the next</span>
             </div>
-            <div class="docs-grid">
-              <a class="doc-tile cyan" href="#" onclick="event.preventDefault(); alert('Mock — PDF would open here.');">
-                <div class="doc-icon">PDF</div>
-                <div class="doc-meta">
-                  <div class="doc-title">Quick Reference Guide</div>
-                  <div class="doc-sub">8 pages · updated May 2</div>
-                </div>
-                <div class="doc-actions">
-                  <button class="btn">View</button>
-                  <button class="btn primary">Download</button>
-                </div>
-              </a>
-              <a class="doc-tile gold" href="#" onclick="event.preventDefault(); alert('Mock — PDF would open here.');">
-                <div class="doc-icon">PDF</div>
-                <div class="doc-meta">
-                  <div class="doc-title">Full Step Guide</div>
-                  <div class="doc-sub">42 pages · updated April 28</div>
-                </div>
-                <div class="doc-actions">
-                  <button class="btn">View</button>
-                  <button class="btn primary">Download</button>
-                </div>
-              </a>
-            </div>
+            <div class="module-picker" id="modulePicker"></div>
           </section>
 
-          <!-- Video demo -->
+          <!-- Selected module detail -->
           <section class="training-section">
-            <div class="section-head">
-              <h2>Video walkthrough</h2>
-              <span class="count">12 min · introduces the SMA onboarding workflow</span>
-            </div>
-            <div class="video-card">
-              <div class="video-thumb">
-                <div class="video-status watched"><span class="dot g"></span>Watched · May 4</div>
-                <div class="video-duration">12:08</div>
-                <div class="video-play">
-                  <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
-                </div>
-              </div>
-              <div class="video-meta">
-                <h3>Onboarding a new SMA client end-to-end</h3>
-                <p class="sub">Walks through Impact Assessment → Tasks Selection → In Progress → Ready for Trading → Onboarding Complete with a real client example.</p>
-              </div>
-            </div>
+            <div class="module-detail" id="moduleDetail"></div>
           </section>
-
-          <!-- Click-through walkthrough -->
-          <section class="training-section">
-            <div class="section-head">
-              <h2>Hands-on walkthrough</h2>
-              <span class="count" id="wkStepCount">Step 1 of 5</span>
-            </div>
-            <div class="walkthrough">
-              <div class="wk-stepper" id="wkStepper"></div>
-              <div class="wk-body" id="wkBody"></div>
-              <div class="wk-nav">
-                <button class="btn" id="wkPrev">← Previous</button>
-                <button class="btn primary" id="wkNext">Next →</button>
-              </div>
-            </div>
-          </section>
-
-          <!-- Knowledge check -->
-          <section class="training-section">
-            <div class="section-head">
-              <h2>Knowledge check</h2>
-              <span class="count">5 questions · pass 4 of 5 to mark complete</span>
-            </div>
-            <div class="quiz" id="quizCard">
-              <div id="quizScore" class="quiz-score" hidden></div>
-              <div id="quizQuestions"></div>
-              <div class="quiz-actions">
-                <button class="btn primary" id="quizSubmit">Submit answers</button>
-                <button class="btn" id="quizReset" hidden>Try again</button>
-              </div>
-            </div>
-          </section>
-
-          <!-- Mark training complete -->
-          <section class="training-section">
-            <div class="complete-card" id="completeCard">
-              <div class="complete-locked" id="completeLocked">
-                <div>
-                  <div class="complete-title">Mark training complete</div>
-                  <div class="complete-sub">Complete the knowledge check above with 4+ correct answers to unlock.</div>
-                </div>
-                <button class="btn primary" id="completeBtn" disabled>Mark training complete</button>
-              </div>
-              <div class="complete-done" id="completeDone" hidden>
-                <span class="complete-check">✓</span>
-                <div>
-                  <div class="complete-title">Training complete</div>
-                  <div class="complete-sub" id="completeStamp"></div>
-                </div>
-              </div>
-            </div>
-          </section>
-
-          <!-- Modal -->
-          <div class="modal" id="completeModal" hidden>
-            <div class="modal-card">
-              <h3>Confirm training complete</h3>
-              <p>You're confirming that you've completed Kissflow training. Your team lead will see this in the hypercare dashboard.</p>
-              <div class="modal-actions">
-                <button class="btn" id="modalCancel">Cancel</button>
-                <button class="btn primary" id="modalConfirm">Confirm</button>
-              </div>
-            </div>
-          </div>
 
           <!-- Get support + Metrics row -->
           <section class="training-section">
@@ -2039,8 +1928,8 @@
                 <div class="card-head"><div><h3>My training metrics</h3><p class="sub">Your progress vs Operations · Mumbai team avg</p></div></div>
                 <div class="card-body">
                   <div class="metrics-grid">
-                    <div class="metric"><div class="metric-label">Modules complete</div><div class="metric-value">3<span class="unit">/5</span></div><div class="metric-vs">team avg 3.7</div></div>
-                    <div class="metric"><div class="metric-label">Last quiz score</div><div class="metric-value">4<span class="unit">/5</span></div><div class="metric-vs">team avg 4.1</div></div>
+                    <div class="metric"><div class="metric-label">Modules passed</div><div class="metric-value">3<span class="unit">/5</span></div><div class="metric-vs">team avg 3.7</div></div>
+                    <div class="metric"><div class="metric-label">Avg quiz score</div><div class="metric-value">4.0<span class="unit">/5</span></div><div class="metric-vs">team avg 4.1</div></div>
                     <div class="metric"><div class="metric-label">Time spent</div><div class="metric-value">38<span class="unit">m</span></div><div class="metric-vs">team avg 45m</div></div>
                     <div class="metric"><div class="metric-label">Days enrolled</div><div class="metric-value">18</div><div class="metric-vs">team avg 16</div></div>
                   </div>
@@ -2483,188 +2372,413 @@
   }
   renderCategoryChart();
 
-  // ===== Training: mark complete =====
-  const TRAINING_COMPLETE_KEY = 'kissflow-training-complete-priya';
-  const completeBtn = document.getElementById('completeBtn');
-  const completeLocked = document.getElementById('completeLocked');
-  const completeDone = document.getElementById('completeDone');
-  const completeStamp = document.getElementById('completeStamp');
-  const completeModal = document.getElementById('completeModal');
-
-  function showCompletedState(stamp) {
-    completeLocked.hidden = true;
-    completeDone.hidden = false;
-    completeStamp.textContent = stamp;
-  }
-
-  // Restore prior completion if persisted
-  try {
-    const prior = localStorage.getItem(TRAINING_COMPLETE_KEY);
-    if (prior) showCompletedState(prior);
-  } catch (e) {}
-
-  document.addEventListener('quiz-passed', () => {
-    completeBtn.disabled = false;
-    completeBtn.classList.add('complete-btn-enabled');
-    completeLocked.querySelector('.complete-sub').textContent = 'Knowledge check passed. Click to confirm completion.';
-  });
-
-  completeBtn.addEventListener('click', () => { completeModal.hidden = false; });
-  document.getElementById('modalCancel').addEventListener('click', () => { completeModal.hidden = true; });
-  document.getElementById('modalConfirm').addEventListener('click', () => {
-    completeModal.hidden = true;
-    const today = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
-    const stamp = `Completed · ${today} by Priya Shah`;
-    showCompletedState(stamp);
-    try { localStorage.setItem(TRAINING_COMPLETE_KEY, stamp); } catch (e) {}
-  });
-
-  // ===== Training: quiz =====
-  const QUIZ_QUESTIONS = [
+  // ===== Training: modules =====
+  const MODULES = [
     {
-      q: "Which stage comes immediately after Tasks Selection in the SMA onboarding workflow?",
-      options: ["Impact Assessment", "In Progress", "Ready for Trading", "Onboarding Complete"],
-      correct: 1,
+      id: 1,
+      title: 'Intro to SMA Onboarding',
+      description: 'Concepts and roles in an SMA onboarding workflow.',
+      estMinutes: 8,
+      materials: [
+        { kind: 'PDF', title: 'Quick Reference Guide', detail: 'Pages 1–3' },
+        { kind: 'PDF', title: 'Full Step Guide',       detail: 'Pages 4–10' },
+        { kind: 'VIDEO', title: 'Video walkthrough', detail: 'Chapter 1 · 0:00–4:30' },
+      ],
+      walkthrough: [
+        { title: 'What is an SMA?', body: 'A Separately Managed Account is a portfolio held in the client\'s name with the manager directing the strategy. The onboarding flow we\'re using applies to new SMA mandates.', pin: '1' },
+        { title: 'Roles on the team', body: 'Each onboarding has a primary owner, a contributor for performance reporting, and a glance-only sign-off from the team MD. Roles map to Kissflow seat types.', pin: '2' },
+        { title: 'Why Kissflow now', body: 'Replaces the spreadsheet + email tracker. Single source of truth for stage transitions, blockers, and SLAs — also feeds the exec dashboard.', pin: '3' },
+      ],
+      quiz: [
+        { q: 'What does SMA stand for in this context?', options: ['Special Margin Account', 'Separately Managed Account', 'Strategic Market Allocation', 'Single Manager Allotment'], correct: 1 },
+        { q: 'Who provides the glance-only sign-off?', options: ['The primary owner', 'The contributor', 'The team MD', 'Apollo IT'], correct: 2 },
+        { q: 'What did Kissflow replace?', options: ['Salesforce', 'A spreadsheet + email tracker', 'A custom Java app', 'Bloomberg terminals'], correct: 1 },
+      ],
     },
     {
-      q: "What's the SLA for Impact Assessment and Tasks Selection?",
-      options: ["8 hours", "24 hours", "3 business days", "No SLA — variable"],
-      correct: 1,
+      id: 2,
+      title: 'Stages & SLAs',
+      description: 'The 5 workflow stages, their SLAs, and what counts as a breach.',
+      estMinutes: 12,
+      materials: [
+        { kind: 'PDF', title: 'Quick Reference Guide', detail: 'Pages 4–6' },
+        { kind: 'PDF', title: 'Full Step Guide',       detail: 'Pages 11–17' },
+        { kind: 'VIDEO', title: 'Video walkthrough', detail: 'Chapter 2 · 4:30–9:00' },
+      ],
+      walkthrough: [
+        { title: 'Impact Assessment', body: 'Initial assessment of the team\'s involvement. SLA: 24 hours from assignment.', pin: '1' },
+        { title: 'Tasks Selection', body: 'Tasks chosen and assigned to owners. SLA: 24 hours.', pin: '2' },
+        { title: 'In Progress', body: 'Active execution. Duration varies by scope. No hard SLA, but stalled items are flagged.', pin: '3' },
+        { title: 'Ready for Trading', body: 'Team is signed off and the client can trade. Post-event closure tasks may continue.', pin: '4' },
+        { title: 'Onboarding Complete', body: 'All tasks closed. Final state in the workflow.', pin: '5' },
+      ],
+      quiz: [
+        { q: 'Which stage comes immediately after Tasks Selection?', options: ['Impact Assessment', 'In Progress', 'Ready for Trading', 'Onboarding Complete'], correct: 1 },
+        { q: 'What is the SLA for Impact Assessment?', options: ['8 hours', '24 hours', '3 business days', 'No SLA'], correct: 1 },
+        { q: 'Which stage has no hard SLA?', options: ['Impact Assessment', 'Tasks Selection', 'In Progress', 'Ready for Trading'], correct: 2 },
+        { q: 'When can the client begin trading?', options: ['At Impact Assessment', 'At Tasks Selection', 'At Ready for Trading', 'At Onboarding Complete'], correct: 2 },
+        { q: 'What happens to post-event closure tasks?', options: ['They go to a separate workflow', 'They\'re continued after Ready for Trading', 'They block the team from advancing', 'They\'re skipped'], correct: 1 },
+      ],
     },
     {
-      q: "How do you flag that a task is waiting on input from another team?",
-      options: ["Add a comment", "Use the dependency tag", "Email the team lead", "Move to Onboarding Complete"],
-      correct: 1,
+      id: 3,
+      title: 'Dependencies & Blockers',
+      description: 'When and how to use dependency tags. Internal vs Client vs Vendor blockers.',
+      estMinutes: 9,
+      materials: [
+        { kind: 'PDF', title: 'Quick Reference Guide', detail: 'Page 7' },
+        { kind: 'PDF', title: 'Full Step Guide',       detail: 'Pages 18–24' },
+        { kind: 'VIDEO', title: 'Video walkthrough', detail: 'Chapter 3 · 9:00–12:08' },
+      ],
+      walkthrough: [
+        { title: 'When to use a dependency tag', body: 'Any time a task is waiting on input from outside your team. Tag it within the same business day to avoid silent stalls.', pin: '1' },
+        { title: 'Internal vs Client vs Vendor', body: 'Pick the source of the blocker. The exec dashboard counts each type separately to surface systemic issues.', pin: '2' },
+        { title: 'Adding a context note', body: 'One sentence is enough. Who you\'re waiting on, what you\'ve asked for, and the date you asked.', pin: '3' },
+        { title: 'How blockers surface upstream', body: 'Tagged blockers populate the exec dashboard\'s Repeat Issues list within an hour. Roberto and Evan see the count and the per-team breakdown.', pin: '4' },
+      ],
+      quiz: [
+        { q: 'When should you add a dependency tag?', options: ['When the task is finished', 'When you\'re waiting on outside input', 'Only at month-end', 'Only when escalating'], correct: 1 },
+        { q: 'Which is NOT a valid blocker type?', options: ['Internal', 'Client', 'Vendor', 'Personal'], correct: 3 },
+        { q: 'How long does a tagged blocker take to appear on the exec dashboard?', options: ['Within an hour', 'Next business day', 'Within a week', 'Manual escalation only'], correct: 0 },
+        { q: 'What does the context note need?', options: ['A full report', 'Who, what, when', 'Just a yes/no flag', 'A confidential password'], correct: 1 },
+      ],
     },
     {
-      q: "Which icon in the left sidebar opens your assigned onboardings?",
-      options: ["Calendar icon", "Inbox icon", "My Onboardings menu item", "Settings cog"],
-      correct: 2,
+      id: 4,
+      title: 'Power-user features',
+      description: 'Bulk actions, saved views, shortcuts, and templates for common SMA shapes.',
+      estMinutes: 14,
+      materials: [
+        { kind: 'PDF', title: 'Full Step Guide',       detail: 'Pages 25–34' },
+        { kind: 'VIDEO', title: 'Video walkthrough', detail: 'Chapter 4 · 12:08–17:00' },
+      ],
+      walkthrough: [
+        { title: 'Bulk task selection', body: 'Hold Shift and click to select a range. Hold Cmd/Ctrl and click to multi-select. Bulk-edit applies to all selected tasks.', pin: '1' },
+        { title: 'Saved views and filters', body: 'Build a filter once, save it, share it with the team. Common saved views: My active onboardings, Stalled > 24h, Pending CFO.', pin: '2' },
+        { title: 'Keyboard shortcuts', body: 'G then Q jumps to your queue. N opens new onboarding. / focuses search. ? opens the full shortcut sheet.', pin: '3' },
+        { title: 'Templates for SMA shapes', body: 'Templates pre-fill stages and dependency expectations for common SMA archetypes (taxable retail, tax-exempt institutional, multi-currency).', pin: '4' },
+        { title: 'Export and reports', body: 'Cmd/Ctrl + E exports the current view to CSV. Reports are scheduled separately by the exec dashboard team.', pin: '5' },
+      ],
+      quiz: [
+        { q: 'How do you select a contiguous range of tasks?', options: ['Hold Cmd and click', 'Hold Shift and click', 'Hold Alt and drag', 'Right-click each task'], correct: 1 },
+        { q: 'What does the keyboard shortcut "G then Q" do?', options: ['Quit Kissflow', 'Open the queue', 'Go to next quiz', 'Generate a query'], correct: 1 },
+        { q: 'Which is a built-in template archetype?', options: ['Taxable retail SMA', 'Personal trading account', 'Crypto wallet', 'Pension plan'], correct: 0 },
+        { q: 'How do you export the current view?', options: ['File → Export', 'Cmd/Ctrl + E', 'Email yourself a link', 'Copy and paste'], correct: 1 },
+        { q: 'Where can you build a saved view?', options: ['Only in admin settings', 'Anywhere with a filter bar', 'In Bloomberg', 'It\'s automatic only'], correct: 1 },
+      ],
     },
     {
-      q: "If you're stuck on a stage and can't progress, who do you contact first?",
-      options: ["Apollo IT", "Your team lead", "Kissflow support", "The onboarding sponsor"],
-      correct: 1,
+      id: 5,
+      title: 'Troubleshooting & Escalation',
+      description: 'Common errors, self-service fixes, and who to contact when stuck.',
+      estMinutes: 8,
+      materials: [
+        { kind: 'PDF', title: 'Quick Reference Guide', detail: 'Page 8' },
+        { kind: 'PDF', title: 'Full Step Guide',       detail: 'Pages 35–42' },
+      ],
+      walkthrough: [
+        { title: 'Common errors and what they mean', body: 'Stage transition stuck, validation errors on rare characters, and bulk-import audit gaps. Each has a known fix path.', pin: '1' },
+        { title: 'Self-service fixes', body: 'Refresh the queue, re-save the form, check the audit log. Most stage-transition issues clear in a minute.', pin: '2' },
+        { title: 'When to escalate to your team lead', body: 'After 30 minutes of being stuck or if the issue affects more than one team member. Don\'t escalate trivial issues.', pin: '3' },
+        { title: 'When to ping Roberto or Apollo IT', body: 'Roberto for workflow design questions; Apollo IT for SSO, permissions, and infrastructure. Use the support card on this page for direct links.', pin: '4' },
+      ],
+      quiz: [
+        { q: 'How long should you self-troubleshoot before escalating?', options: ['Immediately escalate', '30 minutes', '1 day', '1 week'], correct: 1 },
+        { q: 'Who do you contact for SSO issues?', options: ['Your team lead', 'Roberto', 'Apollo IT', 'Kissflow vendor'], correct: 2 },
+        { q: 'Which is a self-service fix to try first?', options: ['Restart your laptop', 'Refresh the queue and re-save the form', 'Email the CEO', 'Ignore the error'], correct: 1 },
+        { q: 'Who handles workflow design questions?', options: ['Apollo IT', 'Roberto', 'The Kissflow vendor', 'Anyone in your team'], correct: 1 },
+      ],
     },
   ];
-  const QUIZ_ANSWERS = new Array(QUIZ_QUESTIONS.length).fill(null);
-  let quizSubmitted = false;
-  function renderQuiz() {
-    const root = document.getElementById('quizQuestions');
+
+  // Mock pre-baked progress: modules 1-3 passed, 4 in progress, 5 locked behind 4.
+  // Persisted into localStorage on first load if not already there. Subsequent loads read from localStorage.
+  const MODULE_PROGRESS_KEY = 'kissflow-training-modules-priya-v2';
+  const DEFAULT_PROGRESS = {
+    1: { passed: true, score: 3, total: 3, date: 'May 1' },
+    2: { passed: true, score: 5, total: 5, date: 'May 3' },
+    3: { passed: true, score: 4, total: 4, date: 'May 5' },
+    4: null,
+    5: null,
+  };
+  let MODULE_PROGRESS;
+  try {
+    const stored = localStorage.getItem(MODULE_PROGRESS_KEY);
+    MODULE_PROGRESS = stored ? JSON.parse(stored) : { ...DEFAULT_PROGRESS };
+  } catch (e) { MODULE_PROGRESS = { ...DEFAULT_PROGRESS }; }
+  function saveProgress() {
+    try { localStorage.setItem(MODULE_PROGRESS_KEY, JSON.stringify(MODULE_PROGRESS)); } catch (e) {}
+  }
+
+  function moduleStatus(modId) {
+    const prog = MODULE_PROGRESS[modId];
+    if (prog && prog.passed) return 'passed';
+    if (prog && !prog.passed) return 'failed';
+    // Locked if previous module not passed
+    if (modId > 1) {
+      const prev = MODULE_PROGRESS[modId - 1];
+      if (!prev || !prev.passed) return 'locked';
+    }
+    return 'notstart';
+  }
+
+  // Default selected: first non-passed unlocked module, or last module if all passed
+  function defaultSelectedModule() {
+    for (const m of MODULES) {
+      const s = moduleStatus(m.id);
+      if (s === 'notstart' || s === 'failed') return m.id;
+    }
+    // All passed
+    return MODULES[MODULES.length - 1].id;
+  }
+
+  let selectedModule = defaultSelectedModule();
+  // walkthrough step + quiz state PER module
+  const moduleWalkStep = {};
+  const moduleQuizAnswers = {};
+  const moduleQuizSubmitted = {};
+  MODULES.forEach(m => {
+    moduleWalkStep[m.id] = 0;
+    moduleQuizAnswers[m.id] = new Array(m.quiz.length).fill(null);
+    moduleQuizSubmitted[m.id] = MODULE_PROGRESS[m.id] && MODULE_PROGRESS[m.id].passed;
+  });
+
+  function renderModulePicker() {
+    const root = document.getElementById('modulePicker');
     if (!root) return;
-    root.innerHTML = QUIZ_QUESTIONS.map((q, qi) => {
+    const STATUS_LABEL = { passed: 'Passed', progress: 'In progress', failed: 'Retake', notstart: 'Not started', locked: 'Locked' };
+    root.innerHTML = MODULES.map(m => {
+      let status = moduleStatus(m.id);
+      // Mark the currently-selected non-passed module as "in progress" cosmetically
+      if (status === 'notstart' && m.id === selectedModule) status = 'progress';
+      const cls = `module-card${m.id === selectedModule ? ' selected' : ''}${status === 'locked' ? ' locked' : ''}`;
+      return `
+        <div class="${cls}" data-module="${m.id}">
+          <div class="mc-num">Module ${m.id}</div>
+          <div class="mc-title">${m.title}</div>
+          <div class="mc-desc">${m.description}</div>
+          <div class="mc-meta">
+            <span class="mc-time">${m.estMinutes} min</span>
+            <span class="mc-status ${status}">${STATUS_LABEL[status]}</span>
+          </div>
+        </div>
+      `;
+    }).join('');
+  }
+
+  function renderModuleDetail() {
+    const root = document.getElementById('moduleDetail');
+    if (!root) return;
+    const m = MODULES.find(x => x.id === selectedModule);
+    if (!m) return;
+    const status = moduleStatus(m.id);
+    const STATUS_LABEL = { passed: 'Passed', progress: 'In progress', failed: 'Retake', notstart: 'Not started', locked: 'Locked' };
+    const displayStatus = (status === 'notstart') ? 'progress' : status;
+
+    // Materials
+    const matsHtml = m.materials.map(mat => `
+      <div class="md-mat-tile" onclick="alert('Mock — ${mat.kind === 'VIDEO' ? 'video player' : 'PDF viewer'} would open here.');">
+        <span class="mt-icon">${mat.kind}</span>
+        <span class="mt-title">${mat.title}</span>
+        <span class="mt-detail">${mat.detail}</span>
+      </div>
+    `).join('');
+
+    // Walkthrough
+    const wkStep = moduleWalkStep[m.id];
+    const stepperHtml = m.walkthrough.map((s, i) => {
+      const cls = i < wkStep ? 'md-walk-step done' : (i === wkStep ? 'md-walk-step active' : 'md-walk-step');
+      return `<div class="${cls}" data-walk-step="${i}"><span class="mws-num">${i+1}</span><span>${s.title}</span></div>`;
+    }).join('');
+    const wk = m.walkthrough[wkStep];
+    const walkBodyHtml = `
+      <div>
+        <h5>${wk.title}</h5>
+        <p>${wk.body}</p>
+      </div>
+      <div class="md-walk-shot">
+        <span class="mw-pin" style="top:30%;left:18%;">${wk.pin}</span>
+      </div>
+    `;
+
+    // Quiz
+    const submitted = moduleQuizSubmitted[m.id];
+    const answers = moduleQuizAnswers[m.id];
+    const qHtml = m.quiz.map((q, qi) => {
       const opts = q.options.map((opt, oi) => {
-        let cls = 'quiz-option';
-        if (quizSubmitted) {
-          if (oi === q.correct) cls += ' correct';
-          else if (QUIZ_ANSWERS[qi] === oi) cls += ' incorrect';
-          if (QUIZ_ANSWERS[qi] === oi) cls += ' user-pick';
+        let ocls = 'md-opt';
+        if (submitted) {
+          if (oi === q.correct) ocls += ' correct';
+          else if (answers[qi] === oi) ocls += ' incorrect';
+          if (answers[qi] === oi) ocls += ' user-pick';
         }
-        const checked = QUIZ_ANSWERS[qi] === oi ? ' checked' : '';
-        const disabled = quizSubmitted ? ' disabled' : '';
+        const checked = answers[qi] === oi ? ' checked' : '';
+        const disabled = submitted ? ' disabled' : '';
         return `
-          <label class="${cls}">
-            <input type="radio" name="q${qi}" value="${oi}"${checked}${disabled}>
+          <label class="${ocls}">
+            <input type="radio" name="m${m.id}q${qi}" value="${oi}"${checked}${disabled} onchange="setQuizAnswer(${m.id}, ${qi}, ${oi})">
             <span>${opt}</span>
           </label>
         `;
       }).join('');
       return `
-        <div class="quiz-question">
-          <div class="q-text"><span class="q-num">Q${qi+1}.</span>${q.q}</div>
-          <div class="quiz-options">${opts}</div>
+        <div class="md-q">
+          <div class="mq-text"><span class="mq-num">Q${qi+1}.</span>${q.q}</div>
+          <div class="md-opts">${opts}</div>
         </div>
       `;
     }).join('');
-    root.querySelectorAll('input[type="radio"]').forEach(input => {
-      input.addEventListener('change', (e) => {
-        const [_, qi] = e.target.name.match(/q(\d+)/);
-        QUIZ_ANSWERS[+qi] = +e.target.value;
+
+    let resultHtml = '';
+    let actionsHtml = '';
+    if (submitted) {
+      const correctCount = m.quiz.reduce((acc, q, qi) => acc + (answers[qi] === q.correct ? 1 : 0), 0);
+      const total = m.quiz.length;
+      const passed = correctCount / total >= 0.8;
+      const stamp = MODULE_PROGRESS[m.id] && MODULE_PROGRESS[m.id].date;
+      if (passed) {
+        const nextMod = MODULES.find(x => x.id === m.id + 1);
+        resultHtml = `<div class="md-quiz-result pass">${correctCount} of ${total} correct · Module passed${stamp ? ` · ${stamp}` : ''}</div>`;
+        actionsHtml = `
+          <button class="btn" onclick="reattemptQuiz(${m.id})">Retake quiz</button>
+          ${nextMod ? `<span class="next-cta">Next: <a href="#" onclick="event.preventDefault(); selectModule(${nextMod.id});" style="color:var(--gold-ink);">Module ${nextMod.id} · ${nextMod.title}</a></span>` : `<span class="next-cta" style="color:var(--green-ink);">All modules complete.</span>`}
+        `;
+      } else {
+        resultHtml = `<div class="md-quiz-result fail">${correctCount} of ${total} correct · Below 80% threshold. Re-read the materials above and try again.</div>`;
+        actionsHtml = `<button class="btn primary" onclick="reattemptQuiz(${m.id})">Try again</button>`;
+      }
+    } else {
+      actionsHtml = `<button class="btn primary" onclick="submitQuiz(${m.id})">Submit answers</button>`;
+    }
+
+    root.innerHTML = `
+      <div class="md-head">
+        <div>
+          <h3>Module ${m.id}: ${m.title}</h3>
+          <div class="md-desc">${m.description}</div>
+        </div>
+        <div class="md-meta">
+          <span class="md-time">${m.estMinutes} min</span>
+          <span class="mc-status ${displayStatus}">${STATUS_LABEL[displayStatus]}</span>
+        </div>
+      </div>
+
+      <div class="md-step">
+        <div class="md-step-head"><span class="md-step-num">1</span><h4>Read the materials</h4></div>
+        <div class="md-materials">${matsHtml}</div>
+      </div>
+
+      <div class="md-step">
+        <div class="md-step-head"><span class="md-step-num">2</span><h4>Walkthrough</h4></div>
+        <div class="md-walk">
+          <div class="md-walk-stepper" id="mdWalkStepper">${stepperHtml}</div>
+          <div class="md-walk-body">${walkBodyHtml}</div>
+          <div class="md-walk-nav">
+            <button class="btn" onclick="walkPrev(${m.id})" ${wkStep === 0 ? 'disabled' : ''}>← Previous</button>
+            <button class="btn primary" onclick="walkNext(${m.id})" ${wkStep === m.walkthrough.length - 1 ? 'disabled' : ''}>Next →</button>
+          </div>
+        </div>
+      </div>
+
+      <div class="md-step">
+        <div class="md-step-head"><span class="md-step-num">3</span><h4>Knowledge check (${m.quiz.length} questions · pass 80%)</h4></div>
+        <div class="md-quiz">
+          ${resultHtml}
+          ${qHtml}
+          <div class="md-quiz-actions">${actionsHtml}</div>
+        </div>
+      </div>
+    `;
+
+    // Wire stepper clicks
+    root.querySelectorAll('[data-walk-step]').forEach(el => {
+      el.addEventListener('click', () => {
+        moduleWalkStep[m.id] = +el.dataset.walkStep;
+        renderModuleDetail();
       });
     });
   }
-  function gradeQuiz() {
-    const correctCount = QUIZ_QUESTIONS.reduce((acc, q, qi) => acc + (QUIZ_ANSWERS[qi] === q.correct ? 1 : 0), 0);
-    const passed = correctCount >= 4;
-    quizSubmitted = true;
-    renderQuiz();
-    const scoreEl = document.getElementById('quizScore');
-    scoreEl.hidden = false;
-    scoreEl.className = `quiz-score ${passed ? 'pass' : 'fail'}`;
-    scoreEl.textContent = `${correctCount} of ${QUIZ_QUESTIONS.length} correct · ${passed ? 'pass — you can mark training complete' : 'try again to unlock training completion'}`;
-    document.getElementById('quizSubmit').hidden = true;
-    document.getElementById('quizReset').hidden = false;
-    if (passed) {
-      window.__quizPassed = true;
-      document.dispatchEvent(new CustomEvent('quiz-passed'));
-    }
+
+  function selectModule(modId) {
+    if (moduleStatus(modId) === 'locked') return;
+    selectedModule = modId;
+    renderModulePicker();
+    renderModuleDetail();
   }
-  function resetQuiz() {
-    QUIZ_ANSWERS.fill(null);
-    quizSubmitted = false;
-    renderQuiz();
-    const scoreEl = document.getElementById('quizScore');
-    scoreEl.hidden = true;
-    document.getElementById('quizSubmit').hidden = false;
-    document.getElementById('quizReset').hidden = true;
+  window.selectModule = selectModule;
+
+  function setQuizAnswer(modId, qi, oi) {
+    moduleQuizAnswers[modId][qi] = oi;
   }
-  document.getElementById('quizSubmit').addEventListener('click', () => {
-    if (QUIZ_ANSWERS.some(a => a === null)) {
+  window.setQuizAnswer = setQuizAnswer;
+
+  function submitQuiz(modId) {
+    const m = MODULES.find(x => x.id === modId);
+    const answers = moduleQuizAnswers[modId];
+    if (answers.some(a => a === null)) {
       alert('Please answer all questions before submitting.');
       return;
     }
-    gradeQuiz();
-  });
-  document.getElementById('quizReset').addEventListener('click', resetQuiz);
-  renderQuiz();
-
-  // ===== Training: walkthrough stepper =====
-  const WALKTHROUGH_STEPS = [
-    { title: 'Open your work queue', body: 'From the Kissflow home screen, click "My Onboardings" in the left sidebar. Your queue shows all SMA clients assigned to you, grouped by stage.', pin: '1' },
-    { title: 'Start a new SMA onboarding', body: 'Click "+ New onboarding". Fill in the client identifier and select the SMA strategy. The workflow opens at Impact Assessment by default.', pin: '2' },
-    { title: 'Move tasks through stages', body: 'Drag a task card or use the stage selector to advance. Each stage has its own SLA — Impact Assessment and Tasks Selection are both 24h.', pin: '3' },
-    { title: 'Add dependencies and notes', body: 'Use the dependency tag to flag pending input from another team. Notes are visible to the whole onboarding team and the exec dashboard.', pin: '4' },
-    { title: 'Mark onboarding complete', body: 'Once Ready for Trading is signed off, complete any post-event closure tasks and click "Mark complete". The onboarding moves to the closed tab.', pin: '5' },
-  ];
-  let wkCurrent = 0;
-  function renderWalkthrough() {
-    const stepper = document.getElementById('wkStepper');
-    const body = document.getElementById('wkBody');
-    const count = document.getElementById('wkStepCount');
-    if (!stepper || !body || !count) return;
-    stepper.innerHTML = WALKTHROUGH_STEPS.map((s, i) => {
-      const cls = i < wkCurrent ? 'wk-step done' : (i === wkCurrent ? 'wk-step active' : 'wk-step');
-      return `<div class="${cls}" data-step="${i}"><span class="wk-num">${i+1}</span>${s.title}</div>`;
-    }).join('');
-    const s = WALKTHROUGH_STEPS[wkCurrent];
-    body.innerHTML = `
-      <div>
-        <h3>${s.title}</h3>
-        <p>${s.body}</p>
-      </div>
-      <div class="wk-screenshot">
-        <span class="wk-pin" style="top:30%;left:18%;">${s.pin}</span>
-      </div>
-    `;
-    count.textContent = `Step ${wkCurrent + 1} of ${WALKTHROUGH_STEPS.length}`;
-    document.getElementById('wkPrev').disabled = wkCurrent === 0;
-    document.getElementById('wkNext').disabled = wkCurrent === WALKTHROUGH_STEPS.length - 1;
+    const correctCount = m.quiz.reduce((acc, q, qi) => acc + (answers[qi] === q.correct ? 1 : 0), 0);
+    const passed = correctCount / m.quiz.length >= 0.8;
+    moduleQuizSubmitted[modId] = true;
+    const today = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+    MODULE_PROGRESS[modId] = { passed, score: correctCount, total: m.quiz.length, date: today };
+    saveProgress();
+    renderModulePicker();
+    renderModuleDetail();
+    updateOverallHero();
   }
-  document.getElementById('wkPrev').addEventListener('click', () => { if (wkCurrent > 0) { wkCurrent--; renderWalkthrough(); } });
-  document.getElementById('wkNext').addEventListener('click', () => { if (wkCurrent < WALKTHROUGH_STEPS.length - 1) { wkCurrent++; renderWalkthrough(); } });
-  document.getElementById('wkStepper').addEventListener('click', (e) => {
-    const step = e.target.closest('.wk-step');
-    if (!step) return;
-    wkCurrent = +step.dataset.step;
-    renderWalkthrough();
-  });
-  renderWalkthrough();
+  window.submitQuiz = submitQuiz;
 
-  // ===== Training: video mock =====
-  const videoThumb = document.querySelector('#tab-training .video-thumb');
-  if (videoThumb) {
-    videoThumb.addEventListener('click', () => alert('Mock — video player would open here.'));
+  function reattemptQuiz(modId) {
+    const m = MODULES.find(x => x.id === modId);
+    moduleQuizAnswers[modId] = new Array(m.quiz.length).fill(null);
+    moduleQuizSubmitted[modId] = false;
+    renderModuleDetail();
   }
+  window.reattemptQuiz = reattemptQuiz;
+
+  function walkPrev(modId) {
+    if (moduleWalkStep[modId] > 0) { moduleWalkStep[modId]--; renderModuleDetail(); }
+  }
+  function walkNext(modId) {
+    const m = MODULES.find(x => x.id === modId);
+    if (moduleWalkStep[modId] < m.walkthrough.length - 1) { moduleWalkStep[modId]++; renderModuleDetail(); }
+  }
+  window.walkPrev = walkPrev;
+  window.walkNext = walkNext;
+
+  function updateOverallHero() {
+    // Overall progress ring + sublede
+    const passedCount = MODULES.filter(m => MODULE_PROGRESS[m.id] && MODULE_PROGRESS[m.id].passed).length;
+    const total = MODULES.length;
+    const pct = Math.round(passedCount / total * 100);
+    // Find the welcome hero in #tab-training
+    const trainingEyebrow = document.querySelector('#tab-training .eyebrow');
+    const trainingLede = document.querySelector('#tab-training .lede');
+    const trainingSublede = document.querySelector('#tab-training .sublede');
+    const ring = document.querySelector('#tab-training .progress-ring-wrap svg circle:nth-child(2)');
+    const ringText = document.querySelector('#tab-training .progress-ring-wrap svg text');
+    const ringMeta = document.querySelector('#tab-training .progress-ring-meta');
+    if (trainingSublede) trainingSublede.textContent = `You've completed ${passedCount} of ${total} modules.${passedCount < total ? ' Keep going.' : ' All modules complete — nice work.'}`;
+    if (ring) ring.setAttribute('stroke-dashoffset', String(226 - (226 * passedCount / total)));
+    if (ringText) ringText.textContent = `${pct}%`;
+    if (ringMeta) ringMeta.textContent = `${passedCount} of ${total} modules`;
+  }
+
+  // Click delegation for module picker
+  document.getElementById('modulePicker').addEventListener('click', (e) => {
+    const card = e.target.closest('.module-card');
+    if (!card) return;
+    const modId = +card.dataset.module;
+    if (moduleStatus(modId) === 'locked') return;
+    selectModule(modId);
+  });
+
+  renderModulePicker();
+  renderModuleDetail();
+  updateOverallHero();
 </script>
 
 </div><!-- /#deck-content -->
