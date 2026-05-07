@@ -770,6 +770,219 @@
   .dep-pill .dot.a { background: var(--amber); }
   .dep-pill .dot.g { background: var(--green); }
 
+  /* ========== DRAWER EXTENSIONS ========== */
+  /* Drawer head new variants */
+  .drawer-head .dh-eyebrow {
+    font-size: 10.5px;
+    font-weight: 600;
+    color: var(--ink-3);
+    text-transform: uppercase;
+    letter-spacing: 0.08em;
+    margin-bottom: 8px;
+  }
+  .drawer-head .icon-btn.close {
+    width: 28px; height: 28px;
+    border-radius: 6px;
+    color: var(--ink-2);
+    display: flex; align-items: center; justify-content: center;
+    transition: background 0.15s, color 0.15s;
+  }
+  .drawer-head .icon-btn.close:hover { background: var(--bg-3); color: var(--ink-0); }
+
+  /* Drawer actions row */
+  .drawer-actions-row { display: flex; gap: 10px; flex-wrap: wrap; }
+  .drawer-hint {
+    color: var(--ink-3); font-size: 11.5px;
+    font-style: italic;
+    padding-top: 4px;
+    border-top: 1px dashed var(--border);
+  }
+
+  /* PDF preview */
+  .pdf-preview {
+    background: var(--bg-3);
+    border-radius: 6px;
+    padding: 16px;
+    display: flex; justify-content: center;
+  }
+  .pdf-page {
+    background: #f7f6f0; color: #1a1a1c;
+    width: 100%; max-width: 360px;
+    padding: 24px 22px;
+    border-radius: 4px;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.4);
+    font-family: 'Inter', system-ui, sans-serif;
+  }
+  .pdf-page-head { border-bottom: 1px solid #d8d8d3; padding-bottom: 10px; margin-bottom: 14px; }
+  .pdf-page-title { font-size: 12px; font-weight: 600; color: #65676c; }
+  .pdf-page-meta  { font-size: 10px; color: #93959a; margin-top: 2px; }
+  .pdf-page-h1 { font-size: 16px; font-weight: 700; color: #1a1a1c; margin: 12px 0 10px; }
+  .pdf-page-h2 { font-size: 12.5px; font-weight: 600; color: #3a3b3e; margin: 14px 0 8px; }
+  .pdf-page-line { height: 6px; background: #d8d8d3; border-radius: 1px; margin: 5px 0; }
+  .pdf-page-line.w55  { width: 55%; }
+  .pdf-page-line.w60  { width: 60%; }
+  .pdf-page-line.w70  { width: 70%; }
+  .pdf-page-line.w75  { width: 75%; }
+  .pdf-page-line.w80  { width: 80%; }
+  .pdf-page-line.w85  { width: 85%; }
+  .pdf-page-line.w90  { width: 90%; }
+  .pdf-page-line.w92  { width: 92%; }
+  .pdf-page-line.w95  { width: 95%; }
+  .pdf-page-foot { color: #93959a; font-size: 9.5px; text-align: center; margin-top: 18px; padding-top: 8px; border-top: 1px solid #d8d8d3; }
+
+  /* Video player mock */
+  .video-player {
+    background: #000;
+    border-radius: 6px;
+    overflow: hidden;
+    border: 1px solid var(--border);
+  }
+  .vp-stage {
+    aspect-ratio: 16/9;
+    background: linear-gradient(135deg, #1e3a5f 0%, #2d5985 50%, #4a7ba9 100%);
+    position: relative;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .vp-play {
+    width: 60px; height: 60px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.92);
+    color: #1a1a1c;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .vp-time {
+    position: absolute; right: 12px; top: 12px;
+    background: rgba(0,0,0,0.5); color: white;
+    padding: 4px 8px; border-radius: 4px;
+    font-size: 11px; font-family: 'JetBrains Mono', monospace;
+  }
+  .vp-bar {
+    height: 4px; background: rgba(255,255,255,0.15);
+    position: relative;
+  }
+  .vp-bar-fill {
+    height: 100%; background: var(--gold);
+    transition: width 0.2s;
+  }
+  .vp-controls {
+    display: flex; align-items: center; gap: 8px;
+    padding: 8px 12px;
+    background: rgba(0,0,0,0.4);
+    color: rgba(255,255,255,0.85);
+    font-size: 12px;
+  }
+  .vp-btn {
+    background: none; border: none;
+    color: inherit; cursor: pointer;
+    padding: 4px 6px;
+    border-radius: 4px;
+    transition: background 0.1s;
+  }
+  .vp-btn:hover { background: rgba(255,255,255,0.1); }
+  .vp-pos { font-family: 'JetBrains Mono', monospace; font-size: 11px; }
+  .vp-spacer { flex: 1; }
+  .vp-chapters { display: flex; flex-direction: column; gap: 2px; }
+  .vp-chapters li {
+    display: grid; grid-template-columns: 28px 1fr auto; gap: 12px;
+    padding: 8px 10px; border-radius: 4px;
+    font-size: 12.5px; color: var(--ink-1);
+    cursor: pointer;
+    transition: background 0.12s;
+  }
+  .vp-chapters li:hover { background: var(--bg-2); }
+  .vp-chapters li.active { background: var(--gold-dim); color: var(--gold-ink); }
+  .vp-ch-num { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--ink-3); }
+  .vp-chapters li.active .vp-ch-num { color: var(--gold-ink); }
+  .vp-ch-time { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--ink-3); }
+
+  /* Team detail drawer — members list */
+  .dm-table { display: flex; flex-direction: column; gap: 4px; }
+  .dm-head, .dm-row {
+    display: grid;
+    grid-template-columns: 28px 1.4fr 0.5fr 0.7fr 0.5fr;
+    gap: 10px;
+    align-items: center;
+    padding: 8px 0;
+    font-size: 12.5px;
+  }
+  .dm-head {
+    color: var(--ink-3); font-size: 10.5px;
+    font-weight: 600; text-transform: uppercase; letter-spacing: 0.06em;
+    border-bottom: 1px solid var(--border);
+    padding-bottom: 6px;
+  }
+  .dm-head .ta-right, .dm-row .ta-right { text-align: right; }
+  .dm-row { border-bottom: 1px solid var(--border); }
+  .dm-row:last-child { border-bottom: none; }
+  .dm-init {
+    width: 26px; height: 26px; border-radius: 50%;
+    background: var(--avatar-grad); color: white;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 10px; font-weight: 600; font-family: 'JetBrains Mono', monospace;
+  }
+  .dm-id { display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+  .dm-name { color: var(--ink-0); font-weight: 500; font-size: 12.5px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .dm-lead-tag { font-size: 9.5px; color: var(--gold-ink); background: var(--gold-dim); padding: 1px 5px; border-radius: 3px; margin-left: 4px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.04em; }
+  .dm-role { color: var(--ink-2); font-size: 11px; }
+  .dm-num { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--ink-1); text-align: right; }
+  .dm-num-pct { color: var(--ink-3); font-size: 10px; margin-left: 1px; }
+  .dm-bar { height: 4px; background: var(--bg-3); border-radius: 2px; overflow: hidden; }
+  .dm-bar-fill { display: block; height: 100%; }
+  .dm-bar-fill.g { background: var(--green); }
+  .dm-bar-fill.a { background: var(--amber); }
+  .dm-bar-fill.r { background: var(--red); }
+  .dm-tr { font-family: 'JetBrains Mono', monospace; font-size: 12px; color: var(--ink-1); text-align: right; }
+
+  /* Tickets list (in team drawer) */
+  .dt-list { display: flex; flex-direction: column; gap: 6px; }
+  .dt-row {
+    display: grid; grid-template-columns: auto 1fr auto auto; gap: 10px;
+    align-items: center;
+    padding: 9px 12px;
+    background: var(--bg-2); border: 1px solid var(--border);
+    border-radius: 5px;
+    font-size: 12.5px;
+  }
+  .dt-id { font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--ink-3); }
+  .dt-title { color: var(--ink-0); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .dt-age { color: var(--ink-3); font-size: 11.5px; font-family: 'JetBrains Mono', monospace; }
+
+  /* Issue drawer — timeline */
+  .dt-timeline { display: flex; flex-direction: column; gap: 0; }
+  .dt-tl-row {
+    display: grid; grid-template-columns: 60px 14px 1fr; gap: 14px;
+    padding: 8px 0;
+    position: relative;
+  }
+  .dt-tl-row::before {
+    content: ''; position: absolute;
+    left: 67px; top: 0; bottom: 0;
+    width: 1px; background: var(--border);
+  }
+  .dt-tl-row:last-child::before { bottom: 50%; }
+  .dt-tl-row:first-child::before { top: 50%; }
+  .dt-tl-day { color: var(--ink-3); font-family: 'JetBrains Mono', monospace; font-size: 11px; }
+  .dt-tl-dot {
+    width: 10px; height: 10px; border-radius: 50%;
+    background: var(--ink-3);
+    margin-top: 4px;
+    z-index: 1;
+    border: 2px solid var(--bg-1);
+    box-sizing: content-box;
+  }
+  .dt-tl-dot.open { background: var(--red-ink); }
+  .dt-tl-dot.flag { background: var(--amber-ink); }
+  .dt-tl-dot.progress { background: var(--gold-ink); }
+  .dt-tl-dot.note { background: var(--ink-2); }
+  .dt-tl-body { padding-bottom: 4px; }
+  .dt-tl-what { color: var(--ink-0); font-size: 13px; font-weight: 500; }
+  .dt-tl-who { color: var(--ink-2); font-size: 11.5px; margin-top: 2px; }
+
+  /* Make matrix rows + repeat-issue rows look clickable */
+  .matrix-row { cursor: pointer; }
+  .ri-row { cursor: pointer; }
+  .md-mat-tile { cursor: pointer; }
+
   .activity-list { display: flex; flex-direction: column; position: relative; }
   .activity-list::before {
     content: ''; position: absolute;
@@ -2117,10 +2330,344 @@
     drawer.setAttribute('aria-hidden', 'true');
   }
 
+  function openDrawer(html) {
+    drawerContent.innerHTML = html;
+    drawer.classList.add('open');
+    drawerOverlay.classList.add('open');
+    drawer.setAttribute('aria-hidden', 'false');
+    drawer.scrollTop = 0;
+  }
+  window.openDrawer = openDrawer;
+  window.closeDrawer = closeDrawer;
+
   // Keyboard
   document.addEventListener('keydown', e => {
     if (e.key === 'Escape') closeDrawer();
   });
+
+  // ===== Matrix row click → team detail drawer =====
+  document.getElementById('matrix-rows')?.addEventListener('click', (e) => {
+    const row = e.target.closest('.matrix-row');
+    if (!row) return;
+    const allRows = Array.from(document.querySelectorAll('#matrix-rows .matrix-row'));
+    const idx = allRows.indexOf(row);
+    if (idx < 0) return;
+    const team = HYPERCARE_TEAMS.find(t =>
+      t.region === row.dataset.region &&
+      t.role === row.dataset.role &&
+      t.status === row.dataset.status &&
+      t.name === row.querySelector('.team-name')?.textContent
+    );
+    if (!team) return;
+    openDrawer(teamDrawerHtml(team));
+  });
+
+  function teamDrawerHtml(t) {
+    const STATUS_LABEL = { g: 'On-track', a: 'Lagging', r: 'At risk' };
+    const adCls = t.adoption >= 90 ? 'g' : (t.adoption >= 75 ? 'a' : 'r');
+    const llCls = t.lastLogin === '>7d' ? 'r' : (t.lastLogin === '4–7d' ? 'a' : 'g');
+    const memberCount = 6;
+    const members = [
+      { name: t.lead, role: 'Team lead', adoption: t.adoption, training: t.training, isLead: true, init: t.leadInit, avatar: t.avatarUrl },
+      { name: 'Marcus Reyes',  role: 'Senior analyst', adoption: Math.max(0, t.adoption + 4), training: 100 },
+      { name: 'Sofia Patel',   role: 'Analyst', adoption: t.adoption, training: t.training === 100 ? 100 : 92 },
+      { name: 'Jacob Lee',     role: 'Analyst', adoption: Math.max(0, t.adoption - 8), training: t.training === 100 ? 95 : 78 },
+      { name: 'Rina Kobayashi',role: 'Analyst', adoption: Math.max(0, t.adoption - 12), training: t.training === 100 ? 100 : 85 },
+      { name: 'Tomás Rivera',  role: 'Coordinator', adoption: Math.max(0, t.adoption - 18), training: t.training === 100 ? 95 : 70 },
+    ];
+    const memberRows = members.map(mem => {
+      const memAdCls = mem.adoption >= 90 ? 'g' : (mem.adoption >= 75 ? 'a' : 'r');
+      return `
+        <div class="dm-row">
+          <span class="dm-init">${mem.init || mem.name.split(' ').map(s => s[0]).join('').slice(0,2)}</span>
+          <div class="dm-id">
+            <div class="dm-name">${mem.name}${mem.isLead ? ' <span class="dm-lead-tag">lead</span>' : ''}</div>
+            <div class="dm-role">${mem.role}</div>
+          </div>
+          <div class="dm-num">${mem.adoption}<span class="dm-num-pct">%</span></div>
+          <div class="dm-bar"><span class="dm-bar-fill ${memAdCls}" style="width:${mem.adoption}%"></span></div>
+          <div class="dm-tr">${mem.training}<span class="dm-num-pct">%</span></div>
+        </div>
+      `;
+    }).join('');
+
+    const ticketCount = t.openTickets;
+    const teamTickets = [
+      { id: 'KSF-1042', title: 'Stage transition stuck on Tasks Selection', sev: 'p1', daysOpen: 4 },
+      { id: 'KSF-1039', title: 'Client field validation error', sev: 'p2', daysOpen: 2 },
+      { id: 'KSF-1031', title: 'Trade Ready notification missing', sev: 'p2', daysOpen: 1 },
+      { id: 'KSF-1027', title: 'Bulk import audit gap', sev: 'p3', daysOpen: 6 },
+      { id: 'KSF-1024', title: 'Re-onboarding flow unclear', sev: 'p3', daysOpen: 3 },
+    ].slice(0, ticketCount);
+    const ticketHtml = ticketCount > 0
+      ? teamTickets.map(tk => `
+          <div class="dt-row">
+            <span class="dt-id">${tk.id}</span>
+            <div class="dt-title">${tk.title}</div>
+            <span class="ri-sev ${tk.sev}">${tk.sev.toUpperCase()}</span>
+            <span class="dt-age">${tk.daysOpen}d</span>
+          </div>
+        `).join('')
+      : `<div class="drawer-hint">No open tickets for this team.</div>`;
+
+    return `
+      <div class="drawer-head">
+        <div class="dh-eyebrow">Team detail · Module assigned: ${t.region}</div>
+        <div class="team-label">${t.name}<span class="region-pill" style="margin-left:8px;font-size:11px">${t.region}</span></div>
+        <div class="lead">
+          <span class="av" style="background-image:url('${t.avatarUrl}'); width:18px; height:18px; font-size:9px;">${t.leadInit}</span>
+          ${t.lead} · Team lead
+        </div>
+        <button class="icon-btn close" onclick="closeDrawer()" aria-label="Close">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+      <div class="drawer-body">
+        <div class="drawer-status">
+          <div class="drawer-stat">
+            <div class="k">Adoption</div>
+            <div class="v ${adCls}">${t.adoption}%</div>
+          </div>
+          <div class="drawer-stat">
+            <div class="k">Open tickets</div>
+            <div class="v ${ticketCount >= 4 ? 'r' : (ticketCount >= 2 ? 'a' : '')}">${ticketCount}</div>
+          </div>
+          <div class="drawer-stat">
+            <div class="k">Training</div>
+            <div class="v">${t.training}%</div>
+          </div>
+        </div>
+
+        <div class="drawer-section">
+          <h4>Members (${members.length})</h4>
+          <div class="dm-table">
+            <div class="dm-head">
+              <span></span>
+              <span>Name</span>
+              <span class="ta-right">Adopt</span>
+              <span></span>
+              <span class="ta-right">Train</span>
+            </div>
+            ${memberRows}
+          </div>
+        </div>
+
+        <div class="drawer-section">
+          <h4>Open tickets · ${ticketCount}</h4>
+          <div class="dt-list">${ticketHtml}</div>
+        </div>
+
+        <div class="drawer-actions-row">
+          <button class="btn" onclick="alert('Mock — would open Slack DM to ${t.lead.replace(/'/g, "\\'")}.')">Message ${t.lead.split(' ')[0]}</button>
+          <button class="btn primary" onclick="alert('Mock — would send a training-reminder nudge.')">Send training nudge</button>
+        </div>
+      </div>
+    `;
+  }
+
+  // ===== Repeat-issue row click → issue detail drawer =====
+  document.getElementById('ri-rows')?.addEventListener('click', (e) => {
+    const row = e.target.closest('.ri-row');
+    if (!row) return;
+    const allRows = Array.from(document.querySelectorAll('#ri-rows .ri-row'));
+    const idx = allRows.indexOf(row);
+    if (idx < 0) return;
+    const issue = REPEAT_ISSUES[idx];
+    if (!issue) return;
+    openDrawer(issueDrawerHtml(issue));
+  });
+
+  function issueDrawerHtml(iss) {
+    const sevLabel = { p1: 'P1', p2: 'P2', p3: 'P3' };
+    const affectedTeams = iss.severity === 'p1'
+      ? ['Operations · Mumbai', 'Performance Reporting · Chicago', 'Trade Ops · NY']
+      : iss.severity === 'p2'
+      ? ['Operations · Mumbai', 'Client Service · London']
+      : ['Operations · Mumbai'];
+    const timeline = [
+      { day: iss.firstSeen, what: 'Issue first reported', who: 'Auto-detected from ticket pattern', kind: 'open' },
+      { day: 'Day 4', what: 'Triaged to ' + iss.owner, who: 'Roberto Romano', kind: 'note' },
+      { day: 'Day 6', what: 'Recurrence detected (3rd occurrence)', who: 'Auto', kind: 'flag' },
+      { day: 'Day 9', what: 'Workaround documented', who: iss.owner === 'Eng' ? 'Sarah Chen' : 'Jackie Lee', kind: 'note' },
+      { day: 'Day 11', what: 'Fix in progress', who: iss.owner, kind: 'progress' },
+    ];
+
+    return `
+      <div class="drawer-head">
+        <div class="dh-eyebrow">Repeat issue · ${iss.category}</div>
+        <div class="team-label">${iss.issue}</div>
+        <div class="lead">
+          <span class="ri-sev ${iss.severity}">${sevLabel[iss.severity]}</span>
+          <span style="margin-left:8px;">First seen ${iss.firstSeen} · ${iss.owner}</span>
+        </div>
+        <button class="icon-btn close" onclick="closeDrawer()" aria-label="Close">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+      <div class="drawer-body">
+        <div class="drawer-status">
+          <div class="drawer-stat">
+            <div class="k">Open count</div>
+            <div class="v">${iss.open}</div>
+          </div>
+          <div class="drawer-stat">
+            <div class="k">First seen</div>
+            <div class="v">${iss.firstSeen}</div>
+          </div>
+          <div class="drawer-stat">
+            <div class="k">Owner</div>
+            <div class="v">${iss.owner}</div>
+          </div>
+        </div>
+
+        <div class="drawer-section">
+          <h4>Description</h4>
+          <p style="color:var(--ink-1); font-size:13.5px; line-height:1.55;">
+            ${iss.issue}. Reported across multiple teams over the hypercare window.
+            ${iss.category === 'Workflow logic' ? 'Root cause is a logic gap in the stage-transition handler when a task has more than one outstanding dependency.' : ''}
+            ${iss.category === 'Data' ? 'Root cause is a validator that doesn\'t handle the full set of expected character ranges.' : ''}
+            ${iss.category === 'Training gap' ? 'No bug — users need clearer guidance in the materials and walkthrough.' : ''}
+          </p>
+        </div>
+
+        <div class="drawer-section">
+          <h4>Affected teams (${affectedTeams.length})</h4>
+          <ul class="dep-pill-row">
+            ${affectedTeams.map(name => `<li class="dep-pill">${name}</li>`).join('')}
+          </ul>
+        </div>
+
+        <div class="drawer-section">
+          <h4>Activity</h4>
+          <div class="dt-timeline">
+            ${timeline.map(ev => `
+              <div class="dt-tl-row">
+                <div class="dt-tl-day">${ev.day}</div>
+                <div class="dt-tl-dot ${ev.kind}"></div>
+                <div class="dt-tl-body">
+                  <div class="dt-tl-what">${ev.what}</div>
+                  <div class="dt-tl-who">${ev.who}</div>
+                </div>
+              </div>
+            `).join('')}
+          </div>
+        </div>
+
+        <div class="drawer-actions-row">
+          <button class="btn" onclick="alert('Mock — would open the underlying ticket bundle.')">View tickets</button>
+          <button class="btn primary" onclick="alert('Mock — would post status update to #kissflow-help.')">Post update</button>
+        </div>
+      </div>
+    `;
+  }
+
+  // ===== Training material drawer =====
+  function openMaterialDrawer(modId, matIdx) {
+    const m = MODULES.find(x => x.id === modId);
+    if (!m) return;
+    const mat = m.materials[matIdx];
+    if (!mat) return;
+    if (mat.kind === 'VIDEO') {
+      openDrawer(videoDrawerHtml(mat, m));
+    } else {
+      openDrawer(pdfDrawerHtml(mat, m));
+    }
+  }
+  window.openMaterialDrawer = openMaterialDrawer;
+
+  function pdfDrawerHtml(mat, mod) {
+    return `
+      <div class="drawer-head">
+        <div class="dh-eyebrow">Module ${mod.id} · ${mat.kind}</div>
+        <div class="team-label">${mat.title}</div>
+        <div class="lead">${mat.detail}</div>
+        <button class="icon-btn close" onclick="closeDrawer()" aria-label="Close">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+      <div class="drawer-body">
+        <div class="drawer-actions-row">
+          <button class="btn" onclick="alert('Mock — would open PDF in a new tab.')">Open in new tab</button>
+          <button class="btn primary" onclick="alert('Mock — PDF would download.')">Download PDF</button>
+        </div>
+        <div class="pdf-preview" role="document" aria-label="${mat.title} preview">
+          <div class="pdf-page">
+            <div class="pdf-page-head">
+              <div class="pdf-page-title">${mat.title}</div>
+              <div class="pdf-page-meta">${mat.detail} · Apollo ISG SMA</div>
+            </div>
+            <div class="pdf-page-h1">${mod.title}</div>
+            <div class="pdf-page-line w90"></div>
+            <div class="pdf-page-line w95"></div>
+            <div class="pdf-page-line w70"></div>
+            <div class="pdf-page-line w85"></div>
+            <div class="pdf-page-line w92"></div>
+            <div class="pdf-page-h2">${mod.walkthrough[0] ? mod.walkthrough[0].title : 'Section 1'}</div>
+            <div class="pdf-page-line w80"></div>
+            <div class="pdf-page-line w95"></div>
+            <div class="pdf-page-line w60"></div>
+            <div class="pdf-page-h2">${mod.walkthrough[1] ? mod.walkthrough[1].title : 'Section 2'}</div>
+            <div class="pdf-page-line w90"></div>
+            <div class="pdf-page-line w75"></div>
+            <div class="pdf-page-line w90"></div>
+            <div class="pdf-page-line w55"></div>
+            <div class="pdf-page-foot">Page 1 of 8 · Confidential — Apollo internal</div>
+          </div>
+        </div>
+        <div class="drawer-hint">This is a mock preview. The real PDF would render here when wired up.</div>
+      </div>
+    `;
+  }
+
+  function videoDrawerHtml(mat, mod) {
+    return `
+      <div class="drawer-head">
+        <div class="dh-eyebrow">Module ${mod.id} · VIDEO</div>
+        <div class="team-label">${mat.title}</div>
+        <div class="lead">${mat.detail}</div>
+        <button class="icon-btn close" onclick="closeDrawer()" aria-label="Close">
+          <svg width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.2" viewBox="0 0 24 24"><path d="M6 6l12 12M18 6L6 18" stroke-linecap="round"/></svg>
+        </button>
+      </div>
+      <div class="drawer-body">
+        <div class="video-player" role="region" aria-label="Video player mock">
+          <div class="vp-stage">
+            <div class="vp-play">
+              <svg width="36" height="36" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+            </div>
+            <div class="vp-time">00:00 / ${mat.detail.replace(/^.*·\s*/, '').replace('–', ' — ')}</div>
+          </div>
+          <div class="vp-bar">
+            <div class="vp-bar-fill" style="width: 0%"></div>
+          </div>
+          <div class="vp-controls">
+            <button class="vp-btn" aria-label="Play"><svg width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg></button>
+            <button class="vp-btn" aria-label="Mute">🔊</button>
+            <span class="vp-pos">00:00 / 04:30</span>
+            <span class="vp-spacer"></span>
+            <button class="vp-btn" aria-label="Settings">⚙︎</button>
+            <button class="vp-btn" aria-label="Fullscreen">⛶</button>
+          </div>
+        </div>
+        <div class="drawer-section">
+          <h4>Chapters</h4>
+          <ul class="vp-chapters">
+            ${mod.walkthrough.map((s, i) => `
+              <li class="${i === 0 ? 'active' : ''}">
+                <span class="vp-ch-num">${String(i+1).padStart(2,'0')}</span>
+                <span class="vp-ch-title">${s.title}</span>
+                <span class="vp-ch-time">${String(i).padStart(2,'0')}:${(i*45 % 60).toString().padStart(2,'0')}</span>
+              </li>
+            `).join('')}
+          </ul>
+        </div>
+        <div class="drawer-actions-row">
+          <button class="btn" onclick="alert('Mock — would open video in full-screen tab.')">Open in new tab</button>
+        </div>
+        <div class="drawer-hint">This is a mock video player. The real player would stream here when wired up.</div>
+      </div>
+    `;
+  }
 
   // ========== TABS ==========
   document.querySelectorAll('.tab-btn').forEach(btn => {
@@ -2584,8 +3131,8 @@
     const displayStatus = (status === 'notstart') ? 'progress' : status;
 
     // Materials
-    const matsHtml = m.materials.map(mat => `
-      <div class="md-mat-tile" onclick="alert('Mock — ${mat.kind === 'VIDEO' ? 'video player' : 'PDF viewer'} would open here.');">
+    const matsHtml = m.materials.map((mat, mi) => `
+      <div class="md-mat-tile" onclick="openMaterialDrawer(${m.id}, ${mi})">
         <span class="mt-icon">${mat.kind}</span>
         <span class="mt-title">${mat.title}</span>
         <span class="mt-detail">${mat.detail}</span>
