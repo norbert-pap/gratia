@@ -2763,10 +2763,6 @@
       : `Until projected go-live · ${config.goLive}`;
 
     document.getElementById('kpiGoLiveValue').textContent = config.goLive;
-    const slipText = config.daysSlip > 0 ? `+${config.daysSlip}d vs plan`
-                   : config.daysSlip < 0 ? `${config.daysSlip}d vs plan`
-                   : 'On plan';
-    document.getElementById('kpiGoLiveDelta').textContent = slipText;
 
     document.getElementById('waffleCountR').textContent = String(offtrack);
     document.getElementById('waffleCountA').textContent = String(pending);
