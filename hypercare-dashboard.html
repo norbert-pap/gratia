@@ -1495,6 +1495,78 @@
   }
   .quiz-score.pass { background: var(--green-dim); border: 1px solid var(--green-line); color: var(--green-ink); }
   .quiz-score.fail { background: var(--red-dim); border: 1px solid var(--red-line); color: var(--red-ink); }
+  .complete-card {
+    background: var(--bg-1); border: 1px solid var(--border); border-radius: 8px;
+    padding: 20px 24px;
+  }
+  .complete-locked, .complete-done { display: flex; align-items: center; justify-content: space-between; gap: 18px; }
+  .complete-done { color: var(--green-ink); }
+  .complete-check {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: var(--green-dim); border: 1px solid var(--green-line);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 18px; flex-shrink: 0;
+  }
+  .complete-title { font-weight: 500; color: var(--ink-0); font-size: 15px; }
+  .complete-done .complete-title { color: var(--green-ink); }
+  .complete-sub { color: var(--ink-2); font-size: 12.5px; margin-top: 4px; }
+  .complete-btn-enabled { animation: gentle-pulse 2s ease-in-out infinite; }
+  @keyframes gentle-pulse { 0%, 100% { box-shadow: 0 0 0 0 var(--gold-line); } 50% { box-shadow: 0 0 0 8px transparent; } }
+  .modal {
+    position: fixed; inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 200;
+    backdrop-filter: blur(2px);
+  }
+  .modal[hidden] { display: none !important; }
+  .modal-card {
+    background: var(--bg-1); border: 1px solid var(--border-2); border-radius: 10px;
+    padding: 24px; max-width: 440px; width: 90%;
+    box-shadow: var(--shadow);
+  }
+  .modal-card h3 { color: var(--ink-0); font-size: 17px; margin-bottom: 10px; }
+  .modal-card p { color: var(--ink-1); font-size: 13.5px; line-height: 1.55; margin-bottom: 18px; }
+  .modal-actions { display: flex; justify-content: flex-end; gap: 10px; }
+  .footer-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .support-body { padding: 16px 20px; }
+  .support-row {
+    display: flex; align-items: center; gap: 12px;
+    padding: 10px 0;
+    border-bottom: 1px solid var(--border);
+    text-decoration: none; color: inherit;
+  }
+  .support-row:last-of-type { border-bottom: none; }
+  .support-row:hover { color: var(--gold-ink); }
+  .support-icon {
+    width: 32px; height: 32px; border-radius: 50%;
+    background: var(--bg-3); border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    color: var(--ink-1); font-size: 15px;
+  }
+  .support-label { color: var(--ink-0); font-weight: 500; font-size: 13px; }
+  .support-detail { color: var(--ink-2); font-size: 12px; font-family: 'JetBrains Mono', monospace; margin-top: 2px; }
+  .faq { margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--border); }
+  .faq-title { color: var(--ink-2); font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 8px; }
+  .faq-item {
+    padding: 8px 0; border-bottom: 1px solid var(--border);
+  }
+  .faq-item:last-child { border-bottom: none; }
+  .faq-item summary {
+    cursor: pointer; color: var(--ink-1); font-size: 13px;
+    list-style: none;
+    padding: 4px 0;
+  }
+  .faq-item summary::-webkit-details-marker { display: none; }
+  .faq-item summary::before { content: '+ '; color: var(--ink-3); font-family: 'JetBrains Mono', monospace; }
+  .faq-item[open] summary::before { content: '− '; color: var(--gold-ink); }
+  .faq-answer { color: var(--ink-2); font-size: 12.5px; line-height: 1.55; padding: 6px 0 4px 14px; }
+  .metrics-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; padding: 8px 4px; }
+  .metric { padding: 8px; }
+  .metric-label { color: var(--ink-2); font-size: 11.5px; text-transform: uppercase; letter-spacing: 0.04em; margin-bottom: 6px; }
+  .metric-value { color: var(--ink-0); font-size: 24px; font-weight: 600; font-family: 'JetBrains Mono', monospace; }
+  .metric-value .unit { color: var(--ink-3); font-size: 14px; margin-left: 2px; font-weight: 400; }
+  .metric-vs { color: var(--ink-3); font-size: 11.5px; margin-top: 4px; font-family: 'JetBrains Mono', monospace; }
 
 </style>
 </head>
@@ -1901,8 +1973,80 @@
             </div>
           </section>
 
-          <!-- Mark complete + support + metrics placeholder -->
-          <div id="footer-sections"></div>
+          <!-- Mark training complete -->
+          <section class="training-section">
+            <div class="complete-card" id="completeCard">
+              <div class="complete-locked" id="completeLocked">
+                <div>
+                  <div class="complete-title">Mark training complete</div>
+                  <div class="complete-sub">Complete the knowledge check above with 4+ correct answers to unlock.</div>
+                </div>
+                <button class="btn primary" id="completeBtn" disabled>Mark training complete</button>
+              </div>
+              <div class="complete-done" id="completeDone" hidden>
+                <span class="complete-check">✓</span>
+                <div>
+                  <div class="complete-title">Training complete</div>
+                  <div class="complete-sub" id="completeStamp"></div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          <!-- Modal -->
+          <div class="modal" id="completeModal" hidden>
+            <div class="modal-card">
+              <h3>Confirm training complete</h3>
+              <p>You're confirming that you've completed Kissflow training. Your team lead will see this in the hypercare dashboard.</p>
+              <div class="modal-actions">
+                <button class="btn" id="modalCancel">Cancel</button>
+                <button class="btn primary" id="modalConfirm">Confirm</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Get support + Metrics row -->
+          <section class="training-section">
+            <div class="footer-grid">
+              <div class="card support-card">
+                <div class="card-head"><div><h3>Need help?</h3><p class="sub">We respond within 4 business hours.</p></div></div>
+                <div class="card-body support-body">
+                  <a class="support-row" href="mailto:kissflow-training@apollo.example">
+                    <span class="support-icon">✉</span>
+                    <div>
+                      <div class="support-label">Email a trainer</div>
+                      <div class="support-detail">kissflow-training@apollo.example</div>
+                    </div>
+                  </a>
+                  <a class="support-row" href="#" onclick="event.preventDefault(); alert('Mock — Slack channel link.')">
+                    <span class="support-icon">#</span>
+                    <div>
+                      <div class="support-label">Ask in Slack</div>
+                      <div class="support-detail">#kissflow-help</div>
+                    </div>
+                  </a>
+                  <div class="faq">
+                    <div class="faq-title">Common questions</div>
+                    <details class="faq-item"><summary>I can't see my onboarding queue</summary><div class="faq-answer">Check that you're signed in with your Apollo SSO account. The queue is filtered by assignee — your team lead can re-assign in bulk.</div></details>
+                    <details class="faq-item"><summary>How do I add a dependency?</summary><div class="faq-answer">Open any task and use the "Dependencies" panel on the right. Choose the blocker type (Internal / Client / Vendor) and add a 1-line note. Visible on the exec dashboard.</div></details>
+                    <details class="faq-item"><summary>What if I'm stuck on a stage?</summary><div class="faq-answer">First, ping your team lead in Slack. If they're unavailable, escalate to Roberto (project owner) via the dependency tag — that surfaces the blocker on the exec dashboard within an hour.</div></details>
+                    <details class="faq-item"><summary>How do I get re-trained?</summary><div class="faq-answer">Re-take the quiz any time. For a 1:1 walkthrough, email kissflow-training@apollo.example with the topic and we'll schedule a 30-minute session within 2 days.</div></details>
+                  </div>
+                </div>
+              </div>
+              <div class="card">
+                <div class="card-head"><div><h3>My training metrics</h3><p class="sub">Your progress vs Operations · Mumbai team avg</p></div></div>
+                <div class="card-body">
+                  <div class="metrics-grid">
+                    <div class="metric"><div class="metric-label">Modules complete</div><div class="metric-value">3<span class="unit">/5</span></div><div class="metric-vs">team avg 3.7</div></div>
+                    <div class="metric"><div class="metric-label">Last quiz score</div><div class="metric-value">4<span class="unit">/5</span></div><div class="metric-vs">team avg 4.1</div></div>
+                    <div class="metric"><div class="metric-label">Time spent</div><div class="metric-value">38<span class="unit">m</span></div><div class="metric-vs">team avg 45m</div></div>
+                    <div class="metric"><div class="metric-label">Days enrolled</div><div class="metric-value">18</div><div class="metric-vs">team avg 16</div></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
         </div>
       </div>
 
@@ -2337,6 +2481,42 @@
     svg.innerHTML = svgContent;
   }
   renderCategoryChart();
+
+  // ===== Training: mark complete =====
+  const TRAINING_COMPLETE_KEY = 'kissflow-training-complete-priya';
+  const completeBtn = document.getElementById('completeBtn');
+  const completeLocked = document.getElementById('completeLocked');
+  const completeDone = document.getElementById('completeDone');
+  const completeStamp = document.getElementById('completeStamp');
+  const completeModal = document.getElementById('completeModal');
+
+  function showCompletedState(stamp) {
+    completeLocked.hidden = true;
+    completeDone.hidden = false;
+    completeStamp.textContent = stamp;
+  }
+
+  // Restore prior completion if persisted
+  try {
+    const prior = localStorage.getItem(TRAINING_COMPLETE_KEY);
+    if (prior) showCompletedState(prior);
+  } catch (e) {}
+
+  document.addEventListener('quiz-passed', () => {
+    completeBtn.disabled = false;
+    completeBtn.classList.add('complete-btn-enabled');
+    completeLocked.querySelector('.complete-sub').textContent = 'Knowledge check passed. Click to confirm completion.';
+  });
+
+  completeBtn.addEventListener('click', () => { completeModal.hidden = false; });
+  document.getElementById('modalCancel').addEventListener('click', () => { completeModal.hidden = true; });
+  document.getElementById('modalConfirm').addEventListener('click', () => {
+    completeModal.hidden = true;
+    const today = new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' });
+    const stamp = `Completed · ${today} by Priya Shah`;
+    showCompletedState(stamp);
+    try { localStorage.setItem(TRAINING_COMPLETE_KEY, stamp); } catch (e) {}
+  });
 
   // ===== Training: quiz =====
   const QUIZ_QUESTIONS = [
