@@ -1337,6 +1337,83 @@
   /* ========== TRAINING TAB ========== */
   .progress-ring-wrap { display: flex; align-items: center; gap: 12px; }
   .progress-ring-meta { color: var(--ink-2); font-family: 'JetBrains Mono', monospace; font-size: 12px; }
+  .training-section { margin-top: 28px; }
+  .training-section .section-head {
+    display: flex; align-items: baseline; justify-content: space-between;
+    margin-bottom: 14px;
+  }
+  .training-section .section-head h2 { font-size: 18px; color: var(--ink-0); font-weight: 600; }
+  .training-section .section-head .count { color: var(--ink-2); font-size: 12.5px; }
+  .docs-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+  .doc-tile {
+    display: grid; grid-template-columns: 56px 1fr auto; gap: 16px;
+    align-items: center;
+    padding: 18px;
+    background: var(--bg-1);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    text-decoration: none;
+    color: inherit;
+    transition: border-color 0.15s, background 0.15s;
+    position: relative;
+    overflow: hidden;
+  }
+  .doc-tile::before {
+    content: ''; position: absolute; left: 0; top: 0; bottom: 0; width: 3px;
+  }
+  .doc-tile.cyan::before { background: #6cb6e8; }
+  .doc-tile.gold::before { background: var(--gold); }
+  .doc-tile:hover { border-color: var(--border-2); background: var(--bg-2); }
+  .doc-icon {
+    width: 56px; height: 64px; border-radius: 6px;
+    background: var(--bg-3); border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    font-family: 'JetBrains Mono', monospace; font-size: 11px; color: var(--ink-2);
+    font-weight: 600; letter-spacing: 0.04em;
+  }
+  .doc-tile.cyan .doc-icon { color: #6cb6e8; border-color: rgba(108, 182, 232, 0.3); }
+  .doc-tile.gold .doc-icon { color: var(--gold-ink); border-color: var(--gold-line); }
+  .doc-title { color: var(--ink-0); font-weight: 500; font-size: 14px; }
+  .doc-sub { color: var(--ink-2); font-size: 12px; margin-top: 4px; font-family: 'JetBrains Mono', monospace; }
+  .doc-actions { display: flex; gap: 8px; }
+  .video-card {
+    display: grid; grid-template-columns: 1.4fr 1fr; gap: 24px;
+    background: var(--bg-1); border: 1px solid var(--border); border-radius: 8px;
+    overflow: hidden;
+  }
+  .video-thumb {
+    aspect-ratio: 16/9;
+    background: linear-gradient(135deg, #1e3a5f 0%, #2d5985 50%, #4a7ba9 100%);
+    position: relative; cursor: pointer;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .video-play {
+    width: 64px; height: 64px; border-radius: 50%;
+    background: rgba(255,255,255,0.92);
+    color: #1a1a1c;
+    display: flex; align-items: center; justify-content: center;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.4);
+    transition: transform 0.2s;
+  }
+  .video-thumb:hover .video-play { transform: scale(1.06); }
+  .video-status {
+    position: absolute; top: 12px; right: 12px;
+    background: rgba(0,0,0,0.5); color: var(--green-ink);
+    padding: 4px 10px; border-radius: 999px;
+    font-size: 11px; display: inline-flex; align-items: center; gap: 6px;
+    backdrop-filter: blur(4px);
+  }
+  .video-status .dot { width: 6px; height: 6px; border-radius: 50%; }
+  .video-status .dot.g { background: var(--green-ink); }
+  .video-duration {
+    position: absolute; bottom: 12px; right: 12px;
+    background: rgba(0,0,0,0.6); color: white;
+    padding: 3px 8px; border-radius: 4px;
+    font-size: 11px; font-family: 'JetBrains Mono', monospace;
+  }
+  .video-meta { padding: 24px; display: flex; flex-direction: column; justify-content: center; }
+  .video-meta h3 { font-size: 16px; color: var(--ink-0); margin-bottom: 8px; }
+  .video-meta .sub { color: var(--ink-2); font-size: 13px; line-height: 1.55; }
 
 </style>
 </head>
@@ -1658,8 +1735,67 @@
             </div>
           </section>
 
-          <!-- Section placeholder for following phases -->
-          <div id="training-sections"></div>
+          <!-- Documents -->
+          <section class="training-section">
+            <div class="section-head">
+              <h2>Reference materials</h2>
+              <span class="count">2 documents · download or view in browser</span>
+            </div>
+            <div class="docs-grid">
+              <a class="doc-tile cyan" href="#" onclick="event.preventDefault(); alert('Mock — PDF would open here.');">
+                <div class="doc-icon">PDF</div>
+                <div class="doc-meta">
+                  <div class="doc-title">Quick Reference Guide</div>
+                  <div class="doc-sub">8 pages · updated May 2</div>
+                </div>
+                <div class="doc-actions">
+                  <button class="btn">View</button>
+                  <button class="btn primary">Download</button>
+                </div>
+              </a>
+              <a class="doc-tile gold" href="#" onclick="event.preventDefault(); alert('Mock — PDF would open here.');">
+                <div class="doc-icon">PDF</div>
+                <div class="doc-meta">
+                  <div class="doc-title">Full Step Guide</div>
+                  <div class="doc-sub">42 pages · updated April 28</div>
+                </div>
+                <div class="doc-actions">
+                  <button class="btn">View</button>
+                  <button class="btn primary">Download</button>
+                </div>
+              </a>
+            </div>
+          </section>
+
+          <!-- Video demo -->
+          <section class="training-section">
+            <div class="section-head">
+              <h2>Video walkthrough</h2>
+              <span class="count">12 min · introduces the SMA onboarding workflow</span>
+            </div>
+            <div class="video-card">
+              <div class="video-thumb">
+                <div class="video-status watched"><span class="dot g"></span>Watched · May 4</div>
+                <div class="video-duration">12:08</div>
+                <div class="video-play">
+                  <svg width="28" height="28" viewBox="0 0 24 24" fill="currentColor"><path d="M8 5v14l11-7z"/></svg>
+                </div>
+              </div>
+              <div class="video-meta">
+                <h3>Onboarding a new SMA client end-to-end</h3>
+                <p class="sub">Walks through Impact Assessment → Tasks Selection → In Progress → Ready for Trading → Onboarding Complete with a real client example.</p>
+              </div>
+            </div>
+          </section>
+
+          <!-- Walkthrough placeholder -->
+          <div id="walkthrough-section"></div>
+
+          <!-- Quiz placeholder -->
+          <div id="quiz-section"></div>
+
+          <!-- Mark complete + support + metrics placeholder -->
+          <div id="footer-sections"></div>
         </div>
       </div>
 
@@ -2094,6 +2230,12 @@
     svg.innerHTML = svgContent;
   }
   renderCategoryChart();
+
+  // ===== Training: video mock =====
+  const videoThumb = document.querySelector('#tab-training .video-thumb');
+  if (videoThumb) {
+    videoThumb.addEventListener('click', () => alert('Mock — video player would open here.'));
+  }
 </script>
 
 </div><!-- /#deck-content -->
