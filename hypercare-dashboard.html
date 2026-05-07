@@ -1472,11 +1472,13 @@
   .md-walk-shot {
     aspect-ratio: 16/10;
     background: var(--bg-3); border: 1px solid var(--border); border-radius: 6px;
-    display: flex; align-items: center; justify-content: center;
-    color: var(--ink-3); font-size: 12px; font-family: 'JetBrains Mono', monospace;
     position: relative;
+    overflow: hidden;
   }
-  .md-walk-shot::before { content: ''; position: absolute; inset: 12px; border: 1px dashed var(--border-2); border-radius: 4px; }
+  .md-walk-shot .mw-svg {
+    position: absolute; inset: 0; width: 100%; height: 100%;
+    display: block;
+  }
   .md-walk-shot .mw-pin {
     position: absolute; width: 22px; height: 22px; border-radius: 50%;
     background: var(--gold); color: var(--bg);
@@ -2591,25 +2593,94 @@
       return `<div class="${cls}" data-walk-step="${i}"><span class="mws-num">${i+1}</span><span>${s.title}</span></div>`;
     }).join('');
     const wk = m.walkthrough[wkStep];
+    const PIN_POSITIONS = [
+      { x: 17, y: 33 },  // sidebar
+      { x: 92, y: 11 },  // user avatar / top-right
+      { x: 88, y: 22 },  // primary action button
+      { x: 50, y: 56 },  // table row 2
+      { x: 28, y: 80 },  // table row 5
+    ];
+    const pinPos = PIN_POSITIONS[wkStep % PIN_POSITIONS.length];
+    const fakeUiSvg = `
+      <svg class="mw-svg" viewBox="0 0 320 200" preserveAspectRatio="none" aria-hidden="true">
+        <!-- Top bar -->
+        <rect x="0" y="0" width="320" height="22" fill="rgba(255,255,255,0.04)"/>
+        <line x1="0" y1="22" x2="320" y2="22" stroke="var(--border)" stroke-width="0.6"/>
+        <rect x="8"  y="6" width="50" height="10" rx="2" fill="var(--ink-3)" opacity="0.45"/>
+        <rect x="220" y="6" width="80" height="10" rx="2" fill="var(--ink-3)" opacity="0.22"/>
+        <circle cx="306" cy="11" r="6" fill="var(--gold)" opacity="0.45"/>
+        <!-- Sidebar -->
+        <rect x="0" y="22" width="60" height="178" fill="rgba(255,255,255,0.02)"/>
+        <line x1="60" y1="22" x2="60" y2="200" stroke="var(--border)" stroke-width="0.6"/>
+        <rect x="8" y="34" width="44" height="6" rx="1" fill="var(--ink-3)" opacity="0.4"/>
+        <rect x="8" y="46" width="44" height="6" rx="1" fill="var(--gold)"  opacity="0.65"/>
+        <rect x="8" y="58" width="44" height="6" rx="1" fill="var(--ink-3)" opacity="0.4"/>
+        <rect x="8" y="70" width="44" height="6" rx="1" fill="var(--ink-3)" opacity="0.4"/>
+        <rect x="8" y="82" width="44" height="6" rx="1" fill="var(--ink-3)" opacity="0.4"/>
+        <!-- Tab strip + primary action -->
+        <rect x="74"  y="32" width="50" height="8" rx="1" fill="var(--ink-2)" opacity="0.55"/>
+        <rect x="130" y="32" width="40" height="8" rx="1" fill="var(--ink-3)" opacity="0.32"/>
+        <rect x="176" y="32" width="40" height="8" rx="1" fill="var(--ink-3)" opacity="0.32"/>
+        <rect x="270" y="30" width="40" height="12" rx="2" fill="var(--gold)" opacity="0.72"/>
+        <!-- Header row + body -->
+        <line x1="68" y1="50" x2="312" y2="50" stroke="var(--border)" stroke-width="0.4"/>
+        <rect x="74"  y="56" width="40" height="5" rx="1" fill="var(--ink-3)" opacity="0.5"/>
+        <rect x="140" y="56" width="40" height="5" rx="1" fill="var(--ink-3)" opacity="0.5"/>
+        <rect x="200" y="56" width="40" height="5" rx="1" fill="var(--ink-3)" opacity="0.5"/>
+        <rect x="260" y="56" width="40" height="5" rx="1" fill="var(--ink-3)" opacity="0.5"/>
+        <rect x="68"  y="68"  width="244" height="18" rx="2" fill="rgba(255,255,255,0.025)"/>
+        <rect x="74"  y="74"  width="50" height="6" rx="1" fill="var(--ink-2)" opacity="0.6"/>
+        <rect x="140" y="74"  width="36" height="6" rx="1" fill="var(--ink-3)" opacity="0.4"/>
+        <rect x="200" y="74"  width="36" height="6" rx="1" fill="var(--ink-3)" opacity="0.4"/>
+        <circle cx="278" cy="77" r="3" fill="var(--green)" opacity="0.7"/>
+        <rect x="68"  y="92"  width="244" height="18" rx="2" fill="rgba(255,255,255,0.025)"/>
+        <rect x="74"  y="98"  width="60" height="6" rx="1" fill="var(--ink-2)" opacity="0.6"/>
+        <rect x="140" y="98"  width="36" height="6" rx="1" fill="var(--ink-3)" opacity="0.4"/>
+        <rect x="200" y="98"  width="36" height="6" rx="1" fill="var(--ink-3)" opacity="0.4"/>
+        <circle cx="278" cy="101" r="3" fill="var(--amber)" opacity="0.7"/>
+        <rect x="68"  y="116" width="244" height="18" rx="2" fill="rgba(255,255,255,0.025)"/>
+        <rect x="74"  y="122" width="44" height="6" rx="1" fill="var(--ink-2)" opacity="0.6"/>
+        <rect x="140" y="122" width="36" height="6" rx="1" fill="var(--ink-3)" opacity="0.4"/>
+        <rect x="200" y="122" width="36" height="6" rx="1" fill="var(--ink-3)" opacity="0.4"/>
+        <circle cx="278" cy="125" r="3" fill="var(--red)" opacity="0.7"/>
+        <rect x="68"  y="140" width="244" height="18" rx="2" fill="rgba(255,255,255,0.025)"/>
+        <rect x="74"  y="146" width="56" height="6" rx="1" fill="var(--ink-2)" opacity="0.6"/>
+        <rect x="140" y="146" width="36" height="6" rx="1" fill="var(--ink-3)" opacity="0.4"/>
+        <rect x="200" y="146" width="36" height="6" rx="1" fill="var(--ink-3)" opacity="0.4"/>
+        <circle cx="278" cy="149" r="3" fill="var(--green)" opacity="0.7"/>
+        <rect x="68"  y="164" width="244" height="18" rx="2" fill="rgba(255,255,255,0.025)"/>
+        <rect x="74"  y="170" width="48" height="6" rx="1" fill="var(--ink-2)" opacity="0.6"/>
+        <rect x="140" y="170" width="36" height="6" rx="1" fill="var(--ink-3)" opacity="0.4"/>
+        <rect x="200" y="170" width="36" height="6" rx="1" fill="var(--ink-3)" opacity="0.4"/>
+        <circle cx="278" cy="173" r="3" fill="var(--green)" opacity="0.7"/>
+      </svg>
+    `;
     const walkBodyHtml = `
       <div>
         <h5>${wk.title}</h5>
         <p>${wk.body}</p>
       </div>
       <div class="md-walk-shot">
-        <span class="mw-pin" style="top:30%;left:18%;">${wk.pin}</span>
+        ${fakeUiSvg}
+        <span class="mw-pin" style="top:${pinPos.y}%;left:${pinPos.x}%;">${wk.pin}</span>
       </div>
     `;
 
     // Quiz
     const submitted = moduleQuizSubmitted[m.id];
     const answers = moduleQuizAnswers[m.id];
+    const submittedCorrectCount = submitted ? m.quiz.reduce((acc, q, qi) => acc + (answers[qi] === q.correct ? 1 : 0), 0) : 0;
+    const submittedPassed = submitted && (submittedCorrectCount / m.quiz.length >= 0.8);
     const qHtml = m.quiz.map((q, qi) => {
       const opts = q.options.map((opt, oi) => {
         let ocls = 'md-opt';
         if (submitted) {
-          if (oi === q.correct) ocls += ' correct';
-          else if (answers[qi] === oi) ocls += ' incorrect';
+          // Only reveal correct/incorrect highlights when the user passed.
+          // On fail, keep options neutral so the user has to re-read and figure them out.
+          if (submittedPassed) {
+            if (oi === q.correct) ocls += ' correct';
+            else if (answers[qi] === oi) ocls += ' incorrect';
+          }
           if (answers[qi] === oi) ocls += ' user-pick';
         }
         const checked = answers[qi] === oi ? ' checked' : '';
