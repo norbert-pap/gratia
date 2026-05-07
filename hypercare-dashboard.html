@@ -193,6 +193,30 @@
     gap: 6px;
   }
 
+  .nav-right .day-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 5px 11px;
+    background: var(--bg-3);
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    font-size: 12px;
+    color: var(--ink-2);
+    font-family: 'JetBrains Mono', monospace;
+    margin-right: 6px;
+    line-height: 1.3;
+  }
+  .nav-right .day-badge strong {
+    color: var(--gold-ink);
+    font-weight: 600;
+  }
+  .nav-right .day-badge .dot-pulse {
+    width: 6px; height: 6px;
+    border-radius: 50%;
+    background: var(--gold);
+    animation: pulse 2s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+    flex-shrink: 0;
+  }
+
   .avatar-btn {
     width: 32px; height: 32px;
     border-radius: 50%;
@@ -1875,6 +1899,10 @@
       <button class="tab-btn" data-tab="training">Training</button>
     </nav>
     <div class="nav-right">
+      <span class="day-badge" title="Hypercare day count">
+        <span class="dot-pulse"></span>
+        Day <strong>12</strong> of 30
+      </span>
       <button class="icon-btn theme-toggle" id="themeToggle" title="Toggle theme" aria-label="Toggle theme">
         <svg class="ti-moon" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" stroke-linecap="round" stroke-linejoin="round"/></svg>
         <svg class="ti-sun" fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41" stroke-linecap="round"/></svg>
@@ -1955,10 +1983,10 @@
           <div class="kpi-target">Target 26/26 teams</div>
         </div>
         <div class="kpi">
-          <div class="label">Timeliness</div>
-          <div class="value num"><span id="kpiTimelinessValue">11</span><span class="unit">d</span></div>
-          <div class="delta green">−1d WoW</div>
-          <div class="kpi-target">Target &lt;14 days</div>
+          <div class="label">Avg. cycle time</div>
+          <div class="value num"><span id="kpiCycleTimeValue">14</span><span class="unit">d</span></div>
+          <div class="delta green">↓ vs 22d baseline</div>
+          <div class="kpi-target">Kickoff → Pre-Trading sign-off</div>
         </div>
         <div class="kpi">
           <div class="label">Blockers resolved in SLA</div>
