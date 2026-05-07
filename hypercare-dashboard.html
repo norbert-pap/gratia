@@ -1945,7 +1945,7 @@
             <span class="status-chip" id="statusChip" data-status="amber"><span class="dot-pulse"></span><span id="statusChipLabel">Stabilizing on track</span></span>
           </div>
           <h1 class="lede" id="dashLede">3 of 6 exit criteria met. <em>Tickets down 38% week-over-week</em>.</h1>
-          <p class="sublede" id="dashSublede">Adoption lagging in Mumbai Ops and Chicago Reporting. Repeat-issue rate still above threshold — workflow stage-transition bug accounts for the largest share.</p>
+          <p class="sublede" id="dashSublede">Adoption lagging in Mumbai FinOps Engineering and Chicago Reconciliations. Repeat-issue rate still above threshold — workflow stage-transition bug accounts for the largest share.</p>
         </div>
         <div class="head-actions">
           <button class="btn primary">
@@ -2285,7 +2285,7 @@
                 </div>
               </div>
               <div class="card">
-                <div class="card-head"><div><h3>My training metrics</h3><p class="sub">Your progress vs Operations · Mumbai team avg</p></div></div>
+                <div class="card-head"><div><h3>My training metrics</h3><p class="sub">Your progress vs FinOps Engineering · Mumbai team avg</p></div></div>
                 <div class="card-body">
                   <div class="metrics-grid">
                     <div class="metric"><div class="metric-label">Modules passed</div><div class="metric-value">3<span class="unit">/5</span></div><div class="metric-vs">team avg 3.7</div></div>
@@ -2321,15 +2321,15 @@
   // Single fixed dataset: 9 teams. Wave 1 went live May 30 (day 12 today). Wave 2 went live June 5 (day 7 today).
   // status: 'g' on-track, 'a' lagging, 'r' at-risk.
   const HYPERCARE_TEAMS = [
-    { name: 'Onboarding Program',    region: 'NY',      lead: 'Jordan Reyes',   leadInit: 'JR', avatarUrl: 'https://randomuser.me/api/portraits/women/44.jpg', wave: 1, days: 12, adoption: 96, openTickets: 0, training: 100, lastLogin: 'Today', status: 'g', role: 'Primary user' },
-    { name: 'Performance Reporting', region: 'NY',      lead: 'Sarah Chen',     leadInit: 'SC', avatarUrl: 'https://randomuser.me/api/portraits/women/68.jpg', wave: 1, days: 12, adoption: 92, openTickets: 1, training: 100, lastLogin: 'Today', status: 'g', role: 'Contributor' },
-    { name: 'Performance Reporting', region: 'Chicago', lead: 'Daniel Okafor',  leadInit: 'DO', avatarUrl: 'https://randomuser.me/api/portraits/men/22.jpg',   wave: 1, days: 12, adoption: 71, openTickets: 3, training: 88,  lastLogin: '1–3d', status: 'a', role: 'Contributor' },
-    { name: 'Operations',            region: 'NY',      lead: 'Aiko Tanaka',    leadInit: 'AT', avatarUrl: 'https://randomuser.me/api/portraits/women/30.jpg', wave: 1, days: 12, adoption: 90, openTickets: 1, training: 96,  lastLogin: 'Today', status: 'g', role: 'Power user' },
-    { name: 'Operations',            region: 'Mumbai',  lead: 'Priya Shah',     leadInit: 'PS', avatarUrl: 'https://randomuser.me/api/portraits/women/79.jpg', wave: 2, days: 7,  adoption: 64, openTickets: 5, training: 92,  lastLogin: '4–7d', status: 'r', role: 'Power user' },
-    { name: 'Client Service',        region: 'NY',      lead: 'Marcus Bell',    leadInit: 'MB', avatarUrl: 'https://randomuser.me/api/portraits/men/35.jpg',   wave: 1, days: 12, adoption: 88, openTickets: 0, training: 100, lastLogin: 'Today', status: 'g', role: 'Contributor' },
-    { name: 'Client Service',        region: 'London',  lead: 'Hannah Green',   leadInit: 'HG', avatarUrl: 'https://randomuser.me/api/portraits/women/52.jpg', wave: 2, days: 7,  adoption: 82, openTickets: 1, training: 95,  lastLogin: '1–3d', status: 'a', role: 'Contributor' },
-    { name: 'Trade Ops',             region: 'NY',      lead: 'Liam Park',      leadInit: 'LP', avatarUrl: 'https://randomuser.me/api/portraits/men/48.jpg',   wave: 1, days: 12, adoption: 91, openTickets: 1, training: 100, lastLogin: 'Today', status: 'g', role: 'Contributor' },
-    { name: 'Compliance',            region: 'NY',      lead: 'Rachel Stone',   leadInit: 'RS', avatarUrl: 'https://randomuser.me/api/portraits/women/12.jpg', wave: 1, days: 12, adoption: 89, openTickets: 0, training: 100, lastLogin: 'Today', status: 'g', role: 'Glance-only' },
+    { name: 'Transitions',                region: 'NY',      lead: 'Jordan Reyes',   leadInit: 'JR', avatarUrl: 'https://randomuser.me/api/portraits/women/44.jpg', wave: 1, days: 12, adoption: 96, openTickets: 0, training: 100, lastLogin: 'Today', status: 'g', role: 'Primary user' },
+    { name: 'Client Reporting Engineering', region: 'NY',    lead: 'Sarah Chen',     leadInit: 'SC', avatarUrl: 'https://randomuser.me/api/portraits/women/68.jpg', wave: 1, days: 12, adoption: 92, openTickets: 1, training: 100, lastLogin: 'Today', status: 'g', role: 'Contributor' },
+    { name: 'Reconciliations',            region: 'Chicago', lead: 'Daniel Okafor',  leadInit: 'DO', avatarUrl: 'https://randomuser.me/api/portraits/men/22.jpg',   wave: 1, days: 12, adoption: 71, openTickets: 3, training: 88,  lastLogin: '1–3d', status: 'a', role: 'Contributor' },
+    { name: 'Apollo NY Middle Office',    region: 'NY',      lead: 'Aiko Tanaka',    leadInit: 'AT', avatarUrl: 'https://randomuser.me/api/portraits/women/30.jpg', wave: 1, days: 12, adoption: 90, openTickets: 1, training: 96,  lastLogin: 'Today', status: 'g', role: 'Power user' },
+    { name: 'FinOps Engineering (ePAM)',  region: 'Mumbai',  lead: 'Priya Shah',     leadInit: 'PS', avatarUrl: 'https://randomuser.me/api/portraits/women/79.jpg', wave: 2, days: 7,  adoption: 64, openTickets: 5, training: 92,  lastLogin: '4–7d', status: 'r', role: 'Power user' },
+    { name: 'Client Service',             region: 'NY',      lead: 'Marcus Bell',    leadInit: 'MB', avatarUrl: 'https://randomuser.me/api/portraits/men/35.jpg',   wave: 1, days: 12, adoption: 88, openTickets: 0, training: 100, lastLogin: 'Today', status: 'g', role: 'Contributor' },
+    { name: 'Client Solutions',           region: 'London',  lead: 'Hannah Green',   leadInit: 'HG', avatarUrl: 'https://randomuser.me/api/portraits/women/52.jpg', wave: 2, days: 7,  adoption: 82, openTickets: 1, training: 95,  lastLogin: '1–3d', status: 'a', role: 'Contributor' },
+    { name: 'Trade Support Ops',          region: 'NY',      lead: 'Liam Park',      leadInit: 'LP', avatarUrl: 'https://randomuser.me/api/portraits/men/48.jpg',   wave: 1, days: 12, adoption: 91, openTickets: 1, training: 100, lastLogin: 'Today', status: 'g', role: 'Contributor' },
+    { name: 'Investment Compliance',      region: 'NY',      lead: 'Rachel Stone',   leadInit: 'RS', avatarUrl: 'https://randomuser.me/api/portraits/women/12.jpg', wave: 1, days: 12, adoption: 89, openTickets: 0, training: 100, lastLogin: 'Today', status: 'g', role: 'Glance-only' },
   ];
 
   // Stabilization chart per-day data (Day 1..30)
@@ -2619,10 +2619,10 @@
   function issueDrawerHtml(iss) {
     const sevLabel = { p1: 'P1', p2: 'P2', p3: 'P3' };
     const affectedTeams = iss.severity === 'p1'
-      ? ['Operations · Mumbai', 'Performance Reporting · Chicago', 'Trade Ops · NY']
+      ? ['FinOps Engineering · Mumbai', 'Reconciliations · Chicago', 'Trade Support Ops · NY']
       : iss.severity === 'p2'
-      ? ['Operations · Mumbai', 'Client Service · London']
-      : ['Operations · Mumbai'];
+      ? ['FinOps Engineering · Mumbai', 'Client Solutions · London']
+      : ['FinOps Engineering · Mumbai'];
     const timeline = [
       { day: iss.firstSeen, what: 'Issue first reported', who: 'Auto-detected from ticket pattern', kind: 'open' },
       { day: 'Day 4', what: 'Triaged to ' + iss.owner, who: 'Roberto Romano', kind: 'note' },
