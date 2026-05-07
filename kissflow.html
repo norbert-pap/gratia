@@ -1009,7 +1009,10 @@
   .kf-frame {
     border: 1px solid var(--border);
     border-radius: 8px;
-    overflow: hidden;
+    /* overflow:visible so .tip tooltips inside the matrix can extend past the
+       frame's left edge. The first child (.kf-title-row) carries its own
+       rounded-top corners to keep the visual seam clean. */
+    overflow: visible;
     margin: -8px 0 28px;
     background: var(--bg);
   }
@@ -1027,6 +1030,8 @@
     padding: 11px 16px 11px 18px;
     border-bottom: 1px solid var(--border);
     background: var(--bg-2);
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
   }
   .kf-title {
     display: flex; align-items: center; gap: 9px;
