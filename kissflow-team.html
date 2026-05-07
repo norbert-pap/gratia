@@ -612,21 +612,22 @@
   <main>
     <div class="kf-frame">
       <div class="kf-bar">
-        <div class="kf-pill"><span class="dot"></span>Onboarding · Carina Capital</div>
+        <div class="kf-pill"><span class="dot"></span>ISG SMA Onboarding</div>
         <div class="kf-pill" style="background: transparent;">Kissflow Workflows</div>
       </div>
       <div class="kf-tabs-wrap">
         <nav class="kf-tabs">
-          <div class="kf-tab">Forms</div>
-          <div class="kf-tab active">Workflows</div>
-          <div class="kf-tab">Datasets</div>
-          <div class="kf-tab">Apps</div>
+          <div class="kf-tab">Lead Dashboard</div>
+          <div class="kf-tab">All Requests</div>
+          <div class="kf-tab">Team Lead Tasks</div>
+          <div class="kf-tab">Team Tasks</div>
+          <div class="kf-tab">Request Tasks</div>
+          <div class="kf-tab active">Dashboards</div>
+          <div class="kf-tab">Instructions</div>
         </nav>
-        <nav class="kf-subtabs">
-          <button class="kf-subtab" onclick="location.href='kissflow.html'">Onboarding overview</button>
-          <button class="kf-subtab active">Team detail</button>
-          <button class="kf-subtab">Internal Controls</button>
-          <button class="kf-subtab">Performance</button>
+        <nav class="kf-subtabs" aria-label="Team filter" id="teamSubtabs">
+          <button class="kf-subtab" onclick="location.href='kissflow.html'">All Teams</button>
+          <button class="kf-subtab active" id="currentTeamSubtab">Portfolio Administration</button>
         </nav>
       </div>
 
@@ -813,22 +814,45 @@
   const clientParam = params.get('client') || '';
 
   function teamNameFromRef(ref) {
-    // Map well-known refs from the parent dashboard, otherwise fall back.
+    // Map matches TEAM_META in the parent dashboard (kissflow.html). 28 teams from
+    // the Mockups V6 spreadsheet's Drop Down List tab.
     const map = {
-      'CK-2401':'Performance','CK-2402':'Risk Management','CK-2403':'Client Service',
-      'CK-2404':'Reconciliation','CK-2405':'Tax Services','CK-2406':'Corporate Actions',
-      'CK-2407':'Settlements','CK-2408':'Allocations','CK-2409':'Client Solutions',
-      'CK-2410':'Transfer Agency','CK-2411':'Cash Management','CK-2412':'Billing',
-      'CK-2413':'Custody','CK-2414':'Treasury','CK-2415':'Compliance',
-      'CK-2416':'Internal Controls','CK-2417':'Middle Office','CK-2418':'Trade Support',
-      'CK-2419':'Fund Accounting','CK-2420':'Reference Data','CK-2421':'ISG Legal',
-      'CK-2422':'Portfolio Admin','CK-2423':'Client Engineering',
+      'CK-2401':'Client Solutions',
+      'CK-2402':'Transitions',
+      'CK-2403':'Fin Ops Engineering (ePAM)',
+      'CK-2404':'Mortgage Onboarding (Fin Ops)',
+      'CK-2405':'CPS',
+      'CK-2406':'Client Reporting Engineering',
+      'CK-2407':'Engineering',
+      'CK-2408':'AML',
+      'CK-2409':'Internal Controls (SOC)',
+      'CK-2410':'Firm Compliance',
+      'CK-2411':'Investment Compliance',
+      'CK-2412':'ISG Reference Data',
+      'CK-2413':'ISG Legal',
+      'CK-2414':'ISG Trade Operations & Reconciliations',
+      'CK-2415':'ISG Trade Support Ops (Middle office)',
+      'CK-2416':'New Business Ops',
+      'CK-2417':'3PI Portfolio Management',
+      'CK-2418':'Portfolio Administration',
+      'CK-2419':'Treasury Services (TSS)',
+      'CK-2420':'Portfolio Control',
+      'CK-2421':'Cash Management',
+      'CK-2422':'Apollo NY Middle Office',
+      'CK-2423':'Billing',
+      'CK-2424':'PAM Engineering',
+      'CK-2425':'IC Deck',
+      'CK-2426':'NIER Risk',
+      'CK-2427':'Pricing',
+      'CK-2428':'Feesta IT',
     };
-    return map[ref] || teamNameParam || 'Settlements';
+    return map[ref] || teamNameParam || 'Portfolio Administration';
   }
 
   const teamName = teamNameFromRef(teamRefParam);
   document.getElementById('teamEyebrow').textContent = `ISG SMA · Day 14 of 30 · ${teamName}`;
+  const currentTeamSubtabEl = document.getElementById('currentTeamSubtab');
+  if (currentTeamSubtabEl) currentTeamSubtabEl.textContent = teamName;
 
   // ========== RENDER ==========
   const tasksRowsEl = document.getElementById('task-rows');

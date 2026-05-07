@@ -1730,17 +1730,15 @@
         </nav>
         <nav class="kf-subtabs" aria-label="Team filter">
           <button class="kf-subtab active">All Teams</button>
-          <button class="kf-subtab">Portfolio Admin</button>
-          <button class="kf-subtab">ISG Portfolio Control</button>
-          <button class="kf-subtab">Client Engineering</button>
           <button class="kf-subtab">Client Solutions</button>
-          <button class="kf-subtab">Client Service</button>
-          <button class="kf-subtab">Reference Data</button>
+          <button class="kf-subtab">Transitions</button>
+          <button class="kf-subtab">Portfolio Administration</button>
           <button class="kf-subtab">ISG Legal</button>
-          <button class="kf-subtab">Reconciliation</button>
+          <button class="kf-subtab">ISG Reference Data</button>
+          <button class="kf-subtab">Cash Management</button>
           <button class="kf-subtab">Billing</button>
-          <button class="kf-subtab">Internal Controls</button>
-          <button class="kf-subtab">Performance</button>
+          <button class="kf-subtab">Internal Controls (SOC)</button>
+          <button class="kf-subtab">Treasury Services (TSS)</button>
           <button class="kf-subtab kf-more"><svg width="11" height="11" fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M9 6l6 6-6 6" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
         </nav>
       </section>
@@ -1754,20 +1752,17 @@
             <span class="eyebrow">ISG SMA · Day 14 of 30</span>
             <div class="client-filter">
               <button class="client-select" id="clientSelectBtn" title="Filter by client" aria-haspopup="listbox" aria-expanded="false">
-                <span id="clientSelectLabel">Carina Capital</span>
+                <span id="clientSelectLabel">All Clients</span>
                 <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
               </button>
               <ul class="client-menu" id="clientMenu" role="listbox" hidden>
                 <li class="client-menu-label">Client name</li>
                 <li class="client-menu-item active" role="option" data-client="all">All Clients</li>
-                <li class="client-menu-item" role="option" data-client="carina">Carina Capital</li>
+                <li class="client-menu-item" role="option" data-client="sammons">Sammons</li>
                 <li class="client-menu-item" role="option" data-client="nyl">New York Life</li>
+                <li class="client-menu-item" role="option" data-client="arch">Arch</li>
                 <li class="client-menu-item" role="option" data-client="athene">Athene Holding</li>
-                <li class="client-menu-item" role="option" data-client="abc">ABC Company</li>
-                <li class="client-menu-item" role="option" data-client="def">DEF Organization</li>
-                <li class="client-menu-item" role="option" data-client="ghi">GHI LLC</li>
-                <li class="client-menu-item" role="option" data-client="jkl">JKL Partners</li>
-                <li class="client-menu-item" role="option" data-client="mno">MNO Capital</li>
+                <li class="client-menu-item" role="option" data-client="phoenix">Phoenix Holdings</li>
               </ul>
             </div>
           </div>
@@ -1786,7 +1781,7 @@
         </div>
         <div class="kpi">
           <div class="label">Off-track teams</div>
-          <div class="value num" id="kpiOffTrackValueWrap"><span id="kpiOffTrackValue">5</span><span class="unit">/23</span></div>
+          <div class="value num" id="kpiOffTrackValueWrap"><span id="kpiOffTrackValue">5</span><span class="unit">/28</span></div>
           <div class="delta" id="kpiOffTrackDelta">+1 since last week</div>
         </div>
         <div class="kpi">
@@ -2440,31 +2435,38 @@
   // ========== DATA ==========
   const STAGES = ['Impact Assessment', 'Tasks Selection & Assignment', 'In Progress', 'Ready for Trading', 'Completed'];
 
-  // Fixed metadata for each functional team (consistent across every client)
+  // Fixed metadata for each functional team — pulled from "Drop Down List" tab
+  // in Mockups V6.xlsx (28 teams). Leads picked from named people that appear
+  // across the mockup tabs.
   const TEAM_META = [
-    { name: 'Performance',        ref: 'CK-2401', lead: 'Sarah Chen',     leadInit: 'SC', blocks: ['Allocations', 'Risk Management', 'Fund Accounting'], deps: ['Client'] },
-    { name: 'Risk Management',    ref: 'CK-2402', lead: 'Michael Patel',  leadInit: 'MP', blocks: ['Compliance'], deps: ['Performance'] },
-    { name: 'Client Service',     ref: 'CK-2403', lead: 'John Loh',       leadInit: 'JL', blocks: [], deps: ['Client'] },
-    { name: 'Reconciliation',     ref: 'CK-2404', lead: 'Roberto Romano', leadInit: 'RR', blocks: ['Billing', 'Internal Controls', 'Allocations', 'Trade Support'], deps: ['Reference Data'] },
-    { name: 'Tax Services',       ref: 'CK-2405', lead: 'Michael Patel',  leadInit: 'MP', blocks: ['Fund Accounting'], deps: ['ISG Legal'] },
-    { name: 'Corporate Actions',  ref: 'CK-2406', lead: 'Alexander Black',leadInit: 'AB', blocks: [], deps: ['Reference Data'] },
-    { name: 'Settlements',        ref: 'CK-2407', lead: 'John Loh',       leadInit: 'JL', blocks: ['Custody', 'Transfer Agency', 'Cash Management'], deps: ['ISG Legal'] },
-    { name: 'Allocations',        ref: 'CK-2408', lead: 'Alexander Black',leadInit: 'AB', blocks: ['Reconciliation'], deps: ['Reconciliation'] },
-    { name: 'Client Solutions',   ref: 'CK-2409', lead: 'John Loh',       leadInit: 'JL', blocks: ['Client Service'], deps: ['Client'] },
-    { name: 'Transfer Agency',    ref: 'CK-2410', lead: 'Roberto Romano', leadInit: 'RR', blocks: [], deps: ['Reconciliation'] },
-    { name: 'Cash Management',    ref: 'CK-2411', lead: 'Karthik Dasari', leadInit: 'KD', blocks: [], deps: ['Settlements'] },
-    { name: 'Billing',            ref: 'CK-2412', lead: 'Karthik Dasari', leadInit: 'KD', blocks: [], deps: ['Reconciliation'] },
-    { name: 'Custody',            ref: 'CK-2413', lead: 'Roberto Romano', leadInit: 'RR', blocks: [], deps: ['Settlements'] },
-    { name: 'Treasury',           ref: 'CK-2414', lead: 'Michael Patel',  leadInit: 'MP', blocks: [], deps: ['Client'] },
-    { name: 'Compliance',         ref: 'CK-2415', lead: 'Michael Patel',  leadInit: 'MP', blocks: [], deps: ['Risk Management'] },
-    { name: 'Internal Controls',  ref: 'CK-2416', lead: 'Roberto Romano', leadInit: 'RR', blocks: [], deps: [] },
-    { name: 'Middle Office',      ref: 'CK-2417', lead: 'Alexander Black',leadInit: 'AB', blocks: [], deps: [] },
-    { name: 'Trade Support',      ref: 'CK-2418', lead: 'John Loh',       leadInit: 'JL', blocks: [], deps: [] },
-    { name: 'Fund Accounting',    ref: 'CK-2419', lead: 'Karthik Dasari', leadInit: 'KD', blocks: [], deps: [] },
-    { name: 'Reference Data',     ref: 'CK-2420', lead: 'John Loh',       leadInit: 'JL', blocks: [], deps: [] },
-    { name: 'ISG Legal',          ref: 'CK-2421', lead: 'Roberto Romano', leadInit: 'RR', blocks: [], deps: [] },
-    { name: 'Portfolio Admin',    ref: 'CK-2422', lead: 'John Loh',       leadInit: 'JL', blocks: [], deps: [] },
-    { name: 'Client Engineering', ref: 'CK-2423', lead: 'Alexander Black',leadInit: 'AB', blocks: [], deps: [] },
+    { name: 'Client Solutions',                       ref: 'CK-2401', lead: 'John Loh',         leadInit: 'JL', blocks: [], deps: [] },
+    { name: 'Transitions',                            ref: 'CK-2402', lead: 'Roxanne Bunnell',  leadInit: 'RB', blocks: [], deps: [] },
+    { name: 'Fin Ops Engineering (ePAM)',             ref: 'CK-2403', lead: 'Sid Sharma',       leadInit: 'SS', blocks: [], deps: [] },
+    { name: 'Mortgage Onboarding (Fin Ops)',          ref: 'CK-2404', lead: 'Sid Sharma',       leadInit: 'SS', blocks: [], deps: [] },
+    { name: 'CPS',                                    ref: 'CK-2405', lead: 'Lidiya Shutaya',   leadInit: 'LS', blocks: [], deps: [] },
+    { name: 'Client Reporting Engineering',           ref: 'CK-2406', lead: 'Alex Black',       leadInit: 'AB', blocks: [], deps: [] },
+    { name: 'Engineering',                            ref: 'CK-2407', lead: 'Alex Black',       leadInit: 'AB', blocks: [], deps: [] },
+    { name: 'AML',                                    ref: 'CK-2408', lead: 'Shening',          leadInit: 'SH', blocks: [], deps: [] },
+    { name: 'Internal Controls (SOC)',                ref: 'CK-2409', lead: 'Roberto Romano',   leadInit: 'RR', blocks: [], deps: [] },
+    { name: 'Firm Compliance',                        ref: 'CK-2410', lead: 'Michael Patel',    leadInit: 'MP', blocks: [], deps: [] },
+    { name: 'Investment Compliance',                  ref: 'CK-2411', lead: 'Michael Patel',    leadInit: 'MP', blocks: [], deps: [] },
+    { name: 'ISG Reference Data',                     ref: 'CK-2412', lead: 'John Loh',         leadInit: 'JL', blocks: [], deps: [] },
+    { name: 'ISG Legal',                              ref: 'CK-2413', lead: 'Roberto Romano',   leadInit: 'RR', blocks: [], deps: [] },
+    { name: 'ISG Trade Operations & Reconciliations', ref: 'CK-2414', lead: 'Bhavik Shaw',      leadInit: 'BS', blocks: [], deps: [] },
+    { name: 'ISG Trade Support Ops (Middle office)',  ref: 'CK-2415', lead: 'John Loh',         leadInit: 'JL', blocks: [], deps: [] },
+    { name: 'New Business Ops',                       ref: 'CK-2416', lead: 'Lidiya Shutaya',   leadInit: 'LS', blocks: [], deps: [] },
+    { name: '3PI Portfolio Management',               ref: 'CK-2417', lead: 'Roxanne Bunnell',  leadInit: 'RB', blocks: [], deps: [] },
+    { name: 'Portfolio Administration',               ref: 'CK-2418', lead: 'John Acenas',      leadInit: 'JA', blocks: [], deps: [] },
+    { name: 'Treasury Services (TSS)',                ref: 'CK-2419', lead: 'Karthik Dasari',   leadInit: 'KD', blocks: [], deps: [] },
+    { name: 'Portfolio Control',                      ref: 'CK-2420', lead: 'Alexander Black',  leadInit: 'AB', blocks: [], deps: [] },
+    { name: 'Cash Management',                        ref: 'CK-2421', lead: 'Matthew Hulley',   leadInit: 'MH', blocks: [], deps: [] },
+    { name: 'Apollo NY Middle Office',                ref: 'CK-2422', lead: 'John Loh',         leadInit: 'JL', blocks: [], deps: [] },
+    { name: 'Billing',                                ref: 'CK-2423', lead: 'Karthik Dasari',   leadInit: 'KD', blocks: [], deps: [] },
+    { name: 'PAM Engineering',                        ref: 'CK-2424', lead: 'Sid Sharma',       leadInit: 'SS', blocks: [], deps: [] },
+    { name: 'IC Deck',                                ref: 'CK-2425', lead: 'Lidiya Shutaya',   leadInit: 'LS', blocks: [], deps: [] },
+    { name: 'NIER Risk',                              ref: 'CK-2426', lead: 'Michael Patel',    leadInit: 'MP', blocks: [], deps: [] },
+    { name: 'Pricing',                                ref: 'CK-2427', lead: 'Karthik Dasari',   leadInit: 'KD', blocks: [], deps: [] },
+    { name: 'Feesta IT',                              ref: 'CK-2428', lead: 'Sid Sharma',       leadInit: 'SS', blocks: [], deps: [] },
   ];
 
   // 3 archetypes -each parallel-indexed to TEAM_META (23 entries each)
@@ -2493,6 +2495,11 @@
       { stageIdx: 4, health: 'g', days: 15, risk: 0,  blocker: null },
       { stageIdx: 4, health: 'g', days: 18, risk: 0,  blocker: null },
       { stageIdx: 4, health: 'g', days: 19, risk: 0,  blocker: null },
+      { stageIdx: 3, health: 'g', days: 12, risk: 1,  blocker: null },
+      { stageIdx: 3, health: 'g', days: 11, risk: 1,  blocker: null },
+      { stageIdx: 3, health: 'g', days: 14, risk: 1,  blocker: null },
+      { stageIdx: 4, health: 'g', days: 17, risk: 0,  blocker: null },
+      { stageIdx: 4, health: 'g', days: 16, risk: 0,  blocker: null },
     ],
     ontrack: [
       { stageIdx: 4, health: 'g', days: 18, risk: 0, blocker: null }, // Performance -complete
@@ -2516,8 +2523,13 @@
       { stageIdx: 3, health: 'g', days: 11, risk: 0, blocker: null }, // Fund Accounting -ready
       { stageIdx: 4, health: 'g', days: 16, risk: 0, blocker: null }, // Reference Data -complete
       { stageIdx: 4, health: 'g', days: 15, risk: 0, blocker: null }, // ISG Legal -complete
-      { stageIdx: 4, health: 'g', days: 18, risk: 0, blocker: null }, // Portfolio Admin -complete
-      { stageIdx: 4, health: 'g', days: 19, risk: 0, blocker: null }, // Client Engineering -complete
+      { stageIdx: 4, health: 'g', days: 18, risk: 0, blocker: null },
+      { stageIdx: 4, health: 'g', days: 19, risk: 0, blocker: null },
+      { stageIdx: 4, health: 'g', days: 17, risk: 0, blocker: null },
+      { stageIdx: 4, health: 'g', days: 16, risk: 0, blocker: null },
+      { stageIdx: 4, health: 'g', days: 15, risk: 0, blocker: null },
+      { stageIdx: 3, health: 'g', days: 13, risk: 0, blocker: null },
+      { stageIdx: 3, health: 'g', days: 12, risk: 0, blocker: null },
     ],
     offtrack: [
       { stageIdx: 0, health: 'r', days: 14, risk: 14, blocker: 'Client unresponsive on benchmark spec, 11 reminders sent.', depTag: 'Pending Client' },
@@ -2543,38 +2555,30 @@
       { stageIdx: 1, health: 'g', days: 15, risk: 1,  blocker: null },
       { stageIdx: 2, health: 'g', days: 18, risk: 1,  blocker: null },
       { stageIdx: 1, health: 'g', days: 19, risk: 1,  blocker: null },
+      { stageIdx: 1, health: 'a', days: 14, risk: 5,  blocker: null },
+      { stageIdx: 0, health: 'a', days: 13, risk: 5,  blocker: null },
+      { stageIdx: 0, health: 'a', days: 12, risk: 4,  blocker: null },
+      { stageIdx: 1, health: 'g', days: 14, risk: 2,  blocker: null },
+      { stageIdx: 0, health: 'g', days: 11, risk: 2,  blocker: null },
     ],
   };
 
-  // 9 clients (incl. All) -each points to an archetype + per-client metadata
+  // Clients pulled from the Mockups V6 spreadsheet (Drop Down List + Team-specific
+  // Dashboards). Roberto's actual list: All Clients, Sammons, New York Life, Arch,
+  // Athene Holding, Phoenix Holdings.
   const CLIENTS = {
-    all:    { name: 'All Clients',      archetype: 'behind',   goLive: 'May 13', daysSlip: 8,   statusKey: 'amber', statusLabel: 'Slightly behind',
-              lede: '<em>8 clients in flight.</em> 3 on track, 3 slightly behind, 2 off-track.',
-              sublede: 'Aggregate view across the SMA portfolio. Filter by client to drill in.' },
-    carina: { name: 'Carina Capital',   archetype: 'behind',   goLive: 'May 13', daysSlip: 8,   statusKey: 'amber', statusLabel: 'Slightly behind',
-              lede: '5 teams off-track. <em>4 teams already complete</em>. On pace for May 13 go-live.',
-              sublede: 'Settlements and Reconciliation are the remaining bottlenecks. ISG Legal contract review cleared this week, Settlements restarting now.' },
-    nyl:    { name: 'New York Life',    archetype: 'ontrack',  goLive: 'May 5',  daysSlip: -2,  statusKey: 'green', statusLabel: 'On track',
-              lede: '<em>13 teams already complete</em>; 8 in final review. Ahead of plan.',
-              sublede: 'No active blockers. On pace for early go-live on May 5.' },
-    athene: { name: 'Athene Holding',   archetype: 'offtrack', goLive: 'Jun 18', daysSlip: 35,  statusKey: 'red',   statusLabel: 'Off track',
-              lede: '<em>13 teams off-track.</em> Portfolio at risk. Projected go-live slipping to Jun 18.',
-              sublede: 'ISG Legal contract review at 18 days outstanding. Client unresponsive on benchmark spec, SSO config, and contact list.' },
-    abc:    { name: 'ABC Company',      archetype: 'behind',   goLive: 'May 16', daysSlip: 11,  statusKey: 'amber', statusLabel: 'Slightly behind',
-              lede: '5 teams off-track. <em>4 teams complete</em>. Projected May 16 go-live.',
-              sublede: 'Performance benchmark received this week. Settlements still working through ISG Legal contract markup.' },
-    def:    { name: 'DEF Organization', archetype: 'offtrack', goLive: 'Jun 11', daysSlip: 28,  statusKey: 'red',   statusLabel: 'Off track',
-              lede: '<em>13 teams off-track.</em> Onboarding stalled. Go-live now Jun 11.',
-              sublede: 'Tax residency documentation still missing across entities. Client engagement intermittent since week 1.' },
-    ghi:    { name: 'GHI LLC',          archetype: 'ontrack',  goLive: 'May 7',  daysSlip: 0,   statusKey: 'green', statusLabel: 'On track',
-              lede: '<em>13 teams complete</em>; 8 in final review. Tracking exactly to plan.',
-              sublede: 'Two pending items in last-stage review. Client target date held at May 7.' },
-    jkl:    { name: 'JKL Partners',     archetype: 'behind',   goLive: 'May 18', daysSlip: 13,  statusKey: 'amber', statusLabel: 'Slightly behind',
-              lede: '5 teams off-track. <em>4 teams complete</em>. Projected May 18 go-live.',
-              sublede: 'Custodian file mapping in progress. Settlement instruction templates due back from ISG Legal next week.' },
-    mno:    { name: 'MNO Capital',      archetype: 'ontrack',  goLive: 'May 9',  daysSlip: 2,   statusKey: 'green', statusLabel: 'On track',
-              lede: '<em>13 teams complete</em>; 8 in final review. Two-day buffer over plan.',
-              sublede: 'No blockers. Final IT cutover scheduled for next week.' },
+    all:     { name: 'All Clients',      archetype: 'behind',   goLive: 'May 13', daysSlip: 8,   statusKey: 'amber', statusLabel: 'Slightly behind',
+               lede: '<em>5 clients in flight.</em> 2 on track, 2 slightly behind, 1 off-track.' },
+    sammons: { name: 'Sammons',          archetype: 'behind',   goLive: 'May 13', daysSlip: 8,   statusKey: 'amber', statusLabel: 'Slightly behind',
+               lede: '5 teams off-track. <em>9 teams already complete</em>. On pace for May 13 go-live.' },
+    nyl:     { name: 'New York Life',    archetype: 'ontrack',  goLive: 'May 5',  daysSlip: -2,  statusKey: 'green', statusLabel: 'On track',
+               lede: '<em>19 teams already complete</em>; 9 in final review. Ahead of plan.' },
+    arch:    { name: 'Arch',             archetype: 'behind',   goLive: 'May 16', daysSlip: 11,  statusKey: 'amber', statusLabel: 'Slightly behind',
+               lede: '5 teams off-track. <em>9 teams already complete</em>. Projected May 16 go-live.' },
+    athene:  { name: 'Athene Holding',   archetype: 'offtrack', goLive: 'Jun 18', daysSlip: 35,  statusKey: 'red',   statusLabel: 'Off track',
+               lede: '<em>13 teams off-track.</em> Portfolio at risk. Projected go-live slipping to Jun 18.' },
+    phoenix: { name: 'Phoenix Holdings', archetype: 'ontrack',  goLive: 'May 7',  daysSlip: 0,   statusKey: 'green', statusLabel: 'On track',
+               lede: '<em>19 teams already complete</em>; 9 in final review. Tracking exactly to plan.' },
   };
 
   const HEALTH_LABEL = { r: 'Off track', a: 'Pending info', g: 'On track' };
