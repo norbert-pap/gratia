@@ -482,7 +482,8 @@
     background: var(--bg-1);
     border: 1px solid var(--border);
     border-radius: 8px;
-    overflow: hidden;
+    /* visible so per-cell tooltips on Stage / Status can escape past the table edges */
+    overflow: visible;
   }
   .task-head-row {
     display: grid;
@@ -606,6 +607,55 @@
     color: var(--ink-3);
     font-size: 12.5px;
     font-style: italic;
+  }
+
+  /* ========== TOOLTIP ========== */
+  .tip {
+    position: relative; display: inline-flex; cursor: help;
+  }
+  .tip[data-tip]:hover::after,
+  .tip[data-tip]:focus::after {
+    content: attr(data-tip);
+    position: absolute;
+    bottom: calc(100% + 8px); left: 50%;
+    transform: translateX(-50%);
+    background: var(--bg-3);
+    color: var(--ink-0);
+    border: 1px solid var(--border-2);
+    padding: 7px 10px;
+    border-radius: 5px;
+    font-size: 11.5px; font-weight: 500;
+    white-space: nowrap;
+    z-index: 50;
+    box-shadow: 0 6px 16px rgba(0,0,0,0.45);
+    pointer-events: none;
+    letter-spacing: -0.002em;
+    text-transform: none;
+  }
+  .tip[data-tip]:hover::before {
+    content: '';
+    position: absolute;
+    bottom: calc(100% + 4px); left: 50%;
+    transform: translateX(-50%) rotate(45deg);
+    width: 6px; height: 6px;
+    background: var(--bg-3);
+    border-right: 1px solid var(--border-2);
+    border-bottom: 1px solid var(--border-2);
+    z-index: 30;
+    pointer-events: none;
+  }
+  .tip.tip-wide[data-tip]:hover::after,
+  .tip.tip-wide[data-tip]:focus::after {
+    white-space: normal;
+    max-width: 260px;
+    width: max-content;
+    text-align: left;
+    line-height: 1.45;
+  }
+  .task-row .dep-tag.dep-client {
+    background: var(--kf-blue-dim);
+    color: var(--kf-blue);
+    border-color: var(--kf-blue-line);
   }
 
   .footer {
@@ -785,39 +835,22 @@
 <script>
   const STAGES = ['Impact Assessment', 'Tasks Selection & Assignment', 'In Progress', 'Ready for Trading', 'Completed'];
 
-  // Tasks lifted directly from "Team Lead Dashboard - PA" in the Mockups V6 spreadsheet.
-  // rawStatus values match Roberto's status column verbatim:
-  //   'ia' = Impact Assessment, 'tsa' = Tasks Selection and Assignment,
-  //   'ip' = In Progress, 'pi' = Pending (Internal), 'pc' = Pending (Client),
-  //   'rft' = Ready for Trading, 'done' = Completed.
-  // stage 0..4 maps to the 5-stage workflow shown in the parent dashboard.
+  // Transitions team example — the team is in "In Progress" stage. Roxanne
+  // Bunnell (lead) closed out Impact Assessment and Tasks Selection & Assignment;
+  // the day-to-day in-progress work is owned by Tracy Chow. Task names lifted
+  // from the "Task Def. & Assign." tab plus the Transitions row in
+  // "Team Lead Dashboard - PA". Dependencies surface as "Pending (Internal)"
+  // or "Pending (Client)" only.
   const TASKS = [
-    // ===== PA Team Tasks =====
-    { kind: 'team', ref: 'PA-001', name: 'Confirm bank portal access',                                                                      assignee: 'John Acenas',     team: 'Portfolio Administration', deps: ['Client'],            stage: 2, rawStatus: 'pi',  elapsed: '1d 3h 20m', type: 'Pre-Trading' },
-    { kind: 'team', ref: 'PA-002', name: 'Confirm bank account access in bank portal',                                                      assignee: 'Laura Vidal',     team: 'Portfolio Administration', deps: ['PA-001'],            stage: 2, rawStatus: 'ip',  elapsed: '2d 1h 45m', type: 'Pre-Trading' },
-    { kind: 'team', ref: 'PA-003', name: 'Update Duco process to accept custodian for custodian positions',                                 assignee: 'Laura Vidal',     team: 'Portfolio Administration', deps: ['ISG Legal'],         stage: 0, rawStatus: 'ia',  elapsed: '5d 3h 10m', type: 'Post Event Closure' },
-    { kind: 'team', ref: 'PA-004', name: 'Update Duco to accept custodian position file',                                                   assignee: 'John Acenas',     team: 'Portfolio Administration', deps: ['PA-003'],            stage: 1, rawStatus: 'tsa', elapsed: '3d 3h 20m', type: 'Post Event Closure' },
-    { kind: 'team', ref: 'PA-005', name: 'Add tF Cash Forecast Summary to internal forecasting spreadsheet for new portfolios',             assignee: 'John Acenas',     team: 'Portfolio Administration', deps: ['X-007', 'Client'],   stage: 2, rawStatus: 'pc',  elapsed: '4d 6h 30m', type: 'Post Event Closure' },
-    { kind: 'team', ref: 'PA-006', name: 'Add Cash Ladder & Daily IC Attribution Analysis to internal attribution spreadsheet',             assignee: 'Laura Vidal',     team: 'Portfolio Administration', deps: ['X-001'],             stage: 2, rawStatus: 'ip',  elapsed: '1d 3h 20m', type: 'Post Event Closure' },
-    { kind: 'team', ref: 'PA-007', name: 'Add Committed Cash Sheet Validation to internal cash validation spreadsheet',                     assignee: 'John Acenas',     team: 'Portfolio Administration', deps: ['X-001'],             stage: 1, rawStatus: 'tsa', elapsed: '2d 1h 45m', type: 'Post Event Closure' },
-    { kind: 'team', ref: 'PA-008', name: 'Add Currency Accounts to Duco reference table with new portfolios/bank accounts',                 assignee: 'Laura Vidal',     team: 'Portfolio Administration', deps: ['PA-003'],            stage: 0, rawStatus: 'ia',  elapsed: '5d 3h 10m', type: 'Pre-Trading' },
-    { kind: 'team', ref: 'PA-009', name: 'Add Fungible portfolio to Duco reference table with new portfolios/bank accounts',                assignee: 'John Acenas',     team: 'Portfolio Administration', deps: ['PA-003'],            stage: 1, rawStatus: 'tsa', elapsed: '3d 3h 20m', type: 'Pre-Trading' },
-    // ===== Other relevant tasks (cross-team) =====
-    { kind: 'cross', ref: 'X-001', name: 'Set up custodian daily reporting to create EOD cash balance report for MergeCashflowA',           assignee: 'Bhavik Shaw',     team: 'Reconciliations',          deps: ['X-005'],             stage: 0, rawStatus: 'ia',  elapsed: '1d 3h 20m', type: 'Pre-Trading' },
-    { kind: 'cross', ref: 'X-002', name: 'Set up custodian daily reporting to create EOD positions report for MergeC',                      assignee: 'Bhavik Shaw',     team: 'Reconciliations',          deps: ['X-005'],             stage: 0, rawStatus: 'ia',  elapsed: '1d 3h 20m', type: 'Pre-Trading' },
-    { kind: 'cross', ref: 'X-003', name: 'Set up custodian daily reporting to create T-1 transaction report for PWM/PAM load',              assignee: 'Sid Sharma',      team: 'PAM IT',                   deps: ['Client'],            stage: 0, rawStatus: 'ia',  elapsed: '5d 3h 10m', type: 'Pre-Trading' },
-    { kind: 'cross', ref: 'X-004', name: 'Confirm internal IT and Custodian have access to FTP drop location for bank reports',             assignee: 'Sid Sharma',      team: 'PAM IT',                   deps: [],                    stage: 1, rawStatus: 'tsa', elapsed: '3d 3h 20m', type: 'Pre-Trading' },
-    { kind: 'cross', ref: 'X-005', name: 'Confirm bank/IT file transfer operational and IT can access and pull daily files',                assignee: 'Sid Sharma',      team: 'PAM IT',                   deps: ['X-004'],             stage: 1, rawStatus: 'tsa', elapsed: '4d 6h 30m', type: 'Pre-Trading' },
-    { kind: 'cross', ref: 'X-006', name: 'Provide IT custodian file mapping for EOD Cash Balances (MergeCashFlowA) merge files & PAM upload', assignee: 'Sid Sharma',    team: 'PAM IT',                   deps: ['X-005'],             stage: 1, rawStatus: 'tsa', elapsed: '1d 3h 20m', type: 'Pre-Trading' },
-    { kind: 'cross', ref: 'X-007', name: 'Provide IT custodian file mapping for EOD Positions (MergeC) merge files and PAM upload',         assignee: 'Sid Sharma',      team: 'PAM IT',                   deps: ['X-005'],             stage: 2, rawStatus: 'ip',  elapsed: '1d 3h 20m', type: 'Pre-Trading' },
-    { kind: 'cross', ref: 'X-012', name: 'Request STIF vehicle ID from custodian/client (STIF CUSIP invested in each bank account)',        assignee: 'Matthew Hulley',  team: 'Cash & Positions',         deps: ['Client'],            stage: 2, rawStatus: 'pc',  elapsed: '1d 3h 20m', type: 'Pre-Trading' },
-    { kind: 'cross', ref: 'X-013', name: 'Check PAM is STIF ID is already in SMF and setup correctly. Verify with Reference Data SMF in PAM as C&E', assignee: 'Matthew Hulley', team: 'Cash & Positions',  deps: ['X-012', 'ISG Reference Data'], stage: 2, rawStatus: 'pc', elapsed: '2d 1h 45m', type: 'Pre-Trading' },
-    { kind: 'cross', ref: 'X-014', name: 'Give PAM IT the portfolios that will hold the STIF position and the related bank account',        assignee: 'Matthew Hulley',  team: 'Cash & Positions',         deps: ['X-013'],             stage: 2, rawStatus: 'pc',  elapsed: '5d 3h 10m', type: 'Pre-Trading' },
-    { kind: 'cross', ref: 'X-015', name: 'Check with third-party client if they can provide daily Treasury cash flows',                     assignee: 'Matthew Hulley',  team: 'Cash & Positions',         deps: ['Client'],            stage: 2, rawStatus: 'pc',  elapsed: '3d 3h 20m', type: 'Pre-Trading' },
-    { kind: 'cross', ref: 'X-016', name: 'Update Duco reference tables with new POint Citibank portfolios/bank accounts',                   assignee: 'Bhavik Shaw',     team: 'Cash & Positions',         deps: ['Client'],            stage: 2, rawStatus: 'pc',  elapsed: '4d 6h 30m', type: 'Post Event Closure' },
-    { kind: 'cross', ref: 'X-017', name: 'Update Duco reference tables with PAM and Custodian Mapping portfolios/bank accounts',            assignee: 'Bhavik Shaw',     team: 'Cash & Positions',         deps: ['X-016'],             stage: 4, rawStatus: 'done', elapsed: '1d 3h 20m', type: 'Post Event Closure' },
-    { kind: 'cross', ref: 'X-018', name: 'Update Duco reference tables with new Citi Account Normalizer portfolios/bank accounts',          assignee: 'Bhavik Shaw',     team: 'Cash & Positions',         deps: ['X-017'],             stage: 4, rawStatus: 'done', elapsed: '2d 1h 45m', type: 'Post Event Closure' },
-    { kind: 'cross', ref: 'X-019', name: 'Instruct Transitions to add 3PI portfolios to ISGMANA in tF',                                     assignee: 'Roxanne Bunnell', team: 'Transitions',              deps: ['X-018'],             stage: 4, rawStatus: 'done', elapsed: '5d 3h 10m', type: 'Post Event Closure' },
+    { ref: 'TR-001', name: 'Impact Assessment',                                                  assignee: 'Roxanne Bunnell', stage: 0, rawStatus: 'done', elapsed: '1d 3h 20m', type: 'Pre-Trading' },
+    { ref: 'TR-002', name: 'Tasks Selection & Assignment',                                       assignee: 'Roxanne Bunnell', stage: 1, rawStatus: 'done', elapsed: '1d 3h 20m', type: 'Pre-Trading' },
+    { ref: 'TR-003', name: 'Hold discussions with Stakeholder POCs',                             assignee: 'Tracy Chow',      stage: 2, rawStatus: 'pi',   elapsed: '2d 1h 45m', type: 'Pre-Trading' },
+    { ref: 'TR-004', name: 'Collect tax & W9 forms (from AML Team or Client)',                   assignee: 'Tracy Chow',      stage: 2, rawStatus: 'pc',   elapsed: '3d 4h 20m', type: 'Pre-Trading' },
+    { ref: 'TR-005', name: 'Review standard reporting package with client',                      assignee: 'Tracy Chow',      stage: 2, rawStatus: 'pc',   elapsed: '1d 3h 20m', type: 'Pre-Trading' },
+    { ref: 'TR-006', name: 'Confirm method of dissemination, recipients, and data sources',      assignee: 'Tracy Chow',      stage: 2, rawStatus: 'ip',   elapsed: '1d 3h 20m', type: 'Pre-Trading' },
+    { ref: 'TR-007', name: 'Coordinate with Engineering to develop automated reports',           assignee: 'Tracy Chow',      stage: 2, rawStatus: 'pi',   elapsed: '2d 1h 45m', type: 'Pre-Trading' },
+    { ref: 'TR-008', name: 'Confirm disclosures with compliance',                                assignee: 'Tracy Chow',      stage: 2, rawStatus: 'pi',   elapsed: '2d 1h 45m', type: 'Pre-Trading' },
+    { ref: 'TR-009', name: 'Add 3PI portfolios to ISGMANA in tF',                                assignee: 'Tracy Chow',      stage: 2, rawStatus: 'ip',   elapsed: '1d 3h 20m', type: 'Post Event Closure' },
   ];
 
   // Status display labels + colour bucket. Roberto's full 7-value status palette.
@@ -836,6 +869,37 @@
     done: 'done',
   };
   function statusToHealth(rawStatus) { return STATUS_BUCKET[rawStatus] || 'g'; }
+
+  // Hover descriptions. Stage = where the task sits in the workflow.
+  // Status = what's happening with it right now.
+  const STAGE_DESC = [
+    'Initial assessment of the team\'s involvement and what\'s required for this client. SLA: 24 hours.',
+    'Tasks chosen and assigned to owners on the team. SLA: 24 hours.',
+    'Team is executing the assigned tasks. Duration varies by scope.',
+    'Team can support trading for this client. Post-event closure tasks may still be in flight.',
+    'All onboarding work for this team closed.',
+  ];
+  const STATUS_DESC = {
+    ia:   'Currently in initial assessment of impact and scope.',
+    tsa:  'Tasks being selected and assigned to owners.',
+    ip:   'Actively being worked on by the assignee.',
+    pi:   'Blocked — waiting on another internal team to provide information or sign-off.',
+    pc:   'Blocked — waiting on the client to provide information.',
+    rft:  'Ready to support trading; awaiting any final post-event closure tasks.',
+    done: 'Task complete.',
+  };
+
+  // Dependencies surface "Pending (Internal)" or "Pending (Client)" tags only,
+  // derived from the task's raw status.
+  function depsForTask(t) {
+    if (t.rawStatus === 'pi') return ['Pending (Internal)'];
+    if (t.rawStatus === 'pc') return ['Pending (Client)'];
+    return [];
+  }
+  const DEP_DESC = {
+    'Pending (Internal)': 'Waiting on another internal team to provide information or sign-off.',
+    'Pending (Client)':   'Waiting on the client to provide information.',
+  };
 
   const HEALTH_LABEL = { r: 'Off track', a: 'Pending', g: 'On track', done: 'Completed' };
   const HEALTH_RANK = { r: 0, a: 1, g: 2, done: 3 };
@@ -883,7 +947,7 @@
       'CK-2427':'Pricing',
       'CK-2428':'Feesta IT',
     };
-    return map[ref] || teamNameParam || 'Portfolio Administration';
+    return map[ref] || teamNameParam || 'Transitions';
   }
 
   const teamName = teamNameFromRef(teamRefParam);
@@ -928,35 +992,31 @@
 
     sorted.forEach(t => {
       const p = personByName(t.assignee);
-      const depCell = (t.deps && t.deps.length)
-        ? t.deps.map(d => `<span class="dep-tag">${d}</span>`).join('')
-        : '<span class="deps-empty">·</span>';
+      const deps = depsForTask(t);
+      const depCell = deps.length
+        ? deps.map(d => `<span class="tip" data-tip="${DEP_DESC[d] || ''}"><span class="dep-tag dep-${d.includes('Client') ? 'client' : 'internal'}">${d}</span></span>`).join('')
+        : '<span class="deps-empty">—</span>';
 
       const statusLabel = STATUS_LABEL[t.rawStatus] || t.rawStatus;
       const bucket = statusToHealth(t.rawStatus);
+      const stageLabel = STAGES[t.stage];
 
       const isDone = t.rawStatus === 'done';
       const completedHtml = isDone
         ? `<strong>${t.assignee}</strong><span class="when">${t.elapsed}</span>`
         : '<span class="completed empty">—</span>';
 
-      // For cross-team rows, surface the team alongside the assignee so the row
-      // makes sense when the user is looking at a single team's dashboard.
-      const personMeta = t.kind === 'cross' && t.team
-        ? `<span class="av">${p.init}</span><span>${p.name}<span class="person-team">${t.team}</span></span>`
-        : `<span class="av">${p.init}</span><span>${p.name}</span>`;
-
       const row = document.createElement('div');
-      row.className = `task-row kind-${t.kind || 'team'}`;
+      row.className = 'task-row';
       row.dataset.status = bucket;
       row.dataset.stage = String(t.stage);
       row.innerHTML = `
         <div class="ref">${t.ref}</div>
         <div class="name">${t.name}${t.type ? `<span class="sub">${t.type}</span>` : ''}</div>
-        <div class="person">${personMeta}</div>
+        <div class="person"><span class="av">${p.init}</span><span>${p.name}</span></div>
         <div class="deps">${depCell}</div>
-        <div class="stage-cell">${STAGES[t.stage]}</div>
-        <div class="status-cell ${bucket}"><span class="status-dot ${bucket}"></span>${statusLabel}</div>
+        <div class="stage-cell"><span class="tip tip-wide" data-tip="${STAGE_DESC[t.stage] || ''}">${stageLabel}</span></div>
+        <div class="status-cell ${bucket}"><span class="tip tip-wide" data-tip="${STATUS_DESC[t.rawStatus] || ''}"><span class="status-dot ${bucket}"></span>${statusLabel}</span></div>
         <div class="elapsed ${bucketElapsedClass(t)}">${t.elapsed}</div>
         <div class="completed">${completedHtml}</div>
       `;
