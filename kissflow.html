@@ -1679,6 +1679,7 @@
     </div>
     <nav class="tabs">
       <button class="tab-btn active" data-tab="dashboard">Dashboard</button>
+      <a class="tab-btn" href="kissflow-team.html?team=CK-2418&amp;client=sammons">Team page</a>
       <button class="tab-btn" data-tab="personas">Personas <span class="ct">6</span></button>
     </nav>
     <div class="nav-right">
@@ -3157,13 +3158,26 @@ Apollo`,
   });
 
   // ========== TABS ==========
+  function activateTab(tab) {
+    document.querySelectorAll('.tab-btn').forEach(b => {
+      b.classList.toggle('active', b.dataset.tab === tab);
+    });
+    document.querySelectorAll('.tab-panel').forEach(p => {
+      p.classList.toggle('active', p.id === `tab-${tab}`);
+    });
+  }
   document.querySelectorAll('.tab-btn').forEach(btn => {
+    if (!btn.dataset.tab) return; // <a> link tabs (e.g. Team page) — let the browser navigate.
     btn.onclick = () => {
-      const tab = btn.dataset.tab;
-      document.querySelectorAll('.tab-btn').forEach(b => b.classList.toggle('active', b === btn));
-      document.querySelectorAll('.tab-panel').forEach(p => p.classList.toggle('active', p.id === `tab-${tab}`));
+      activateTab(btn.dataset.tab);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     };
+  });
+  // Honour #personas in the URL so Team-page → "Personas" link from another page lands correctly.
+  if (location.hash === '#personas') activateTab('personas');
+  window.addEventListener('hashchange', () => {
+    if (location.hash === '#personas') activateTab('personas');
+    else if (location.hash === '' || location.hash === '#dashboard') activateTab('dashboard');
   });
 
   // ========== THEME TOGGLE ==========

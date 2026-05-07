@@ -149,6 +149,38 @@
     border-radius: 4px;
   }
   .nav-right { margin-left: auto; display: flex; align-items: center; gap: 6px; }
+
+  /* ========== TABS (in main nav) ========== */
+  .tabs {
+    display: flex; align-items: stretch;
+    gap: 0; margin: 0; padding: 0; border: none;
+    height: 100%;
+  }
+  .tab-btn {
+    height: 100%;
+    padding: 0 16px;
+    font-size: 13.5px; font-weight: 500;
+    color: var(--ink-2);
+    position: relative;
+    transition: color 0.15s;
+    display: inline-flex; align-items: center; gap: 7px;
+    text-decoration: none;
+  }
+  .tab-btn:hover { color: var(--ink-0); }
+  .tab-btn.active { color: var(--ink-0); }
+  .tab-btn.active::after {
+    content: ''; position: absolute;
+    left: 14px; right: 14px;
+    bottom: -1px;
+    height: 2px; background: var(--gold);
+    border-radius: 1px;
+  }
+  .tab-btn .ct {
+    color: var(--ink-3);
+    font-variant-numeric: tabular-nums;
+    font-size: 11.5px;
+  }
+  .tab-btn.active .ct { color: var(--ink-2); }
   .icon-btn {
     width: 32px; height: 32px;
     border-radius: 6px;
@@ -601,6 +633,11 @@
     <div class="nav-brand" onclick="location.href='kissflow.html'">
       <div class="nav-brand-fallback">A</div>
     </div>
+    <nav class="tabs">
+      <a class="tab-btn" href="kissflow.html">Dashboard</a>
+      <button class="tab-btn active" type="button">Team page</button>
+      <a class="tab-btn" href="kissflow.html#personas">Personas <span class="ct">6</span></a>
+    </nav>
     <div class="nav-right">
       <button class="icon-btn" id="themeToggle" aria-label="Toggle theme">
         <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -756,31 +793,31 @@
   // stage 0..4 maps to the 5-stage workflow shown in the parent dashboard.
   const TASKS = [
     // ===== PA Team Tasks =====
-    { kind: 'team', ref: 'PA-001', name: 'Confirm bank portal access',                                                                      assignee: 'John Acenas',     team: 'Portfolio Administration', deps: [], stage: 2, rawStatus: 'pi',  elapsed: '1d 3h 20m', type: 'Pre-Trading' },
-    { kind: 'team', ref: 'PA-002', name: 'Confirm bank account access in bank portal',                                                      assignee: 'Laura Vidal',     team: 'Portfolio Administration', deps: [], stage: 2, rawStatus: 'ip',  elapsed: '2d 1h 45m', type: 'Pre-Trading' },
-    { kind: 'team', ref: 'PA-003', name: 'Update Duco process to accept custodian for custodian positions',                                 assignee: 'Laura Vidal',     team: 'Portfolio Administration', deps: [], stage: 0, rawStatus: 'ia',  elapsed: '5d 3h 10m', type: 'Post Event Closure' },
-    { kind: 'team', ref: 'PA-004', name: 'Update Duco to accept custodian position file',                                                   assignee: 'John Acenas',     team: 'Portfolio Administration', deps: [], stage: 1, rawStatus: 'tsa', elapsed: '3d 3h 20m', type: 'Post Event Closure' },
-    { kind: 'team', ref: 'PA-005', name: 'Add tF Cash Forecast Summary to internal forecasting spreadsheet for new portfolios',             assignee: 'John Acenas',     team: 'Portfolio Administration', deps: [], stage: 2, rawStatus: 'pc',  elapsed: '4d 6h 30m', type: 'Post Event Closure' },
-    { kind: 'team', ref: 'PA-006', name: 'Add Cash Ladder & Daily IC Attribution Analysis to internal attribution spreadsheet',             assignee: 'Laura Vidal',     team: 'Portfolio Administration', deps: [], stage: 2, rawStatus: 'ip',  elapsed: '1d 3h 20m', type: 'Post Event Closure' },
-    { kind: 'team', ref: 'PA-007', name: 'Add Committed Cash Sheet Validation to internal cash validation spreadsheet',                     assignee: 'John Acenas',     team: 'Portfolio Administration', deps: [], stage: 1, rawStatus: 'tsa', elapsed: '2d 1h 45m', type: 'Post Event Closure' },
-    { kind: 'team', ref: 'PA-008', name: 'Add Currency Accounts to Duco reference table with new portfolios/bank accounts',                 assignee: 'Laura Vidal',     team: 'Portfolio Administration', deps: [], stage: 0, rawStatus: 'ia',  elapsed: '5d 3h 10m', type: 'Pre-Trading' },
-    { kind: 'team', ref: 'PA-009', name: 'Add Fungible portfolio to Duco reference table with new portfolios/bank accounts',                assignee: 'John Acenas',     team: 'Portfolio Administration', deps: [], stage: 1, rawStatus: 'tsa', elapsed: '3d 3h 20m', type: 'Pre-Trading' },
+    { kind: 'team', ref: 'PA-001', name: 'Confirm bank portal access',                                                                      assignee: 'John Acenas',     team: 'Portfolio Administration', deps: ['Client'],            stage: 2, rawStatus: 'pi',  elapsed: '1d 3h 20m', type: 'Pre-Trading' },
+    { kind: 'team', ref: 'PA-002', name: 'Confirm bank account access in bank portal',                                                      assignee: 'Laura Vidal',     team: 'Portfolio Administration', deps: ['PA-001'],            stage: 2, rawStatus: 'ip',  elapsed: '2d 1h 45m', type: 'Pre-Trading' },
+    { kind: 'team', ref: 'PA-003', name: 'Update Duco process to accept custodian for custodian positions',                                 assignee: 'Laura Vidal',     team: 'Portfolio Administration', deps: ['ISG Legal'],         stage: 0, rawStatus: 'ia',  elapsed: '5d 3h 10m', type: 'Post Event Closure' },
+    { kind: 'team', ref: 'PA-004', name: 'Update Duco to accept custodian position file',                                                   assignee: 'John Acenas',     team: 'Portfolio Administration', deps: ['PA-003'],            stage: 1, rawStatus: 'tsa', elapsed: '3d 3h 20m', type: 'Post Event Closure' },
+    { kind: 'team', ref: 'PA-005', name: 'Add tF Cash Forecast Summary to internal forecasting spreadsheet for new portfolios',             assignee: 'John Acenas',     team: 'Portfolio Administration', deps: ['X-007', 'Client'],   stage: 2, rawStatus: 'pc',  elapsed: '4d 6h 30m', type: 'Post Event Closure' },
+    { kind: 'team', ref: 'PA-006', name: 'Add Cash Ladder & Daily IC Attribution Analysis to internal attribution spreadsheet',             assignee: 'Laura Vidal',     team: 'Portfolio Administration', deps: ['X-001'],             stage: 2, rawStatus: 'ip',  elapsed: '1d 3h 20m', type: 'Post Event Closure' },
+    { kind: 'team', ref: 'PA-007', name: 'Add Committed Cash Sheet Validation to internal cash validation spreadsheet',                     assignee: 'John Acenas',     team: 'Portfolio Administration', deps: ['X-001'],             stage: 1, rawStatus: 'tsa', elapsed: '2d 1h 45m', type: 'Post Event Closure' },
+    { kind: 'team', ref: 'PA-008', name: 'Add Currency Accounts to Duco reference table with new portfolios/bank accounts',                 assignee: 'Laura Vidal',     team: 'Portfolio Administration', deps: ['PA-003'],            stage: 0, rawStatus: 'ia',  elapsed: '5d 3h 10m', type: 'Pre-Trading' },
+    { kind: 'team', ref: 'PA-009', name: 'Add Fungible portfolio to Duco reference table with new portfolios/bank accounts',                assignee: 'John Acenas',     team: 'Portfolio Administration', deps: ['PA-003'],            stage: 1, rawStatus: 'tsa', elapsed: '3d 3h 20m', type: 'Pre-Trading' },
     // ===== Other relevant tasks (cross-team) =====
-    { kind: 'cross', ref: 'X-001', name: 'Set up custodian daily reporting to create EOD cash balance report for MergeCashflowA',           assignee: 'Bhavik Shaw',     team: 'Reconciliations',          deps: [], stage: 0, rawStatus: 'ia',  elapsed: '1d 3h 20m', type: 'Pre-Trading' },
-    { kind: 'cross', ref: 'X-002', name: 'Set up custodian daily reporting to create EOD positions report for MergeC',                      assignee: 'Bhavik Shaw',     team: 'Reconciliations',          deps: [], stage: 0, rawStatus: 'ia',  elapsed: '1d 3h 20m', type: 'Pre-Trading' },
-    { kind: 'cross', ref: 'X-003', name: 'Set up custodian daily reporting to create T-1 transaction report for PWM/PAM load',              assignee: 'Sid Sharma',      team: 'PAM IT',                   deps: [], stage: 0, rawStatus: 'ia',  elapsed: '5d 3h 10m', type: 'Pre-Trading' },
-    { kind: 'cross', ref: 'X-004', name: 'Confirm internal IT and Custodian have access to FTP drop location for bank reports',             assignee: 'Sid Sharma',      team: 'PAM IT',                   deps: [], stage: 1, rawStatus: 'tsa', elapsed: '3d 3h 20m', type: 'Pre-Trading' },
-    { kind: 'cross', ref: 'X-005', name: 'Confirm bank/IT file transfer operational and IT can access and pull daily files',                assignee: 'Sid Sharma',      team: 'PAM IT',                   deps: [], stage: 1, rawStatus: 'tsa', elapsed: '4d 6h 30m', type: 'Pre-Trading' },
-    { kind: 'cross', ref: 'X-006', name: 'Provide IT custodian file mapping for EOD Cash Balances (MergeCashFlowA) merge files & PAM upload', assignee: 'Sid Sharma',    team: 'PAM IT',                   deps: [], stage: 1, rawStatus: 'tsa', elapsed: '1d 3h 20m', type: 'Pre-Trading' },
-    { kind: 'cross', ref: 'X-007', name: 'Provide IT custodian file mapping for EOD Positions (MergeC) merge files and PAM upload',         assignee: 'Sid Sharma',      team: 'PAM IT',                   deps: [], stage: 2, rawStatus: 'ip',  elapsed: '1d 3h 20m', type: 'Pre-Trading' },
-    { kind: 'cross', ref: 'X-012', name: 'Request STIF vehicle ID from custodian/client (STIF CUSIP invested in each bank account)',        assignee: 'Matthew Hulley',  team: 'Cash & Positions',         deps: [], stage: 2, rawStatus: 'pc',  elapsed: '1d 3h 20m', type: 'Pre-Trading' },
-    { kind: 'cross', ref: 'X-013', name: 'Check PAM is STIF ID is already in SMF and setup correctly. Verify with Reference Data SMF in PAM as C&E', assignee: 'Matthew Hulley', team: 'Cash & Positions',  deps: [], stage: 2, rawStatus: 'pc',  elapsed: '2d 1h 45m', type: 'Pre-Trading' },
-    { kind: 'cross', ref: 'X-014', name: 'Give PAM IT the portfolios that will hold the STIF position and the related bank account',        assignee: 'Matthew Hulley',  team: 'Cash & Positions',         deps: [], stage: 2, rawStatus: 'pc',  elapsed: '5d 3h 10m', type: 'Pre-Trading' },
-    { kind: 'cross', ref: 'X-015', name: 'Check with third-party client if they can provide daily Treasury cash flows',                     assignee: 'Matthew Hulley',  team: 'Cash & Positions',         deps: [], stage: 2, rawStatus: 'pc',  elapsed: '3d 3h 20m', type: 'Pre-Trading' },
-    { kind: 'cross', ref: 'X-016', name: 'Update Duco reference tables with new POint Citibank portfolios/bank accounts',                   assignee: 'Bhavik Shaw',     team: 'Cash & Positions',         deps: [], stage: 2, rawStatus: 'pc',  elapsed: '4d 6h 30m', type: 'Post Event Closure' },
-    { kind: 'cross', ref: 'X-017', name: 'Update Duco reference tables with PAM and Custodian Mapping portfolios/bank accounts',            assignee: 'Bhavik Shaw',     team: 'Cash & Positions',         deps: [], stage: 4, rawStatus: 'done', elapsed: '1d 3h 20m', type: 'Post Event Closure' },
-    { kind: 'cross', ref: 'X-018', name: 'Update Duco reference tables with new Citi Account Normalizer portfolios/bank accounts',          assignee: 'Bhavik Shaw',     team: 'Cash & Positions',         deps: [], stage: 4, rawStatus: 'done', elapsed: '2d 1h 45m', type: 'Post Event Closure' },
-    { kind: 'cross', ref: 'X-019', name: 'Instruct Transitions to add 3PI portfolios to ISGMANA in tF',                                     assignee: 'Roxanne Bunnell', team: 'Transitions',              deps: [], stage: 4, rawStatus: 'done', elapsed: '5d 3h 10m', type: 'Post Event Closure' },
+    { kind: 'cross', ref: 'X-001', name: 'Set up custodian daily reporting to create EOD cash balance report for MergeCashflowA',           assignee: 'Bhavik Shaw',     team: 'Reconciliations',          deps: ['X-005'],             stage: 0, rawStatus: 'ia',  elapsed: '1d 3h 20m', type: 'Pre-Trading' },
+    { kind: 'cross', ref: 'X-002', name: 'Set up custodian daily reporting to create EOD positions report for MergeC',                      assignee: 'Bhavik Shaw',     team: 'Reconciliations',          deps: ['X-005'],             stage: 0, rawStatus: 'ia',  elapsed: '1d 3h 20m', type: 'Pre-Trading' },
+    { kind: 'cross', ref: 'X-003', name: 'Set up custodian daily reporting to create T-1 transaction report for PWM/PAM load',              assignee: 'Sid Sharma',      team: 'PAM IT',                   deps: ['Client'],            stage: 0, rawStatus: 'ia',  elapsed: '5d 3h 10m', type: 'Pre-Trading' },
+    { kind: 'cross', ref: 'X-004', name: 'Confirm internal IT and Custodian have access to FTP drop location for bank reports',             assignee: 'Sid Sharma',      team: 'PAM IT',                   deps: [],                    stage: 1, rawStatus: 'tsa', elapsed: '3d 3h 20m', type: 'Pre-Trading' },
+    { kind: 'cross', ref: 'X-005', name: 'Confirm bank/IT file transfer operational and IT can access and pull daily files',                assignee: 'Sid Sharma',      team: 'PAM IT',                   deps: ['X-004'],             stage: 1, rawStatus: 'tsa', elapsed: '4d 6h 30m', type: 'Pre-Trading' },
+    { kind: 'cross', ref: 'X-006', name: 'Provide IT custodian file mapping for EOD Cash Balances (MergeCashFlowA) merge files & PAM upload', assignee: 'Sid Sharma',    team: 'PAM IT',                   deps: ['X-005'],             stage: 1, rawStatus: 'tsa', elapsed: '1d 3h 20m', type: 'Pre-Trading' },
+    { kind: 'cross', ref: 'X-007', name: 'Provide IT custodian file mapping for EOD Positions (MergeC) merge files and PAM upload',         assignee: 'Sid Sharma',      team: 'PAM IT',                   deps: ['X-005'],             stage: 2, rawStatus: 'ip',  elapsed: '1d 3h 20m', type: 'Pre-Trading' },
+    { kind: 'cross', ref: 'X-012', name: 'Request STIF vehicle ID from custodian/client (STIF CUSIP invested in each bank account)',        assignee: 'Matthew Hulley',  team: 'Cash & Positions',         deps: ['Client'],            stage: 2, rawStatus: 'pc',  elapsed: '1d 3h 20m', type: 'Pre-Trading' },
+    { kind: 'cross', ref: 'X-013', name: 'Check PAM is STIF ID is already in SMF and setup correctly. Verify with Reference Data SMF in PAM as C&E', assignee: 'Matthew Hulley', team: 'Cash & Positions',  deps: ['X-012', 'ISG Reference Data'], stage: 2, rawStatus: 'pc', elapsed: '2d 1h 45m', type: 'Pre-Trading' },
+    { kind: 'cross', ref: 'X-014', name: 'Give PAM IT the portfolios that will hold the STIF position and the related bank account',        assignee: 'Matthew Hulley',  team: 'Cash & Positions',         deps: ['X-013'],             stage: 2, rawStatus: 'pc',  elapsed: '5d 3h 10m', type: 'Pre-Trading' },
+    { kind: 'cross', ref: 'X-015', name: 'Check with third-party client if they can provide daily Treasury cash flows',                     assignee: 'Matthew Hulley',  team: 'Cash & Positions',         deps: ['Client'],            stage: 2, rawStatus: 'pc',  elapsed: '3d 3h 20m', type: 'Pre-Trading' },
+    { kind: 'cross', ref: 'X-016', name: 'Update Duco reference tables with new POint Citibank portfolios/bank accounts',                   assignee: 'Bhavik Shaw',     team: 'Cash & Positions',         deps: ['Client'],            stage: 2, rawStatus: 'pc',  elapsed: '4d 6h 30m', type: 'Post Event Closure' },
+    { kind: 'cross', ref: 'X-017', name: 'Update Duco reference tables with PAM and Custodian Mapping portfolios/bank accounts',            assignee: 'Bhavik Shaw',     team: 'Cash & Positions',         deps: ['X-016'],             stage: 4, rawStatus: 'done', elapsed: '1d 3h 20m', type: 'Post Event Closure' },
+    { kind: 'cross', ref: 'X-018', name: 'Update Duco reference tables with new Citi Account Normalizer portfolios/bank accounts',          assignee: 'Bhavik Shaw',     team: 'Cash & Positions',         deps: ['X-017'],             stage: 4, rawStatus: 'done', elapsed: '2d 1h 45m', type: 'Post Event Closure' },
+    { kind: 'cross', ref: 'X-019', name: 'Instruct Transitions to add 3PI portfolios to ISGMANA in tF',                                     assignee: 'Roxanne Bunnell', team: 'Transitions',              deps: ['X-018'],             stage: 4, rawStatus: 'done', elapsed: '5d 3h 10m', type: 'Post Event Closure' },
   ];
 
   // Status display labels + colour bucket. Roberto's full 7-value status palette.
