@@ -1,0 +1,1051 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<title>Apollo · Team Onboarding</title>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script>
+  (function () {
+    try {
+      const saved = localStorage.getItem('apollo-theme');
+      if (saved === 'light' || saved === 'dark') {
+        document.documentElement.setAttribute('data-theme', saved);
+      }
+    } catch (e) {}
+  })();
+</script>
+<style>
+  *, *::before, *::after { box-sizing: border-box; }
+  html, body, h1, h2, h3, h4, p, ul, li, figure, div, section, nav, aside, header, main, button { margin: 0; padding: 0; }
+  button { background: none; border: none; color: inherit; cursor: pointer; font: inherit; }
+  ul { list-style: none; }
+
+  :root, [data-theme="dark"] {
+    --bg: #0b0c0e;
+    --bg-1: #111214;
+    --bg-2: #17181b;
+    --bg-3: #1e1f22;
+    --bg-4: #27282c;
+    --border: #232428;
+    --border-2: #33353b;
+    --ink-0: #edeef1;
+    --ink-1: #d4d6db;
+    --ink-2: #8f9198;
+    --ink-3: #5c5e65;
+    --ink-4: #36383d;
+    --gold: #16a38a;
+    --gold-bright: #2cc2a5;
+    --gold-ink: #5ad9bc;
+    --gold-dim: rgba(22, 163, 138, 0.13);
+    --gold-line: rgba(22, 163, 138, 0.30);
+    --green: #16a38a;
+    --green-ink: #5ad9bc;
+    --green-dim: rgba(22, 163, 138, 0.14);
+    --green-line: rgba(22, 163, 138, 0.32);
+    --amber: #e6b259;
+    --amber-ink: #f2ca85;
+    --amber-dim: rgba(230, 178, 89, 0.14);
+    --amber-line: rgba(230, 178, 89, 0.32);
+    --red: #e06f64;
+    --red-ink: #f0928a;
+    --red-dim: rgba(224, 111, 100, 0.14);
+    --red-line: rgba(224, 111, 100, 0.32);
+    --shadow: 0 1px 1px rgba(0,0,0,0.3), 0 10px 32px rgba(0,0,0,0.4);
+    --nav-bg: rgba(11, 12, 14, 0.85);
+    --row-hover: rgba(255, 255, 255, 0.013);
+    --kf-subtab-bg: rgba(0, 0, 0, 0.2);
+    --avatar-grad: linear-gradient(135deg, #0d6b5a, #16a38a);
+    --kf-blue: #87b3ec;
+    --kf-blue-line: rgba(74, 141, 224, 0.4);
+    --kf-blue-dim: rgba(74, 141, 224, 0.18);
+  }
+  [data-theme="light"] {
+    --bg: #fafaf8;
+    --bg-1: #ffffff;
+    --bg-2: #f4f4f1;
+    --bg-3: #ebebe7;
+    --bg-4: #d8d8d3;
+    --border: #e6e6e1;
+    --border-2: #d2d2cc;
+    --ink-0: #1a1a1c;
+    --ink-1: #3a3b3e;
+    --ink-2: #65676c;
+    --ink-3: #93959a;
+    --ink-4: #c2c3c7;
+    --gold: #0e8a73;
+    --gold-bright: #16a38a;
+    --gold-ink: #0e8a73;
+    --gold-dim: rgba(22, 163, 138, 0.10);
+    --gold-line: rgba(22, 163, 138, 0.32);
+    --green: #0e8a73;
+    --green-ink: #0e8a73;
+    --green-dim: rgba(22, 163, 138, 0.10);
+    --green-line: rgba(22, 163, 138, 0.32);
+    --amber: #c98a2b;
+    --amber-ink: #a8721d;
+    --amber-dim: rgba(230, 178, 89, 0.16);
+    --amber-line: rgba(201, 138, 43, 0.32);
+    --red: #d04a3d;
+    --red-ink: #b53a2e;
+    --red-dim: rgba(208, 74, 61, 0.10);
+    --red-line: rgba(208, 74, 61, 0.32);
+    --shadow: 0 1px 2px rgba(20, 22, 30, 0.04), 0 8px 24px rgba(20, 22, 30, 0.06);
+    --nav-bg: rgba(255, 255, 255, 0.88);
+    --row-hover: rgba(0, 0, 0, 0.025);
+    --kf-subtab-bg: rgba(0, 0, 0, 0.025);
+    --avatar-grad: linear-gradient(135deg, #16a38a, #0e8a73);
+    --kf-blue: #1f6cd9;
+    --kf-blue-line: rgba(31, 108, 217, 0.35);
+    --kf-blue-dim: rgba(31, 108, 217, 0.10);
+  }
+
+  body {
+    background: var(--bg);
+    color: var(--ink-0);
+    font-family: 'Inter', system-ui, sans-serif;
+    font-size: 14px;
+    line-height: 1.5;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    letter-spacing: -0.005em;
+    overflow-x: hidden;
+  }
+
+  .mono { font-family: 'JetBrains Mono', monospace; }
+  .num { font-variant-numeric: tabular-nums; }
+  .eyebrow {
+    font-size: 10.5px; font-weight: 600; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--ink-3);
+  }
+
+  .app { min-height: 100vh; display: flex; flex-direction: column; }
+
+  /* Mainnav */
+  .mainnav {
+    height: 58px;
+    display: flex; align-items: stretch;
+    padding: 0 28px;
+    border-bottom: 1px solid var(--border);
+    background: var(--nav-bg);
+    backdrop-filter: blur(14px);
+    position: sticky; top: 0; z-index: 20;
+  }
+  .nav-brand {
+    display: flex; align-items: center;
+    padding-right: 20px; margin-right: 16px;
+    border-right: 1px solid var(--border);
+    cursor: pointer;
+  }
+  .nav-brand-fallback {
+    font-size: 17px; font-weight: 700;
+    color: var(--gold-ink);
+    width: 28px; height: 28px;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--gold-dim);
+    border: 1px solid var(--gold-line);
+    border-radius: 4px;
+  }
+  .nav-right { margin-left: auto; display: flex; align-items: center; gap: 6px; }
+  .icon-btn {
+    width: 32px; height: 32px;
+    border-radius: 6px;
+    color: var(--ink-2);
+    display: flex; align-items: center; justify-content: center;
+    transition: all 0.15s;
+  }
+  .icon-btn:hover { background: var(--bg-2); color: var(--ink-0); }
+  .icon-btn svg { width: 14px; height: 14px; }
+  .avatar-btn {
+    width: 32px; height: 32px;
+    border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    background: var(--avatar-grad);
+    color: #fff; font-weight: 600; font-size: 11px;
+  }
+
+  main { flex: 1; }
+
+  /* Kissflow chrome */
+  .kf-frame {
+    max-width: 1340px;
+    margin: 0 auto;
+    padding: 24px 28px 80px;
+  }
+  .kf-bar {
+    display: flex; align-items: center; gap: 12px;
+    padding: 10px 14px;
+    background: var(--bg-1);
+    border: 1px solid var(--border);
+    border-radius: 8px 8px 0 0;
+    border-bottom: none;
+  }
+  .kf-pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 10px;
+    border-radius: 16px;
+    font-size: 11.5px; color: var(--ink-2);
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+  }
+  .kf-pill .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--gold); }
+  .kf-tabs-wrap {
+    background: var(--bg-1);
+    border: 1px solid var(--border);
+    border-top: none;
+  }
+  .kf-tabs {
+    display: flex; padding: 0 14px;
+    border-bottom: 1px solid var(--border);
+  }
+  .kf-tab {
+    padding: 12px 14px;
+    font-size: 12.5px; color: var(--ink-2);
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+  }
+  .kf-tab.active {
+    color: var(--ink-0);
+    border-bottom-color: var(--gold);
+  }
+  .kf-subtabs {
+    display: flex; gap: 2px; padding: 8px 14px;
+    background: var(--kf-subtab-bg);
+  }
+  .kf-subtab {
+    padding: 5px 10px;
+    border-radius: 5px;
+    font-size: 11.5px; color: var(--ink-2);
+    cursor: pointer;
+    background: transparent;
+    border: 1px solid transparent;
+  }
+  .kf-subtab.active {
+    background: var(--bg-1);
+    border-color: var(--border);
+    color: var(--ink-0);
+  }
+
+  .kf-body {
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-top: none;
+    padding: 28px;
+    border-radius: 0 0 8px 8px;
+  }
+
+  /* Page head */
+  .page-head {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    gap: 32px; align-items: end;
+    padding-bottom: 24px;
+    border-bottom: 1px solid var(--border);
+    margin-bottom: 28px;
+  }
+  .eyebrow-row {
+    display: flex; align-items: center; gap: 10px;
+    margin-bottom: 14px;
+  }
+  .back-link {
+    display: inline-flex; align-items: center; gap: 6px;
+    font-size: 11.5px; color: var(--ink-2);
+    text-decoration: none;
+    padding: 4px 8px; border-radius: 4px;
+    transition: background 0.14s, color 0.14s;
+  }
+  .back-link:hover { background: var(--bg-2); color: var(--ink-0); }
+  .back-link svg { width: 11px; height: 11px; }
+
+  .client-filter { position: relative; }
+  .client-select {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 8px;
+    font-size: 11.5px; color: var(--ink-1);
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+    cursor: pointer;
+  }
+  .client-select:hover { border-color: var(--border-2); }
+  .client-select svg { width: 10px; height: 10px; }
+
+  h1.lede {
+    font-size: 26px;
+    font-weight: 600;
+    line-height: 1.22;
+    letter-spacing: -0.018em;
+    color: var(--ink-0);
+    max-width: 720px;
+  }
+  h1.lede em { color: var(--gold-ink); font-style: normal; font-weight: 600; }
+
+  .head-actions { display: flex; gap: 8px; align-items: center; }
+  .btn {
+    height: 34px; padding: 0 14px;
+    border-radius: 6px;
+    font-size: 13px; font-weight: 500;
+    display: inline-flex; align-items: center; gap: 8px;
+    transition: all 0.15s;
+    border: 1px solid var(--border-2);
+    color: var(--ink-0);
+    background: var(--bg-2);
+  }
+  .btn:hover { background: var(--bg-3); border-color: var(--ink-4); }
+  .btn.primary {
+    background: var(--gold);
+    color: #ffffff;
+    border-color: var(--gold);
+    font-weight: 600;
+  }
+  .btn.primary:hover { background: var(--gold-bright); }
+  .btn svg { width: 13px; height: 13px; }
+
+  /* KPI row */
+  .kpi-row {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 1px;
+    background: var(--border);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin-bottom: 28px;
+  }
+  .kpi {
+    background: var(--bg-1);
+    padding: 18px 20px 20px;
+    display: flex; flex-direction: column; gap: 6px;
+  }
+  .kpi:first-child { border-top-left-radius: 7px; border-bottom-left-radius: 7px; }
+  .kpi:last-child { border-top-right-radius: 7px; border-bottom-right-radius: 7px; }
+  .kpi .label { font-size: 11px; font-weight: 500; color: var(--ink-2); letter-spacing: 0.03em; text-transform: uppercase; }
+  .kpi .value {
+    font-size: 26px; font-weight: 600; line-height: 1;
+    letter-spacing: -0.018em;
+    color: var(--ink-0);
+    display: flex; align-items: baseline; gap: 3px;
+    font-variant-numeric: tabular-nums;
+  }
+  .kpi .value .unit { font-size: 14px; color: var(--ink-2); font-weight: 500; }
+  .kpi .delta { font-size: 11.5px; color: var(--ink-3); }
+
+  /* Status header strip */
+  .status-strip {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    gap: 24px;
+    align-items: center;
+    padding: 14px 20px;
+    background: var(--bg-1);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin-bottom: 18px;
+  }
+  .status-strip .left {
+    display: flex; align-items: center; gap: 14px;
+  }
+  .status-pill {
+    display: inline-flex; align-items: center; gap: 8px;
+    padding: 6px 12px;
+    border-radius: 5px;
+    font-size: 12px; font-weight: 600;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+  }
+  .status-pill.r { background: var(--red-dim); color: var(--red-ink); border: 1px solid var(--red-line); }
+  .status-pill.a { background: var(--amber-dim); color: var(--amber-ink); border: 1px solid var(--amber-line); }
+  .status-pill.g { background: var(--green-dim); color: var(--green-ink); border: 1px solid var(--green-line); }
+  .status-pill .dot { width: 6px; height: 6px; border-radius: 50%; }
+  .status-pill.r .dot { background: var(--red); }
+  .status-pill.a .dot { background: var(--amber); }
+  .status-pill.g .dot { background: var(--green); }
+  .stage-pill {
+    font-size: 12px; color: var(--ink-1);
+    padding: 6px 12px;
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: 5px;
+  }
+  .stage-pill .stage-label { color: var(--ink-3); margin-right: 6px; font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.08em; }
+
+  /* Stage progress */
+  .stage-progress {
+    display: grid; grid-template-columns: repeat(5, 1fr); gap: 6px;
+  }
+  .stage-progress .seg {
+    height: 4px; border-radius: 1.5px;
+    background: var(--bg-4);
+  }
+  .stage-progress .seg.done { background: var(--ink-2); }
+  .stage-progress .seg.cur-r { background: var(--red); }
+  .stage-progress .seg.cur-a { background: var(--amber); }
+  .stage-progress .seg.cur-g { background: var(--green); }
+
+  /* Filters above table */
+  .table-head {
+    display: flex; align-items: center; justify-content: space-between;
+    gap: 16px;
+    margin-bottom: 14px;
+    flex-wrap: wrap;
+  }
+  .table-head h2 {
+    font-size: 17px; font-weight: 600; letter-spacing: -0.014em;
+  }
+  .table-head .count { color: var(--ink-3); font-size: 12px; margin-left: 14px; }
+  .filter-bar { display: flex; align-items: center; gap: 6px; flex-wrap: wrap; }
+  .chip {
+    height: 28px; padding: 0 11px;
+    display: inline-flex; align-items: center; gap: 7px;
+    font-size: 12px; font-weight: 500;
+    border-radius: 6px;
+    color: var(--ink-2);
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    cursor: pointer;
+    transition: all 0.14s;
+  }
+  .chip:hover { color: var(--ink-0); border-color: var(--border-2); }
+  .chip.active { color: var(--ink-0); background: var(--bg-3); border-color: var(--ink-4); }
+  .chip .ct { color: var(--ink-3); font-weight: 500; font-variant-numeric: tabular-nums; }
+  .chip .dot { width: 6px; height: 6px; border-radius: 50%; }
+  .chip .dot.r { background: var(--red); }
+  .chip .dot.a { background: var(--amber); }
+  .chip .dot.g { background: var(--green); }
+
+  /* Stage select */
+  .stage-filter {
+    display: flex; align-items: center; gap: 8px;
+  }
+  .stage-filter-label {
+    font-size: 10.5px; font-weight: 600; color: var(--ink-3);
+    letter-spacing: 0.08em; text-transform: uppercase;
+  }
+  .stage-select-wrap { position: relative; }
+  .stage-select-wrap svg {
+    position: absolute; right: 8px; top: 50%;
+    transform: translateY(-50%);
+    width: 11px; height: 11px;
+    color: var(--ink-3);
+    pointer-events: none;
+  }
+  .stage-select {
+    appearance: none; -webkit-appearance: none;
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    color: var(--ink-0);
+    font: inherit; font-size: 12px; font-weight: 500;
+    height: 28px;
+    padding: 0 26px 0 11px;
+    border-radius: 6px;
+    cursor: pointer;
+  }
+  .stage-select:hover { border-color: var(--border-2); }
+
+  /* Task table */
+  .task-table {
+    background: var(--bg-1);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .task-head-row {
+    display: grid;
+    grid-template-columns: 90px 1.6fr 130px 130px 110px 100px 80px 110px;
+    gap: 16px;
+    padding: 12px 20px;
+    font-size: 10.5px; font-weight: 600;
+    color: var(--ink-3);
+    letter-spacing: 0.08em; text-transform: uppercase;
+    border-bottom: 1px solid var(--border);
+  }
+  .task-row {
+    display: grid;
+    grid-template-columns: 90px 1.6fr 130px 130px 110px 100px 80px 110px;
+    gap: 16px;
+    padding: 13px 20px;
+    align-items: center;
+    border-bottom: 1px solid var(--border);
+    transition: background 0.12s;
+  }
+  .task-row:last-child { border-bottom: none; }
+  .task-row:hover { background: var(--row-hover); }
+  .task-row.hidden { display: none; }
+
+  .task-row .ref {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 10.5px;
+    color: var(--ink-3);
+    font-weight: 500;
+    letter-spacing: 0.02em;
+  }
+  .task-row .name {
+    font-size: 13px; color: var(--ink-0);
+    font-weight: 500;
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .task-row .name .sub {
+    display: block;
+    font-size: 11px; color: var(--ink-3); font-weight: 400;
+    margin-top: 2px;
+  }
+  .task-row .person {
+    display: flex; align-items: center; gap: 8px;
+    font-size: 12px; color: var(--ink-1);
+    overflow: hidden;
+  }
+  .task-row .av {
+    width: 22px; height: 22px; border-radius: 50%;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 9.5px; font-weight: 600;
+    color: var(--ink-1);
+    background: var(--bg-3);
+    border: 1px solid var(--border-2);
+    flex-shrink: 0;
+  }
+  .task-row .person span:not(.av) {
+    overflow: hidden; text-overflow: ellipsis; white-space: nowrap;
+  }
+  .task-row .deps {
+    font-size: 11.5px; color: var(--ink-2);
+    display: flex; flex-wrap: wrap; gap: 4px;
+  }
+  .task-row .deps-empty { color: var(--ink-4); font-size: 12px; }
+  .task-row .dep-tag {
+    display: inline-flex; align-items: center;
+    font-size: 10.5px; font-weight: 600;
+    padding: 1px 6px;
+    border-radius: 3px;
+    background: var(--amber-dim);
+    color: var(--amber-ink);
+    border: 1px solid var(--amber-line);
+    white-space: nowrap;
+  }
+  .task-row .stage-cell {
+    font-size: 12px; color: var(--ink-2);
+  }
+  .task-row .status-cell {
+    display: flex; align-items: center; gap: 7px;
+    font-size: 12px; font-weight: 500;
+  }
+  .status-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+  .status-dot.r { background: var(--red); box-shadow: 0 0 0 3px var(--red-dim); }
+  .status-dot.a { background: var(--amber); box-shadow: 0 0 0 3px var(--amber-dim); }
+  .status-dot.g { background: var(--green); box-shadow: 0 0 0 3px var(--green-dim); }
+  .status-dot.done {
+    background: var(--ink-3);
+  }
+  .status-cell.r { color: var(--red-ink); }
+  .status-cell.a { color: var(--amber-ink); }
+  .status-cell.g { color: var(--green-ink); }
+  .status-cell.done { color: var(--ink-3); }
+
+  .task-row .elapsed {
+    font-size: 12px; text-align: right;
+    font-variant-numeric: tabular-nums;
+    color: var(--ink-2);
+  }
+  .task-row .elapsed.bad { color: var(--red-ink); font-weight: 500; }
+  .task-row .elapsed.warn { color: var(--amber-ink); }
+
+  .task-row .completed {
+    font-size: 11.5px; color: var(--ink-2);
+    line-height: 1.35;
+  }
+  .task-row .completed.empty { color: var(--ink-4); font-size: 12px; }
+  .task-row .completed strong { color: var(--ink-1); font-weight: 500; }
+  .task-row .completed .when { display: block; font-size: 10.5px; color: var(--ink-3); }
+
+  .footer {
+    margin-top: 32px;
+    padding-top: 16px;
+    border-top: 1px solid var(--border);
+    display: flex; justify-content: space-between;
+    font-size: 11px; color: var(--ink-3);
+  }
+
+  @media (max-width: 1100px) {
+    .task-head-row, .task-row {
+      grid-template-columns: 90px 1.4fr 110px 110px 100px 90px 70px 100px;
+      gap: 12px;
+      padding: 12px 14px;
+      font-size: 11.5px;
+    }
+  }
+</style>
+</head>
+<body>
+
+<div class="app">
+  <header class="mainnav">
+    <div class="nav-brand" onclick="location.href='kissflow.html'">
+      <div class="nav-brand-fallback">A</div>
+    </div>
+    <div class="nav-right">
+      <button class="icon-btn" id="themeToggle" aria-label="Toggle theme">
+        <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <button class="avatar-btn">NP</button>
+    </div>
+  </header>
+
+  <main>
+    <div class="kf-frame">
+      <div class="kf-bar">
+        <div class="kf-pill"><span class="dot"></span>Onboarding · Carina Capital</div>
+        <div class="kf-pill" style="background: transparent;">Kissflow Workflows</div>
+      </div>
+      <div class="kf-tabs-wrap">
+        <nav class="kf-tabs">
+          <div class="kf-tab">Forms</div>
+          <div class="kf-tab active">Workflows</div>
+          <div class="kf-tab">Datasets</div>
+          <div class="kf-tab">Apps</div>
+        </nav>
+        <nav class="kf-subtabs">
+          <button class="kf-subtab" onclick="location.href='kissflow.html'">Onboarding overview</button>
+          <button class="kf-subtab active">Team detail</button>
+          <button class="kf-subtab">Internal Controls</button>
+          <button class="kf-subtab">Performance</button>
+        </nav>
+      </div>
+
+      <div class="kf-body">
+
+        <section class="page-head">
+          <div>
+            <div class="eyebrow-row">
+              <a class="back-link" href="kissflow.html">
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                All teams
+              </a>
+              <span class="eyebrow" id="teamEyebrow">ISG SMA · Day 14 of 30 · Settlements</span>
+              <div class="client-filter">
+                <button class="client-select" id="clientSelectBtn" title="Filter by client">
+                  <span id="clientSelectLabel">Carina Capital</span>
+                  <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+                </button>
+              </div>
+            </div>
+            <h1 class="lede" id="teamLede">Settlements · <em>4 of 11 tasks complete</em>. ISG Legal contract review just cleared.</h1>
+          </div>
+          <div class="head-actions">
+            <button class="btn primary">
+              <svg fill="none" stroke="currentColor" stroke-width="1.8" viewBox="0 0 24 24"><path d="M12 6v6l4 2M21 12a9 9 0 11-18 0 9 9 0 0118 0z" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              Send reminder
+            </button>
+          </div>
+        </section>
+
+        <section class="kpi-row">
+          <div class="kpi">
+            <div class="label">Off-track</div>
+            <div class="value num" id="kpiOffValue" style="color: var(--red-ink);">2<span class="unit">tasks</span></div>
+            <div class="delta">Past SLA</div>
+          </div>
+          <div class="kpi">
+            <div class="label">Completion</div>
+            <div class="value num"><span id="kpiTasksDone">4</span><span class="unit">of <span id="kpiTasksTotal">11</span> tasks</span></div>
+            <div class="delta" id="kpiTasksDelta">36% complete</div>
+          </div>
+          <div class="kpi">
+            <div class="label">Days remaining</div>
+            <div class="value num" id="kpiDaysRemaining">15</div>
+            <div class="delta">Until projected go-live</div>
+          </div>
+          <div class="kpi">
+            <div class="label">Projected go-live</div>
+            <div class="value num" id="kpiGoLive" style="font-size: 26px;">May 13</div>
+          </div>
+        </section>
+
+        <section class="status-strip">
+          <div class="left">
+            <span class="status-pill r" id="overallStatus">
+              <span class="dot"></span>
+              <span id="overallStatusLabel">Off track</span>
+            </span>
+            <span class="stage-pill"><span class="stage-label">Current stage</span><span id="currentStageLabel">In Progress</span></span>
+          </div>
+          <div class="stage-progress" id="stageProgress"></div>
+        </section>
+
+        <section>
+          <div class="table-head">
+            <div>
+              <h2 style="display:inline;">Tasks</h2>
+              <span class="count" id="tasksCount">11 tasks</span>
+            </div>
+            <div class="filter-bar" id="filters">
+              <button class="chip active" data-filter="all">All<span class="ct" id="ctAll">11</span></button>
+              <button class="chip" data-filter="r"><span class="dot r"></span>Off track<span class="ct" id="ctR">2</span></button>
+              <button class="chip" data-filter="a"><span class="dot a"></span>Pending<span class="ct" id="ctA">2</span></button>
+              <button class="chip" data-filter="g"><span class="dot g"></span>On track<span class="ct" id="ctG">3</span></button>
+              <button class="chip" data-filter="done"><span class="dot" style="background: var(--ink-3);"></span>Completed<span class="ct" id="ctDone">4</span></button>
+            </div>
+            <div class="stage-filter">
+              <span class="stage-filter-label">Stage</span>
+              <div class="stage-select-wrap">
+                <select id="stageFilterSelect" class="stage-select">
+                  <option value="all">All stages</option>
+                  <option value="0">Impact Assessment</option>
+                  <option value="1">Tasks Selection &amp; Assignment</option>
+                  <option value="2">In Progress</option>
+                  <option value="3">Ready for Trading</option>
+                  <option value="4">Completed</option>
+                </select>
+                <svg fill="none" stroke="currentColor" stroke-width="2" viewBox="0 0 24 24"><path d="M6 9l6 6 6-6" stroke-linecap="round" stroke-linejoin="round"/></svg>
+              </div>
+            </div>
+          </div>
+
+          <div class="task-table">
+            <div class="task-head-row">
+              <div>Item ID</div>
+              <div>Task name</div>
+              <div>Assigned</div>
+              <div>Dependencies</div>
+              <div>Stage</div>
+              <div>Status</div>
+              <div style="text-align:right;">Elapsed</div>
+              <div>Completed</div>
+            </div>
+            <div id="task-rows"></div>
+          </div>
+        </section>
+
+        <div class="footer">
+          <div>apollo · isg-sma · team detail · v2.4.1</div>
+          <div>updated 2 min ago</div>
+        </div>
+
+      </div>
+    </div>
+  </main>
+</div>
+
+<script>
+  const STAGES = ['Impact Assessment', 'Tasks Selection & Assignment', 'In Progress', 'Ready for Trading', 'Completed'];
+
+  const PEOPLE = [
+    { name: 'Sarah Chen',     init: 'SC' },
+    { name: 'Michael Patel',  init: 'MP' },
+    { name: 'John Loh',       init: 'JL' },
+    { name: 'Roberto Romano', init: 'RR' },
+    { name: 'Alexander Black',init: 'AB' },
+    { name: 'Karthik Dasari', init: 'KD' },
+    { name: 'Norbert Pap',    init: 'NP' },
+    { name: 'Lidiya Shutaya', init: 'LS' },
+    { name: 'Jackie Wu',      init: 'JW' },
+    { name: 'Kirsty Fouche',  init: 'KF' },
+    { name: 'Michelle Borely',init: 'MB' },
+  ];
+
+  // Mock task data — represents what a typical Settlements team's onboarding looks like
+  // for a single client, broken out at the task level.
+  // status: 'r' off-track, 'a' pending, 'g' on track, 'done'
+  // stage: 0..4 mapping to STAGES
+  const TASKS = [
+    // Stage 0 — Impact Assessment (single team-lead task)
+    {
+      ref: 'T-3001',
+      name: 'Settlements impact assessment',
+      sub: 'Review client trade flow & identify operational impact',
+      assignee: 'Roberto Romano',
+      deps: [],
+      stage: 0,
+      status: 'done',
+      elapsedDays: 1,
+      completedBy: 'Roberto Romano',
+      completedDays: 13,
+    },
+    // Stage 1 — Tasks Selection & Assignment (single sign-off task)
+    {
+      ref: 'T-3002',
+      name: 'Confirm task list & assign owners',
+      sub: 'Sign-off on tasks selected for this client',
+      assignee: 'Roberto Romano',
+      deps: [],
+      stage: 1,
+      status: 'done',
+      elapsedDays: 1,
+      completedBy: 'Roberto Romano',
+      completedDays: 12,
+    },
+    // Stage 2 — In Progress (the bulk of detail-level tasks)
+    {
+      ref: 'T-3003',
+      name: 'Set up settlement instructions in custodian portal',
+      sub: 'Create SSI for each broker counterparty',
+      assignee: 'Karthik Dasari',
+      deps: ['ISG Legal contract'],
+      stage: 2,
+      status: 'r',
+      elapsedDays: 11,
+      completedBy: null,
+    },
+    {
+      ref: 'T-3004',
+      name: 'Configure FX settlement workflow',
+      sub: 'Establish FX cut-off times & operational windows',
+      assignee: 'Karthik Dasari',
+      deps: ['T-3003'],
+      stage: 2,
+      status: 'r',
+      elapsedDays: 9,
+      completedBy: null,
+    },
+    {
+      ref: 'T-3005',
+      name: 'Map account structure to ledger',
+      sub: '4 entities across 2 custodians',
+      assignee: 'John Loh',
+      deps: [],
+      stage: 2,
+      status: 'a',
+      elapsedDays: 6,
+      completedBy: null,
+    },
+    {
+      ref: 'T-3006',
+      name: 'Send test SWIFT MT54x messages',
+      sub: 'Verify routing & format with custodian',
+      assignee: 'John Loh',
+      deps: ['T-3003'],
+      stage: 2,
+      status: 'a',
+      elapsedDays: 4,
+      completedBy: null,
+    },
+    {
+      ref: 'T-3007',
+      name: 'Build static data records',
+      sub: 'Counterparty SSIs, agent banks, market codes',
+      assignee: 'Sarah Chen',
+      deps: [],
+      stage: 2,
+      status: 'g',
+      elapsedDays: 3,
+      completedBy: null,
+    },
+    {
+      ref: 'T-3008',
+      name: 'Document escalation path & contacts',
+      sub: 'Out-of-hours, fail management, breaks',
+      assignee: 'Roberto Romano',
+      deps: [],
+      stage: 2,
+      status: 'g',
+      elapsedDays: 2,
+      completedBy: null,
+    },
+    {
+      ref: 'T-3009',
+      name: 'Configure trade matching rules in PAM',
+      sub: 'Tolerances, auto-affirm thresholds',
+      assignee: 'Alexander Black',
+      deps: ['T-3007'],
+      stage: 2,
+      status: 'g',
+      elapsedDays: 2,
+      completedBy: null,
+    },
+    // Two completed in-progress tasks (so the "completed" column has examples)
+    {
+      ref: 'T-3010',
+      name: 'Run UAT settlement scenario',
+      sub: 'Day-1 trade simulation, full life-cycle',
+      assignee: 'John Loh',
+      deps: [],
+      stage: 2,
+      status: 'done',
+      elapsedDays: 4,
+      completedBy: 'John Loh',
+      completedDays: 7,
+    },
+    {
+      ref: 'T-3011',
+      name: 'Onboard with broker network',
+      sub: 'Add custodian to broker SSI book',
+      assignee: 'Karthik Dasari',
+      deps: [],
+      stage: 2,
+      status: 'done',
+      elapsedDays: 5,
+      completedBy: 'Karthik Dasari',
+      completedDays: 6,
+    },
+  ];
+
+  const HEALTH_LABEL = { r: 'Off track', a: 'Pending', g: 'On track', done: 'Completed' };
+  const HEALTH_RANK = { r: 0, a: 1, g: 2, done: 3 };
+
+  // ========== STATE ==========
+  let healthFilter = 'all';
+  let stageFilter = null;
+
+  // ========== URL params ==========
+  const params = new URLSearchParams(location.search);
+  const teamRefParam = params.get('team') || '';
+  const teamNameParam = params.get('teamName') || '';
+  const clientParam = params.get('client') || '';
+
+  function teamNameFromRef(ref) {
+    // Map well-known refs from the parent dashboard, otherwise fall back.
+    const map = {
+      'CK-2401':'Performance','CK-2402':'Risk Management','CK-2403':'Client Service',
+      'CK-2404':'Reconciliation','CK-2405':'Tax Services','CK-2406':'Corporate Actions',
+      'CK-2407':'Settlements','CK-2408':'Allocations','CK-2409':'Client Solutions',
+      'CK-2410':'Transfer Agency','CK-2411':'Cash Management','CK-2412':'Billing',
+      'CK-2413':'Custody','CK-2414':'Treasury','CK-2415':'Compliance',
+      'CK-2416':'Internal Controls','CK-2417':'Middle Office','CK-2418':'Trade Support',
+      'CK-2419':'Fund Accounting','CK-2420':'Reference Data','CK-2421':'ISG Legal',
+      'CK-2422':'Portfolio Admin','CK-2423':'Client Engineering',
+    };
+    return map[ref] || teamNameParam || 'Settlements';
+  }
+
+  const teamName = teamNameFromRef(teamRefParam);
+  document.getElementById('teamEyebrow').textContent = `ISG SMA · Day 14 of 30 · ${teamName}`;
+  document.getElementById('teamLede').innerHTML = `${teamName} · <em>4 of 11 tasks complete</em>. 2 tasks blocked on ISG Legal contract review.`;
+
+  // ========== RENDER ==========
+  const tasksRowsEl = document.getElementById('task-rows');
+
+  function personByName(name) {
+    return PEOPLE.find(p => p.name === name) || { name: name, init: name.split(' ').map(s => s[0]).join('').slice(0,2).toUpperCase() };
+  }
+
+  function elapsedClass(t) {
+    if (t.status === 'r') return 'bad';
+    if (t.status === 'a') return 'warn';
+    return '';
+  }
+
+  function renderTasks() {
+    // Sort: most urgent first (off-track → pending → on track → completed),
+    // then by least advanced stage
+    const sorted = [...TASKS].sort((a, b) => {
+      if (HEALTH_RANK[a.status] !== HEALTH_RANK[b.status]) {
+        return HEALTH_RANK[a.status] - HEALTH_RANK[b.status];
+      }
+      return a.stage - b.stage;
+    });
+
+    tasksRowsEl.innerHTML = '';
+    sorted.forEach(t => {
+      const p = personByName(t.assignee);
+      const depCell = (t.deps && t.deps.length)
+        ? t.deps.map(d => `<span class="dep-tag">${d}</span>`).join('')
+        : '<span class="deps-empty">·</span>';
+
+      const statusLabel = HEALTH_LABEL[t.status] || t.status;
+      const statusClass = t.status;
+
+      const completedHtml = (t.status === 'done' && t.completedBy)
+        ? `<strong>${t.completedBy}</strong><span class="when">${t.elapsedDays}d · ${t.completedDays}d ago</span>`
+        : '<span class="completed empty">—</span>';
+
+      const row = document.createElement('div');
+      row.className = 'task-row';
+      row.dataset.status = t.status;
+      row.dataset.stage = String(t.stage);
+      row.innerHTML = `
+        <div class="ref">${t.ref}</div>
+        <div class="name">${t.name}<span class="sub">${t.sub || ''}</span></div>
+        <div class="person"><span class="av">${p.init}</span><span>${p.name}</span></div>
+        <div class="deps">${depCell}</div>
+        <div class="stage-cell">${STAGES[t.stage]}</div>
+        <div class="status-cell ${statusClass}"><span class="status-dot ${statusClass}"></span>${statusLabel}</div>
+        <div class="elapsed ${elapsedClass(t)}">${t.elapsedDays}d</div>
+        <div class="completed">${completedHtml}</div>
+      `;
+      tasksRowsEl.appendChild(row);
+    });
+    applyFilters();
+  }
+
+  function applyFilters() {
+    let visibleCount = 0;
+    document.querySelectorAll('.task-row').forEach(r => {
+      const statusOk = (healthFilter === 'all') || r.dataset.status === healthFilter;
+      const stageOk = (stageFilter === null) || r.dataset.stage === String(stageFilter);
+      const visible = statusOk && stageOk;
+      r.classList.toggle('hidden', !visible);
+      if (visible) visibleCount += 1;
+    });
+    document.getElementById('tasksCount').textContent = `${visibleCount} of ${TASKS.length} tasks`;
+  }
+
+  document.querySelectorAll('#filters .chip').forEach(chip => {
+    chip.onclick = () => {
+      document.querySelectorAll('#filters .chip').forEach(c => c.classList.remove('active'));
+      chip.classList.add('active');
+      healthFilter = chip.dataset.filter;
+      applyFilters();
+    };
+  });
+  document.getElementById('stageFilterSelect').addEventListener('change', e => {
+    const v = e.target.value;
+    stageFilter = v === 'all' ? null : parseInt(v, 10);
+    applyFilters();
+  });
+
+  // KPIs
+  function renderKpis() {
+    const total = TASKS.length;
+    const done = TASKS.filter(t => t.status === 'done').length;
+    const offTrack = TASKS.filter(t => t.status === 'r').length;
+    const pending = TASKS.filter(t => t.status === 'a').length;
+    const onTrack = TASKS.filter(t => t.status === 'g').length;
+
+    document.getElementById('kpiOffValue').firstChild.textContent = String(offTrack);
+    document.getElementById('kpiTasksDone').textContent = String(done);
+    document.getElementById('kpiTasksTotal').textContent = String(total);
+    document.getElementById('kpiTasksDelta').textContent = `${Math.round(done / total * 100)}% complete`;
+
+    document.getElementById('ctAll').textContent = String(total);
+    document.getElementById('ctR').textContent = String(offTrack);
+    document.getElementById('ctA').textContent = String(pending);
+    document.getElementById('ctG').textContent = String(onTrack);
+    document.getElementById('ctDone').textContent = String(done);
+
+    // Determine overall status from worst active task
+    let overall = 'g';
+    if (offTrack > 0) overall = 'r';
+    else if (pending > 0) overall = 'a';
+    const pill = document.getElementById('overallStatus');
+    pill.classList.remove('r','a','g');
+    pill.classList.add(overall);
+    document.getElementById('overallStatusLabel').textContent = HEALTH_LABEL[overall];
+
+    // Current stage = highest stage with at least one not-done task; else 4
+    const activeStages = TASKS.filter(t => t.status !== 'done').map(t => t.stage);
+    const currentStage = activeStages.length === 0 ? 4 : Math.min(...activeStages);
+    document.getElementById('currentStageLabel').textContent = STAGES[currentStage];
+
+    // Stage progress segs
+    const seg = document.getElementById('stageProgress');
+    seg.innerHTML = '';
+    for (let i = 0; i < 5; i++) {
+      const d = document.createElement('div');
+      d.className = 'seg';
+      if (i < currentStage) d.classList.add('done');
+      else if (i === currentStage) d.classList.add('cur-' + overall);
+      seg.appendChild(d);
+    }
+  }
+
+  // Theme toggle
+  document.getElementById('themeToggle').addEventListener('click', () => {
+    const next = document.documentElement.getAttribute('data-theme') === 'light' ? 'dark' : 'light';
+    document.documentElement.setAttribute('data-theme', next);
+    try { localStorage.setItem('apollo-theme', next); } catch (e) {}
+  });
+
+  renderKpis();
+  renderTasks();
+</script>
+</body>
+</html>
