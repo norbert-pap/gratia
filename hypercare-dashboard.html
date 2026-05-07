@@ -1414,6 +1414,54 @@
   .video-meta { padding: 24px; display: flex; flex-direction: column; justify-content: center; }
   .video-meta h3 { font-size: 16px; color: var(--ink-0); margin-bottom: 8px; }
   .video-meta .sub { color: var(--ink-2); font-size: 13px; line-height: 1.55; }
+  .walkthrough {
+    background: var(--bg-1); border: 1px solid var(--border); border-radius: 8px;
+    padding: 24px;
+  }
+  .wk-stepper { display: flex; align-items: center; gap: 0; margin-bottom: 24px; }
+  .wk-step {
+    flex: 1; display: flex; align-items: center; gap: 10px;
+    padding: 8px 4px;
+    color: var(--ink-3);
+    border-bottom: 2px solid var(--border);
+    font-size: 12.5px;
+    cursor: pointer;
+    transition: color 0.15s, border-color 0.15s;
+  }
+  .wk-step.done { color: var(--green-ink); border-color: var(--green-line); }
+  .wk-step.active { color: var(--ink-0); border-color: var(--gold); font-weight: 500; }
+  .wk-step .wk-num {
+    width: 22px; height: 22px; border-radius: 50%;
+    background: var(--bg-3); color: inherit;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-family: 'JetBrains Mono', monospace; font-weight: 500;
+    border: 1px solid var(--border);
+  }
+  .wk-step.active .wk-num { background: var(--gold-dim); color: var(--gold-ink); border-color: var(--gold-line); }
+  .wk-step.done .wk-num { background: var(--green-dim); color: var(--green-ink); border-color: var(--green-line); }
+  .wk-body { display: grid; grid-template-columns: 1fr 1.3fr; gap: 28px; padding: 12px 0; }
+  .wk-body h3 { font-size: 17px; color: var(--ink-0); margin-bottom: 12px; }
+  .wk-body p { color: var(--ink-1); line-height: 1.55; font-size: 13.5px; }
+  .wk-screenshot {
+    aspect-ratio: 16/10;
+    background: var(--bg-2); border: 1px solid var(--border); border-radius: 6px;
+    display: flex; align-items: center; justify-content: center;
+    color: var(--ink-3); font-size: 12.5px; font-family: 'JetBrains Mono', monospace;
+    position: relative;
+  }
+  .wk-screenshot::before {
+    content: ''; position: absolute; inset: 12px;
+    border: 1px dashed var(--border-2); border-radius: 4px;
+  }
+  .wk-pin {
+    position: absolute; width: 22px; height: 22px; border-radius: 50%;
+    background: var(--gold); color: var(--bg);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 11px; font-weight: 600; font-family: 'JetBrains Mono', monospace;
+    box-shadow: 0 0 0 4px rgba(22, 163, 138, 0.25);
+  }
+  .wk-nav { display: flex; justify-content: space-between; gap: 12px; margin-top: 18px; }
+  .wk-nav .btn[disabled] { opacity: 0.4; cursor: not-allowed; }
 
 </style>
 </head>
@@ -1788,8 +1836,21 @@
             </div>
           </section>
 
-          <!-- Walkthrough placeholder -->
-          <div id="walkthrough-section"></div>
+          <!-- Click-through walkthrough -->
+          <section class="training-section">
+            <div class="section-head">
+              <h2>Hands-on walkthrough</h2>
+              <span class="count" id="wkStepCount">Step 1 of 5</span>
+            </div>
+            <div class="walkthrough">
+              <div class="wk-stepper" id="wkStepper"></div>
+              <div class="wk-body" id="wkBody"></div>
+              <div class="wk-nav">
+                <button class="btn" id="wkPrev">← Previous</button>
+                <button class="btn primary" id="wkNext">Next →</button>
+              </div>
+            </div>
+          </section>
 
           <!-- Quiz placeholder -->
           <div id="quiz-section"></div>
@@ -2230,6 +2291,48 @@
     svg.innerHTML = svgContent;
   }
   renderCategoryChart();
+
+  // ===== Training: walkthrough stepper =====
+  const WALKTHROUGH_STEPS = [
+    { title: 'Open your work queue', body: 'From the Kissflow home screen, click "My Onboardings" in the left sidebar. Your queue shows all SMA clients assigned to you, grouped by stage.', pin: '1' },
+    { title: 'Start a new SMA onboarding', body: 'Click "+ New onboarding". Fill in the client identifier and select the SMA strategy. The workflow opens at Impact Assessment by default.', pin: '2' },
+    { title: 'Move tasks through stages', body: 'Drag a task card or use the stage selector to advance. Each stage has its own SLA — Impact Assessment and Tasks Selection are both 24h.', pin: '3' },
+    { title: 'Add dependencies and notes', body: 'Use the dependency tag to flag pending input from another team. Notes are visible to the whole onboarding team and the exec dashboard.', pin: '4' },
+    { title: 'Mark onboarding complete', body: 'Once Ready for Trading is signed off, complete any post-event closure tasks and click "Mark complete". The onboarding moves to the closed tab.', pin: '5' },
+  ];
+  let wkCurrent = 0;
+  function renderWalkthrough() {
+    const stepper = document.getElementById('wkStepper');
+    const body = document.getElementById('wkBody');
+    const count = document.getElementById('wkStepCount');
+    if (!stepper || !body || !count) return;
+    stepper.innerHTML = WALKTHROUGH_STEPS.map((s, i) => {
+      const cls = i < wkCurrent ? 'wk-step done' : (i === wkCurrent ? 'wk-step active' : 'wk-step');
+      return `<div class="${cls}" data-step="${i}"><span class="wk-num">${i+1}</span>${s.title}</div>`;
+    }).join('');
+    const s = WALKTHROUGH_STEPS[wkCurrent];
+    body.innerHTML = `
+      <div>
+        <h3>${s.title}</h3>
+        <p>${s.body}</p>
+      </div>
+      <div class="wk-screenshot">
+        <span class="wk-pin" style="top:30%;left:18%;">${s.pin}</span>
+      </div>
+    `;
+    count.textContent = `Step ${wkCurrent + 1} of ${WALKTHROUGH_STEPS.length}`;
+    document.getElementById('wkPrev').disabled = wkCurrent === 0;
+    document.getElementById('wkNext').disabled = wkCurrent === WALKTHROUGH_STEPS.length - 1;
+  }
+  document.getElementById('wkPrev').addEventListener('click', () => { if (wkCurrent > 0) { wkCurrent--; renderWalkthrough(); } });
+  document.getElementById('wkNext').addEventListener('click', () => { if (wkCurrent < WALKTHROUGH_STEPS.length - 1) { wkCurrent++; renderWalkthrough(); } });
+  document.getElementById('wkStepper').addEventListener('click', (e) => {
+    const step = e.target.closest('.wk-step');
+    if (!step) return;
+    wkCurrent = +step.dataset.step;
+    renderWalkthrough();
+  });
+  renderWalkthrough();
 
   // ===== Training: video mock =====
   const videoThumb = document.querySelector('#tab-training .video-thumb');
