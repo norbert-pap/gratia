@@ -1661,8 +1661,8 @@
   const EXIT_CRITERIA = [
     { label: 'Open P1 incidents',          target: '0 for 5 consecutive days', current: '0 · day 2 of 5', state: 'progress', streak: { current: 2, target: 5 }, jumpTo: null },
     { label: 'Adoption rate (all teams)',  target: '≥ 90%',                    current: '84% · 7 of 9 teams pass', state: 'failing',  streak: null, jumpTo: 'matrix-section' },
-    { label: 'Repeat-issue rate',          target: '< 10%',                    current: '14%',                      state: 'failing',  streak: null, jumpTo: 'repeat-issues' },
-    { label: 'MTTR (P2)',                  target: '≤ 24h sustained',          current: '18h · day 5 of 5',         state: 'met',      streak: { current: 5, target: 5 }, jumpTo: null },
+    { label: 'Workflow completion',        target: '26/26 teams end-to-end',   current: '22/26 · 4 teams pending', state: 'failing',  streak: null, jumpTo: 'matrix-section' },
+    { label: 'Active usage',               target: '> 80%',                    current: '82%',                      state: 'met',      streak: null, jumpTo: null },
     { label: 'Old SMA process retirement', target: '100% on Kissflow',         current: '100%',                     state: 'met',      streak: null, jumpTo: null },
     { label: 'Training completion',        target: '≥ 95%',                    current: '96%',                      state: 'met',      streak: null, jumpTo: null },
   ];
