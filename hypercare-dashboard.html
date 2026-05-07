@@ -323,31 +323,76 @@
   .btn svg { width: 13px; height: 13px; }
 
   /* ========== KPI ROW ========== */
-  /* Hypercare sub-tabs (Leadership summary / Operational detail) */
+  /* Hypercare sub-tabs (Leadership summary / Operational detail) — segmented-control style */
   .sub-tabs {
-    display: flex;
-    gap: 0;
-    margin: 0 0 18px;
-    border-bottom: 1px solid var(--border);
+    display: inline-flex;
+    gap: 3px;
+    padding: 4px;
+    background: var(--bg-2);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    margin: 0 0 22px;
   }
   .sub-tab {
-    padding: 10px 18px;
-    font-size: 13px;
+    padding: 7px 16px;
+    font-size: 12.5px;
     font-weight: 500;
     color: var(--ink-2);
-    background: none;
+    background: transparent;
     border: none;
-    border-bottom: 2px solid transparent;
+    border-radius: 6px;
     cursor: pointer;
-    margin-bottom: -1px;
-    transition: color 0.15s, border-color 0.15s;
+    transition: background 0.15s, color 0.15s, box-shadow 0.15s;
     font-family: inherit;
+    line-height: 1.4;
   }
   .sub-tab:hover { color: var(--ink-0); }
   .sub-tab.active {
+    background: var(--bg-1);
     color: var(--ink-0);
-    border-bottom-color: var(--gold);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.18), inset 0 0 0 1px var(--border);
   }
+  [data-theme="light"] .sub-tab.active {
+    box-shadow: 0 1px 2px rgba(20, 22, 30, 0.06), inset 0 0 0 1px var(--border-2);
+  }
+
+  /* Operational summary strip (4 stats above the matrix) */
+  .ops-summary {
+    display: grid;
+    grid-template-columns: repeat(4, 1fr);
+    gap: 12px;
+    margin-bottom: 22px;
+  }
+  .ops-sum {
+    background: var(--bg-1);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 14px 16px;
+  }
+  .ops-sum-label {
+    color: var(--ink-3);
+    font-size: 10.5px;
+    font-weight: 500;
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: 8px;
+  }
+  .ops-sum-value {
+    color: var(--ink-0);
+    font-size: 22px;
+    font-weight: 500;
+    font-family: 'JetBrains Mono', monospace;
+    line-height: 1;
+  }
+  .ops-sum-sub {
+    color: var(--ink-2);
+    font-size: 11.5px;
+    margin-top: 8px;
+    font-family: 'JetBrains Mono', monospace;
+  }
+  .ops-sum-sub.met { color: var(--green-ink); }
+  .ops-sum-sub.warn { color: var(--amber-ink); }
+  .ops-sum-sub.bad { color: var(--red-ink); }
 
   .hyper-pane { display: none; }
   .hyper-pane.active { display: block; animation: fadeUp 0.3s cubic-bezier(0.22, 0.61, 0.36, 1) both; }
@@ -2040,6 +2085,30 @@
           </div> <!-- /#hp-leadership -->
 
           <div id="hp-operational" class="hyper-pane">
+
+      <!-- ===== OPERATIONAL SUMMARY STRIP ===== -->
+      <section class="ops-summary">
+        <div class="ops-sum">
+          <div class="ops-sum-label">Open tickets</div>
+          <div class="ops-sum-value">6</div>
+          <div class="ops-sum-sub met">−8 since last week</div>
+        </div>
+        <div class="ops-sum">
+          <div class="ops-sum-label">Shadow onboardings</div>
+          <div class="ops-sum-value">0</div>
+          <div class="ops-sum-sub met">Target 0 · met</div>
+        </div>
+        <div class="ops-sum">
+          <div class="ops-sum-label">Stuck in Impact Assessment</div>
+          <div class="ops-sum-value">3</div>
+          <div class="ops-sum-sub warn">&gt;3 business days</div>
+        </div>
+        <div class="ops-sum">
+          <div class="ops-sum-label">Workflows reopened</div>
+          <div class="ops-sum-value">2</div>
+          <div class="ops-sum-sub">Post sign-off corrections</div>
+        </div>
+      </section>
 
       <!-- ===== TEAM MATRIX ===== -->
       <section class="matrix-section" id="matrix-section">
