@@ -357,10 +357,12 @@
   .status-pill.r { background: var(--red-dim); color: var(--red-ink); border: 1px solid var(--red-line); }
   .status-pill.a { background: var(--amber-dim); color: var(--amber-ink); border: 1px solid var(--amber-line); }
   .status-pill.g { background: var(--green-dim); color: var(--green-ink); border: 1px solid var(--green-line); }
+  .status-pill.none { background: var(--bg-2); color: var(--ink-3); border: 1px solid var(--border); }
   .status-pill .dot { width: 6px; height: 6px; border-radius: 50%; }
   .status-pill.r .dot { background: var(--red); }
   .status-pill.a .dot { background: var(--amber); }
   .status-pill.g .dot { background: var(--green); }
+  .status-pill.none .dot { background: var(--ink-4); }
   .stage-pill {
     font-size: 12px; color: var(--ink-1);
     padding: 6px 12px;
@@ -557,6 +559,14 @@
   .task-row .completed strong { color: var(--ink-1); font-weight: 500; }
   .task-row .completed .when { display: block; font-size: 10.5px; color: var(--ink-3); }
 
+  .task-empty {
+    padding: 32px 20px;
+    text-align: center;
+    color: var(--ink-3);
+    font-size: 12.5px;
+    font-style: italic;
+  }
+
   .footer {
     margin-top: 32px;
     padding-top: 16px;
@@ -728,155 +738,10 @@
 <script>
   const STAGES = ['Impact Assessment', 'Tasks Selection & Assignment', 'In Progress', 'Ready for Trading', 'Completed'];
 
-  const PEOPLE = [
-    { name: 'Sarah Chen',     init: 'SC' },
-    { name: 'Michael Patel',  init: 'MP' },
-    { name: 'John Loh',       init: 'JL' },
-    { name: 'Roberto Romano', init: 'RR' },
-    { name: 'Alexander Black',init: 'AB' },
-    { name: 'Karthik Dasari', init: 'KD' },
-    { name: 'Norbert Pap',    init: 'NP' },
-    { name: 'Lidiya Shutaya', init: 'LS' },
-    { name: 'Jackie Wu',      init: 'JW' },
-    { name: 'Kirsty Fouche',  init: 'KF' },
-    { name: 'Michelle Borely',init: 'MB' },
-  ];
-
-  // Mock task data — represents what a typical Settlements team's onboarding looks like
-  // for a single client, broken out at the task level.
-  // status: 'r' off-track, 'a' pending, 'g' on track, 'done'
-  // stage: 0..4 mapping to STAGES
-  const TASKS = [
-    // Stage 0 — Impact Assessment (single team-lead task)
-    {
-      ref: 'T-3001',
-      name: 'Settlements impact assessment',
-      sub: 'Review client trade flow & identify operational impact',
-      assignee: 'Roberto Romano',
-      deps: [],
-      stage: 0,
-      status: 'done',
-      elapsedDays: 1,
-      completedBy: 'Roberto Romano',
-      completedDays: 13,
-    },
-    // Stage 1 — Tasks Selection & Assignment (single sign-off task)
-    {
-      ref: 'T-3002',
-      name: 'Confirm task list & assign owners',
-      sub: 'Sign-off on tasks selected for this client',
-      assignee: 'Roberto Romano',
-      deps: [],
-      stage: 1,
-      status: 'done',
-      elapsedDays: 1,
-      completedBy: 'Roberto Romano',
-      completedDays: 12,
-    },
-    // Stage 2 — In Progress (the bulk of detail-level tasks)
-    {
-      ref: 'T-3003',
-      name: 'Set up settlement instructions in custodian portal',
-      sub: 'Create SSI for each broker counterparty',
-      assignee: 'Karthik Dasari',
-      deps: ['ISG Legal contract'],
-      stage: 2,
-      status: 'r',
-      elapsedDays: 11,
-      completedBy: null,
-    },
-    {
-      ref: 'T-3004',
-      name: 'Configure FX settlement workflow',
-      sub: 'Establish FX cut-off times & operational windows',
-      assignee: 'Karthik Dasari',
-      deps: ['T-3003'],
-      stage: 2,
-      status: 'r',
-      elapsedDays: 9,
-      completedBy: null,
-    },
-    {
-      ref: 'T-3005',
-      name: 'Map account structure to ledger',
-      sub: '4 entities across 2 custodians',
-      assignee: 'John Loh',
-      deps: [],
-      stage: 2,
-      status: 'a',
-      elapsedDays: 6,
-      completedBy: null,
-    },
-    {
-      ref: 'T-3006',
-      name: 'Send test SWIFT MT54x messages',
-      sub: 'Verify routing & format with custodian',
-      assignee: 'John Loh',
-      deps: ['T-3003'],
-      stage: 2,
-      status: 'a',
-      elapsedDays: 4,
-      completedBy: null,
-    },
-    {
-      ref: 'T-3007',
-      name: 'Build static data records',
-      sub: 'Counterparty SSIs, agent banks, market codes',
-      assignee: 'Sarah Chen',
-      deps: [],
-      stage: 2,
-      status: 'g',
-      elapsedDays: 3,
-      completedBy: null,
-    },
-    {
-      ref: 'T-3008',
-      name: 'Document escalation path & contacts',
-      sub: 'Out-of-hours, fail management, breaks',
-      assignee: 'Roberto Romano',
-      deps: [],
-      stage: 2,
-      status: 'g',
-      elapsedDays: 2,
-      completedBy: null,
-    },
-    {
-      ref: 'T-3009',
-      name: 'Configure trade matching rules in PAM',
-      sub: 'Tolerances, auto-affirm thresholds',
-      assignee: 'Alexander Black',
-      deps: ['T-3007'],
-      stage: 2,
-      status: 'g',
-      elapsedDays: 2,
-      completedBy: null,
-    },
-    // Two completed in-progress tasks (so the "completed" column has examples)
-    {
-      ref: 'T-3010',
-      name: 'Run UAT settlement scenario',
-      sub: 'Day-1 trade simulation, full life-cycle',
-      assignee: 'John Loh',
-      deps: [],
-      stage: 2,
-      status: 'done',
-      elapsedDays: 4,
-      completedBy: 'John Loh',
-      completedDays: 7,
-    },
-    {
-      ref: 'T-3011',
-      name: 'Onboard with broker network',
-      sub: 'Add custodian to broker SSI book',
-      assignee: 'Karthik Dasari',
-      deps: [],
-      stage: 2,
-      status: 'done',
-      elapsedDays: 5,
-      completedBy: 'Karthik Dasari',
-      completedDays: 6,
-    },
-  ];
+  // Tasks come from the actual mockups — empty for now.
+  // Each task: { ref, name, sub?, assignee, deps: [], stage: 0..4, status: 'r'|'a'|'g'|'done',
+  //              elapsedDays, completedBy?, completedDays? }
+  const TASKS = [];
 
   const HEALTH_LABEL = { r: 'Off track', a: 'Pending', g: 'On track', done: 'Completed' };
   const HEALTH_RANK = { r: 0, a: 1, g: 2, done: 3 };
@@ -908,13 +773,13 @@
 
   const teamName = teamNameFromRef(teamRefParam);
   document.getElementById('teamEyebrow').textContent = `ISG SMA · Day 14 of 30 · ${teamName}`;
-  document.getElementById('teamLede').innerHTML = `${teamName} · <em>4 of 11 tasks complete</em>. 2 tasks blocked on ISG Legal contract review.`;
 
   // ========== RENDER ==========
   const tasksRowsEl = document.getElementById('task-rows');
 
   function personByName(name) {
-    return PEOPLE.find(p => p.name === name) || { name: name, init: name.split(' ').map(s => s[0]).join('').slice(0,2).toUpperCase() };
+    const init = (name || '').split(' ').map(s => s[0]).join('').slice(0,2).toUpperCase();
+    return { name: name || '—', init: init || '—' };
   }
 
   function elapsedClass(t) {
@@ -924,6 +789,15 @@
   }
 
   function renderTasks() {
+    tasksRowsEl.innerHTML = '';
+    if (TASKS.length === 0) {
+      const empty = document.createElement('div');
+      empty.className = 'task-empty';
+      empty.textContent = 'No tasks loaded yet — drop the task list from the mockup into the TASKS array.';
+      tasksRowsEl.appendChild(empty);
+      applyFilters();
+      return;
+    }
     // Sort: most urgent first (off-track → pending → on track → completed),
     // then by least advanced stage
     const sorted = [...TASKS].sort((a, b) => {
@@ -933,7 +807,6 @@
       return a.stage - b.stage;
     });
 
-    tasksRowsEl.innerHTML = '';
     sorted.forEach(t => {
       const p = personByName(t.assignee);
       const depCell = (t.deps && t.deps.length)
@@ -975,7 +848,9 @@
       r.classList.toggle('hidden', !visible);
       if (visible) visibleCount += 1;
     });
-    document.getElementById('tasksCount').textContent = `${visibleCount} of ${TASKS.length} tasks`;
+    document.getElementById('tasksCount').textContent = TASKS.length === 0
+      ? 'No tasks'
+      : `${visibleCount} of ${TASKS.length} tasks`;
   }
 
   document.querySelectorAll('#filters .chip').forEach(chip => {
@@ -1000,10 +875,16 @@
     const pending = TASKS.filter(t => t.status === 'a').length;
     const onTrack = TASKS.filter(t => t.status === 'g').length;
 
-    document.getElementById('kpiOffValue').firstChild.textContent = String(offTrack);
-    document.getElementById('kpiTasksDone').textContent = String(done);
+    const kpiOffEl = document.getElementById('kpiOffValue');
+    kpiOffEl.firstChild.textContent = total === 0 ? '—' : String(offTrack);
+    kpiOffEl.style.color = total === 0 ? 'var(--ink-3)'
+      : offTrack > 0 ? 'var(--red-ink)' : 'var(--green-ink)';
+
+    document.getElementById('kpiTasksDone').textContent = total === 0 ? '—' : String(done);
     document.getElementById('kpiTasksTotal').textContent = String(total);
-    document.getElementById('kpiTasksDelta').textContent = `${Math.round(done / total * 100)}% complete`;
+    document.getElementById('kpiTasksDelta').textContent = total === 0
+      ? 'Awaiting task list'
+      : `${Math.round(done / total * 100)}% complete`;
 
     document.getElementById('ctAll').textContent = String(total);
     document.getElementById('ctR').textContent = String(offTrack);
@@ -1012,18 +893,19 @@
     document.getElementById('ctDone').textContent = String(done);
 
     // Determine overall status from worst active task
-    let overall = 'g';
+    let overall = total === 0 ? null : 'g';
     if (offTrack > 0) overall = 'r';
     else if (pending > 0) overall = 'a';
     const pill = document.getElementById('overallStatus');
-    pill.classList.remove('r','a','g');
-    pill.classList.add(overall);
-    document.getElementById('overallStatusLabel').textContent = HEALTH_LABEL[overall];
+    pill.classList.remove('r','a','g','none');
+    pill.classList.add(overall || 'none');
+    document.getElementById('overallStatusLabel').textContent = overall ? HEALTH_LABEL[overall] : 'No data';
 
     // Current stage = highest stage with at least one not-done task; else 4
     const activeStages = TASKS.filter(t => t.status !== 'done').map(t => t.stage);
-    const currentStage = activeStages.length === 0 ? 4 : Math.min(...activeStages);
-    document.getElementById('currentStageLabel').textContent = STAGES[currentStage];
+    const currentStage = total === 0 ? null
+      : activeStages.length === 0 ? 4 : Math.min(...activeStages);
+    document.getElementById('currentStageLabel').textContent = currentStage === null ? '—' : STAGES[currentStage];
 
     // Stage progress segs
     const seg = document.getElementById('stageProgress');
@@ -1031,10 +913,27 @@
     for (let i = 0; i < 5; i++) {
       const d = document.createElement('div');
       d.className = 'seg';
-      if (i < currentStage) d.classList.add('done');
-      else if (i === currentStage) d.classList.add('cur-' + overall);
+      if (currentStage !== null) {
+        if (i < currentStage) d.classList.add('done');
+        else if (i === currentStage) d.classList.add('cur-' + overall);
+      }
       seg.appendChild(d);
     }
+  }
+
+  function renderLede() {
+    const lede = document.getElementById('teamLede');
+    if (TASKS.length === 0) {
+      lede.innerHTML = `${teamName}`;
+      return;
+    }
+    const total = TASKS.length;
+    const done = TASKS.filter(t => t.status === 'done').length;
+    const offTrack = TASKS.filter(t => t.status === 'r').length;
+    const headline = `${teamName} · <em>${done} of ${total} tasks complete</em>.`;
+    lede.innerHTML = offTrack > 0
+      ? `${headline} ${offTrack} task${offTrack === 1 ? '' : 's'} off track.`
+      : headline;
   }
 
   // Theme toggle
@@ -1044,6 +943,7 @@
     try { localStorage.setItem('apollo-theme', next); } catch (e) {}
   });
 
+  renderLede();
   renderKpis();
   renderTasks();
 </script>
