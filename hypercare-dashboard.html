@@ -2040,6 +2040,8 @@
       svgContent += `<line x1="${padL}" y1="${y}" x2="${W-padR}" y2="${y}" stroke="var(--border)" stroke-dasharray="2 4" stroke-width="1"/>`;
       svgContent += `<text x="${padL-6}" y="${y+3}" text-anchor="end" font-size="9.5" font-family="JetBrains Mono, monospace" fill="var(--ink-3)">${v}</text>`;
     }
+    // Y-axis title (rotated)
+    svgContent += `<text x="14" y="${padT + innerH/2}" text-anchor="middle" font-size="10.5" font-family="Inter, sans-serif" fill="var(--ink-2)" transform="rotate(-90 14 ${padT + innerH/2})">Ticket count</text>`;
     // Bars
     CAT_DATA.forEach((d, i) => {
       const xCenter = padL + slotW * (i + 0.5);
