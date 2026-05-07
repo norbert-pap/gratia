@@ -325,7 +325,7 @@
   /* ========== KPI ROW ========== */
   .kpi-row {
     display: grid;
-    grid-template-columns: repeat(5, 1fr);
+    grid-template-columns: repeat(6, 1fr);
     gap: 1px;
     background: var(--border);
     border: 1px solid var(--border);
@@ -356,6 +356,12 @@
   .kpi .delta.bad { color: var(--red-ink); }
   .kpi .delta.good { color: var(--green-ink); }
   .kpi .spark { margin-top: 6px; }
+  .kpi .kpi-target {
+    color: var(--ink-3);
+    font-size: 11px;
+    margin-top: 4px;
+    font-family: 'JetBrains Mono', monospace;
+  }
 
   /* ========== HERO GRID ========== */
   .hero-grid {
@@ -1399,27 +1405,38 @@
         <div class="kpi">
           <div class="label">Adoption rate</div>
           <div class="value num"><span id="kpiAdoptionValue">84</span><span class="unit">%</span></div>
-          <div class="delta amber" id="kpiAdoptionDelta">+6pp WoW · target 90%</div>
+          <div class="delta amber">+6pp WoW</div>
+          <div class="kpi-target">Target 100%</div>
         </div>
         <div class="kpi">
-          <div class="label">Open P1 / P2</div>
-          <div class="value num" id="kpiTicketsValue">6</div>
-          <div class="delta green" id="kpiTicketsDelta">−8 since last week</div>
+          <div class="label">Active usage</div>
+          <div class="value num"><span id="kpiActiveValue">82</span><span class="unit">%</span></div>
+          <div class="delta green">+9pp WoW</div>
+          <div class="kpi-target">Target &gt;80%</div>
         </div>
         <div class="kpi">
-          <div class="label">Repeat-issue rate</div>
-          <div class="value num"><span id="kpiRepeatValue">14</span><span class="unit">%</span></div>
-          <div class="delta amber" id="kpiRepeatDelta">−3pp WoW · target &lt;10%</div>
+          <div class="label">Workflow completion</div>
+          <div class="value num"><span id="kpiWorkflowValue">22</span><span class="unit">/26</span></div>
+          <div class="delta amber">+4 WoW</div>
+          <div class="kpi-target">Target 26/26 teams</div>
         </div>
         <div class="kpi">
-          <div class="label">MTTR (P2)</div>
-          <div class="value num"><span id="kpiMttrValue">18</span><span class="unit">h</span></div>
-          <div class="delta green" id="kpiMttrDelta">Within 24h target</div>
+          <div class="label">Timeliness</div>
+          <div class="value num"><span id="kpiTimelinessValue">11</span><span class="unit">d</span></div>
+          <div class="delta green">−1d WoW</div>
+          <div class="kpi-target">Target &lt;14 days</div>
         </div>
         <div class="kpi">
-          <div class="label"><span class="tip tip-wide tip-below" data-tip="Hypercare exits when all 6 criteria are met for 5 consecutive days. Today: 3 of 6 met.">Days to exit</span></div>
-          <div class="value num" id="kpiDaysValue">18</div>
-          <div class="delta" id="kpiDaysDelta">3 of 6 criteria met</div>
+          <div class="label">Blockers resolved in SLA</div>
+          <div class="value num"><span id="kpiBlockersValue">92</span><span class="unit">%</span></div>
+          <div class="delta amber">+5pp WoW</div>
+          <div class="kpi-target">Target 100% within 48h</div>
+        </div>
+        <div class="kpi">
+          <div class="label"><span class="tip tip-wide tip-below" data-tip="Hypercare exits when all 6 criteria are met for 5 consecutive days. Today: 3 of 6 met.">Exit readiness</span></div>
+          <div class="value num"><span id="kpiExitValue">3</span><span class="unit">/6</span></div>
+          <div class="delta">criteria met</div>
+          <div class="kpi-target">Target 6/6</div>
         </div>
       </section>
 
