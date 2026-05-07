@@ -1462,6 +1462,39 @@
   }
   .wk-nav { display: flex; justify-content: space-between; gap: 12px; margin-top: 18px; }
   .wk-nav .btn[disabled] { opacity: 0.4; cursor: not-allowed; }
+  .quiz {
+    background: var(--bg-1); border: 1px solid var(--border); border-radius: 8px;
+    padding: 24px;
+  }
+  .quiz-question { padding: 16px 0; border-top: 1px solid var(--border); }
+  .quiz-question:first-child { border-top: none; padding-top: 0; }
+  .quiz-question .q-text { color: var(--ink-0); font-size: 14px; font-weight: 500; margin-bottom: 12px; }
+  .quiz-question .q-num { color: var(--ink-3); font-family: 'JetBrains Mono', monospace; margin-right: 8px; }
+  .quiz-options { display: flex; flex-direction: column; gap: 6px; }
+  .quiz-option {
+    display: flex; align-items: center; gap: 10px;
+    padding: 10px 14px;
+    background: var(--bg-2); border: 1px solid var(--border);
+    border-radius: 6px;
+    cursor: pointer;
+    color: var(--ink-1);
+    font-size: 13px;
+    transition: background 0.12s, border-color 0.12s;
+  }
+  .quiz-option:hover { background: var(--bg-3); }
+  .quiz-option input { accent-color: var(--gold); }
+  .quiz-option.correct  { background: var(--green-dim); border-color: var(--green-line); color: var(--green-ink); }
+  .quiz-option.incorrect { background: var(--red-dim);  border-color: var(--red-line);  color: var(--red-ink); }
+  .quiz-option.user-pick { font-weight: 500; }
+  .quiz-actions { display: flex; gap: 12px; margin-top: 18px; }
+  .quiz-score {
+    padding: 12px 18px;
+    border-radius: 6px;
+    margin-bottom: 18px;
+    font-weight: 500;
+  }
+  .quiz-score.pass { background: var(--green-dim); border: 1px solid var(--green-line); color: var(--green-ink); }
+  .quiz-score.fail { background: var(--red-dim); border: 1px solid var(--red-line); color: var(--red-ink); }
 
 </style>
 </head>
@@ -1852,8 +1885,21 @@
             </div>
           </section>
 
-          <!-- Quiz placeholder -->
-          <div id="quiz-section"></div>
+          <!-- Knowledge check -->
+          <section class="training-section">
+            <div class="section-head">
+              <h2>Knowledge check</h2>
+              <span class="count">5 questions · pass 4 of 5 to mark complete</span>
+            </div>
+            <div class="quiz" id="quizCard">
+              <div id="quizScore" class="quiz-score" hidden></div>
+              <div id="quizQuestions"></div>
+              <div class="quiz-actions">
+                <button class="btn primary" id="quizSubmit">Submit answers</button>
+                <button class="btn" id="quizReset" hidden>Try again</button>
+              </div>
+            </div>
+          </section>
 
           <!-- Mark complete + support + metrics placeholder -->
           <div id="footer-sections"></div>
@@ -2291,6 +2337,105 @@
     svg.innerHTML = svgContent;
   }
   renderCategoryChart();
+
+  // ===== Training: quiz =====
+  const QUIZ_QUESTIONS = [
+    {
+      q: "Which stage comes immediately after Tasks Selection in the SMA onboarding workflow?",
+      options: ["Impact Assessment", "In Progress", "Ready for Trading", "Onboarding Complete"],
+      correct: 1,
+    },
+    {
+      q: "What's the SLA for Impact Assessment and Tasks Selection?",
+      options: ["8 hours", "24 hours", "3 business days", "No SLA — variable"],
+      correct: 1,
+    },
+    {
+      q: "How do you flag that a task is waiting on input from another team?",
+      options: ["Add a comment", "Use the dependency tag", "Email the team lead", "Move to Onboarding Complete"],
+      correct: 1,
+    },
+    {
+      q: "Which icon in the left sidebar opens your assigned onboardings?",
+      options: ["Calendar icon", "Inbox icon", "My Onboardings menu item", "Settings cog"],
+      correct: 2,
+    },
+    {
+      q: "If you're stuck on a stage and can't progress, who do you contact first?",
+      options: ["Apollo IT", "Your team lead", "Kissflow support", "The onboarding sponsor"],
+      correct: 1,
+    },
+  ];
+  const QUIZ_ANSWERS = new Array(QUIZ_QUESTIONS.length).fill(null);
+  let quizSubmitted = false;
+  function renderQuiz() {
+    const root = document.getElementById('quizQuestions');
+    if (!root) return;
+    root.innerHTML = QUIZ_QUESTIONS.map((q, qi) => {
+      const opts = q.options.map((opt, oi) => {
+        let cls = 'quiz-option';
+        if (quizSubmitted) {
+          if (oi === q.correct) cls += ' correct';
+          else if (QUIZ_ANSWERS[qi] === oi) cls += ' incorrect';
+          if (QUIZ_ANSWERS[qi] === oi) cls += ' user-pick';
+        }
+        const checked = QUIZ_ANSWERS[qi] === oi ? ' checked' : '';
+        const disabled = quizSubmitted ? ' disabled' : '';
+        return `
+          <label class="${cls}">
+            <input type="radio" name="q${qi}" value="${oi}"${checked}${disabled}>
+            <span>${opt}</span>
+          </label>
+        `;
+      }).join('');
+      return `
+        <div class="quiz-question">
+          <div class="q-text"><span class="q-num">Q${qi+1}.</span>${q.q}</div>
+          <div class="quiz-options">${opts}</div>
+        </div>
+      `;
+    }).join('');
+    root.querySelectorAll('input[type="radio"]').forEach(input => {
+      input.addEventListener('change', (e) => {
+        const [_, qi] = e.target.name.match(/q(\d+)/);
+        QUIZ_ANSWERS[+qi] = +e.target.value;
+      });
+    });
+  }
+  function gradeQuiz() {
+    const correctCount = QUIZ_QUESTIONS.reduce((acc, q, qi) => acc + (QUIZ_ANSWERS[qi] === q.correct ? 1 : 0), 0);
+    const passed = correctCount >= 4;
+    quizSubmitted = true;
+    renderQuiz();
+    const scoreEl = document.getElementById('quizScore');
+    scoreEl.hidden = false;
+    scoreEl.className = `quiz-score ${passed ? 'pass' : 'fail'}`;
+    scoreEl.textContent = `${correctCount} of ${QUIZ_QUESTIONS.length} correct · ${passed ? 'pass — you can mark training complete' : 'try again to unlock training completion'}`;
+    document.getElementById('quizSubmit').hidden = true;
+    document.getElementById('quizReset').hidden = false;
+    if (passed) {
+      window.__quizPassed = true;
+      document.dispatchEvent(new CustomEvent('quiz-passed'));
+    }
+  }
+  function resetQuiz() {
+    QUIZ_ANSWERS.fill(null);
+    quizSubmitted = false;
+    renderQuiz();
+    const scoreEl = document.getElementById('quizScore');
+    scoreEl.hidden = true;
+    document.getElementById('quizSubmit').hidden = false;
+    document.getElementById('quizReset').hidden = true;
+  }
+  document.getElementById('quizSubmit').addEventListener('click', () => {
+    if (QUIZ_ANSWERS.some(a => a === null)) {
+      alert('Please answer all questions before submitting.');
+      return;
+    }
+    gradeQuiz();
+  });
+  document.getElementById('quizReset').addEventListener('click', resetQuiz);
+  renderQuiz();
 
   // ===== Training: walkthrough stepper =====
   const WALKTHROUGH_STEPS = [
