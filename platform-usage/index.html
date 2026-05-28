@@ -126,28 +126,21 @@ table.users th:first-child, table.users td:first-child { text-align: left; }
   <section class="cards" aria-label="Summary"></section>
 
   <section class="panel">
-    <h2>Events per type over time</h2>
+    <h2>Interactions over time</h2>
+    <p class="panel-note">Weekly count of platform interactions (AI Tool calls and Grace Chat sessions), stacked.</p>
     <canvas id="events-chart" height="120"></canvas>
-    <p class="panel-note">Weekly count of platform events, stacked by action type.</p>
   </section>
 
-  <div class="two-col">
-    <section class="panel">
-      <h2>Active users per week</h2>
-      <canvas id="active-chart" height="200"></canvas>
-      <p class="panel-note">Distinct users (admins and analysts) with at least one platform event that week.</p>
-    </section>
-    <section class="panel">
-      <h2>Action mix</h2>
-      <canvas id="mix-chart" height="200"></canvas>
-      <p class="panel-note">Share of total events by action type across the window.</p>
-    </section>
-  </div>
+  <section class="panel">
+    <h2>Active users per week</h2>
+    <p class="panel-note">A user is "active" in a week if they triggered at least one interaction that week. Split by role (analyst vs admin).</p>
+    <canvas id="active-chart" height="160"></canvas>
+  </section>
 
   <section class="panel">
     <h2>Top 10 most active users</h2>
+    <p class="panel-note">Anonymized users ranked by total interactions in the window.</p>
     <div id="top-users-wrap"></div>
-    <p class="panel-note">Anonymized user IDs, ranked by total events in the window.</p>
   </section>
 </main>
 </div>
@@ -228,11 +221,10 @@ table.users th:first-child, table.users td:first-child { text-align: left; }
 
   // ---- Summary cards ----
   document.querySelector('.cards').innerHTML = [
-    ['Total events', num0(totalEvents)],
+    ['Total interactions', num0(totalEvents), 'AI Tool calls + Grace Chat sessions'],
     ['Active users', num0(uniqueUsers), num0(uniqueAnalystUsers) + ' analyst · ' + num0(uniqueAdmins) + ' admin'],
-    ['Action types', num0(actionTypes.length)],
-    ['Active days', num0(activeDays)],
-    ['Avg events / user', num0(avgPerUser)],
+    ['Active days', num0(activeDays), 'days with ≥ 1 interaction'],
+    ['Avg interactions / user', num0(avgPerUser)],
   ].map(([label, value, sub]) => '<div class="card"><div class="label">' + label + '</div><div class="value">' + value + '</div>' + (sub ? '<div class="sub">' + sub + '</div>' : '') + '</div>').join('');
 
   // ---- Events per type over time (weekly stacked) ----
@@ -251,8 +243,16 @@ table.users th:first-child, table.users td:first-child { text-align: left; }
     m.set(r.action_type, (m.get(r.action_type) || 0) + r.count);
   }
   const weeks = [...weekActionCounts.keys()].sort();
+  const ACTION_LABELS = {
+    ai_run: 'AI Tool',
+    chat_started: 'Grace Chat',
+    kb_quiz_completed: 'KB Quiz',
+    upskill_module_completed: 'Upskill',
+    practice_case_attempted: 'Practice Case',
+  };
+  const displayLabel = (a) => ACTION_LABELS[a] || a;
   const eventsDatasets = actionTypes.map((action, i) => ({
-    label: action,
+    label: displayLabel(action),
     data: weeks.map((w) => weekActionCounts.get(w).get(action) || 0),
     backgroundColor: colorOf(i),
     borderRadius: 3,
@@ -294,33 +294,15 @@ table.users th:first-child, table.users td:first-child { text-align: left; }
     },
   });
 
-  // ---- Action mix (doughnut) ----
-  const actionTotals = actionTypes.map((action) => rows.filter((r) => r.action_type === action).reduce((s, r) => s + r.count, 0));
-  new Chart(document.getElementById('mix-chart'), {
-    type: 'doughnut',
-    data: {
-      labels: actionTypes,
-      datasets: [{ data: actionTotals, backgroundColor: actionTypes.map((_, i) => colorOf(i)), borderWidth: 0 }],
-    },
-    options: {
-      cutout: '60%',
-      plugins: {
-        legend: { position: 'right' },
-        tooltip: { callbacks: { label: (ctx) => ctx.label + ': ' + num0(ctx.parsed) + ' (' + pct1(ctx.parsed / totalEvents) + ')' } },
-      },
-    },
-  });
-
   // ---- Top 10 most active users ----
   const userTotals = new Map();
   for (const r of rows) userTotals.set(r.user_id, (userTotals.get(r.user_id) || 0) + r.count);
   const topUsers = [...userTotals.entries()].sort((a, b) => b[1] - a[1]).slice(0, 10);
-  let html = '<table class="users"><thead><tr><th>User</th><th>Role</th><th>Total events</th><th>% of total</th><th>Distinct action types</th></tr></thead><tbody>';
+  let html = '<table class="users"><thead><tr><th>User</th><th>Role</th><th>Total interactions</th><th>% of total</th></tr></thead><tbody>';
   for (const [uid, total] of topUsers) {
     const userRows = rows.filter((r) => r.user_id === uid);
     const role = userRows[0]?.user_role || '';
-    const distinctActions = new Set(userRows.map((r) => r.action_type)).size;
-    html += '<tr><td>' + uid + '</td><td>' + role + '</td><td>' + num0(total) + '</td><td>' + pct1(total / totalEvents) + '</td><td>' + num0(distinctActions) + '</td></tr>';
+    html += '<tr><td>' + uid + '</td><td>' + role + '</td><td>' + num0(total) + '</td><td>' + pct1(total / totalEvents) + '</td></tr>';
   }
   html += '</tbody></table>';
   document.getElementById('top-users-wrap').innerHTML = html;
