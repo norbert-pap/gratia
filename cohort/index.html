@@ -40,7 +40,7 @@ body {
 }
 .brand { display: flex; align-items: center; }
 .title-block h1 { margin: 0; font-size: 22px; font-weight: 700; letter-spacing: -0.01em; }
-.subtitle { margin: 4px 0 0; color: var(--mint-soft); font-size: 13px; }
+.subtitle { margin: 4px 0 0; color: rgba(255, 255, 255, 0.65); font-size: 13px; }
 .confidential {
   border: 1px solid var(--mint);
   color: var(--mint);
@@ -213,27 +213,27 @@ table.cohort tbody tr:hover { background: rgba(0, 201, 167, 0.04); }
     </section>
     <section class="panel">
       <h2>Retention</h2>
-      <canvas id="retention-chart" height="200"></canvas>
       <p class="panel-note">Bars: unique customers active each month. Line: % of prior-month customers who transacted again.</p>
+      <canvas id="retention-chart" height="200"></canvas>
     </section>
   </div>
 
   <section class="panel">
     <h2>Average revenue per active client per year</h2>
-    <canvas id="arpc-chart" height="120"></canvas>
     <p class="panel-note">Yearly revenue divided by the number of customers active that year. 2026 covers Jan–Apr.</p>
+    <canvas id="arpc-chart" height="120"></canvas>
   </section>
 
   <div class="two-col">
     <section class="panel">
       <h2>Repeat-client distribution</h2>
-      <canvas id="repeat-chart" height="200"></canvas>
       <p class="panel-note">Customers grouped by how many distinct months they transacted.</p>
+      <canvas id="repeat-chart" height="200"></canvas>
     </section>
     <section class="panel">
       <h2>Same-customer revenue, year over year</h2>
-      <canvas id="ndr-chart" height="200"></canvas>
       <p class="panel-note">For each cohort year, the same customers' revenue in the next period. 2025→2026 compares Jan–Apr only.</p>
+      <canvas id="ndr-chart" height="200"></canvas>
     </section>
   </div>
 
@@ -328,7 +328,7 @@ table.cohort tbody tr:hover { background: rgba(0, 201, 167, 0.04); }
     ['Total transactions', num0(totalTxns)],
     ['Unique clients', num0(uniqueClients)],
     ['Unique analysts', num0(uniqueAnalysts)],
-    ['Date range', dateRangeLabel, firstDate + ' → ' + lastDate],
+    ['Date range', dateRangeLabel],
     ['Avg per transaction', usd0(avgPerTxn)],
   ].map(([label, value, sub]) => `<div class="card"><div class="label">${label}</div><div class="value">${value}</div>${sub ? '<div class="sub">' + sub + '</div>' : ''}</div>`).join('');
 
