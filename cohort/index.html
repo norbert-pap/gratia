@@ -207,10 +207,10 @@ table.cohort tbody tr:hover { background: rgba(0, 201, 167, 0.04); }
     <p class="subtitle">Prepared for diligence, 2026-06-01</p>
   </div>
   <div class="header-actions">
-    <button id="download-csv" type="button" class="download-btn" aria-label="Download anonymized data as CSV">
+    <a href="gratia-transactions.zip" download class="download-btn" aria-label="Download dataset (accrual + cash CSV)">
       <svg width="14" height="14" viewBox="0 0 16 16" aria-hidden="true"><path fill="currentColor" d="M8 1v8m0 0L4.5 5.5M8 9l3.5-3.5M2 11v2a1 1 0 0 0 1 1h10a1 1 0 0 0 1-1v-2" stroke="currentColor" stroke-width="1.5" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg>
-      Download CSV
-    </button>
+      Download data
+    </a>
     <div class="confidential">Confidential</div>
   </div>
 </header>
@@ -379,18 +379,7 @@ table.cohort tbody tr:hover { background: rgba(0, 201, 167, 0.04); }
   const rows = JSON.parse(document.getElementById('cohort-data').textContent);
   const excludedAnalysts = new Set(window.__EXCLUDED_ANALYSTS__ || []);
 
-  // CSV download
-  document.getElementById('download-csv').addEventListener('click', () => {
-    const blob = new Blob([window.__CSV_SOURCE__], { type: 'text/csv;charset=utf-8' });
-    const url = URL.createObjectURL(blob);
-    const a = document.createElement('a');
-    a.href = url;
-    a.download = window.__CSV_FILENAME__;
-    document.body.appendChild(a);
-    a.click();
-    document.body.removeChild(a);
-    URL.revokeObjectURL(url);
-  });
+  // Download handled by direct link to gratia-transactions.zip
   const usd0 = (n) => n.toLocaleString('en-US', { style: 'currency', currency: 'USD', maximumFractionDigits: 0 });
   const usd2 = (n) => n.toLocaleString('en-US', { style: 'currency', currency: 'USD', minimumFractionDigits: 2, maximumFractionDigits: 2 });
   const num0 = (n) => n.toLocaleString('en-US', { maximumFractionDigits: 0 });
