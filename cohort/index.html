@@ -106,6 +106,17 @@ main { padding: 32px 48px; max-width: 1400px; margin: 0 auto; }
 .view { display: none; }
 .view.is-active { display: block; }
 .view-intro { color: var(--muted); font-size: 13px; margin: 0 0 20px; max-width: 900px; }
+#prep-overlay { position: fixed; inset: 0; z-index: 2000; background: rgba(3, 39, 41, 0.55); display: none; align-items: center; justify-content: center; padding: 24px; }
+#prep-overlay.is-open { display: flex; }
+.prep-card { background: white; border-radius: 14px; max-width: 640px; width: 100%; max-height: 86vh; overflow-y: auto; padding: 28px 32px; position: relative; box-shadow: 0 20px 60px rgba(3, 39, 41, 0.35); }
+.prep-card h2 { margin: 0 0 2px; color: var(--teal); font-size: 20px; }
+.prep-card h3 { color: var(--teal); font-size: 13px; text-transform: uppercase; letter-spacing: 0.05em; margin: 18px 0 6px; }
+.prep-card p { font-size: 13px; color: var(--ink); margin: 0 0 6px; }
+.prep-card ul { margin: 0; padding-left: 18px; }
+.prep-card li { font-size: 13px; margin-bottom: 5px; }
+.prep-hint { color: var(--muted); font-size: 11px; }
+.prep-close { position: absolute; top: 16px; right: 18px; border: none; background: none; font-size: 24px; line-height: 1; color: var(--muted); cursor: pointer; }
+@media print { #prep-overlay { display: none !important; } }
 .methodology { background: white; border: 1px solid var(--line); border-radius: 12px; padding: 0 24px; margin-bottom: 24px; }
 .methodology > summary { cursor: pointer; padding: 16px 0; font-size: 14px; font-weight: 700; color: var(--teal); list-style: none; }
 .methodology > summary::-webkit-details-marker { display: none; }
@@ -347,6 +358,38 @@ table.cohort tbody tr:hover { background: rgba(0, 201, 167, 0.04); }
 </main>
 
 <div id="cohort-popover" role="tooltip" aria-hidden="true"></div>
+
+<div id="prep-overlay" aria-hidden="true">
+  <div class="prep-card">
+    <button id="prep-close" class="prep-close" aria-label="Close">×</button>
+    <h2>Talking points</h2>
+    <p class="prep-hint">Internal — press í (or type "prep") to toggle, Esc to close.</p>
+    <h3>Story</h3>
+    <p>Services business with SaaS-like retention economics: revenue compounding on a concentrating, high-value enterprise base, near-zero paid acquisition, expanding gross margin.</p>
+    <h3>Lead with</h3>
+    <ul>
+      <li>Revenue climbing 2024 → 2025 → 2026 run-rate; same-customer revenue shows expansion within accounts.</li>
+      <li>Revenue per customer rising — bigger engagements, deeper penetration.</li>
+      <li>Near-zero paid CAC — growth is founder / referral / network-led.</li>
+      <li>Blended gross margin ~40–55%, trending up.</li>
+    </ul>
+    <h3>Corrections to own up front</h3>
+    <ul>
+      <li>Revenue scope: first extract was hourly-only; corrected file is all streams (revenue is higher).</li>
+      <li>Window: starts Jan 2024 — current entity; pre-2024 was a prior consulting entity.</li>
+      <li>Basis: cash, matches the payback request; reconciles to P&amp;L.</li>
+    </ul>
+    <h3>Likely questions</h3>
+    <ul>
+      <li><strong>Concentration:</strong> anchor enterprise logos; expanding multi-deployment; pipeline beyond the top account.</li>
+      <li><strong>CAC looks high:</strong> S&amp;M is one-time and overhead, not acquisition spend; normalized CAC is far lower; most growth is organic.</li>
+      <li><strong>Cash vs accrual / DSO:</strong> recent-year cash trails accrual by collection timing — enterprise net-60/90 terms, normal.</li>
+      <li><strong>April P&amp;L:</strong> still reconciling; still expect a profit.</li>
+    </ul>
+    <h3>Workbench walk order</h3>
+    <p>Revenue cohorts → lifetime revenue → retention % → dollar retention → GP cohorts → CAC (normalized). Toggle consultant view for supply-side durability.</p>
+  </div>
+</div>
 
 <footer class="page-footer">
   <p>Export date: 2026-06-01</p>
@@ -968,6 +1011,22 @@ table.cohort tbody tr:hover { background: rgba(0, 201, 167, 0.04); }
     renderWorkbench(btn.getAttribute('data-dim'));
   }));
   renderWorkbench('customer');
+
+  // Hidden talking-points overlay: type "prep" to toggle, Esc to close.
+  const prepOverlay = document.getElementById('prep-overlay');
+  let prepBuf = '';
+  const openPrep = () => prepOverlay.classList.add('is-open');
+  const closePrep = () => prepOverlay.classList.remove('is-open');
+  document.getElementById('prep-close').addEventListener('click', closePrep);
+  prepOverlay.addEventListener('click', (e) => { if (e.target === prepOverlay) closePrep(); });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') { closePrep(); return; }
+    if (e.metaKey || e.ctrlKey || e.altKey) return;
+    if (e.key === 'í') { prepOverlay.classList.toggle('is-open'); return; }
+    if (e.key.length !== 1) return;
+    prepBuf = (prepBuf + e.key.toLowerCase()).slice(-4);
+    if (prepBuf === 'prep') prepOverlay.classList.toggle('is-open');
+  });
 
   // Top-level view switch (Our view / Adjusted)
   document.querySelectorAll('.view-btn').forEach((btn) => btn.addEventListener('click', () => {
