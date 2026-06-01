@@ -341,13 +341,13 @@ table.cohort tbody tr:hover { background: rgba(0, 201, 167, 0.04); }
     <button class="wb-tab" data-dim="consultant">By consultant</button>
   </div>
 
-  <section class="panel"><h2 id="g-rev-title">Monthly revenue cohorts</h2><div class="cohort-wrap" id="g-rev"></div></section>
-  <section class="panel"><h2 id="g-revcum-title">Lifetime revenue per cohort (cumulative)</h2><div class="cohort-wrap" id="g-revcum"></div></section>
-  <section class="panel gp-only"><h2 id="g-gp-title">Monthly gross profit cohorts</h2><p class="panel-note">Blended-margin estimate (P&amp;L monthly GP% × revenue).</p><div class="cohort-wrap" id="g-gp"></div></section>
-  <section class="panel gp-only"><h2 id="g-gpcum-title">Lifetime gross profit per cohort (cumulative)</h2><div class="cohort-wrap" id="g-gpcum"></div></section>
-  <section class="panel"><h2 id="g-active-title">Active by cohort</h2><div class="cohort-wrap" id="g-active"></div></section>
-  <section class="panel"><h2 id="g-ret-title">Retention % by cohort</h2><p class="panel-note">Share of the cohort active in each later month.</p><div class="cohort-wrap" id="g-ret"></div></section>
-  <section class="panel"><h2 id="g-dollar-title">Dollar retention % by cohort</h2><p class="panel-note">Revenue in each later month vs the cohort's month-0 revenue.</p><div class="cohort-wrap" id="g-dollar"></div></section>
+  <section class="panel"><h2 id="g-rev-title">Monthly revenue cohorts</h2><canvas id="c-rev" height="120"></canvas><div class="cohort-wrap" id="g-rev"></div></section>
+  <section class="panel"><h2 id="g-revcum-title">Lifetime revenue per cohort (cumulative)</h2><canvas id="c-revcum" height="120"></canvas><div class="cohort-wrap" id="g-revcum"></div></section>
+  <section class="panel gp-only"><h2 id="g-gp-title">Monthly gross profit cohorts</h2><p class="panel-note">Blended-margin estimate (P&amp;L monthly GP% × revenue).</p><canvas id="c-gp" height="120"></canvas><div class="cohort-wrap" id="g-gp"></div></section>
+  <section class="panel gp-only"><h2 id="g-gpcum-title">Lifetime gross profit per cohort (cumulative)</h2><canvas id="c-gpcum" height="120"></canvas><div class="cohort-wrap" id="g-gpcum"></div></section>
+  <section class="panel"><h2 id="g-active-title">Active by cohort</h2><canvas id="c-active" height="120"></canvas><div class="cohort-wrap" id="g-active"></div></section>
+  <section class="panel"><h2 id="g-ret-title">Retention % by cohort</h2><p class="panel-note">Share of the cohort active in each later month.</p><canvas id="c-ret" height="120"></canvas><div class="cohort-wrap" id="g-ret"></div></section>
+  <section class="panel"><h2 id="g-dollar-title">Dollar retention % by cohort</h2><p class="panel-note">Revenue in each later month vs the cohort's month-0 revenue.</p><canvas id="c-dollar" height="120"></canvas><div class="cohort-wrap" id="g-dollar"></div></section>
 
   <section class="panel cac-only">
     <h2>CAC payback</h2>
@@ -1029,7 +1029,104 @@ table.cohort tbody tr:hover { background: rgba(0, 201, 167, 0.04); }
     else { wbPop.classList.remove('is-visible'); wbPop.setAttribute('aria-hidden', 'true'); }
   });
 
+  // Chart instances by canvas id (destroy before re-render on dim switch).
+  const wbCharts = {};
+  const cohortColor = (i, n, a) => 'hsla(' + Math.round((i / Math.max(n, 1)) * 320) + ', 60%, 52%, ' + a + ')';
+  const addMonths = (ymStr, k) => {
+    const [y, m] = ymStr.split('-').map(Number);
+    const t = y * 12 + (m - 1) + k;
+    return Math.floor(t / 12) + '-' + String((t % 12) + 1).padStart(2, '0');
+  };
+  function makeChart(id, cfg) {
+    if (wbCharts[id]) wbCharts[id].destroy();
+    const el = document.getElementById(id);
+    if (el) wbCharts[id] = new Chart(el, cfg);
+  }
+
+  // Stacked-area chart over calendar months (revenue | gp | active | revenue_cum | gp_cum)
+  function renderArea(id, dim, mode) {
+    const { cohorts, cell, maxSince } = buildCohort(dim);
+    const calSet = new Set();
+    for (const cm of cohorts) for (let s = 0; s <= maxSince; s++) if (cell.get(cm + '|' + s)) calSet.add(addMonths(cm, s));
+    const labels = [...calSet].sort();
+    const cumulative = mode === 'revenue_cum' || mode === 'gp_cum';
+    const field = mode === 'gp' || mode === 'gp_cum' ? 'gp' : mode === 'active' ? 'ids' : 'rev';
+    const datasets = cohorts.map((cm, i) => ({
+      label: cm,
+      data: labels.map((lm) => {
+        const s = monthsBetween(cm, lm);
+        if (s < 0) return 0;
+        if (cumulative) {
+          let sum = 0;
+          for (let k = 0; k <= s; k++) { const ck = cell.get(cm + '|' + k); if (ck) sum += ck[field]; }
+          return sum;
+        }
+        const c = cell.get(cm + '|' + s);
+        if (!c) return 0;
+        return field === 'ids' ? c.ids.size : c[field];
+      }),
+      backgroundColor: cohortColor(i, cohorts.length, 0.5),
+      borderColor: cohortColor(i, cohorts.length, 0.85),
+      borderWidth: 0.5,
+      fill: true,
+      pointRadius: 0,
+      tension: 0.25,
+    }));
+    const money = field !== 'ids';
+    makeChart(id, {
+      type: 'line',
+      data: { labels, datasets },
+      options: {
+        plugins: { legend: { display: false }, tooltip: { enabled: false } },
+        interaction: { mode: 'nearest' },
+        scales: {
+          x: { stacked: true, ticks: { maxTicksLimit: 12 } },
+          y: { stacked: true, ticks: { callback: (v) => (money ? usd0(v) : num0(v)) } },
+        },
+      },
+    });
+  }
+
+  // Multi-line chart indexed by months-since (retention | dollar)
+  function renderLines(id, dim, mode) {
+    const { cohorts, size, cell, maxSince } = buildCohort(dim);
+    const labels = [];
+    for (let s = 0; s <= maxSince; s++) labels.push('M+' + s);
+    const datasets = cohorts.map((cm, i) => ({
+      label: cm,
+      data: labels.map((_, s) => {
+        const c = cell.get(cm + '|' + s);
+        if (mode === 'retention') return c ? (c.ids.size / (size.get(cm) || 1)) * 100 : null;
+        const c0 = cell.get(cm + '|0');
+        return c && c0 && c0.rev ? (c.rev / c0.rev) * 100 : null;
+      }),
+      borderColor: cohortColor(i, cohorts.length, 0.9),
+      backgroundColor: cohortColor(i, cohorts.length, 0.9),
+      borderWidth: 1.5,
+      pointRadius: 0,
+      tension: 0.25,
+      spanGaps: false,
+    }));
+    makeChart(id, {
+      type: 'line',
+      data: { labels, datasets },
+      options: {
+        plugins: { legend: { display: false }, tooltip: { enabled: false } },
+        scales: { y: { ticks: { callback: (v) => v + '%' } } },
+      },
+    });
+  }
+
   function renderWorkbench(dim) {
+    renderArea('c-rev', dim, 'revenue');
+    renderArea('c-revcum', dim, 'revenue_cum');
+    if (hasPL) {
+      renderArea('c-gp', dim, 'gp');
+      renderArea('c-gpcum', dim, 'gp_cum');
+    }
+    renderArea('c-active', dim, 'active');
+    renderLines('c-ret', dim, 'retention');
+    renderLines('c-dollar', dim, 'dollar');
     renderGrid('g-rev', 'g-rev-title', 'Monthly revenue cohorts — by ' + dim, dim, 'revenue');
     renderGrid('g-revcum', 'g-revcum-title', 'Lifetime revenue per cohort — by ' + dim, dim, 'revenue_cum');
     if (hasPL) {
