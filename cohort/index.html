@@ -974,6 +974,12 @@ table.cohort tbody tr:hover { background: rgba(0, 201, 167, 0.04); }
     let h = '<table class="utilization"><thead><tr><th>Cohort</th><th>New customers</th><th>S&amp;M (raw)</th><th>S&amp;M (norm)</th><th>CAC raw</th><th>CAC norm</th><th>Payback raw</th><th>Payback norm</th></tr></thead><tbody>';
     for (const cm of cohorts) {
       const n = size.get(cm) || 0;
+      // S&M only defined for months the P&L covers. Absent ≠ zero spend.
+      const covered = Object.prototype.hasOwnProperty.call(SM, cm);
+      if (!covered) {
+        h += '<tr><td>' + cm + '</td><td>' + num0(n) + '</td><td colspan="6" style="text-align:left;color:#5b7374">n/a — outside P&amp;L coverage</td></tr>';
+        continue;
+      }
       const smRaw = SM[cm] || 0;
       const smN = (SM_NORM && SM_NORM[cm]) || 0;
       const cacRaw = n ? smRaw / n : 0;
