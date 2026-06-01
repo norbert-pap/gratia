@@ -96,7 +96,7 @@ main { padding: 32px 48px; max-width: 1400px; margin: 0 auto; }
 .panel-note { color: var(--muted); font-size: 12px; margin: 4px 0 16px; }
 .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
 .section-divider { margin: 40px 0 4px; font-size: 20px; font-weight: 700; color: var(--teal); border-top: 2px solid var(--line); padding-top: 28px; }
-.section-intro { color: var(--muted); font-size: 13px; margin: 0 0 20px; max-width: 900px; }
+.section-intro { color: var(--muted); font-size: 13px; margin: 0 0 20px; }
 .wb-tabs { display: flex; gap: 8px; margin-bottom: 16px; }
 .wb-tab { font-family: inherit; font-size: 13px; font-weight: 600; padding: 8px 16px; border-radius: 8px; border: 1px solid var(--line); background: white; color: var(--muted); cursor: pointer; }
 .wb-tab.is-active { background: var(--teal); color: white; border-color: var(--teal); }
@@ -105,7 +105,7 @@ main { padding: 32px 48px; max-width: 1400px; margin: 0 auto; }
 .view-btn.is-active { color: var(--teal); border-bottom-color: var(--mint); }
 .view { display: none; }
 .view.is-active { display: block; }
-.view-intro { color: var(--muted); font-size: 13px; margin: 0 0 20px; max-width: 900px; }
+.view-intro { color: var(--muted); font-size: 13px; margin: 0 0 20px; }
 #prep-overlay { position: fixed; inset: 0; z-index: 2000; background: rgba(3, 39, 41, 0.55); display: none; align-items: center; justify-content: center; padding: 24px; }
 #prep-overlay.is-open { display: flex; }
 .prep-card { background: white; border-radius: 14px; max-width: 640px; width: 100%; max-height: 86vh; overflow-y: auto; padding: 28px 32px; position: relative; box-shadow: 0 20px 60px rgba(3, 39, 41, 0.35); }
@@ -124,7 +124,7 @@ main { padding: 32px 48px; max-width: 1400px; margin: 0 auto; }
 .methodology[open] > summary::before { content: '▾ '; }
 .methodology-body { padding-bottom: 20px; font-size: 13px; color: var(--ink); }
 .methodology-body h3 { font-size: 13px; color: var(--teal); margin: 18px 0 8px; }
-.methodology-body p { color: var(--muted); max-width: 860px; }
+.methodology-body p { color: var(--muted); }
 .meth-foot { font-size: 12px; }
 .meth-table { border-collapse: collapse; width: 100%; font-size: 12px; margin: 4px 0; }
 .meth-table th, .meth-table td { padding: 6px 10px; border-bottom: 1px solid var(--line); text-align: left; }
@@ -246,7 +246,7 @@ table.cohort tbody tr:hover { background: rgba(0, 201, 167, 0.04); }
           <tr><td>403009 Community Subscription</td><td>Included</td></tr>
           <tr><td>405000 Investor Discounts</td><td>Netted into revenue (line-prorated)</td></tr>
           <tr><td>405002 Customer Credit</td><td>Netted into revenue (line-prorated)</td></tr>
-          <tr><td>406000 Project Expense Income</td><td>Excluded — pass-through expense reimbursement</td></tr>
+          <tr><td>406000 Project Expense Income</td><td>Excluded (pass-through expense reimbursement)</td></tr>
           <tr><td>404000 Reimbursed Expenses, other non-revenue</td><td>Excluded</td></tr>
         </tbody>
       </table>
@@ -259,7 +259,7 @@ table.cohort tbody tr:hover { background: rgba(0, 201, 167, 0.04); }
           <tr><td>Basis</td><td>Transaction-dated</td><td>Accrual (cash extract available for payback)</td></tr>
           <tr><td>Window</td><td>All time (incl. pre-2024)</td><td>Jan 2024+ (current entity; pre-2024 was a prior consulting LLC)</td></tr>
           <tr><td>Hours billed</td><td>Included</td><td>Included</td></tr>
-          <tr><td>Gross profit</td><td>—</td><td>Blended monthly P&amp;L margin × revenue</td></tr>
+          <tr><td>Gross profit</td><td>n/a</td><td>Blended monthly P&amp;L margin × revenue</td></tr>
           <tr><td>CAC</td><td>S&amp;M ÷ new customers (raw)</td><td>Raw + normalized (excl. one-time brand project); most acquisition is founder/referral-led</td></tr>
         </tbody>
       </table>
@@ -273,7 +273,7 @@ table.cohort tbody tr:hover { background: rgba(0, 201, 167, 0.04); }
           <tr><td>2026 (Jan–Apr)</td><td>$903K</td><td>$810K</td></tr>
         </tbody>
       </table>
-      <p class="meth-foot">Higher across the board here — the first extract captured only hourly (PAYG) revenue; this adds Packages, Fixed Fee, Placement and Subscriptions. Accrual recognizes revenue when earned; a cash extract is available for payback-timing analysis. May 2026 is excluded (not enough data yet); the first-extract 2026 figure still includes it.</p>
+      <p class="meth-foot">Higher across the board: the first extract captured only hourly (PAYG) revenue. This adds Packages, Fixed Fee, Placement and Subscriptions. Accrual recognizes revenue when earned; a cash extract is available for payback timing. May 2026 is excluded (not enough data yet); the first-extract 2026 figure still includes it.</p>
     </div>
   </details>
 
@@ -283,7 +283,7 @@ table.cohort tbody tr:hover { background: rgba(0, 201, 167, 0.04); }
   </nav>
 
   <div id="view-ours" class="view is-active">
-  <p class="view-intro">How we read the business: revenue trend, concentration, retention, and services-native cuts (revenue per client, repeat rate, same-customer year-over-year).</p>
+  <p class="view-intro">Revenue trend, concentration, retention, and services-native cuts: revenue per client, repeat rate, same-customer year over year.</p>
 
   <section class="panel">
     <h2>Revenue over time</h2>
@@ -334,7 +334,7 @@ table.cohort tbody tr:hover { background: rgba(0, 201, 167, 0.04); }
   </div><!-- /view-ours -->
 
   <div id="view-his" class="view">
-  <p class="view-intro">The investor's layer-cake cohort cuts, recreated on the corrected dataset (accrual, all streams). Rows = cohort (month of first transaction), columns = months since. Hover a cell for the IDs in it. GP cohorts apply the monthly P&amp;L gross-margin to revenue (blended estimate, not line-level cost).</p>
+  <p class="view-intro">The investor's layer-cake cohort cuts, recreated on the corrected dataset (accrual, all streams). Rows are cohorts (month of first transaction); columns are months since. Hover a cell for the IDs in it. GP cohorts apply the monthly P&amp;L gross margin to revenue (blended estimate, not line-level cost).</p>
 
   <div class="wb-tabs" id="wb-tabs">
     <button class="wb-tab is-active" data-dim="customer">By customer</button>
@@ -351,7 +351,7 @@ table.cohort tbody tr:hover { background: rgba(0, 201, 167, 0.04); }
 
   <section class="panel cac-only">
     <h2>CAC payback</h2>
-    <p class="panel-note">CAC = sales &amp; marketing spend in a cohort's first month ÷ new customers that month. Payback = months until cumulative gross profit per customer covers CAC. "Normalized" excludes the one-off Brand Strategy line. CAC here is illustrative — most acquisition is founder/referral-led, so paid CAC overstates true cost.</p>
+    <p class="panel-note">CAC = sales &amp; marketing spend in a cohort's first month ÷ new customers that month. Payback = months until cumulative gross profit per customer covers CAC. "Normalized" excludes the one-off Brand Strategy line. CAC here is illustrative: most acquisition is founder and referral led, so paid CAC overstates true cost.</p>
     <div id="cac-wrap"></div>
   </section>
   </div><!-- /view-his -->
@@ -363,27 +363,27 @@ table.cohort tbody tr:hover { background: rgba(0, 201, 167, 0.04); }
   <div class="prep-card">
     <button id="prep-close" class="prep-close" aria-label="Close">×</button>
     <h2>Talking points</h2>
-    <p class="prep-hint">Internal — press í (or type "prep") to toggle, Esc to close.</p>
+    <p class="prep-hint">Internal. Press í (or type "prep") to toggle, Esc to close.</p>
     <h3>Story</h3>
     <p>Services business with SaaS-like retention economics: revenue compounding on a concentrating, high-value enterprise base, near-zero paid acquisition, expanding gross margin.</p>
     <h3>Lead with</h3>
     <ul>
       <li>Revenue climbing 2024 → 2025 → 2026 run-rate; same-customer revenue shows expansion within accounts.</li>
-      <li>Revenue per customer rising — bigger engagements, deeper penetration.</li>
-      <li>Near-zero paid CAC — growth is founder / referral / network-led.</li>
+      <li>Revenue per customer rising: bigger engagements, deeper penetration.</li>
+      <li>Near-zero paid CAC; growth is founder, referral and network led.</li>
       <li>Blended gross margin ~40–55%, trending up.</li>
     </ul>
     <h3>Corrections to own up front</h3>
     <ul>
       <li>Revenue scope: first extract was hourly-only; corrected file is all streams (revenue is higher).</li>
-      <li>Window: starts Jan 2024 — current entity; pre-2024 was a prior consulting entity.</li>
+      <li>Window: starts Jan 2024 (current entity). Pre-2024 was a prior consulting entity.</li>
       <li>Basis: accrual (revenue when earned); cash extract available for payback timing. Reconciles to P&amp;L.</li>
     </ul>
     <h3>Likely questions</h3>
     <ul>
       <li><strong>Concentration:</strong> anchor enterprise logos; expanding multi-deployment; pipeline beyond the top account.</li>
       <li><strong>CAC looks high:</strong> S&amp;M is one-time and overhead, not acquisition spend; normalized CAC is far lower; most growth is organic.</li>
-      <li><strong>Cash vs accrual / DSO:</strong> recent-year cash trails accrual by collection timing — enterprise net-60/90 terms, normal.</li>
+      <li><strong>Cash vs accrual / DSO:</strong> recent-year cash trails accrual by collection timing. Enterprise net-60/90 terms, normal.</li>
       <li><strong>April P&amp;L:</strong> still reconciling; still expect a profit.</li>
     </ul>
     <h3>Workbench walk order</h3>
@@ -568,7 +568,7 @@ table.cohort tbody tr:hover { background: rgba(0, 201, 167, 0.04); }
       if (cellSet && cellSet.size > 0) {
         const cellKey = 'p' + (popKey++);
         popoverIndex.set(cellKey, {
-          title: 'Cohort ' + cm + ' — M+' + i,
+          title: 'Cohort ' + cm + ', M+' + i,
           meta: cellSet.size + ' of ' + members.size + ' active in this period · ' + usd0(v),
           ids: idChips(cellSet),
         });
@@ -978,7 +978,7 @@ table.cohort tbody tr:hover { background: rgba(0, 201, 167, 0.04); }
       // S&M only defined for months the P&L covers. Absent ≠ zero spend.
       const covered = Object.prototype.hasOwnProperty.call(SM, cm);
       if (!covered) {
-        h += '<tr><td>' + cm + '</td><td>' + num0(n) + '</td><td colspan="6" style="text-align:left;color:#5b7374">n/a — outside P&amp;L coverage</td></tr>';
+        h += '<tr><td>' + cm + '</td><td>' + num0(n) + '</td><td colspan="6" style="text-align:left;color:#5b7374">n/a (outside P&amp;L coverage)</td></tr>';
         continue;
       }
       const smRaw = SM[cm] || 0;
@@ -986,14 +986,14 @@ table.cohort tbody tr:hover { background: rgba(0, 201, 167, 0.04); }
       const cacRaw = n ? smRaw / n : 0;
       const cacN = n ? smN / n : 0;
       let cum = 0;
-      let pbRaw = '—';
-      let pbN = '—';
+      let pbRaw = '-';
+      let pbN = '-';
       for (let s = 0; s <= 36; s++) {
         const c = cell.get(cm + '|' + s);
         if (c) cum += c.gp;
         const perCust = n ? cum / n : 0;
-        if (pbRaw === '—' && cacRaw > 0 && perCust >= cacRaw) pbRaw = s + ' mo';
-        if (pbN === '—' && cacN > 0 && perCust >= cacN) pbN = s + ' mo';
+        if (pbRaw === '-' && cacRaw > 0 && perCust >= cacRaw) pbRaw = s + ' mo';
+        if (pbN === '-' && cacN > 0 && perCust >= cacN) pbN = s + ' mo';
       }
       h += '<tr><td>' + cm + '</td><td>' + num0(n) + '</td><td>' + usd0(smRaw) + '</td><td>' + usd0(smN) + '</td><td>' + usd0(cacRaw) + '</td><td>' + usd0(cacN) + '</td><td>' + pbRaw + '</td><td>' + pbN + '</td></tr>';
     }
@@ -1031,15 +1031,15 @@ table.cohort tbody tr:hover { background: rgba(0, 201, 167, 0.04); }
   });
 
   function renderWorkbench(dim) {
-    renderGrid('g-rev', 'g-rev-title', 'Monthly revenue cohorts — by ' + dim, dim, 'revenue');
-    renderGrid('g-revcum', 'g-revcum-title', 'Lifetime revenue per cohort — by ' + dim, dim, 'revenue_cum');
+    renderGrid('g-rev', 'g-rev-title', 'Monthly revenue cohorts, by ' + dim, dim, 'revenue');
+    renderGrid('g-revcum', 'g-revcum-title', 'Lifetime revenue per cohort, by ' + dim, dim, 'revenue_cum');
     if (hasPL) {
-      renderGrid('g-gp', 'g-gp-title', 'Monthly gross profit cohorts — by ' + dim, dim, 'gp');
-      renderGrid('g-gpcum', 'g-gpcum-title', 'Lifetime gross profit per cohort — by ' + dim, dim, 'gp_cum');
+      renderGrid('g-gp', 'g-gp-title', 'Monthly gross profit cohorts, by ' + dim, dim, 'gp');
+      renderGrid('g-gpcum', 'g-gpcum-title', 'Lifetime gross profit per cohort, by ' + dim, dim, 'gp_cum');
     }
     renderGrid('g-active', 'g-active-title', 'Active ' + dim + 's by cohort', dim, 'active');
-    renderGrid('g-ret', 'g-ret-title', 'Retention % by cohort — by ' + dim, dim, 'retention');
-    renderGrid('g-dollar', 'g-dollar-title', 'Dollar retention % by cohort — by ' + dim, dim, 'dollar');
+    renderGrid('g-ret', 'g-ret-title', 'Retention % by cohort, by ' + dim, dim, 'retention');
+    renderGrid('g-dollar', 'g-dollar-title', 'Dollar retention % by cohort, by ' + dim, dim, 'dollar');
   }
   document.querySelectorAll('.wb-tab').forEach((btn) => btn.addEventListener('click', () => {
     document.querySelectorAll('.wb-tab').forEach((b) => b.classList.remove('is-active'));
