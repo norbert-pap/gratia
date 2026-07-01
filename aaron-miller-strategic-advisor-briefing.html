@@ -1,0 +1,1706 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gratia: Strategic Advisor Briefing for Aaron Miller</title>
+<script src="auth.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --bg: #01191A;
+      --bg-light: #04383A;
+      --bg-card: rgba(255, 255, 255, 0.04);
+      --bg-card-hover: rgba(255, 255, 255, 0.06);
+      --text: #FFFFFF;
+      --text-secondary: rgba(255, 255, 255, 0.7);
+      --text-muted: rgba(255, 255, 255, 0.35);
+      --mint: #23DD9C;
+      --mint-rgb: 35, 221, 156;
+      --mint-subtle: rgba(35, 221, 156, 0.10);
+      --border: rgba(255, 255, 255, 0.08);
+      --border-light: rgba(255, 255, 255, 0.12);
+      --light-bg: #F2F5F5;
+      --light-text: #01191A;
+      --light-text-secondary: rgba(0, 0, 0, 0.6);
+      --light-border: #E0E5E5;
+      --font: 'DM Sans', system-ui, sans-serif;
+      --font-heading: 'DM Sans', 'DM Sans', system-ui, serif;
+      --radius-deck: 12px;
+      --radius-card: 12px;
+      --radius-table: 10px;
+      --radius-btn: 10px;
+      --heading-tracking: -0.5px;
+      --score-high-bg: rgba(35, 221, 156, 0.22);
+      --score-mid-bg: rgba(248, 146, 15, 0.20);
+      --score-low-bg: rgba(204, 53, 53, 0.16);
+      --score-na-bg: rgba(0, 0, 0, 0.05);
+      --bar-up: rgba(35, 221, 156, 0.85);
+      --bar-down: rgba(204, 53, 53, 0.8);
+      --bar-neutral: #04383A;
+    }
+
+    html, body {
+      width: 100%; height: 100%;
+      overflow: hidden;
+      background: #000;
+      color: var(--text);
+      font-family: var(--font);
+      -webkit-font-smoothing: antialiased;
+    }
+
+    .deck {
+      position: absolute;
+      width: 1280px; height: 720px;
+      transform-origin: 0 0;
+      background: radial-gradient(ellipse at 50% 20%, var(--bg-light) 0%, var(--bg) 70%);
+      border-radius: var(--radius-deck);
+      overflow: hidden;
+    }
+
+    .progress {
+      position: absolute; top: 0; left: 0; height: 2px;
+      background: linear-gradient(90deg, var(--mint), var(--mint));
+      transition: width 0.5s cubic-bezier(0.22, 1, 0.36, 1);
+      z-index: 100;
+    }
+
+    .counter {
+      position: absolute; bottom: 24px; left: 56px;
+      font-size: 12px; font-weight: 500; color: var(--text-muted);
+      letter-spacing: 0.04em; z-index: 50;
+    }
+
+    .nav-arrows {
+      position: absolute; bottom: 24px; right: 32px;
+      display: flex; gap: 8px; z-index: 50;
+    }
+
+    .nav-btn {
+      width: 36px; height: 36px;
+      border-radius: var(--radius-btn); border: 1px solid var(--border-light);
+      background: var(--bg-card); color: var(--text-secondary);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; font-family: var(--font); font-size: 16px;
+      transition: background 0.2s ease, border-color 0.2s ease;
+    }
+
+    .nav-btn:hover { background: var(--mint-subtle); border-color: var(--mint); color: var(--text); }
+
+    .slide {
+      position: absolute; inset: 0;
+      display: flex; align-items: flex-start; justify-content: flex-start;
+      /* Extra top clearance vs. the 56px sides/bottom: the persistent .brand
+         corner logo (top: 32px, ~20px tall) needs room to breathe above
+         left-aligned eyebrow/title content — 56px alone left only ~4px. */
+      padding: 76px 56px 56px;
+      opacity: 0; transition: opacity 0.5s ease;
+      pointer-events: none; overflow: hidden;
+    }
+
+    .slide.active { opacity: 1; pointer-events: auto; }
+
+    /* Overflow debug — only visible when body.gratia-debug-overflow is set
+       by the runtime (parent posts gratia.set-debug for admin users). */
+    body.gratia-debug-overflow .slide[data-overflowing="true"] {
+      outline: 2px dashed rgba(220, 38, 38, 0.75);
+      outline-offset: -2px;
+    }
+    body.gratia-debug-overflow .slide[data-overflowing="true"]::before {
+      content: 'OVERFLOW ' attr(data-overflow-info);
+      position: absolute; top: 8px; left: 8px;
+      padding: 4px 8px;
+      background: rgba(220, 38, 38, 0.92); color: #fff;
+      font: 600 11px/1 ui-monospace, SFMono-Regular, Menlo, monospace;
+      letter-spacing: 0.06em; border-radius: 3px;
+      z-index: 1000; pointer-events: none;
+    }
+
+    
+    .slide--light { background: var(--light-bg); color: var(--light-text); }
+    .slide--light h1 { color: var(--light-text); }
+    .slide--light .subtitle { color: var(--light-text-secondary); }
+    .slide--light .bullet { color: var(--light-text-secondary); }
+    .slide--light .card { background: #FFFFFF; border-color: var(--light-border); }
+    .slide--light .card h3 { color: var(--light-text); }
+    .slide--light .card p { color: var(--light-text-secondary); }
+    .slide--light .card.highlight { background: var(--mint-subtle); border-color: var(--mint); }
+
+    .slide-inner { position: relative; width: 100%; max-width: 960px; }
+    .slide-inner--wide { max-width: 1168px; }
+
+    h1 {
+      font-family: var(--font-heading);
+      font-size: 36px; font-weight: 600; line-height: 1.15;
+      letter-spacing: var(--heading-tracking); margin-bottom: 12px;
+    }
+
+    .subtitle {
+      font-size: 17px; font-weight: 300;
+      color: var(--text-secondary); line-height: 1.5;
+      max-width: 680px; margin-bottom: 28px;
+    }
+
+    .eyebrow {
+      font-size: 11px; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.1em; color: var(--mint); margin-bottom: 10px;
+    }
+
+    .bullets { display: flex; flex-direction: column; gap: 10px; margin-top: 12px; }
+    .bullet { display: flex; gap: 12px; font-size: 17px; font-weight: 400; line-height: 1.5; color: var(--text-secondary); }
+    .bullet::before {
+      content: ""; flex-shrink: 0;
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--mint); margin-top: 9px;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(var(--col-count, 3), minmax(0, 1fr));
+      gap: 14px; margin-top: 12px;
+      align-items: stretch;
+    }
+    .cards--2 { --col-count: 2; }
+    .cards--3 { --col-count: 3; }
+    .cards--4 { --col-count: 4; }
+
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border); border-radius: var(--radius-card);
+      padding: 18px;
+      display: flex; flex-direction: column; gap: 6px;
+      transition: border-color 0.3s ease, background 0.3s ease;
+    }
+    .card.highlight { border-color: var(--mint); background: var(--mint-subtle); }
+    .card h3 { font-size: 17px; font-weight: 600; margin: 0; line-height: 1.3; }
+    .card p { font-size: 15px; font-weight: 300; color: var(--text-secondary); line-height: 1.55; margin: 0; }
+
+    .card-icon {
+      width: 36px; height: 36px; border-radius: 10px;
+      background: var(--mint-subtle); color: var(--mint);
+      display: inline-flex; align-items: center; justify-content: center;
+      font-size: 18px; font-weight: 700; line-height: 1;
+      margin-bottom: 4px;
+    }
+    .slide--dark .card-icon { background: rgba(var(--mint-rgb), 0.14); }
+
+    .card-metric {
+      display: flex; align-items: baseline; flex-wrap: wrap; gap: 6px;
+      margin-bottom: 2px;
+      font-variant-numeric: tabular-nums;
+    }
+    .card-metric-value {
+      font-family: var(--font-heading);
+      font-size: 30px; font-weight: 700; line-height: 1;
+      letter-spacing: -1px; color: var(--light-text);
+    }
+    .slide--dark .card-metric-value { color: var(--text); }
+    .card-metric-unit {
+      font-size: 14px; font-weight: 500; letter-spacing: -0.01em;
+      color: var(--light-text-secondary);
+    }
+    .slide--dark .card-metric-unit { color: var(--text-secondary); }
+    .card-metric .trend { margin-left: 4px; font-size: 11px; padding: 3px 8px; }
+
+    .card--profile { align-items: flex-start; gap: 8px; }
+    .card--profile .card-image {
+      width: 64px; height: 64px; border-radius: 50%;
+      object-fit: cover; border: 1px solid var(--light-border);
+      background: var(--mint-subtle);
+      margin-bottom: 4px;
+    }
+    .slide--dark .card--profile .card-image { border-color: var(--border); }
+    .card-subtitle {
+      font-size: 11px; font-weight: 500; line-height: 1.3;
+      color: var(--light-text-secondary);
+      margin: 0; letter-spacing: 0.02em;
+    }
+    .slide--dark .card-subtitle { color: var(--text-muted); }
+
+    .card-tags {
+      display: flex; flex-wrap: wrap; gap: 4px;
+      margin-top: 6px;
+    }
+    .card-tag {
+      font-size: 10px; font-weight: 500; line-height: 1.2;
+      padding: 3px 8px; border-radius: 999px;
+      /* Full-strength accent text on the tinted pill reads as near-invisible on
+         light backgrounds (mint-on-mint-tint) — darken it for legible contrast. */
+      background: var(--mint-subtle); color: color-mix(in srgb, var(--mint) 45%, black);
+      letter-spacing: 0.01em;
+      white-space: nowrap;
+    }
+    .slide--dark .card-tag { background: rgba(var(--mint-rgb), 0.14); color: var(--mint); }
+
+    /* cover */
+    .cover {
+      align-items: center; justify-content: center;
+      padding: 80px; text-align: left;
+    }
+    .cover .slide-inner { max-width: 780px; }
+    .cover h1 { font-size: 48px; letter-spacing: calc(var(--heading-tracking) * 3); margin-bottom: 12px; }
+    .cover .subtitle { font-size: 20px; margin-bottom: 16px; }
+    .cover .cover-desc { font-size: 15px; font-weight: 300; color: var(--text-secondary); line-height: 1.6; max-width: 560px; }
+
+    /* closing */
+    .closing {
+      align-items: center; justify-content: center;
+      text-align: center; padding: 80px;
+    }
+    .closing .slide-inner { text-align: center; }
+    .closing h1 { font-size: 56px; letter-spacing: calc(var(--heading-tracking) * 3); margin-bottom: 12px; }
+    .closing .subtitle { font-size: 18px; color: var(--text-secondary); max-width: none; margin: 0 auto; }
+
+    /* chapter divider */
+    .chapter {
+      align-items: center; justify-content: flex-start;
+      padding: 80px 80px;
+    }
+    .chapter .slide-inner { max-width: 820px; }
+    .chapter h1 { font-size: 44px; letter-spacing: calc(var(--heading-tracking) * 2); margin-bottom: 14px; }
+    .chapter .subtitle { font-size: 16px; max-width: 640px; }
+
+    /* big text */
+    .big-text {
+      align-items: center; justify-content: center;
+      text-align: center; padding: 80px;
+    }
+    .big-text .slide-inner { text-align: center; max-width: 880px; margin: 0 auto; }
+    .big-text .eyebrow { display: inline-block; margin: 0 auto 18px; }
+    .big-text-statement {
+      font-family: var(--font-heading);
+      font-size: 38px; font-weight: 600;
+      line-height: 1.15; letter-spacing: calc(var(--heading-tracking) * 1.6);
+      color: var(--light-text);
+      margin: 0 auto 14px;
+    }
+    .slide--dark .big-text-statement { color: var(--text); }
+    .big-text-attribution {
+      font-size: 13px; font-weight: 400;
+      color: var(--light-text-secondary); letter-spacing: 0.02em;
+    }
+    .slide--dark .big-text-attribution { color: var(--text-muted); }
+
+    /* two-column */
+    .two-column {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 20px; align-items: stretch;
+      margin-top: 12px;
+    }
+    .two-column-arrow {
+      align-self: center;
+      font-size: 28px; font-weight: 700;
+      color: var(--mint);
+    }
+    .column {
+      background: #FFFFFF;
+      border: 1px solid var(--light-border); border-radius: var(--radius-card);
+      padding: 20px; display: flex; flex-direction: column; gap: 10px;
+    }
+    .slide--dark .column { background: var(--bg-card); border-color: var(--border); }
+    .column h3 { font-size: 17px; font-weight: 600; line-height: 1.2; color: var(--light-text); }
+    .slide--dark .column h3 { color: var(--text); }
+    .column--problem h3 { color: #CC3535; }
+    .column--solution h3 { color: var(--mint); }
+    .column-items { display: flex; flex-direction: column; gap: 8px; }
+    .column-item {
+      font-size: 16px; font-weight: 400; line-height: 1.5;
+      color: var(--light-text-secondary);
+      padding-left: 14px; position: relative;
+    }
+    .slide--dark .column-item { color: var(--text-secondary); }
+    .column-item::before {
+      content: ""; position: absolute; left: 0; top: 8px;
+      width: 5px; height: 5px; border-radius: 50%;
+      background: var(--mint);
+    }
+    .column--problem .column-item::before { background: #CC3535; }
+    .column--solution .column-item::before { background: var(--mint); }
+
+    /* table */
+    .deck-table {
+      width: 100%; border-collapse: collapse;
+      margin-top: 12px; font-size: 15px; font-weight: 400;
+      background: #FFFFFF;
+      border: 1px solid var(--light-border); border-radius: var(--radius-table);
+      overflow: hidden;
+    }
+    .slide--dark .deck-table { background: var(--bg-card); border-color: var(--border); }
+    .deck-table th, .deck-table td {
+      padding: 10px 14px; text-align: left;
+      border-top: 1px solid var(--light-border);
+      color: var(--light-text-secondary);
+      line-height: 1.4; vertical-align: top;
+    }
+    .slide--dark .deck-table th, .slide--dark .deck-table td {
+      border-top-color: var(--border); color: var(--text-secondary);
+    }
+    .deck-table thead th {
+      font-size: 11px; font-weight: 600;
+      color: var(--light-text);
+      background: transparent; border-top: none;
+      letter-spacing: 0.02em;
+    }
+    .slide--dark .deck-table thead th { color: var(--text); }
+    .deck-table tbody th {
+      font-weight: 600; color: var(--light-text);
+    }
+    .slide--dark .deck-table tbody th { color: var(--text); }
+
+    /* score matrix — heat-mapped weighted prioritization grid */
+    .score-matrix {
+      width: 100%; border-collapse: separate; border-spacing: 3px;
+      margin-top: 10px; font-size: 13px;
+    }
+    .score-matrix thead th {
+      font-size: 10px; font-weight: 600; letter-spacing: 0.02em;
+      color: var(--light-text-secondary); text-align: center;
+      padding: 4px 6px; vertical-align: bottom; line-height: 1.2;
+    }
+    .slide--dark .score-matrix thead th { color: var(--text-secondary); }
+    .score-matrix-weight { display: block; font-weight: 500; opacity: 0.7; margin-top: 2px; }
+    .score-matrix-agg { color: var(--light-text); font-weight: 700; }
+    .slide--dark .score-matrix-agg { color: var(--text); }
+    .score-matrix tbody th {
+      text-align: left; font-weight: 600; font-size: 13px;
+      color: var(--light-text); padding: 4px 10px 4px 0; white-space: nowrap;
+    }
+    .slide--dark .score-matrix tbody th { color: var(--text); }
+    .score-cell {
+      text-align: center; font-weight: 600; font-variant-numeric: tabular-nums;
+      padding: 6px 8px; border-radius: 6px; color: var(--light-text); min-width: 34px;
+    }
+    .slide--dark .score-cell { color: var(--text); }
+    .score-cell--high { background: var(--score-high-bg); }
+    .score-cell--mid { background: var(--score-mid-bg); }
+    .score-cell--low { background: var(--score-low-bg); }
+    .score-cell--na { background: var(--score-na-bg); color: var(--light-text-secondary); font-weight: 400; }
+    .slide--dark .score-cell--na { color: var(--text-muted); }
+    .score-total, .score-rank {
+      text-align: center; font-weight: 700; font-variant-numeric: tabular-nums;
+      padding: 6px 8px; color: var(--light-text);
+    }
+    .slide--dark .score-total, .slide--dark .score-rank { color: var(--text); }
+    .score-row--highlight th, .score-row--highlight .score-total { color: var(--mint); }
+    .score-legend {
+      display: flex; gap: 16px; margin-top: 12px; flex-wrap: wrap;
+      font-size: 11px; color: var(--light-text-secondary);
+    }
+    .slide--dark .score-legend { color: var(--text-secondary); }
+    .score-legend-item { display: inline-flex; align-items: center; gap: 6px; }
+    .score-chip { width: 12px; height: 12px; border-radius: 3px; display: inline-block; }
+    .score-source { margin-top: 10px; font-size: 11px; color: var(--light-text-secondary); font-style: italic; }
+    .slide--dark .score-source { color: var(--text-muted); }
+
+    /* bubble matrix — plotted positioning map */
+    .bubble-plot { width: 100%; margin-top: 6px; }
+    .bubble-plot svg { width: 100%; height: auto; max-height: 430px; display: block; overflow: visible; }
+    .bubble-axis { stroke: var(--light-border); stroke-width: 1.5; }
+    .slide--dark .bubble-axis { stroke: var(--border-light); }
+    .bubble-axis-mid { stroke: var(--light-border); stroke-width: 1; stroke-dasharray: 4 5; opacity: 0.7; }
+    .slide--dark .bubble-axis-mid { stroke: var(--border-light); }
+    .bubble-axis-title { fill: var(--light-text); font-size: 15px; font-weight: 600; }
+    .slide--dark .bubble-axis-title { fill: var(--text); }
+    .bubble-end { fill: var(--light-text-secondary); font-size: 12px; font-weight: 500; }
+    .slide--dark .bubble-end { fill: var(--text-secondary); }
+    .bubble-label { fill: var(--light-text); font-size: 12px; font-weight: 600; }
+    .slide--dark .bubble-label { fill: var(--text); }
+    .bubble-legend {
+      display: flex; gap: 16px; margin-top: 10px; flex-wrap: wrap;
+      font-size: 11px; color: var(--light-text-secondary);
+    }
+    .slide--dark .bubble-legend { color: var(--text-secondary); }
+    .bubble-legend-item { display: inline-flex; align-items: center; gap: 6px; }
+    .bubble-chip { width: 12px; height: 12px; border-radius: 50%; display: inline-block; opacity: 0.7; }
+    .bubble-size-note { font-style: italic; }
+
+    /* waterfall + tornado — financial bar visuals */
+    .wf-plot, .tor-plot { width: 100%; margin-top: 6px; }
+    .wf-plot svg, .tor-plot svg { width: 100%; height: auto; max-height: 400px; display: block; overflow: visible; }
+    .wf-up { fill: var(--bar-up); background: var(--bar-up); }
+    .wf-down { fill: var(--bar-down); background: var(--bar-down); }
+    .wf-total { fill: var(--bar-neutral); background: var(--bar-neutral); }
+    .wf-val { fill: var(--light-text); font-size: 13px; font-weight: 700; font-variant-numeric: tabular-nums; }
+    .slide--dark .wf-val { fill: var(--text); }
+    .wf-cat { fill: var(--light-text-secondary); font-size: 12px; }
+    .slide--dark .wf-cat { fill: var(--text-secondary); }
+    .wf-conn { stroke: var(--light-border); stroke-width: 1; stroke-dasharray: 3 3; }
+    .slide--dark .wf-conn { stroke: var(--border-light); }
+    .wf-legend { display: flex; gap: 16px; margin-top: 8px; font-size: 11px; color: var(--light-text-secondary); }
+    .slide--dark .wf-legend { color: var(--text-secondary); }
+    .tor-up { fill: var(--bar-up); }
+    .tor-down { fill: var(--bar-down); }
+    .tor-label { fill: var(--light-text); font-size: 13px; font-weight: 600; }
+    .slide--dark .tor-label { fill: var(--text); }
+    .tor-end { fill: var(--light-text-secondary); font-size: 11px; font-variant-numeric: tabular-nums; }
+    .slide--dark .tor-end { fill: var(--text-secondary); }
+    .tor-base { stroke: var(--light-text); stroke-width: 1.5; stroke-dasharray: 4 4; opacity: 0.5; }
+    .slide--dark .tor-base { stroke: var(--text); }
+    .tor-base-label { fill: var(--light-text-secondary); font-size: 11px; font-weight: 600; }
+    .slide--dark .tor-base-label { fill: var(--text-secondary); }
+
+    /* entrance anim — stagger up to 16 elements per slide. Anything beyond
+       the cap animates at the cap delay; prior code stopped at 4, which made
+       any 5th+ animated element pop in immediately and break the sequence. */
+    .slide .anim { opacity: 0; transform: translateY(14px); }
+    .slide.active .anim { animation: fadeUp 0.55s ease forwards; }
+    .slide.active .anim[data-d="1"] { animation-delay: 0.06s; }
+    .slide.active .anim[data-d="2"] { animation-delay: 0.14s; }
+    .slide.active .anim[data-d="3"] { animation-delay: 0.22s; }
+    .slide.active .anim[data-d="4"] { animation-delay: 0.30s; }
+    .slide.active .anim[data-d="5"] { animation-delay: 0.38s; }
+    .slide.active .anim[data-d="6"] { animation-delay: 0.46s; }
+    .slide.active .anim[data-d="7"] { animation-delay: 0.54s; }
+    .slide.active .anim[data-d="8"] { animation-delay: 0.62s; }
+    .slide.active .anim[data-d="9"] { animation-delay: 0.70s; }
+    .slide.active .anim[data-d="10"] { animation-delay: 0.78s; }
+    .slide.active .anim[data-d="11"] { animation-delay: 0.86s; }
+    .slide.active .anim[data-d="12"] { animation-delay: 0.94s; }
+    .slide.active .anim[data-d="13"] { animation-delay: 1.02s; }
+    .slide.active .anim[data-d="14"] { animation-delay: 1.10s; }
+    .slide.active .anim[data-d="15"] { animation-delay: 1.18s; }
+    .slide.active .anim[data-d="16"] { animation-delay: 1.26s; }
+
+    @keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+
+    /* brand watermark — theme-aware via :has() on active slide */
+    .brand {
+      position: absolute; top: 32px; left: 56px; z-index: 50;
+      display: inline-flex; align-items: center;
+      color: var(--text);
+    }
+    .brand svg { height: 20px; width: auto; display: block; }
+    .deck:has(.slide.active.slide--light) .brand { color: var(--light-text); }
+
+    /* metric hero */
+    .metric-hero {
+      align-items: center; justify-content: center;
+      text-align: center; padding: 80px;
+    }
+    .metric-hero .slide-inner {
+      text-align: center; max-width: 860px; margin: 0 auto;
+      display: flex; flex-direction: column; align-items: center;
+    }
+    .metric-hero .eyebrow { display: block; margin-bottom: 20px; }
+    .metric-hero-value {
+      display: flex; align-items: baseline; justify-content: center;
+      gap: 10px;
+      font-family: var(--font-heading);
+      font-size: 120px; font-weight: 700;
+      line-height: 1; letter-spacing: -4px; color: var(--light-text);
+      margin-bottom: 10px;
+    }
+    .slide--dark .metric-hero-value { color: var(--text); }
+    .metric-hero-trend { display: flex; justify-content: center; margin-bottom: 16px; }
+    .metric-hero-trend .trend {
+      font-size: 15px; padding: 6px 14px; margin-left: 0;
+    }
+    .metric-hero-label {
+      font-size: 18px; font-weight: 500;
+      color: var(--light-text); margin-bottom: 6px;
+    }
+    .slide--dark .metric-hero-label { color: var(--text); }
+    .metric-hero-context {
+      font-size: 15px; color: var(--light-text-secondary);
+      margin: 0 auto 6px; max-width: 520px;
+    }
+    .slide--dark .metric-hero-context { color: var(--text-secondary); }
+
+    /* metric figure helpers (shared by hero + grid) */
+    .metric-figure { font-variant-numeric: tabular-nums; }
+    .metric-unit {
+      font-size: 0.4em; font-weight: 500;
+      letter-spacing: -0.02em;
+      color: var(--light-text-secondary); margin-left: 6px;
+    }
+    .slide--dark .metric-unit { color: var(--text-secondary); }
+
+    .trend {
+      display: inline-flex; align-items: center; gap: 4px;
+      font-size: 13px; font-weight: 600;
+      letter-spacing: 0; line-height: 1;
+      padding: 4px 10px; border-radius: 999px;
+      background: rgba(0, 0, 0, 0.04);
+      margin-left: 10px; vertical-align: middle;
+      white-space: nowrap;
+    }
+    .stat-tile .trend { font-size: 11px; padding: 3px 8px; margin-left: 6px; }
+    .slide--dark .trend { background: rgba(255, 255, 255, 0.06); }
+    .trend--good { color: var(--mint); }
+    .trend--bad { color: #CC3535; }
+    .trend--flat { color: var(--light-text-secondary); }
+    .slide--dark .trend--flat { color: var(--text-secondary); }
+    .trend-arrow { font-size: 1.1em; line-height: 1; }
+    .trend-percent { font-weight: 700; }
+    .trend-label { font-weight: 500; }
+
+    /* stats grid */
+    .stats-grid {
+      display: grid; gap: 16px;
+      margin-top: 18px;
+      grid-template-columns: repeat(var(--stat-cols, 3), 1fr);
+    }
+    .stats-grid--2 { --stat-cols: 2; }
+    .stats-grid--3 { --stat-cols: 3; }
+    .stats-grid--4 { --stat-cols: 4; }
+    .stats-grid--6 { --stat-cols: 3; }
+    .stat-tile {
+      background: #FFFFFF;
+      border: 1px solid var(--light-border); border-radius: var(--radius-card);
+      padding: 22px 20px;
+    }
+    .slide--dark .stat-tile { background: var(--bg-card); border-color: var(--border); }
+    .stat-tile-value {
+      display: flex; align-items: baseline; flex-wrap: wrap;
+      gap: 8px; font-size: 36px; font-weight: 700;
+      font-family: var(--font-heading);
+      line-height: 1.05; letter-spacing: -1.2px;
+      color: var(--light-text); margin-bottom: 6px;
+    }
+    .slide--dark .stat-tile-value { color: var(--text); }
+    .stat-tile-label {
+      font-size: 15px; font-weight: 500;
+      color: var(--light-text); margin-bottom: 2px;
+    }
+    .slide--dark .stat-tile-label { color: var(--text); }
+    .stat-tile-context {
+      font-size: 13px; font-weight: 400;
+      color: var(--light-text-secondary);
+    }
+    .slide--dark .stat-tile-context { color: var(--text-secondary); }
+
+    /* quote */
+    .quote {
+      align-items: center; justify-content: center;
+      padding: 80px;
+    }
+    .quote .slide-inner { max-width: 880px; }
+    .quote-text {
+      font-family: var(--font-heading);
+      font-size: 32px; font-weight: 500;
+      line-height: 1.3; letter-spacing: calc(var(--heading-tracking) * 1.0);
+      color: var(--text); margin-bottom: 28px;
+    }
+    .slide--light .quote-text { color: var(--light-text); }
+    .quote-attribution {
+      display: flex; align-items: center; gap: 14px;
+    }
+    .quote-logo { height: 28px; width: auto; max-width: 120px; object-fit: contain; }
+    .quote-name { font-size: 14px; font-weight: 600; color: var(--text); }
+    .slide--light .quote-name { color: var(--light-text); }
+    .quote-role { font-size: 12px; color: var(--text-secondary); margin-top: 2px; }
+    .slide--light .quote-role { color: var(--light-text-secondary); }
+
+    /* logo wall */
+    .logo-wall {
+      display: grid; gap: 12px;
+      grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+      margin-top: 20px;
+    }
+    .logo-tile {
+      background: #FFFFFF;
+      border: 1px solid var(--light-border); border-radius: var(--radius-card);
+      height: 72px; display: flex; align-items: center; justify-content: center;
+      padding: 12px 16px;
+    }
+    .slide--dark .logo-tile { background: rgba(255, 255, 255, 0.06); border-color: var(--border); }
+    .logo-tile img { max-width: 100%; max-height: 100%; object-fit: contain; filter: saturate(0.9); }
+    .logo-fallback {
+      font-size: 13px; font-weight: 600;
+      color: var(--light-text-secondary); text-align: center;
+    }
+    .slide--dark .logo-fallback { color: var(--text-secondary); }
+
+    /* matrix 2x2 */
+    .matrix {
+      display: grid; grid-template-columns: auto 1fr;
+      grid-template-rows: 1fr auto; gap: 10px;
+      margin-top: 12px; align-items: stretch;
+    }
+    .matrix-y-label {
+      writing-mode: vertical-rl; transform: rotate(180deg);
+      align-self: center; justify-self: center;
+      font-size: 10px; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.12em; color: var(--light-text-secondary);
+    }
+    .slide--dark .matrix-y-label { color: var(--text-secondary); }
+    .matrix-x-label {
+      grid-column: 2 / 3; grid-row: 2 / 3;
+      text-align: center; font-size: 10px; font-weight: 600;
+      text-transform: uppercase; letter-spacing: 0.12em;
+      color: var(--light-text-secondary); margin-top: 6px;
+    }
+    .slide--dark .matrix-x-label { color: var(--text-secondary); }
+    .matrix-grid {
+      position: relative;
+      display: grid; grid-template-columns: 1fr 1fr; grid-template-rows: 1fr 1fr;
+      gap: 0; min-height: 340px;
+      border: 1px solid var(--light-border);
+      border-radius: var(--radius-card); overflow: hidden;
+      background: #FFFFFF;
+    }
+    .slide--dark .matrix-grid { background: var(--bg-card); border-color: var(--border); }
+    .matrix-quadrant {
+      padding: 18px; display: flex; flex-direction: column; gap: 8px;
+      background: transparent;
+    }
+    .matrix-quadrant--tl { border-right: 1px solid var(--light-border); border-bottom: 1px solid var(--light-border); }
+    .matrix-quadrant--tr { border-bottom: 1px solid var(--light-border); }
+    .matrix-quadrant--bl { border-right: 1px solid var(--light-border); }
+    .slide--dark .matrix-quadrant--tl { border-right-color: var(--border); border-bottom-color: var(--border); }
+    .slide--dark .matrix-quadrant--tr { border-bottom-color: var(--border); }
+    .slide--dark .matrix-quadrant--bl { border-right-color: var(--border); }
+    .matrix-quadrant--highlight { background: var(--mint-subtle); }
+    .matrix-quadrant-label {
+      font-size: 11px; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--light-text);
+    }
+    .slide--dark .matrix-quadrant-label { color: var(--text); }
+    .matrix-quadrant--highlight .matrix-quadrant-label { color: var(--mint); }
+    .matrix-quadrant-items {
+      list-style: none; display: flex; flex-direction: column; gap: 4px;
+      font-size: 12px; color: var(--light-text-secondary);
+    }
+    .slide--dark .matrix-quadrant-items { color: var(--text-secondary); }
+    .matrix-axis-label {
+      position: absolute; font-size: 10px; font-weight: 500;
+      color: var(--light-text-secondary);
+      background: #FFFFFF; padding: 2px 8px; border-radius: 999px;
+      border: 1px solid var(--light-border);
+    }
+    .slide--dark .matrix-axis-label { background: var(--bg-light); color: var(--text-secondary); border-color: var(--border); }
+    .matrix-axis-label--y-high { top: 10px; left: 50%; transform: translateX(-50%); }
+    .matrix-axis-label--y-low { bottom: 10px; left: 50%; transform: translateX(-50%); }
+    .matrix-axis-label--x-low { left: 10px; top: 50%; transform: translateY(-50%); }
+    .matrix-axis-label--x-high { right: 10px; top: 50%; transform: translateY(-50%); }
+
+    /* timeline */
+    .timeline {
+      display: grid; gap: 12px; margin-top: 18px;
+      grid-template-columns: repeat(var(--phase-count, 4), 1fr);
+    }
+    .timeline-phase {
+      position: relative;
+      background: #FFFFFF;
+      border: 1px solid var(--light-border); border-radius: var(--radius-card);
+      padding: 16px; padding-top: 34px;
+    }
+    .slide--dark .timeline-phase { background: var(--bg-card); border-color: var(--border); }
+    .timeline-phase--highlight { border-color: var(--mint); background: var(--mint-subtle); }
+    .timeline-phase-marker {
+      position: absolute; top: -14px; left: 16px;
+      width: 28px; height: 28px; border-radius: 50%;
+      background: var(--mint); color: #01191A;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 700;
+    }
+    .timeline-phase-period {
+      font-size: 10px; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--mint);
+      margin-bottom: 4px;
+    }
+    .timeline-phase-label {
+      font-size: 14px; font-weight: 600; color: var(--light-text);
+      line-height: 1.25; margin-bottom: 4px;
+    }
+    .slide--dark .timeline-phase-label { color: var(--text); }
+    .timeline-phase-desc {
+      font-size: 14px; font-weight: 400; line-height: 1.4;
+      color: var(--light-text-secondary);
+    }
+    .slide--dark .timeline-phase-desc { color: var(--text-secondary); }
+
+    /* funnel */
+    .funnel {
+      display: flex; flex-direction: column; gap: 6px;
+      align-items: center; margin-top: 16px;
+    }
+    .funnel-row { width: 100%; display: flex; align-items: center; gap: 16px; justify-content: center; }
+    .funnel-bar {
+      display: flex; align-items: center; justify-content: space-between;
+      background: var(--mint);
+      color: #01191A;
+      padding: 14px 22px; border-radius: 4px;
+      font-weight: 600;
+      clip-path: polygon(0 0, 100% 0, 96% 100%, 4% 100%);
+    }
+    .funnel-row:nth-child(1) .funnel-bar { background: #23DD9C; }
+    .funnel-row:nth-child(2) .funnel-bar { background: #5de9b8; }
+    .funnel-row:nth-child(3) .funnel-bar { background: #a3f0d3; }
+    .funnel-row:nth-child(4) .funnel-bar { background: #cbf5e3; }
+    .funnel-row:nth-child(5) .funnel-bar { background: #def8ee; }
+    .funnel-row:nth-child(6) .funnel-bar { background: #ecfbf5; }
+    .funnel-bar-label { font-size: 15px; }
+    .funnel-bar-value { font-size: 16px; font-weight: 700; }
+    .funnel-annotation {
+      font-size: 13px; color: var(--light-text-secondary);
+      white-space: nowrap; min-width: 120px;
+    }
+    .slide--dark .funnel-annotation { color: var(--text-secondary); }
+
+    /* process flow */
+    .process-flow {
+      display: flex; align-items: stretch; gap: 10px;
+      margin-top: 18px; flex-wrap: nowrap;
+    }
+    .process-step {
+      flex: 1; min-width: 0;
+      background: #FFFFFF;
+      border: 1px solid var(--light-border); border-radius: var(--radius-card);
+      padding: 16px 14px;
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    .slide--dark .process-step { background: var(--bg-card); border-color: var(--border); }
+    .process-step-index {
+      width: 24px; height: 24px; border-radius: 50%;
+      background: var(--mint); color: #01191A;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 11px; font-weight: 700;
+    }
+    .process-step-label {
+      font-size: 15px; font-weight: 600; color: var(--light-text);
+      line-height: 1.3;
+    }
+    .slide--dark .process-step-label { color: var(--text); }
+    .process-step-desc {
+      font-size: 14px; font-weight: 400; line-height: 1.45;
+      color: var(--light-text-secondary);
+    }
+    .slide--dark .process-step-desc { color: var(--text-secondary); }
+    .process-arrow {
+      align-self: center; font-size: 20px; font-weight: 700;
+      color: var(--mint); flex-shrink: 0;
+    }
+
+    /* comparison */
+    .comparison {
+      width: 100%; border-collapse: collapse;
+      margin-top: 14px; font-size: 15px;
+      background: #FFFFFF;
+      border: 1px solid var(--light-border); border-radius: var(--radius-table); overflow: hidden;
+    }
+    .slide--dark .comparison { background: var(--bg-card); border-color: var(--border); }
+    .comparison th, .comparison td {
+      padding: 12px 14px; text-align: center; vertical-align: middle;
+      border-top: 1px solid var(--light-border);
+      color: var(--light-text-secondary);
+    }
+    .slide--dark .comparison th, .slide--dark .comparison td {
+      border-top-color: var(--border); color: var(--text-secondary);
+    }
+    .comparison thead th {
+      background: transparent; font-size: 14px; font-weight: 600;
+      color: var(--light-text); letter-spacing: 0.02em;
+      border-top: none;
+    }
+    .slide--dark .comparison thead th { color: var(--text); }
+    .comparison tbody th {
+      text-align: left; font-weight: 600; color: var(--light-text);
+    }
+    .slide--dark .comparison tbody th { color: var(--text); }
+    .comparison .comparison-highlight { background: var(--mint-subtle); }
+    .comparison .comparison-highlight:first-child { border-top-left-radius: var(--radius-table); }
+    .comparison-mark { font-size: 18px; font-weight: 700; line-height: 1; display: inline-block; }
+    .comparison-mark--yes { color: var(--mint); }
+    .comparison-mark--no { color: #CC3535; opacity: 0.7; }
+    .comparison-mark--partial { color: var(--light-text-secondary); }
+    .slide--dark .comparison-mark--partial { color: var(--text-secondary); }
+
+    /* prose (text-heavy narrative / methodology slide) */
+    .prose .slide-inner { max-width: 820px; }
+    .prose-body {
+      display: flex; flex-direction: column; gap: 14px;
+      margin-top: 16px;
+    }
+    .prose-paragraph {
+      font-size: 17px; font-weight: 400; line-height: 1.65;
+      color: var(--light-text-secondary);
+    }
+    .slide--dark .prose-paragraph { color: var(--text-secondary); }
+    .prose-paragraph strong { color: var(--light-text); font-weight: 600; }
+    .slide--dark .prose-paragraph strong { color: var(--text); }
+    .prose-pull-quote {
+      margin-top: 6px;
+      padding: 14px 18px;
+      border-left: 3px solid var(--mint);
+      background: var(--mint-subtle);
+      border-radius: 4px;
+      font-size: 17px; font-weight: 500; font-style: normal;
+      line-height: 1.5; color: var(--light-text);
+    }
+    .slide--dark .prose-pull-quote { color: var(--text); }
+
+    /* numberedList */
+    .numbered-list { display: flex; flex-direction: column; gap: 14px; margin-top: 16px; }
+    .numbered-item { display: flex; align-items: flex-start; gap: 16px; }
+    .numbered-item-index {
+      flex-shrink: 0; width: 32px; height: 32px; border-radius: 50%;
+      background: var(--mint); color: #01191A;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 14px; font-weight: 700;
+      margin-top: 1px;
+    }
+    .numbered-item-label {
+      font-size: 19px; font-weight: 400; line-height: 1.45;
+      color: var(--light-text-secondary);
+      padding-top: 4px;
+    }
+    .slide--dark .numbered-item-label { color: var(--text-secondary); }
+
+    /* detailBullets */
+    .detail-bullets { display: flex; flex-direction: column; gap: 14px; margin-top: 14px; }
+    .detail-bullet {
+      display: flex; align-items: flex-start; gap: 14px;
+      padding: 14px 16px; border-radius: var(--radius-card);
+      background: #FFFFFF; border: 1px solid var(--light-border);
+    }
+    .slide--dark .detail-bullet { background: var(--bg-card); border-color: var(--border); }
+    .detail-bullet--highlight { border-color: var(--mint); background: var(--mint-subtle); }
+    .detail-bullet-index {
+      flex-shrink: 0; width: 28px; height: 28px; border-radius: 50%;
+      background: var(--mint); color: #01191A;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 12px; font-weight: 700;
+    }
+    .detail-bullet-body { flex: 1; min-width: 0; }
+    .detail-bullet-title {
+      font-size: 17px; font-weight: 600; color: var(--light-text);
+      margin-bottom: 4px; line-height: 1.3;
+    }
+    .slide--dark .detail-bullet-title { color: var(--text); }
+    .detail-bullet-desc {
+      font-size: 15px; font-weight: 400; line-height: 1.5;
+      color: var(--light-text-secondary);
+    }
+    .slide--dark .detail-bullet-desc { color: var(--text-secondary); }
+
+    /* twoColBullets */
+    .two-col-bullets {
+      display: grid; grid-template-columns: 1fr 1fr; gap: 28px;
+      margin-top: 16px;
+    }
+    .named-bullets-heading {
+      font-size: 14px; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.1em; color: var(--mint);
+      padding-bottom: 12px; margin-bottom: 12px;
+      border-bottom: 1px solid var(--light-border);
+    }
+    .slide--dark .named-bullets-heading { border-bottom-color: var(--border); }
+
+    /* iconRow */
+    .icon-row {
+      display: grid; gap: 18px;
+      grid-template-columns: repeat(var(--icon-cols, 4), 1fr);
+      margin-top: 20px;
+    }
+    .icon-row:has(> :nth-child(6)) { --icon-cols: 6; }
+    .icon-row:has(> :nth-child(5)):not(:has(> :nth-child(6))) { --icon-cols: 5; }
+    .icon-row:has(> :nth-child(4)):not(:has(> :nth-child(5))) { --icon-cols: 4; }
+    .icon-row:has(> :nth-child(3)):not(:has(> :nth-child(4))) { --icon-cols: 3; }
+    .icon-row-item { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 8px; }
+    .icon-row-glyph {
+      width: 56px; height: 56px; border-radius: 14px;
+      background: var(--mint-subtle); color: var(--mint);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 26px; font-weight: 600; line-height: 1;
+    }
+    .slide--dark .icon-row-glyph { background: rgba(var(--mint-rgb), 0.14); }
+    .icon-row-label {
+      font-size: 16px; font-weight: 600; color: var(--light-text);
+      line-height: 1.3;
+    }
+    .slide--dark .icon-row-label { color: var(--text); }
+    .icon-row-desc {
+      font-size: 14px; font-weight: 400; line-height: 1.5;
+      color: var(--light-text-secondary);
+    }
+    .slide--dark .icon-row-desc { color: var(--text-secondary); }
+
+    /* milestoneArrow */
+    .milestone-arrow {
+      position: relative; margin-top: 32px;
+      padding: 0 32px;
+      display: grid;
+      grid-template-columns: repeat(var(--milestone-count, 4), minmax(0, 1fr));
+      grid-template-rows: 1fr auto 1fr;
+      column-gap: 8px; row-gap: 0;
+    }
+    .milestone {
+      text-align: center; padding: 0 6px;
+      min-width: 0;
+    }
+    .milestone--above { grid-row: 1; align-self: end; padding-bottom: 22px; }
+    .milestone--below { grid-row: 3; align-self: start; padding-top: 22px; }
+    .milestone-arrow-line {
+      position: relative;
+      grid-row: 2; grid-column: 1 / -1;
+      height: 2px; background: var(--mint); border-radius: 2px;
+      align-self: center;
+    }
+    .milestone-arrow-head {
+      position: absolute; right: -22px; top: 50%; transform: translateY(-50%);
+      color: var(--mint); font-size: 22px; font-weight: 700; line-height: 1;
+    }
+    .milestone-dot {
+      grid-row: 2;
+      width: 14px; height: 14px; border-radius: 50%;
+      background: var(--mint);
+      justify-self: center; align-self: center;
+      border: 2px solid #F2F5F5;
+      z-index: 1;
+    }
+    .slide--dark .milestone-dot { border-color: #01191A; }
+    .milestone-period {
+      font-size: 11px; font-weight: 600; text-transform: uppercase;
+      letter-spacing: 0.08em; color: var(--mint); margin-bottom: 4px;
+    }
+    .milestone-label {
+      font-size: 15px; font-weight: 600; color: var(--light-text); line-height: 1.3;
+    }
+    .slide--dark .milestone-label { color: var(--text); }
+    .milestone-desc {
+      font-size: 13px; font-weight: 400; line-height: 1.45;
+      color: var(--light-text-secondary); margin-top: 2px;
+    }
+    .slide--dark .milestone-desc { color: var(--text-secondary); }
+
+    /* quotes (dual/triple) */
+    .quotes-grid { display: grid; gap: 18px; margin-top: 14px; }
+    .quotes-grid--2 { grid-template-columns: 1fr 1fr; }
+    .quotes-grid--3 { grid-template-columns: 1fr 1fr 1fr; }
+    .quote-block {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid var(--border); border-radius: var(--radius-card);
+      padding: 22px 20px; display: flex; flex-direction: column; gap: 16px;
+    }
+    .slide--light .quote-block { background: #FFFFFF; border-color: var(--light-border); }
+    .quote-block-text {
+      font-family: var(--font-heading);
+      font-size: 16px; font-weight: 500; line-height: 1.45;
+      color: var(--text); letter-spacing: -0.2px;
+    }
+    .slide--light .quote-block-text { color: var(--light-text); }
+    .quote-block-attribution { display: flex; align-items: center; gap: 12px; }
+
+    /* ranked */
+    .ranked {
+      width: 100%; border-collapse: collapse;
+      background: #FFFFFF; border: 1px solid var(--light-border);
+      border-radius: var(--radius-table); overflow: hidden;
+      margin-top: 14px; font-size: 13px;
+    }
+    .slide--dark .ranked { background: var(--bg-card); border-color: var(--border); }
+    .ranked th, .ranked td {
+      padding: 10px 14px; text-align: left; vertical-align: middle;
+      border-top: 1px solid var(--light-border);
+      color: var(--light-text-secondary);
+    }
+    .slide--dark .ranked th, .slide--dark .ranked td { border-top-color: var(--border); color: var(--text-secondary); }
+    .ranked thead th {
+      font-size: 11px; font-weight: 600; color: var(--light-text-secondary);
+      text-transform: uppercase; letter-spacing: 0.08em;
+      border-top: none; background: transparent;
+    }
+    .ranked-rank {
+      width: 40px; text-align: center !important;
+      font-weight: 700; color: var(--light-text);
+      font-variant-numeric: tabular-nums;
+    }
+    .slide--dark .ranked-rank { color: var(--text); }
+    .ranked-row { background: var(--rank-tint, transparent); }
+    .ranked-row--highlight { background: var(--mint-subtle) !important; }
+    .ranked-label-name { font-weight: 600; color: var(--light-text); font-size: 15px; }
+    .slide--dark .ranked-label-name { color: var(--text); }
+    .ranked-label-desc { font-size: 13px; color: var(--light-text-secondary); margin-top: 2px; line-height: 1.4; }
+    .slide--dark .ranked-label-desc { color: var(--text-secondary); }
+    .ranked-score {
+      text-align: right !important;
+      font-weight: 600; font-variant-numeric: tabular-nums;
+      color: var(--light-text);
+    }
+    .slide--dark .ranked-score { color: var(--text); }
+
+    /* progressRings */
+    .progress-rings {
+      display: grid; gap: 20px;
+      grid-template-columns: repeat(var(--ring-cols, 4), 1fr);
+      margin-top: 20px;
+    }
+    .progress-rings--2 { --ring-cols: 2; }
+    .progress-rings--3 { --ring-cols: 3; }
+    .progress-rings--4 { --ring-cols: 4; }
+    .progress-ring { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 10px; }
+    .progress-ring-svg { width: 140px; height: 140px; }
+    .progress-ring-track {
+      fill: none; stroke: var(--light-border); stroke-width: 10;
+    }
+    .slide--dark .progress-ring-track { stroke: var(--border); }
+    .progress-ring-fill {
+      fill: none; stroke: var(--mint); stroke-width: 10; stroke-linecap: round;
+      transform: rotate(-90deg); transform-origin: 50% 50%;
+      transition: stroke-dashoffset 0.6s ease;
+    }
+    .progress-ring--orange .progress-ring-fill { stroke: #F8920F; }
+    .progress-ring--red .progress-ring-fill { stroke: #CC3535; }
+    .progress-ring--neutral .progress-ring-fill { stroke: var(--light-text-secondary); }
+    .slide--dark .progress-ring--neutral .progress-ring-fill { stroke: var(--text-secondary); }
+    .progress-ring-value {
+      fill: var(--light-text); font-size: 28px; font-weight: 700;
+      font-family: var(--font-heading); letter-spacing: -0.5px;
+    }
+    .slide--dark .progress-ring-value { fill: var(--text); }
+    .progress-ring-label {
+      font-size: 14px; font-weight: 600; color: var(--light-text);
+      line-height: 1.3;
+    }
+    .slide--dark .progress-ring-label { color: var(--text); }
+    .progress-ring-context {
+      font-size: 11px; font-weight: 400; color: var(--light-text-secondary);
+      line-height: 1.45; max-width: 200px;
+    }
+    .slide--dark .progress-ring-context { color: var(--text-secondary); }
+
+    /* speaker notes overlay */
+    .notes {
+      position: fixed; left: 0; right: 0; bottom: 0;
+      background: rgba(0, 0, 0, 0.92); color: var(--text);
+      padding: 20px 32px; font-size: 14px; line-height: 1.6;
+      max-height: 40vh; overflow-y: auto;
+      transform: translateY(100%); transition: transform 0.3s ease;
+      z-index: 200; border-top: 1px solid var(--border);
+    }
+    .notes.visible { transform: translateY(0); }
+    .notes-label { font-size: 10px; font-weight: 600; text-transform: uppercase; letter-spacing: 0.12em; color: var(--mint); margin-bottom: 8px; }
+    .notes-empty { color: var(--text-muted); font-style: italic; }
+
+    /* chart containers */
+    .metric-chart { width: 100%; max-width: 160px; height: 48px; margin-top: 6px; }
+    .metric-chart svg { width: 100%; height: 100%; display: block; }
+
+    .metric-chart--hero { max-width: 320px; height: 80px; margin-top: 12px; }
+
+    .card-chart { width: 100%; margin-top: 12px; }
+    .card-chart svg { width: 100%; height: auto; display: block; }
+
+    /* chartHero — chart IS the slide. Center everything horizontally so the
+       title, subtitle, chart canvas and footnote all share a vertical axis. */
+    .chart-hero { align-items: center; justify-content: flex-start; }
+    .chart-hero .slide-inner {
+      display: flex; flex-direction: column; gap: 12px;
+      text-align: center; margin: 0 auto;
+    }
+    .chart-hero .eyebrow { display: inline-block; align-self: center; margin: 0 0 6px; }
+    .chart-hero h1 { text-align: center; max-width: 920px; margin: 0 auto; }
+    .chart-hero .subtitle {
+      text-align: center; max-width: 760px;
+      margin: 0 auto 8px; align-self: center;
+    }
+    .chart-hero-canvas {
+      flex: 1; display: flex; align-items: center; justify-content: center;
+      width: 100%;
+    }
+    .chart-hero-canvas svg { max-width: 100%; max-height: 100%; }
+    .chart-hero .slide-footnote { text-align: center; margin: 8px auto 0; }
+    .slide-footnote { font-size: 11px; opacity: 0.75; }
+
+    /* chartWithText has no top-level title (the title is inside the prose panel),
+       so vertically center the whole grid in the slide canvas. */
+    .slide.chart-with-text { align-items: center; }
+    .chart-with-text .chart-with-text-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 32px; align-items: center; }
+    .chart-with-text-prose { display: flex; flex-direction: column; gap: 8px; }
+    .chart-with-text-canvas svg { width: 100%; height: auto; display: block; }
+
+    /* analystCards — port of the CCardAnalyst component used on gogratia.com.
+       Brand-agnostic (the cards represent Gratia bench analysts regardless of
+       which brand's deck they appear in). Square photo with Gratia badge in
+       the corner, name + jobTitle + location + pill tags below. */
+    .analyst-cards-slide .slide-inner { max-width: 1168px; }
+    .analyst-cards {
+      display: grid;
+      gap: 18px;
+      margin-top: 20px;
+      grid-template-columns: repeat(var(--analyst-cols, 3), minmax(0, 280px));
+      justify-content: center;
+    }
+    .analyst-cards--1 { --analyst-cols: 1; }
+    .analyst-cards--2 { --analyst-cols: 2; }
+    .analyst-cards--3 { --analyst-cols: 3; }
+    .analyst-cards--4 { --analyst-cols: 4; }
+    .analyst-card {
+      background: #FFFFFF;
+      border: 1px solid var(--light-border);
+      border-radius: 12px;
+      box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+      overflow: hidden;
+      display: flex; flex-direction: column;
+    }
+    .slide--dark .analyst-card {
+      background: rgba(255, 255, 255, 0.04);
+      border-color: var(--border);
+      box-shadow: none;
+    }
+    .analyst-card__image-wrapper { position: relative; aspect-ratio: 1; }
+    .analyst-card__image {
+      width: 100%; height: 100%;
+      object-fit: cover; display: block;
+    }
+    .analyst-card__badge {
+      position: absolute; top: 0; right: 0;
+      width: 40px; height: 40px;
+    }
+    .analyst-card__badge svg { display: block; width: 100%; height: 100%; }
+    .analyst-card__featured-tag {
+      position: absolute; left: 10px; bottom: 10px;
+      background: #23DD9C;
+      color: #04383A;
+      border-radius: 999px;
+      padding: 5px 12px;
+      display: inline-flex; align-items: center; gap: 5px;
+      font-size: 11px; font-weight: 600;
+      line-height: 1;
+    }
+    .analyst-card__featured-tag svg { width: 12px; height: 12px; }
+    .analyst-card__body {
+      padding: 14px 14px 16px;
+      display: flex; flex-direction: column; gap: 8px;
+    }
+    .analyst-card__name {
+      font-size: 16px; font-weight: 700;
+      color: var(--light-text); line-height: 1.25;
+      white-space: nowrap; text-overflow: ellipsis; overflow: hidden;
+    }
+    .slide--dark .analyst-card__name { color: var(--text); }
+    .analyst-card__job-title {
+      font-size: 12px; font-weight: 400;
+      color: var(--light-text-secondary); line-height: 1.4;
+      white-space: nowrap; text-overflow: ellipsis; overflow: hidden;
+      margin-top: -4px;
+    }
+    .slide--dark .analyst-card__job-title { color: var(--text-secondary); }
+    .analyst-card__location {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 12px; color: var(--light-text-secondary);
+      line-height: 1.2;
+    }
+    .slide--dark .analyst-card__location { color: var(--text-secondary); }
+    .analyst-card__location svg { width: 14px; height: 14px; flex-shrink: 0; }
+    .analyst-card__tags {
+      display: flex; flex-wrap: wrap; gap: 6px;
+      margin-top: 4px;
+    }
+    .analyst-card__tag {
+      padding: 6px 8px;
+      border: 1px solid var(--light-border);
+      border-radius: 4px;
+      font-size: 10.5px; font-weight: 600;
+      color: var(--light-text-secondary);
+      line-height: 1; letter-spacing: 0.01em;
+      white-space: nowrap;
+    }
+    .slide--dark .analyst-card__tag {
+      border-color: var(--border); color: var(--text-secondary);
+    }
+
+    
+  </style>
+</head>
+<body>
+<div id="deck-content">
+<div class="deck">
+<div class="progress" id="progress"></div>
+<div class="brand" aria-hidden="true"><svg width="96" height="22" viewBox="0 0 96 22" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Gratia"><path d="M87.0295 21.3543C85.8868 21.3543 84.944 21.1642 84.2012 20.7838C83.4584 20.4035 82.9156 19.8996 82.5728 19.2721C82.23 18.6255 82.0586 17.9124 82.0586 17.1328C82.0586 16.277 82.2681 15.5259 82.6871 14.8794C83.1251 14.2138 83.8013 13.6908 84.7155 13.3105C85.6296 12.9302 86.801 12.74 88.2294 12.74H91.7147C91.7147 12.0935 91.629 11.5706 91.4576 11.1712C91.2862 10.7529 91.01 10.4486 90.6291 10.2585C90.2673 10.0493 89.7816 9.94469 89.1721 9.94469C88.5055 9.94469 87.9246 10.0873 87.4295 10.3725C86.9533 10.6578 86.6581 11.1047 86.5438 11.7132H82.43C82.5252 10.6673 82.868 9.76403 83.4584 9.00339C84.0489 8.22373 84.8297 7.61522 85.8011 7.17785C86.7914 6.74048 87.9246 6.5218 89.2007 6.5218C90.572 6.5218 91.7623 6.74048 92.7718 7.17785C93.8002 7.61522 94.5906 8.27127 95.1429 9.14601C95.7143 10.0017 96 11.0571 96 12.3122V21.012H92.4575L91.9718 18.8727H91.8861C91.6195 19.2911 91.3148 19.6524 90.9719 19.9566C90.6291 20.2609 90.2482 20.5176 89.8292 20.7268C89.4293 20.936 88.9912 21.0881 88.5151 21.1832C88.058 21.2973 87.5628 21.3543 87.0295 21.3543ZM88.4579 18.1026C88.915 18.1026 89.315 18.0265 89.6578 17.8744C90.0197 17.7223 90.3244 17.5226 90.572 17.2754C90.8196 17.0092 91.0196 16.7049 91.1719 16.3626C91.3243 16.0203 91.4386 15.6495 91.5147 15.2502H88.7436C88.2484 15.2502 87.8389 15.3167 87.5152 15.4498C87.2104 15.5639 86.9819 15.7351 86.8295 15.9633C86.6772 16.1724 86.601 16.4292 86.601 16.7334C86.601 17.0377 86.6772 17.2944 86.8295 17.5036C86.9819 17.6937 87.2009 17.8459 87.4866 17.96C87.7723 18.055 88.0961 18.1026 88.4579 18.1026Z" fill="currentColor"/><path d="M76.3777 21.0119V6.86393H80.663V21.0119H76.3777ZM78.5204 5.32363C77.7586 5.32363 77.1396 5.10494 76.6634 4.66757C76.1873 4.21119 75.9492 3.65021 75.9492 2.98465C75.9492 2.31909 76.1873 1.76762 76.6634 1.33025C77.1396 0.873868 77.7586 0.645676 78.5204 0.645676C79.3012 0.645676 79.9298 0.873868 80.4059 1.33025C80.9011 1.76762 81.1487 2.31909 81.1487 2.98465C81.1487 3.65021 80.9011 4.21119 80.4059 4.66757C79.9298 5.10494 79.3012 5.32363 78.5204 5.32363Z" fill="currentColor"/><path d="M72.4232 21.012C71.3757 21.012 70.452 20.8503 69.6521 20.5271C68.8712 20.1848 68.2522 19.6333 67.7951 18.8727C67.3571 18.112 67.138 17.0756 67.138 15.7635V10.3725H64.7383V6.86402H67.138L67.5951 2.89917H71.4233V6.86402H75.0801V10.3725H71.4233V15.8206C71.4233 16.4101 71.5566 16.8284 71.8233 17.0756C72.0899 17.3038 72.5279 17.4179 73.1374 17.4179H75.0515V21.012H72.4232Z" fill="currentColor"/><path d="M54.9521 21.3543C53.8094 21.3543 52.8666 21.1642 52.1238 20.7838C51.3811 20.4035 50.8383 19.8996 50.4954 19.2721C50.1526 18.6255 49.9812 17.9124 49.9812 17.1328C49.9812 16.277 50.1907 15.5259 50.6097 14.8794C51.0478 14.2138 51.7239 13.6908 52.6381 13.3105C53.5523 12.9302 54.7236 12.74 56.152 12.74H59.6373C59.6373 12.0935 59.5516 11.5706 59.3802 11.1712C59.2088 10.7529 58.9326 10.4486 58.5517 10.2585C58.1899 10.0493 57.7042 9.94469 57.0947 9.94469C56.4281 9.94469 55.8473 10.0873 55.3521 10.3725C54.8759 10.6578 54.5807 11.1047 54.4664 11.7132H50.3526C50.4478 10.6673 50.7906 9.76403 51.3811 9.00339C51.9715 8.22373 52.7523 7.61522 53.7237 7.17785C54.714 6.74048 55.8473 6.5218 57.1233 6.5218C58.4946 6.5218 59.685 6.74048 60.6944 7.17785C61.7228 7.61522 62.5132 8.27127 63.0655 9.14601C63.6369 10.0017 63.9226 11.0571 63.9226 12.3122V21.012H60.3801L59.8945 18.8727H59.8087C59.5421 19.2911 59.2374 19.6524 58.8946 19.9566C58.5517 20.2609 58.1708 20.5176 57.7518 20.7268C57.3519 20.936 56.9138 21.0881 56.4377 21.1832C55.9806 21.2973 55.4854 21.3543 54.9521 21.3543ZM56.3805 18.1026C56.8376 18.1026 57.2376 18.0265 57.5804 17.8744C57.9423 17.7223 58.247 17.5226 58.4946 17.2754C58.7422 17.0092 58.9422 16.7049 59.0945 16.3626C59.2469 16.0203 59.3612 15.6495 59.4374 15.2502H56.6662C56.171 15.2502 55.7615 15.3167 55.4378 15.4498C55.133 15.5639 54.9045 15.7351 54.7521 15.9633C54.5998 16.1724 54.5236 16.4292 54.5236 16.7334C54.5236 17.0377 54.5998 17.2944 54.7521 17.5036C54.9045 17.6937 55.1235 17.8459 55.4092 17.96C55.6949 18.055 56.0187 18.1026 56.3805 18.1026Z" fill="currentColor"/><path d="M40.1943 21.012V6.86409H43.8511L44.2511 9.85911H44.3368C44.7177 8.96536 45.1557 8.28078 45.6509 7.80538C46.1651 7.31096 46.746 6.97818 47.3936 6.80704C48.0602 6.61688 48.7744 6.5218 49.5362 6.5218V11.0571H48.3649C47.7555 11.0571 47.2031 11.1237 46.7079 11.2568C46.2318 11.3709 45.8223 11.5801 45.4795 11.8843C45.1557 12.1696 44.9081 12.5594 44.7367 13.0538C44.5653 13.5482 44.4796 14.1472 44.4796 14.8508V21.012H40.1943Z" fill="currentColor"/><path d="M28.1067 21.3542C26.3355 21.3542 24.7737 20.9359 23.4215 20.0992C22.0693 19.2434 21.0027 18.0549 20.2218 16.5336C19.46 15.0124 19.0791 13.2344 19.0791 11.1996C19.0791 9.14591 19.4791 7.32988 20.279 5.75154C21.0979 4.17321 22.2692 2.93717 23.7929 2.04341C25.3165 1.14966 27.1259 0.702782 29.2209 0.702782C31.6207 0.702782 33.6014 1.27326 35.1631 2.41423C36.7439 3.55519 37.7629 5.13352 38.22 7.14922H33.449C33.1633 6.35055 32.6586 5.73253 31.9349 5.29516C31.2302 4.85779 30.3255 4.63911 29.2209 4.63911C27.9639 4.63911 26.9069 4.91484 26.0498 5.4663C25.1927 5.99875 24.5452 6.7594 24.1071 7.74823C23.6691 8.71805 23.4501 9.86852 23.4501 11.1996C23.4501 12.5688 23.6691 13.7288 24.1071 14.6796C24.5452 15.6304 25.1832 16.353 26.0212 16.8474C26.8592 17.3228 27.8496 17.5605 28.9924 17.5605C30.6303 17.5605 31.8682 17.1327 32.7063 16.2769C33.5633 15.4212 34.0871 14.3468 34.2775 13.0537H29.6209V9.85901H38.5628V21.0119H34.6203L34.3061 18.0454H34.2204C33.8014 18.749 33.2967 19.3575 32.7063 19.871C32.1158 20.3654 31.4302 20.7362 30.6493 20.9834C29.8875 21.2306 29.04 21.3542 28.1067 21.3542Z" fill="currentColor"/><path d="M15.0607 20.8836H10.3542L11.5308 12.6473H11.2955C10.3542 17.7067 5.88307 20.281 0 20.281V15.3395C3.89427 15.2074 8.2363 13.8239 9.11348 9.73307L1.88258 10.0587V5.82289H15.0607V20.8836Z" fill="#23DD9C"/></svg></div>
+
+    <div class="slide active cover slide--dark">
+      <div class="slide-inner">
+        <h1 class="anim" data-d="1">Strategic Advisor Briefing</h1>
+        <p class="subtitle anim" data-d="2">Prepared for Aaron Miller</p>
+        <p class="cover-desc anim" data-d="3">Valuation scenarios, margin quality, buyer lenses, and the AI evidence behind Gratia&#39;s positioning.</p>
+      </div>
+    </div>
+  
+
+    <div class="slide slide--light">
+      <div class="slide-inner">
+        <div class="eyebrow anim" data-d="1">Discussion focus</div>
+        <h1 class="anim" data-d="2">The valuation range depends on which buyer lens applies</h1>
+        <p class="subtitle anim" data-d="3">This briefing frames the evidence for where Gratia sits across staffing, consulting, tech-enabled services, and AI-native services.</p>
+        <div class="bullets anim" data-d="4"><div class="bullet">Today&#39;s run-rate supports roughly $11M to $26M depending on whether buyers use blended, tech-enabled, or AI-native comps.</div><div class="bullet">The 2027 and 2028 cases expand materially if Gratia is viewed as an AI-enabled delivery platform rather than a staffing or consulting services business.</div><div class="bullet">Gratia&#39;s strongest evidence is margin quality. FY25 gross margin is 54.2%, well above every comp group midpoint.</div><div class="bullet">The key discussion is which buyers will believe the AI-native lens, what proof they will require, and which milestones close the gap.</div></div>
+      </div>
+    </div>
+  
+
+    <div class="slide slide--light">
+      <div class="slide-inner slide-inner--wide">
+        <div class="eyebrow anim" data-d="1">Where we stand</div>
+        <h1 class="anim" data-d="2">Gratia is early, but margin quality is the outlier</h1>
+        <p class="subtitle anim" data-d="3">The company is still small on revenue, while gross margin is already stronger than the peer-set benchmarks.</p>
+        <div class="stats-grid stats-grid--6 anim" data-d="4">
+        <div class="stat-tile">
+          <div class="stat-tile-value"><span class="metric-figure">$1.7M</span></div>
+          <div class="stat-tile-label">FY2025 revenue</div>
+          
+          <div class="stat-tile-context">actual, full year</div>
+        </div>
+      
+        <div class="stat-tile">
+          <div class="stat-tile-value"><span class="metric-figure">$3.6M</span></div>
+          <div class="stat-tile-label">Current run-rate</div>
+          
+          <div class="stat-tile-context">annualized, today</div>
+        </div>
+      
+        <div class="stat-tile">
+          <div class="stat-tile-value"><span class="metric-figure">54.2%</span></div>
+          <div class="stat-tile-label">Gross margin</div>
+          
+          <div class="stat-tile-context">FY2025</div>
+        </div>
+      
+        <div class="stat-tile">
+          <div class="stat-tile-value"><span class="metric-figure">$1.1M</span></div>
+          <div class="stat-tile-label">SG&amp;A</div>
+          
+          <div class="stat-tile-context">FY2025</div>
+        </div>
+      
+        <div class="stat-tile">
+          <div class="stat-tile-value"><span class="metric-figure">-9.4%</span></div>
+          <div class="stat-tile-label">EBITDA margin</div>
+          
+          <div class="stat-tile-context">FY2025</div>
+        </div>
+      
+        <div class="stat-tile">
+          <div class="stat-tile-value"><span class="metric-figure">$18K</span></div>
+          <div class="stat-tile-label">Avg monthly burn</div>
+          
+          <div class="stat-tile-context">trailing 12 months</div>
+        </div>
+      </div>
+      </div>
+    </div>
+  
+
+    <div class="slide slide--light">
+      <div class="slide-inner slide-inner--wide">
+        <div class="eyebrow anim" data-d="1">Valuation</div>
+        <h1 class="anim" data-d="2">Revenue scale and buyer lens create an $11M to $124M valuation range</h1>
+        <p class="subtitle anim" data-d="3">The same revenue base moves materially depending on whether buyers apply blended, tech-enabled, or AI-native multiples.</p>
+        <table class="deck-table anim" data-d="4">
+          <thead><tr><th>Revenue scenario</th><th>Comp Average (3.0-5.0x)</th><th>Tech-Enabled Services (3.9-6.2x)</th><th>Tech-Enabled AI-native (4.7-7.1x)</th></tr></thead>
+          <tbody><tr><th scope="row">Run-rate today ($3.6M)</th><td>$10.8M to $18.0M</td><td>$14.0M to $22.3M</td><td>$16.9M to $25.6M</td></tr><tr><th scope="row">2027 target ($10M)</th><td>$30.0M to $50.0M</td><td>$39.0M to $62.0M</td><td>$47.0M to $71.0M</td></tr><tr><th scope="row">2028 target (~$17.5M)</th><td>$52.5M to $91.0M</td><td>$70.0M to $109.0M</td><td>$82.0M to $124.0M</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  
+
+    <div class="slide chart-hero slide--light">
+      <div class="slide-inner slide-inner--wide">
+        <div class="eyebrow anim" data-d="1">Margins</div>
+        <h1 class="anim" data-d="2">Gratia&#39;s 54% gross margin is the strongest valuation datapoint</h1>
+        
+        <div class="chart-hero-canvas anim" data-d="4"><svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1" class="marks" width="715" height="348" viewBox="0 0 715 348"><g fill="none" stroke-miterlimit="10" transform="translate(165,5)"><g class="mark-group role-frame root" role="graphics-object" aria-roledescription="group mark container"><g transform="translate(0,0)"><path class="background" aria-hidden="true" d="M0.5,0.5h520v320h-520Z"/><g><g class="mark-group role-axis" aria-hidden="true"><g transform="translate(0.5,320.5)"><path class="background" aria-hidden="true" d="M0,0h0v0h0Z" pointer-events="none"/><g><g class="mark-rule role-axis-grid" pointer-events="none"><line transform="translate(0,0)" x2="0" y2="-320" stroke="#E0E5E5" stroke-width="1" opacity="1"/><line transform="translate(47,0)" x2="0" y2="-320" stroke="#E0E5E5" stroke-width="1" opacity="1"/><line transform="translate(95,0)" x2="0" y2="-320" stroke="#E0E5E5" stroke-width="1" opacity="1"/><line transform="translate(142,0)" x2="0" y2="-320" stroke="#E0E5E5" stroke-width="1" opacity="1"/><line transform="translate(189,0)" x2="0" y2="-320" stroke="#E0E5E5" stroke-width="1" opacity="1"/><line transform="translate(236,0)" x2="0" y2="-320" stroke="#E0E5E5" stroke-width="1" opacity="1"/><line transform="translate(284,0)" x2="0" y2="-320" stroke="#E0E5E5" stroke-width="1" opacity="1"/><line transform="translate(331,0)" x2="0" y2="-320" stroke="#E0E5E5" stroke-width="1" opacity="1"/><line transform="translate(378,0)" x2="0" y2="-320" stroke="#E0E5E5" stroke-width="1" opacity="1"/><line transform="translate(425,0)" x2="0" y2="-320" stroke="#E0E5E5" stroke-width="1" opacity="1"/><line transform="translate(473,0)" x2="0" y2="-320" stroke="#E0E5E5" stroke-width="1" opacity="1"/><line transform="translate(520,0)" x2="0" y2="-320" stroke="#E0E5E5" stroke-width="1" opacity="1"/></g></g><path class="foreground" aria-hidden="true" d="" pointer-events="none" display="none"/></g></g><g class="mark-group role-axis" role="graphics-symbol" aria-roledescription="axis" aria-label="X-axis for a linear scale with values from 0% to 55%"><g transform="translate(0.5,320.5)"><path class="background" aria-hidden="true" d="M0,0h0v0h0Z" pointer-events="none"/><g><g class="mark-rule role-axis-tick" pointer-events="none"><line transform="translate(0,0)" x2="0" y2="5" stroke="#E0E5E5" stroke-width="1" opacity="1"/><line transform="translate(47,0)" x2="0" y2="5" stroke="#E0E5E5" stroke-width="1" opacity="1"/><line transform="translate(95,0)" x2="0" y2="5" stroke="#E0E5E5" stroke-width="1" opacity="1"/><line transform="translate(142,0)" x2="0" y2="5" stroke="#E0E5E5" stroke-width="1" opacity="1"/><line transform="translate(189,0)" x2="0" y2="5" stroke="#E0E5E5" stroke-width="1" opacity="1"/><line transform="translate(236,0)" x2="0" y2="5" stroke="#E0E5E5" stroke-width="1" opacity="1"/><line transform="translate(284,0)" x2="0" y2="5" stroke="#E0E5E5" stroke-width="1" opacity="1"/><line transform="translate(331,0)" x2="0" y2="5" stroke="#E0E5E5" stroke-width="1" opacity="1"/><line transform="translate(378,0)" x2="0" y2="5" stroke="#E0E5E5" stroke-width="1" opacity="1"/><line transform="translate(425,0)" x2="0" y2="5" stroke="#E0E5E5" stroke-width="1" opacity="1"/><line transform="translate(473,0)" x2="0" y2="5" stroke="#E0E5E5" stroke-width="1" opacity="1"/><line transform="translate(520,0)" x2="0" y2="5" stroke="#E0E5E5" stroke-width="1" opacity="1"/></g><g class="mark-text role-axis-label" pointer-events="none"><text text-anchor="start" transform="translate(0,16)" font-family="DM Sans" font-size="11px" fill="#4D5E5F" opacity="1">0%</text><text text-anchor="middle" transform="translate(47.27272727272727,16)" font-family="DM Sans" font-size="11px" fill="#4D5E5F" opacity="1">5%</text><text text-anchor="middle" transform="translate(94.54545454545455,16)" font-family="DM Sans" font-size="11px" fill="#4D5E5F" opacity="1">10%</text><text text-anchor="middle" transform="translate(141.8181818181818,16)" font-family="DM Sans" font-size="11px" fill="#4D5E5F" opacity="1">15%</text><text text-anchor="middle" transform="translate(189.0909090909091,16)" font-family="DM Sans" font-size="11px" fill="#4D5E5F" opacity="1">20%</text><text text-anchor="middle" transform="translate(236.36363636363635,16)" font-family="DM Sans" font-size="11px" fill="#4D5E5F" opacity="1">25%</text><text text-anchor="middle" transform="translate(283.6363636363636,16)" font-family="DM Sans" font-size="11px" fill="#4D5E5F" opacity="1">30%</text><text text-anchor="middle" transform="translate(330.9090909090908,16)" font-family="DM Sans" font-size="11px" fill="#4D5E5F" opacity="1">35%</text><text text-anchor="middle" transform="translate(378.1818181818182,16)" font-family="DM Sans" font-size="11px" fill="#4D5E5F" opacity="1">40%</text><text text-anchor="middle" transform="translate(425.45454545454544,16)" font-family="DM Sans" font-size="11px" fill="#4D5E5F" opacity="1">45%</text><text text-anchor="middle" transform="translate(472.7272727272727,16)" font-family="DM Sans" font-size="11px" fill="#4D5E5F" opacity="1">50%</text><text text-anchor="end" transform="translate(520,16)" font-family="DM Sans" font-size="11px" fill="#4D5E5F" opacity="1">55%</text></g><g class="mark-rule role-axis-domain" pointer-events="none"><line transform="translate(0,0)" x2="520" y2="0" stroke="#E0E5E5" stroke-width="1" opacity="1"/></g></g><path class="foreground" aria-hidden="true" d="" pointer-events="none" display="none"/></g></g><g class="mark-group role-axis" role="graphics-symbol" aria-roledescription="axis" aria-label="Y-axis for a discrete scale with 5 values: Gratia (FY25), Consulting, AI-native comps, Non-AI comps, Managed Services"><g transform="translate(0.5,0.5)"><path class="background" aria-hidden="true" d="M0,0h0v0h0Z" pointer-events="none"/><g><g class="mark-rule role-axis-tick" pointer-events="none"><line transform="translate(0,31)" x2="-5" y2="0" stroke="#E0E5E5" stroke-width="1" opacity="1"/><line transform="translate(0,95)" x2="-5" y2="0" stroke="#E0E5E5" stroke-width="1" opacity="1"/><line transform="translate(0,160)" x2="-5" y2="0" stroke="#E0E5E5" stroke-width="1" opacity="1"/><line transform="translate(0,224)" x2="-5" y2="0" stroke="#E0E5E5" stroke-width="1" opacity="1"/><line transform="translate(0,288)" x2="-5" y2="0" stroke="#E0E5E5" stroke-width="1" opacity="1"/></g><g class="mark-text role-axis-label" pointer-events="none"><text text-anchor="end" transform="translate(-7,35.499999999999986)" font-family="DM Sans" font-size="12px" fill="#01191A" opacity="1">Gratia (FY25)</text><text text-anchor="end" transform="translate(-7,99.49999999999999)" font-family="DM Sans" font-size="12px" fill="#01191A" opacity="1">Consulting</text><text text-anchor="end" transform="translate(-7,163.5)" font-family="DM Sans" font-size="12px" fill="#01191A" opacity="1">AI-native comps</text><text text-anchor="end" transform="translate(-7,227.5)" font-family="DM Sans" font-size="12px" fill="#01191A" opacity="1">Non-AI comps</text><text text-anchor="end" transform="translate(-7,291.5)" font-family="DM Sans" font-size="12px" fill="#01191A" opacity="1">Managed Services</text></g><g class="mark-rule role-axis-domain" pointer-events="none"><line transform="translate(0,0)" x2="0" y2="320" stroke="#E0E5E5" stroke-width="1" opacity="1"/></g></g><path class="foreground" aria-hidden="true" d="" pointer-events="none" display="none"/></g></g><g class="mark-group role-scope" role="graphics-object" aria-roledescription="group mark container"><g transform="translate(0,3.1999999999999886)"><path class="background" aria-hidden="true" d="M0,0L508.4363636363637,0C510.64402373433967,0,512.4363636363637,1.792339902024,512.4363636363637,4L512.4363636363637,53.6C512.4363636363637,55.807660097976004,510.64402373433967,57.6,508.4363636363637,57.6L0,57.6C0,57.6,0,57.6,0,57.6L0,0C0,0,0,0,0,0Z"/><g clip-path="url(#clip1)"><g class="mark-group role-scope" role="graphics-object" aria-roledescription="group mark container"><g transform="translate(0,0)"><path class="background" aria-hidden="true" d="M0,0h0v57.6h0Z"/><g><g class="mark-rect role-mark layer_0_marks" role="graphics-object" aria-roledescription="rect mark container"><path aria-label="value: 54%; label: Gratia (FY25)" role="graphics-symbol" aria-roledescription="bar" d="M0,0h512.4363636363637v57.6h-512.4363636363637Z" fill="#23DD9C"/></g></g><path class="foreground" aria-hidden="true" d="" display="none"/></g></g></g><path class="foreground" aria-hidden="true" d="" display="none"/></g><g transform="translate(0,67.19999999999999)"><path class="background" aria-hidden="true" d="M0,0L213.45454545454544,0C215.66220555252144,0,217.45454545454544,1.792339902024,217.45454545454544,4L217.45454545454544,53.6C217.45454545454544,55.807660097976004,215.66220555252144,57.6,213.45454545454544,57.6L0,57.6C0,57.6,0,57.6,0,57.6L0,0C0,0,0,0,0,0Z"/><g clip-path="url(#clip2)"><g class="mark-group role-scope" role="graphics-object" aria-roledescription="group mark container"><g transform="translate(0,0)"><path class="background" aria-hidden="true" d="M0,0h0v57.6h0Z"/><g><g class="mark-rect role-mark layer_0_marks" role="graphics-object" aria-roledescription="rect mark container"><path aria-label="value: 23%; label: Consulting" role="graphics-symbol" aria-roledescription="bar" d="M0,0h217.45454545454544v57.6h-217.45454545454544Z" fill="#23DD9C"/></g></g><path class="foreground" aria-hidden="true" d="" display="none"/></g></g></g><path class="foreground" aria-hidden="true" d="" display="none"/></g><g transform="translate(0,131.2)"><path class="background" aria-hidden="true" d="M0,0L156.72727272727272,0C158.93493282524872,0,160.72727272727272,1.792339902024,160.72727272727272,4L160.72727272727272,53.6C160.72727272727272,55.807660097976004,158.93493282524872,57.6,156.72727272727272,57.6L0,57.6C0,57.6,0,57.6,0,57.6L0,0C0,0,0,0,0,0Z"/><g clip-path="url(#clip3)"><g class="mark-group role-scope" role="graphics-object" aria-roledescription="group mark container"><g transform="translate(0,0)"><path class="background" aria-hidden="true" d="M0,0h0v57.6h0Z"/><g><g class="mark-rect role-mark layer_0_marks" role="graphics-object" aria-roledescription="rect mark container"><path aria-label="value: 17%; label: AI-native comps" role="graphics-symbol" aria-roledescription="bar" d="M0,0h160.72727272727272v57.6h-160.72727272727272Z" fill="#23DD9C"/></g></g><path class="foreground" aria-hidden="true" d="" display="none"/></g></g></g><path class="foreground" aria-hidden="true" d="" display="none"/></g><g transform="translate(0,195.2)"><path class="background" aria-hidden="true" d="M0,0L137.8181818181818,0C140.02584191615782,0,141.8181818181818,1.792339902024,141.8181818181818,4L141.8181818181818,53.6C141.8181818181818,55.807660097976004,140.02584191615782,57.6,137.8181818181818,57.6L0,57.6C0,57.6,0,57.6,0,57.6L0,0C0,0,0,0,0,0Z"/><g clip-path="url(#clip4)"><g class="mark-group role-scope" role="graphics-object" aria-roledescription="group mark container"><g transform="translate(0,0)"><path class="background" aria-hidden="true" d="M0,0h0v57.6h0Z"/><g><g class="mark-rect role-mark layer_0_marks" role="graphics-object" aria-roledescription="rect mark container"><path aria-label="value: 15%; label: Non-AI comps" role="graphics-symbol" aria-roledescription="bar" d="M0,0h141.8181818181818v57.6h-141.8181818181818Z" fill="#23DD9C"/></g></g><path class="foreground" aria-hidden="true" d="" display="none"/></g></g></g><path class="foreground" aria-hidden="true" d="" display="none"/></g><g transform="translate(0,259.2)"><path class="background" aria-hidden="true" d="M0,0L71.63636363636363,0C73.84402373433963,0,75.63636363636363,1.792339902024,75.63636363636363,4L75.63636363636363,53.6C75.63636363636363,55.807660097976004,73.84402373433963,57.6,71.63636363636363,57.6L0,57.6C0,57.6,0,57.6,0,57.6L0,0C0,0,0,0,0,0Z"/><g clip-path="url(#clip5)"><g class="mark-group role-scope" role="graphics-object" aria-roledescription="group mark container"><g transform="translate(0,0)"><path class="background" aria-hidden="true" d="M0,0h0v57.6h0Z"/><g><g class="mark-rect role-mark layer_0_marks" role="graphics-object" aria-roledescription="rect mark container"><path aria-label="value: 8%; label: Managed Services" role="graphics-symbol" aria-roledescription="bar" d="M0,0h75.63636363636363v57.6h-75.63636363636363Z" fill="#23DD9C"/></g></g><path class="foreground" aria-hidden="true" d="" display="none"/></g></g></g><path class="foreground" aria-hidden="true" d="" display="none"/></g></g><g class="mark-text role-mark layer_1_marks" role="graphics-object" aria-roledescription="text mark container"><text aria-label="value: 54%; label: Gratia (FY25)" role="graphics-symbol" aria-roledescription="text mark" text-anchor="start" transform="translate(518.4363636363637,34.999999999999986)" font-family="DM Sans" font-size="11px" fill="#01191A">54%</text><text aria-label="value: 23%; label: Consulting" role="graphics-symbol" aria-roledescription="text mark" text-anchor="start" transform="translate(223.45454545454544,98.99999999999999)" font-family="DM Sans" font-size="11px" fill="#01191A">23%</text><text aria-label="value: 17%; label: AI-native comps" role="graphics-symbol" aria-roledescription="text mark" text-anchor="start" transform="translate(166.72727272727272,163)" font-family="DM Sans" font-size="11px" fill="#01191A">17%</text><text aria-label="value: 15%; label: Non-AI comps" role="graphics-symbol" aria-roledescription="text mark" text-anchor="start" transform="translate(147.8181818181818,227)" font-family="DM Sans" font-size="11px" fill="#01191A">15%</text><text aria-label="value: 8%; label: Managed Services" role="graphics-symbol" aria-roledescription="text mark" text-anchor="start" transform="translate(81.63636363636363,291)" font-family="DM Sans" font-size="11px" fill="#01191A">8%</text></g></g><path class="foreground" aria-hidden="true" d="" display="none"/></g></g></g><defs><clipPath id="clip1"><path d="M0,0L508.4363636363637,0C510.64402373433967,0,512.4363636363637,1.792339902024,512.4363636363637,4L512.4363636363637,53.6C512.4363636363637,55.807660097976004,510.64402373433967,57.6,508.4363636363637,57.6L0,57.6C0,57.6,0,57.6,0,57.6L0,0C0,0,0,0,0,0Z"/></clipPath><clipPath id="clip2"><path d="M0,0L213.45454545454544,0C215.66220555252144,0,217.45454545454544,1.792339902024,217.45454545454544,4L217.45454545454544,53.6C217.45454545454544,55.807660097976004,215.66220555252144,57.6,213.45454545454544,57.6L0,57.6C0,57.6,0,57.6,0,57.6L0,0C0,0,0,0,0,0Z"/></clipPath><clipPath id="clip3"><path d="M0,0L156.72727272727272,0C158.93493282524872,0,160.72727272727272,1.792339902024,160.72727272727272,4L160.72727272727272,53.6C160.72727272727272,55.807660097976004,158.93493282524872,57.6,156.72727272727272,57.6L0,57.6C0,57.6,0,57.6,0,57.6L0,0C0,0,0,0,0,0Z"/></clipPath><clipPath id="clip4"><path d="M0,0L137.8181818181818,0C140.02584191615782,0,141.8181818181818,1.792339902024,141.8181818181818,4L141.8181818181818,53.6C141.8181818181818,55.807660097976004,140.02584191615782,57.6,137.8181818181818,57.6L0,57.6C0,57.6,0,57.6,0,57.6L0,0C0,0,0,0,0,0Z"/></clipPath><clipPath id="clip5"><path d="M0,0L71.63636363636363,0C73.84402373433963,0,75.63636363636363,1.792339902024,75.63636363636363,4L75.63636363636363,53.6C75.63636363636363,55.807660097976004,73.84402373433963,57.6,71.63636363636363,57.6L0,57.6C0,57.6,0,57.6,0,57.6L0,0C0,0,0,0,0,0Z"/></clipPath></defs></svg></div>
+        <div class="slide-footnote anim" data-d="5">Comp margins are public estimates (midpoint shown). Gratia&#39;s figure is FY25 actual and not strictly apples-to-apples.</div>
+      </div>
+    </div>
+  
+
+    <div class="slide slide--light">
+      <div class="slide-inner slide-inner--wide">
+        <div class="eyebrow anim" data-d="1">Valuation</div>
+        <h1 class="anim" data-d="2">AI-native comps get the premium without the highest margin</h1>
+        <p class="subtitle anim" data-d="3">The premium reflects strategic scarcity, not margin alone.</p>
+        <div class="bubble-plot anim" data-d="4">
+          <svg viewBox="0 0 1000 520" preserveAspectRatio="xMidYMid meet" role="img" aria-label="AI-native comps get the premium without the highest margin">
+            <line class="bubble-axis-mid" x1="56" y1="246.0" x2="976" y2="246.0" />
+            <line class="bubble-axis-mid" x1="516.0" y1="22" x2="516.0" y2="470" />
+            <line class="bubble-axis" x1="56" y1="470" x2="976" y2="470" />
+            <line class="bubble-axis" x1="56" y1="22" x2="56" y2="470" />
+            <g class="bubble">
+          <circle cx="516.0" cy="194.8" r="20.0" fill="var(--mint)" fill-opacity="0.62" stroke="none" stroke-width="0" />
+          <text x="516.0" y="226.8" class="bubble-label" text-anchor="middle">Non-AI (15% margin, 4.3x)</text>
+        </g><g class="bubble">
+          <circle cx="577.3" cy="92.4" r="20.0" fill="#3B82F6" fill-opacity="0.62" stroke="var(--light-text)" stroke-width="2" />
+          <text x="577.3" y="124.4" class="bubble-label" text-anchor="middle">AI-native (17% margin, 5.9x)</text>
+        </g><g class="bubble">
+          <circle cx="761.3" cy="342.0" r="20.0" fill="#F8920F" fill-opacity="0.62" stroke="none" stroke-width="0" />
+          <text x="761.3" y="374.0" class="bubble-label" text-anchor="middle">Consulting (23% margin, 2.0x)</text>
+        </g><g class="bubble">
+          <circle cx="301.3" cy="412.4" r="20.0" fill="#8B5CF6" fill-opacity="0.62" stroke="none" stroke-width="0" />
+          <text x="301.3" y="444.4" class="bubble-label" text-anchor="middle">Managed (8% margin, 0.9x)</text>
+        </g>
+            <text class="bubble-axis-title" x="516.0" y="514" text-anchor="middle">Gross margin % →</text>
+            <text class="bubble-axis-title" x="-246.0" y="13" text-anchor="middle" transform="rotate(-90)">Revenue multiple (x) →</text>
+            <text class="bubble-end" x="62" y="34" text-anchor="start">Higher multiple</text>
+            <text class="bubble-end" x="62" y="464" text-anchor="start">Lower multiple</text>
+            <text class="bubble-end" x="62" y="452" text-anchor="start">Lower margin</text>
+            <text class="bubble-end" x="972" y="464" text-anchor="end">Higher margin</text>
+          </svg>
+        </div>
+        <div class="bubble-legend anim" data-d="5"><span class="bubble-legend-item"><span class="bubble-chip" style="background:var(--mint)"></span>Tech-Enabled (non-AI)</span><span class="bubble-legend-item"><span class="bubble-chip" style="background:#3B82F6"></span>Tech-Enabled (AI-native)</span><span class="bubble-legend-item"><span class="bubble-chip" style="background:#F8920F"></span>Consulting</span><span class="bubble-legend-item"><span class="bubble-chip" style="background:#8B5CF6"></span>Managed Services</span></div>
+        <p class="score-source anim" data-d="6">Group-average gross margin and revenue multiple midpoints, per the comp table.</p>
+      </div>
+    </div>
+  
+
+    <div class="slide slide--light">
+      <div class="slide-inner slide-inner--wide">
+        <div class="eyebrow anim" data-d="1">AI thesis</div>
+        <h1 class="anim" data-d="2">Grace is the operating proof behind the AI-native claim</h1>
+        <p class="subtitle anim" data-d="3">The AI positioning is strongest where it shows up in pricing, quality control, staffing, and analyst ramp.</p>
+        <div class="cards cards--2 anim" data-d="4">
+    <div class="card">
+      
+      
+      
+      <h3>Pricing discipline</h3>
+      
+      <p>Grace checks each engagement against a live margin model before sale. This makes margin control part of scoping, not a finance clean-up after delivery.</p>
+      
+      
+    </div>
+  
+    <div class="card">
+      
+      
+      
+      <h3>Quality control</h3>
+      
+      <p>AQS scores deliverables before they reach the client. Earlier issue detection reduces rework and protects delivery cost.</p>
+      
+      
+    </div>
+  
+    <div class="card">
+      
+      
+      
+      <h3>Utilization</h3>
+      
+      <p>Grace searches the bench and recruiting pipeline to staff work faster. Better matching should lift utilization and reduce idle capacity.</p>
+      
+      
+    </div>
+  
+    <div class="card">
+      
+      
+      
+      <h3>Analyst ramp</h3>
+      
+      <p>Practice engagements, learning plans, and comprehension checks shorten ramp time. Capacity can grow without a matching increase in management overhead.</p>
+      
+      
+    </div>
+  </div>
+      </div>
+    </div>
+  
+
+    <div class="slide slide--light">
+      <div class="slide-inner slide-inner--wide">
+        <div class="eyebrow anim" data-d="1">Comp set</div>
+        <h1 class="anim" data-d="2">The tech-enabled comp set frames the upside case</h1>
+        <p class="subtitle anim" data-d="3">These companies anchor the higher multiple cases, especially when buyers see AI plus human operations as a platform.</p>
+        <table class="deck-table anim" data-d="4">
+          <thead><tr><th>Company</th><th>Segment</th><th>Business model</th><th>Gross margin</th><th>Revenue multiple</th></tr></thead>
+          <tbody><tr><th scope="row">Toptal</th><td>Non-AI-native</td><td>Curated freelance marketplace</td><td>15-25%</td><td>3-5x</td></tr><tr><th scope="row">Upwork</th><td>Non-AI-native</td><td>Open marketplace (volume)</td><td>5-15%</td><td>2-4x</td></tr><tr><th scope="row">Fiverr</th><td>Non-AI-native</td><td>Transactional gig marketplace</td><td>10-20%</td><td>5-7x</td></tr><tr><th scope="row">Catalant</th><td>Non-AI-native</td><td>Enterprise talent and delivery</td><td>10-20%</td><td>3-6x</td></tr><tr><th scope="row">ZipRecruiter</th><td>Non-AI-native</td><td>Job marketplace and hiring</td><td>10-20%</td><td>3-5x</td></tr><tr><th scope="row">Invisible Tech</th><td>AI-native</td><td>Hybrid AI and human ops</td><td>10-20%</td><td>4-6x</td></tr><tr><th scope="row">Scale AI</th><td>AI-native</td><td>AI-enabled data ops platform</td><td>15-25%</td><td>8-12x</td></tr><tr><th scope="row">Surge AI</th><td>AI-native</td><td>AI data services, human-in-loop</td><td>15-25%</td><td>5-8x</td></tr><tr><th scope="row">Sama</th><td>AI-native</td><td>AI data labeling and workforce</td><td>10-20%</td><td>3.3x</td></tr><tr><th scope="row">CloudFactory</th><td>AI-native</td><td>Managed workforce (BPO plus AI)</td><td>10-20%</td><td>3-6x</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  
+
+    <div class="slide slide--light">
+      <div class="slide-inner slide-inner--wide">
+        <div class="eyebrow anim" data-d="1">Comp set</div>
+        <h1 class="anim" data-d="2">Lower-multiple comps set the downside guardrails</h1>
+        <p class="subtitle anim" data-d="3">Useful context for downside framing, but less representative of the intended positioning.</p>
+        <table class="deck-table anim" data-d="4">
+          <thead><tr><th>Company</th><th>Segment</th><th>Business model</th><th>Gross margin</th><th>Revenue multiple</th></tr></thead>
+          <tbody><tr><th scope="row">McKinsey</th><td>Consulting</td><td>High-end strategy consulting</td><td>20-30%</td><td>1-3x</td></tr><tr><th scope="row">BCG</th><td>Consulting</td><td>High-end strategy consulting</td><td>20-30%</td><td>1-3x</td></tr><tr><th scope="row">Bain</th><td>Consulting</td><td>High-end strategy consulting</td><td>20-30%</td><td>1-3x</td></tr><tr><th scope="row">Deloitte</th><td>Consulting</td><td>Scaled consulting services</td><td>15-25%</td><td>1-3x</td></tr><tr><th scope="row">EY</th><td>Consulting</td><td>Scaled consulting services</td><td>15-25%</td><td>1-3x</td></tr><tr><th scope="row">ManpowerGroup</th><td>Managed Services</td><td>Staffing</td><td>3-7%</td><td>0.7-1x</td></tr><tr><th scope="row">HireQuest</th><td>Managed Services</td><td>Staffing</td><td>n/a</td><td>0.5-0.8x</td></tr><tr><th scope="row">Robert Half</th><td>Managed Services</td><td>Staffing and consulting</td><td>6-10%</td><td>0.4-0.6x</td></tr><tr><th scope="row">Adecco</th><td>Managed Services</td><td>Staffing</td><td>3-6%</td><td>0.7-1x</td></tr><tr><th scope="row">Accenture</th><td>Managed Services</td><td>Process outsourcing and tech</td><td>12-18%</td><td>1.7x</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  
+
+    <div class="slide slide--light">
+      <div class="slide-inner slide-inner--wide">
+        <div class="eyebrow anim" data-d="1">Market context</div>
+        <h1 class="anim" data-d="2">Each buyer type will value a different version of Gratia</h1>
+        <p class="subtitle anim" data-d="3">The same asset can be read as a platform, delivery layer, services capability, or near-shore AI arm.</p>
+        <div class="cards cards--2 anim" data-d="4">
+    <div class="card">
+      
+      
+      
+      <h3>Private equity</h3>
+      
+      <p>Will look for repeatable margin expansion, utilization discipline, and a path to scale without linear delivery headcount.</p>
+      
+      
+    </div>
+  
+    <div class="card">
+      
+      
+      
+      <h3>Synergistic acquirer</h3>
+      
+      <p>Will value added delivery capacity and a differentiated AI-enabled talent layer that can plug into existing client channels.</p>
+      
+      <div class="card-tags"><span class="card-tag">Accenture</span><span class="card-tag">PwC</span></div>
+    </div>
+  
+    <div class="card">
+      
+      
+      
+      <h3>AI company needing services</h3>
+      
+      <p>Will care most about human-in-the-loop execution for evaluation, data operations, implementation, or client delivery.</p>
+      
+      
+    </div>
+  
+    <div class="card">
+      
+      
+      
+      <h3>Mid-tier consulting</h3>
+      
+      <p>Will underwrite a near-shore, AI-enabled delivery arm that is faster to acquire than build.</p>
+      
+      <div class="card-tags"><span class="card-tag">Near-shore AI delivery</span></div>
+    </div>
+  </div>
+      </div>
+    </div>
+  
+
+    <div class="slide slide--light">
+      <div class="slide-inner slide-inner--wide">
+        <div class="eyebrow anim" data-d="1">Past deals</div>
+        <h1 class="anim" data-d="2">Recent M&amp;A shows buyers paying for capability, not just labor</h1>
+        
+        <table class="deck-table anim" data-d="4">
+          <thead><tr><th>Buyer</th><th>Target</th><th>Deal value</th><th>Valuation</th><th>Multiple</th></tr></thead>
+          <tbody><tr><th scope="row">Meta</th><td>Scale AI</td><td>$14.3B (49% stake)</td><td>$29B</td><td>~16x</td></tr><tr><th scope="row">Apax Partners</th><td>Thoughtworks</td><td>$1.75B</td><td>~$1.75B</td><td>~2.0x</td></tr><tr><th scope="row">Bridgepoint</th><td>Argon &amp; Co</td><td>$383.9M</td><td>Undisclosed</td><td>n/d</td></tr><tr><th scope="row">DoorDash</th><td>Symbiosys</td><td>$175.0M</td><td>Undisclosed</td><td>n/d</td></tr><tr><th scope="row">Teleperformance</th><td>ZP Better Together</td><td>Undisclosed</td><td>Undisclosed</td><td>n/d</td></tr><tr><th scope="row">Concentrix</th><td>BlinkCX</td><td>Undisclosed</td><td>Undisclosed</td><td>n/d</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  
+
+    <div class="slide slide--light">
+      <div class="slide-inner slide-inner--wide">
+        <div class="eyebrow anim" data-d="1">Past deals</div>
+        <h1 class="anim" data-d="2">Recent AI-native raises show what premium capital is underwriting</h1>
+        
+        <table class="deck-table anim" data-d="4">
+          <thead><tr><th>Investor</th><th>Company</th><th>Raise</th><th>Valuation</th><th>Multiple</th></tr></thead>
+          <tbody><tr><th scope="row">Undisclosed (reported round)</th><td>Surge AI</td><td>Undisclosed</td><td>~$25B</td><td>~mid-20s x</td></tr><tr><th scope="row">Accel / Amazon / Meta</th><td>Scale AI (Series F)</td><td>$1.0B</td><td>$13.8B</td><td>~9x</td></tr><tr><th scope="row">Felicis</th><td>Mercor (Series C)</td><td>$350M</td><td>$10B</td><td>~20x</td></tr><tr><th scope="row">Khazanah</th><td>Turing (Series E)</td><td>$111M</td><td>$2.2B</td><td>~13x</td></tr><tr><th scope="row">Undisclosed (2025 round)</th><td>Invisible Technologies</td><td>Undisclosed</td><td>&gt;$2B</td><td>n/d</td></tr></tbody>
+        </table>
+      </div>
+    </div>
+  
+
+    <div class="slide slide--light">
+      <div class="slide-inner">
+        <div class="eyebrow anim" data-d="1">Synthesis</div>
+        <h1 class="anim" data-d="2">The discussion should focus on proof points, not a single price</h1>
+        
+        <div class="bullets anim" data-d="4"><div class="bullet">The immediate run-rate supports a modest valuation if buyers use blended comps. The upside case depends on defending the AI-native lens.</div><div class="bullet">The margin data gives Gratia a real opening, but the comp set will not do the work by itself.</div><div class="bullet">The strongest positioning is AI-enabled delivery economics, not labor arbitrage, staffing, or classic consulting.</div><div class="bullet">The next diligence question is evidence: repeatable AI-assisted scoping, quality control, staffing, and analyst ramp that keep margin high as revenue scales.</div></div>
+      </div>
+    </div>
+  
+
+    <div class="slide custom-slide slide--dark">
+      <div class="slide-inner slide-inner--wide custom-slide-body">
+        
+        <style>
+          .deck:has(.custom-slide.active .final-logo-close) > .brand,
+          .deck:has(.custom-slide.active .final-logo-close) > .counter,
+          .deck:has(.custom-slide.active .final-logo-close) > .nav-arrows {
+            display: none;
+          }
+
+          .final-logo-close {
+            min-height: 508px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--text);
+          }
+
+          .final-logo-close svg {
+            width: 260px;
+            height: auto;
+            display: block;
+          }
+        </style>
+        <div class="final-logo-close anim" data-d="1" aria-label="Gratia">
+          <svg width="96" height="22" viewBox="0 0 96 22" fill="none" xmlns="http://www.w3.org/2000/svg" aria-label="Gratia"><path d="M87.0295 21.3543C85.8868 21.3543 84.944 21.1642 84.2012 20.7838C83.4584 20.4035 82.9156 19.8996 82.5728 19.2721C82.23 18.6255 82.0586 17.9124 82.0586 17.1328C82.0586 16.277 82.2681 15.5259 82.6871 14.8794C83.1251 14.2138 83.8013 13.6908 84.7155 13.3105C85.6296 12.9302 86.801 12.74 88.2294 12.74H91.7147C91.7147 12.0935 91.629 11.5706 91.4576 11.1712C91.2862 10.7529 91.01 10.4486 90.6291 10.2585C90.2673 10.0493 89.7816 9.94469 89.1721 9.94469C88.5055 9.94469 87.9246 10.0873 87.4295 10.3725C86.9533 10.6578 86.6581 11.1047 86.5438 11.7132H82.43C82.5252 10.6673 82.868 9.76403 83.4584 9.00339C84.0489 8.22373 84.8297 7.61522 85.8011 7.17785C86.7914 6.74048 87.9246 6.5218 89.2007 6.5218C90.572 6.5218 91.7623 6.74048 92.7718 7.17785C93.8002 7.61522 94.5906 8.27127 95.1429 9.14601C95.7143 10.0017 96 11.0571 96 12.3122V21.012H92.4575L91.9718 18.8727H91.8861C91.6195 19.2911 91.3148 19.6524 90.9719 19.9566C90.6291 20.2609 90.2482 20.5176 89.8292 20.7268C89.4293 20.936 88.9912 21.0881 88.5151 21.1832C88.058 21.2973 87.5628 21.3543 87.0295 21.3543ZM88.4579 18.1026C88.915 18.1026 89.315 18.0265 89.6578 17.8744C90.0197 17.7223 90.3244 17.5226 90.572 17.2754C90.8196 17.0092 91.0196 16.7049 91.1719 16.3626C91.3243 16.0203 91.4386 15.6495 91.5147 15.2502H88.7436C88.2484 15.2502 87.8389 15.3167 87.5152 15.4498C87.2104 15.5639 86.9819 15.7351 86.8295 15.9633C86.6772 16.1724 86.601 16.4292 86.601 16.7334C86.601 17.0377 86.6772 17.2944 86.8295 17.5036C86.9819 17.6937 87.2009 17.8459 87.4866 17.96C87.7723 18.055 88.0961 18.1026 88.4579 18.1026Z" fill="currentColor"/><path d="M76.3777 21.0119V6.86393H80.663V21.0119H76.3777ZM78.5204 5.32363C77.7586 5.32363 77.1396 5.10494 76.6634 4.66757C76.1873 4.21119 75.9492 3.65021 75.9492 2.98465C75.9492 2.31909 76.1873 1.76762 76.6634 1.33025C77.1396 0.873868 77.7586 0.645676 78.5204 0.645676C79.3012 0.645676 79.9298 0.873868 80.4059 1.33025C80.9011 1.76762 81.1487 2.31909 81.1487 2.98465C81.1487 3.65021 80.9011 4.21119 80.4059 4.66757C79.9298 5.10494 79.3012 5.32363 78.5204 5.32363Z" fill="currentColor"/><path d="M72.4232 21.012C71.3757 21.012 70.452 20.8503 69.6521 20.5271C68.8712 20.1848 68.2522 19.6333 67.7951 18.8727C67.3571 18.112 67.138 17.0756 67.138 15.7635V10.3725H64.7383V6.86402H67.138L67.5951 2.89917H71.4233V6.86402H75.0801V10.3725H71.4233V15.8206C71.4233 16.4101 71.5566 16.8284 71.8233 17.0756C72.0899 17.3038 72.5279 17.4179 73.1374 17.4179H75.0515V21.012H72.4232Z" fill="currentColor"/><path d="M54.9521 21.3543C53.8094 21.3543 52.8666 21.1642 52.1238 20.7838C51.3811 20.4035 50.8383 19.8996 50.4954 19.2721C50.1526 18.6255 49.9812 17.9124 49.9812 17.1328C49.9812 16.277 50.1907 15.5259 50.6097 14.8794C51.0478 14.2138 51.7239 13.6908 52.6381 13.3105C53.5523 12.9302 54.7236 12.74 56.152 12.74H59.6373C59.6373 12.0935 59.5516 11.5706 59.3802 11.1712C59.2088 10.7529 58.9326 10.4486 58.5517 10.2585C58.1899 10.0493 57.7042 9.94469 57.0947 9.94469C56.4281 9.94469 55.8473 10.0873 55.3521 10.3725C54.8759 10.6578 54.5807 11.1047 54.4664 11.7132H50.3526C50.4478 10.6673 50.7906 9.76403 51.3811 9.00339C51.9715 8.22373 52.7523 7.61522 53.7237 7.17785C54.714 6.74048 55.8473 6.5218 57.1233 6.5218C58.4946 6.5218 59.685 6.74048 60.6944 7.17785C61.7228 7.61522 62.5132 8.27127 63.0655 9.14601C63.6369 10.0017 63.9226 11.0571 63.9226 12.3122V21.012H60.3801L59.8945 18.8727H59.8087C59.5421 19.2911 59.2374 19.6524 58.8946 19.9566C58.5517 20.2609 58.1708 20.5176 57.7518 20.7268C57.3519 20.936 56.9138 21.0881 56.4377 21.1832C55.9806 21.2973 55.4854 21.3543 54.9521 21.3543ZM56.3805 18.1026C56.8376 18.1026 57.2376 18.0265 57.5804 17.8744C57.9423 17.7223 58.247 17.5226 58.4946 17.2754C58.7422 17.0092 58.9422 16.7049 59.0945 16.3626C59.2469 16.0203 59.3612 15.6495 59.4374 15.2502H56.6662C56.171 15.2502 55.7615 15.3167 55.4378 15.4498C55.133 15.5639 54.9045 15.7351 54.7521 15.9633C54.5998 16.1724 54.5236 16.4292 54.5236 16.7334C54.5236 17.0377 54.5998 17.2944 54.7521 17.5036C54.9045 17.6937 55.1235 17.8459 55.4092 17.96C55.6949 18.055 56.0187 18.1026 56.3805 18.1026Z" fill="currentColor"/><path d="M40.1943 21.012V6.86409H43.8511L44.2511 9.85911H44.3368C44.7177 8.96536 45.1557 8.28078 45.6509 7.80538C46.1651 7.31096 46.746 6.97818 47.3936 6.80704C48.0602 6.61688 48.7744 6.5218 49.5362 6.5218V11.0571H48.3649C47.7555 11.0571 47.2031 11.1237 46.7079 11.2568C46.2318 11.3709 45.8223 11.5801 45.4795 11.8843C45.1557 12.1696 44.9081 12.5594 44.7367 13.0538C44.5653 13.5482 44.4796 14.1472 44.4796 14.8508V21.012H40.1943Z" fill="currentColor"/><path d="M28.1067 21.3542C26.3355 21.3542 24.7737 20.9359 23.4215 20.0992C22.0693 19.2434 21.0027 18.0549 20.2218 16.5336C19.46 15.0124 19.0791 13.2344 19.0791 11.1996C19.0791 9.14591 19.4791 7.32988 20.279 5.75154C21.0979 4.17321 22.2692 2.93717 23.7929 2.04341C25.3165 1.14966 27.1259 0.702782 29.2209 0.702782C31.6207 0.702782 33.6014 1.27326 35.1631 2.41423C36.7439 3.55519 37.7629 5.13352 38.22 7.14922H33.449C33.1633 6.35055 32.6586 5.73253 31.9349 5.29516C31.2302 4.85779 30.3255 4.63911 29.2209 4.63911C27.9639 4.63911 26.9069 4.91484 26.0498 5.4663C25.1927 5.99875 24.5452 6.7594 24.1071 7.74823C23.6691 8.71805 23.4501 9.86852 23.4501 11.1996C23.4501 12.5688 23.6691 13.7288 24.1071 14.6796C24.5452 15.6304 25.1832 16.353 26.0212 16.8474C26.8592 17.3228 27.8496 17.5605 28.9924 17.5605C30.6303 17.5605 31.8682 17.1327 32.7063 16.2769C33.5633 15.4212 34.0871 14.3468 34.2775 13.0537H29.6209V9.85901H38.5628V21.0119H34.6203L34.3061 18.0454H34.2204C33.8014 18.749 33.2967 19.3575 32.7063 19.871C32.1158 20.3654 31.4302 20.7362 30.6493 20.9834C29.8875 21.2306 29.04 21.3542 28.1067 21.3542Z" fill="currentColor"/><path d="M15.0607 20.8836H10.3542L11.5308 12.6473H11.2955C10.3542 17.7067 5.88307 20.281 0 20.281V15.3395C3.89427 15.2074 8.2363 13.8239 9.11348 9.73307L1.88258 10.0587V5.82289H15.0607V20.8836Z" fill="#23DD9C"/></svg>
+        </div>
+      
+      </div>
+    </div>
+  
+<div class="counter" id="counter">1 / 14</div>
+<div class="nav-arrows">
+<button class="nav-btn" id="nav-prev" aria-label="Previous">&larr;</button>
+<button class="nav-btn" id="nav-next" aria-label="Next">&rarr;</button>
+</div>
+</div>
+<div class="notes" id="notes">
+<div class="notes-label">Speaker notes &mdash; press N to toggle</div>
+<div id="notes-text"></div>
+</div>
+<script>
+    (() => {
+      const slides = Array.from(document.querySelectorAll('.slide'));
+      const progress = document.getElementById('progress');
+      const counter = document.getElementById('counter');
+      const notes = document.getElementById('notes');
+      const notesText = document.getElementById('notes-text');
+      const total = slides.length;
+      let current = 0;
+      let notesVisible = false;
+
+      function updateNotes() {
+        const note = slides[current].getAttribute('data-notes') || '';
+        if (!notesVisible) { notes.classList.remove('visible'); return; }
+        if (note) {
+          notesText.textContent = note;
+          notesText.classList.remove('notes-empty');
+        } else {
+          notesText.textContent = 'No speaker notes for this slide.';
+          notesText.classList.add('notes-empty');
+        }
+        notes.classList.add('visible');
+      }
+
+      function goTo(i) {
+        if (i < 0 || i >= total || i === current) return;
+        slides[current].classList.remove('active');
+        current = i;
+        slides[current].classList.add('active');
+        progress.style.width = ((current + 1) / total * 100) + '%';
+        counter.textContent = (current + 1) + ' / ' + total;
+        updateNotes();
+      }
+
+      function toggleNotes() {
+        notesVisible = !notesVisible;
+        updateNotes();
+      }
+
+      function toggleFullscreen() {
+        if (!document.fullscreenElement) document.documentElement.requestFullscreen().catch(() => {});
+        else document.exitFullscreen();
+      }
+
+      function openDeckLink(e) {
+        const anchor = e.target && e.target.closest ? e.target.closest('a[href]') : null;
+        if (!anchor) return;
+        e.preventDefault();
+        window.open(anchor.href, '_blank', 'noopener,noreferrer');
+      }
+
+      function installExternalLinkTargets() {
+        document.querySelectorAll('a[href]').forEach((anchor) => {
+          anchor.setAttribute('target', '_blank');
+          anchor.setAttribute('rel', 'noopener noreferrer');
+        });
+        document.addEventListener('click', openDeckLink, true);
+      }
+
+      document.addEventListener('keydown', (e) => {
+        const tag = e.target.tagName;
+        if (tag === 'INPUT' || tag === 'TEXTAREA' || e.target.isContentEditable) return;
+        if (e.key === 'ArrowRight' || e.key === 'ArrowDown' || e.key === ' ' || e.key === 'PageDown') {
+          e.preventDefault(); goTo(current + 1);
+        } else if (e.key === 'ArrowLeft' || e.key === 'ArrowUp' || e.key === 'Backspace' || e.key === 'PageUp') {
+          e.preventDefault(); goTo(current - 1);
+        } else if (e.key === 'n' || e.key === 'N') {
+          e.preventDefault(); toggleNotes();
+        } else if (e.key === 'f' || e.key === 'F') {
+          e.preventDefault(); toggleFullscreen();
+        } else if (e.key === 'Home') {
+          e.preventDefault(); goTo(0);
+        } else if (e.key === 'End') {
+          e.preventDefault(); goTo(total - 1);
+        }
+      });
+
+      document.getElementById('nav-prev').addEventListener('click', () => goTo(current - 1));
+      document.getElementById('nav-next').addEventListener('click', () => goTo(current + 1));
+      installExternalLinkTargets();
+
+      const deck = document.querySelector('.deck');
+      function scaleDeck() {
+        const margin = 32;
+        const sw = (window.innerWidth - margin * 2) / 1280;
+        const sh = (window.innerHeight - margin * 2) / 720;
+        const s = Math.min(sw, sh);
+        deck.style.transform = 'scale(' + s + ')';
+        deck.style.left = ((window.innerWidth - 1280 * s) / 2) + 'px';
+        deck.style.top = ((window.innerHeight - 720 * s) / 2) + 'px';
+      }
+      scaleDeck();
+      window.addEventListener('resize', scaleDeck);
+
+      counter.textContent = '1 / ' + total;
+      progress.style.width = (1 / total * 100) + '%';
+
+      // ---- Overflow detector ----
+      // Inspects each slide's .slide-inner against the 1280×720 frame, tags
+      // overflowing slides with data-overflowing + data-overflow-info, and
+      // posts a structured report to the parent. The parent decides what to
+      // do with the signal (telemetry, debug outline, future autofix).
+      function detectOverflow() {
+        const report = [];
+        for (let i = 0; i < slides.length; i++) {
+          const slide = slides[i];
+          const inner = slide.querySelector('.slide-inner') || slide;
+          const overY = inner.scrollHeight - slide.clientHeight;
+          const overX = inner.scrollWidth - slide.clientWidth;
+          // Allow 1px slack — sub-pixel rounding can produce false positives.
+          const verticalOver = overY > 1;
+          const horizontalOver = overX > 1;
+          if (!verticalOver && !horizontalOver) {
+            slide.removeAttribute('data-overflowing');
+            slide.removeAttribute('data-overflow-info');
+            continue;
+          }
+          const axis = verticalOver && horizontalOver ? 'both' : verticalOver ? 'vertical' : 'horizontal';
+          const overshootPx = Math.max(verticalOver ? overY : 0, horizontalOver ? overX : 0);
+          const titleEl = slide.querySelector('h1, h2');
+          const title = titleEl ? (titleEl.textContent || '').trim().slice(0, 80) : '';
+          slide.setAttribute('data-overflowing', 'true');
+          slide.setAttribute('data-overflow-info', axis + ' +' + overshootPx + 'px');
+          report.push({ index: i, title: title, axis: axis, overshootPx: overshootPx });
+        }
+        if (window.parent && window.parent !== window) {
+          window.parent.postMessage({ type: 'gratia.deck.overflow', slides: report }, '*');
+        }
+      }
+
+      window.addEventListener('message', (e) => {
+        const d = e && e.data;
+        if (!d || typeof d !== 'object' || d.type !== 'gratia.set-debug') return;
+        const on = !!(d.flags && d.flags.overflow);
+        document.body.classList.toggle('gratia-debug-overflow', on);
+      });
+
+      // Run after layout settles. requestAnimationFrame twice gives the
+      // browser a chance to apply the initial scale + paint before measuring.
+      requestAnimationFrame(() => requestAnimationFrame(detectOverflow));
+    })();
+  </script>
+</div><!-- /deck-content -->
+</body>
+</html>
